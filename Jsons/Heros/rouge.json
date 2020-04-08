@@ -1,0 +1,27 @@
+{
+  "name": "Rouge",
+  "heroPowerManaCost": 3,
+  "hp": 30,
+  "specialPower": "A card which is not in your class or not neutral, costs 2 less mana .",
+
+  "pcarts": [],
+  "dcarts": [
+    "fierywaraxe",
+    "evasivewyrm",
+    "blessingoftheancients",
+    "tastyflyfish",
+    "lightforgedblessing",
+    "depthcharge",
+    "cobaltspellkin",
+    "koboldstickyfinger",
+    "tombwarden",
+    "friendlysmith"
+  ],
+  "canAttack": false,
+  "att": 0,
+  "spcarts": [
+    "friendlysmith",
+    "umbralskulker"
+  ],
+  "heroPower": "Steal a card from opponent's hand and add it to your hand .Costs 3 mana\n Upgrade : if you have a weapon , You Steal a card from opponent's hand and a card from opponent's deck randomly."
+}

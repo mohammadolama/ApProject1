@@ -1,0 +1,11 @@
+{
+  "name": "HolyLighht",
+  "description": "add 5Hp to all your minions and hero",
+  "type": "Spell",
+  "heroClass": "Neutral",
+  "rarity": "Epic",
+  "price": 20,
+  "usageTimes": 1,
+  "title": null,
+  "manaCost": 5
+}

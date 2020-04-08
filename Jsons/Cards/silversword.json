@@ -1,0 +1,11 @@
+{
+  "name": "SilverSword",
+  "description": "After your hero attacks, give your minions +1/+1 .",
+  "type": "Weapon",
+  "heroClass": "Neutral",
+  "price": 20,
+  "rarity": "Epic",
+  "durability": 3,
+  "att": 2,
+  "manaCost": 6
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Deathwing",
+  "description": "Battlecry: Attack all other minions;",
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Legendary",
+  "price": 20,
+  "title": "Dragon",
+  "health": 12,
+  "attack": 12,
+  "attribute": [
+    "BattleCry"
+  ],
+  "manaCost": 8
+}
