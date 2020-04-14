@@ -25,7 +25,7 @@ public class Constants {
     static Icon warlockIcon = new ImageIcon("resources\\pics\\hero\\warlock.png");
 
 
-    static BufferedImage heroBackgroung;
+    static BufferedImage heroBackground;
 
 
     private static BufferedImage login;
@@ -46,7 +46,8 @@ public class Constants {
     static BufferedImage warlockPower;
 
 
-    static BufferedImage hp;
+    static BufferedImage status2;
+    static BufferedImage tick;
 
     static BufferedImage arcanitereaper;
     static BufferedImage ashbringer;
@@ -201,13 +202,15 @@ public class Constants {
 
 
         try {
-            hp = ImageIO.read(new File("resources\\pics\\1.png"));
+            status=ImageIO.read(new File("resources\\pics\\game\\status1.png"));
+            status2 = ImageIO.read(new File("resources\\pics\\game\\status2.png"));
+            tick=ImageIO.read(new File("resources\\pics\\game\\tick.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            heroBackgroung = ImageIO.read(new File("resources\\pics\\2.jpg"));
+            heroBackground = ImageIO.read(new File("resources\\pics\\game\\hero.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -225,5 +228,14 @@ public class Constants {
 
     }
 
+
+    public static void addPanels(){
+        CollectionPanel collectionPanel=CollectionPanel.getInstance();
+        ShopPanel shopPanel=ShopPanel.getInstance();
+        StatusPanel statusPanel=StatusPanel.getInstance();
+        MyFrame.panel.add(collectionPanel,"collection");
+        MyFrame.panel.add(shopPanel,"shop");
+        MyFrame.panel.add(statusPanel,"status");
+    }
 
 }

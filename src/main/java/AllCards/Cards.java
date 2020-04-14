@@ -1,5 +1,14 @@
 package AllCards;
 
+import Enums.Carts;
+import Enums.NeutralCarts;
+import Enums.SpecialCarts;
+import Main.Deck;
+import Main.Gamestate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Cards {
     private String name;
     private String description;
@@ -63,5 +72,51 @@ public class Cards {
 
     public void setRarity(String rarity) {
         this.rarity = rarity;
+    }
+
+    public static ArrayList<Cards> allCards(){
+        ArrayList<Carts> ar=new ArrayList<>();
+        for (Carts carts : Carts.values()) {
+            ar.add(carts);
+        }
+
+    return Deck.UpdateDeck(ar);
+    }
+
+    public static ArrayList<Cards> purchasedCards(){
+        ArrayList<Carts> ar=new ArrayList<>();
+        for (Carts cart : Gamestate.getPlayer().getPlayerCarts()) {
+            ar.add(cart);
+        }
+        return Deck.UpdateDeck(ar);
+    }
+
+    public static ArrayList<Cards> lockedCards(){
+        ArrayList<Carts> ar=new ArrayList<>();
+        outer :for (Carts carts : Carts.values()) {
+            for (Carts playerCart : Gamestate.getPlayer().getPlayerCarts()) {
+                if (carts.toString().equalsIgnoreCase(playerCart.toString())){
+                    continue outer;
+                }
+            }
+            ar.add(carts);
+        }
+        return Deck.UpdateDeck(ar);
+    }
+
+    public static ArrayList<Cards> neutralCardsFilter(){
+        ArrayList<Carts> ar=new ArrayList<>();
+        for (NeutralCarts value : NeutralCarts.values()) {
+            ar.add(Carts.valueOf(value.toString()));
+        }
+        return Deck.UpdateDeck(ar);
+    }
+
+    public static ArrayList<Cards> specialCardsFilter(){
+        ArrayList<Carts> ar=new ArrayList<>();
+        for (SpecialCarts value : SpecialCarts.values()) {
+            ar.add(Carts.valueOf(value.toString()));
+        }
+        return Deck.UpdateDeck(ar);
     }
 }

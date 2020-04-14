@@ -105,7 +105,6 @@ public class Info {
                 "\n Username        :   " + player.getUsername() +
                 "\n Password        :   " + player.getPassword() +
                 "\n Level           :   " + player.getLevel() +
-                "\n Selected Hero   :   " + player.getSelectedHero().getName() +
                 "\n AvailableHeros  :   " + player.getPlayerHeroes().toString()+
                 "\n EXP             :   " + player.getExp()+ ConsoleColors.RESET);
     }

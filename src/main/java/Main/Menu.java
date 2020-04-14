@@ -14,14 +14,14 @@ public class Menu {
         password = player.getPassword();
         Scanner sc = new Scanner(System.in);
 
-        if (player.getNewToGame()) {
-            player.SetFirstHero(player);
-        }
+//        if (player.getNewToGame()) {
+//            player.SetFirstHero(player);
+//        }
 
 
 
         while (true) {
-            player.getSelectedHero().UpdateDeck(); // build card objects from json and put in hero arraylist
+//            player.getSelectedHero().UpdateDeck(); // build card objects from json and put in hero arraylist
 
             System.out.println(ConsoleColors.CYAN_BOLD + "**      Menu        **" + ConsoleColors.RESET);
             System.out.println("\n" +
@@ -58,8 +58,8 @@ public class Menu {
                     LOGGER.playerlog(player,"Sign out ");
                     return;
                 case "store":LOGGER.playerlog(player, "Navigate : Store");
-                    Shop.Shop(player);break;
-                case "hero":HeroChanger.HeroChanger(player);break;
+//                    Shop.Shop(player);break;
+//                case "hero":HeroChanger.HeroChanger(player);break;
                 case "hesoyam" :player.setLevel(player.getLevel() + 1);
                     System.out.println("\n"+ConsoleColors.BLUE_BOLD + "**  LEVEL UP    **" + ConsoleColors.RESET+"\n");
                     JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);break;

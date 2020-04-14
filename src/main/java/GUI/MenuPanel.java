@@ -1,9 +1,8 @@
 package GUI;
 
-import Main.Gamestate;
-import Main.JsonBuilders;
-import Main.LOGGER;
+import Main.*;
 import Main.Menu;
+import Sounds.SoundAdmin;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,7 +14,7 @@ import java.io.IOException;
 
 import static GUI.Constants.*;
 
-public class MenuPanel extends JPanel implements ActionListener, MouseMotionListener, MouseListener {
+public class MenuPanel extends JPanel implements ActionListener, MouseMotionListener, MouseListener,KeyListener {
 
     private int startY=100;
     private int startX=20;
@@ -29,12 +28,18 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
     private static JButton logout=new JButton("Log Out");
     private static JButton exit=new JButton("Exit");
     private static JButton src;
-
+    private static JDialog jDialog=new JDialog();
+    private static JTextField cheatField;
+    private static boolean cheatActivated;
 
     private static final MenuPanel menu=new MenuPanel();
 
     private MenuPanel(){
         setLayout(null);
+        addKeyListener(this);
+        setFocusable(true);
+
+
         play.addActionListener(this);
         play.addMouseListener(this);
         play.setBounds(startX,startY,200,50);
@@ -55,7 +60,6 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
         store.addMouseListener(this);
         store.setBounds(startX,startY+ 2 * spcaing,200,50);
         store.setFocusable(false);
-
         store.setFont(f2);
         add(store);
 
@@ -77,8 +81,6 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
         logout.addMouseListener(this);
         logout.setBounds(startX,startY+ 5 *spcaing,200,50);
         logout.setFocusable(false);
-
-
         logout.setText("Log Out");
         logout.setFont(f2);
 
@@ -89,6 +91,18 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
         exit.setFocusable(false);
         exit.setFont(f2);
         add(exit);
+
+        jDialog.setSize(new Dimension(400,200));
+        jDialog.setLocationRelativeTo(null);
+        jDialog.addKeyListener(this);
+        jDialog.setLayout(new BorderLayout());
+        cheatField=new JTextField();
+        cheatField.setSize(new Dimension(200,100));
+        cheatField.setFocusable(false);
+        jDialog.add(cheatField,BorderLayout.CENTER);
+
+
+
     }
 
     static MenuPanel getInstance(){
@@ -118,31 +132,35 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button=(JButton)e.getSource();
-        System.out.println("helloo");
         if (button == logout){
-            System.out.println("hadadadadadd");
-
             LOGGER.playerlog(Gamestate.getPlayer(),"Sign out ");
-            try {
-                JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
+            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
             MyFrame.getInstance().changePanel("login");
         }
         else if (button == exit){
-            try {
-                JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
             System.exit(0);
         }
         else if (button == status){
+            StatusPanel.getInstance().revalidate();
+            StatusPanel.getInstance().repaint();
             MyFrame.getInstance().changePanel("status");
             StatusPanel.getInstance().requestFocus();
             revalidate();
+        }
+        else if (button==store){
+            ShopPanel.getInstance().revalidate();
+            ShopPanel.getInstance().repaint();
+            MyFrame.getInstance().changePanel("shop");
+            ShopPanel.getInstance().requestFocus();
+            revalidate();
+        }else if(button==setting){
+            menu.requestFocus();
+        }else if (button == collection){
+            CollectionPanel.getInstance().revalidate();
+            CollectionPanel.getInstance().repaint();
+            MyFrame.getInstance().changePanel("collection");
+            CollectionPanel.getInstance().requestFocus();
         }
     }
 
@@ -179,6 +197,37 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+        int str=e.getKeyCode();
+        System.out.println(str);
+        if (str == KeyEvent.VK_T){
+           jDialog.setVisible(true);
+            cheatActivated=true;
+        }
+        if (str == KeyEvent.VK_R){
+            if (cheatActivated){
+                if (cheatField.getText().equalsIgnoreCase("hesoyam")){
+                    Gamestate.getPlayer().setLevel(Gamestate.getPlayer().getLevel() + 1);
+                    JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+                }
+                cheatActivated=false;
+                jDialog.setVisible(false);
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 }

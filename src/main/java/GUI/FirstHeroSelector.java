@@ -1,30 +1,39 @@
 package GUI;
 
-import Enums.Carts;
 import Enums.Heroes;
-import Heros.Hero;
+import G_L_Interface.Update;
 import Main.Gamestate;
 import Main.JsonBuilders;
-import Main.JsonReaders;
 import Main.LOGGER;
+import Main.Shop;
+import Sounds.SoundAdmin;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static GUI.Constants.*;
 
-public class FirstHeroSelector extends JPanel implements ActionListener {
+public class FirstHeroSelector extends JPanel implements ActionListener, MouseListener {
 
-    private JButton mage;
-    private JButton rogue;
-    private JButton warlock;
+    private JButton mage=new JButton();
+    private JButton rogue=new JButton();
+    private JButton warlock=new JButton();
     private JButton src;
-    private JButton choose;
+    private JButton choose=new JButton("Choose");
     private String hero;
+    private ArrayList<Images> ar;
+    private boolean flag;
+    private boolean flag2;
+    private String name;
+
+
+    private JLabel jLabel;
 
     private int size=350;
     private int spacing=400;
@@ -35,147 +44,214 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
 
 
     public FirstHeroSelector(){
-        repaint();
+        ar=new ArrayList<>();
+        addMouseListener(this);
+        setFocusable(true);
+        requestFocus();
+//        repaint();
         setLayout(null);
 
-        JButton mage=new JButton();
+//        JButton mage=new JButton();
         mage.setIcon(mageIcon);
         mage.setContentAreaFilled(false);
         mage.setBorderPainted(false);
         mage.setBounds(startX,startY,size,size);
         mage.setFont(f2);
+        mage.setFocusable(false);
         mage.addActionListener(this);
-        add(mage);
+//        add(mage);
 
 
         System.out.println("helloo");
 
-        JButton rogue =new JButton();
+//        JButton rogue =new JButton();
         rogue.setIcon(rogueIcon);
         rogue.setContentAreaFilled(false);
         rogue.setBorderPainted(false);
         rogue.setBounds(startX+spacing,startY,size,size);
         rogue.setFont(f2);
+        rogue.setFocusable(false);
         rogue.addActionListener(this);
-        add(rogue);
+//        add(rogue);
 
-        JButton warlock = new JButton();
+//        JButton warlock = new JButton();
         warlock.setIcon(warlockIcon);
         warlock.setContentAreaFilled(false);
         warlock.setBorderPainted(false);
         warlock.setBounds(startX+2*spacing,startY,size,size);
         warlock.setFont(f2);
+        warlock.setFocusable(false);
         warlock.addActionListener(this);
-        add(warlock);
+//        add(warlock);
+
+
+
+
         System.out.println("hello");
-        JButton choose=new JButton("Choose");
+//        JButton choose=new JButton("Choose");
         choose.setFocusable(false);
         choose.setBounds(120 , gameHight-120,120,30);
         choose.setFont(f2);
-        add(choose);
+        choose.addActionListener(this);
+//        add(choose);
+
+        jLabel=new JLabel();
+        jLabel.setIcon(new ImageIcon());
+
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.drawImage(heroBackgroung,0,0,1600,1000,null);
-
+//        super.paintComponent(g);
         Graphics2D g2d=(Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setFont(f2.deriveFont(35.0f));
-        FontMetrics fontMetrics=g2d.getFontMetrics(f2);
-        g2d.setColor(Color.BLUE);
-        g2d.drawString("Mage" , (startX+120),startY+size+15);
-        g2d.drawString("Rouge" , (startX+120)+spacing,startY+size+15);
-        g2d.drawString("warlock" , (startX+120)+2*spacing,startY+size+15);
+        if (!flag){
+            revalidate();
+            add(mage);
+            add(warlock);
+            add(rogue);
+            add(choose);
+            g.drawImage(heroBackground, 0, 0, 1600, 1000, null);
 
-        g2d.setFont(f2.deriveFont(40.0f));
-        g2d.setColor(Color.YELLOW);
-        g2d.drawString("     Hero    ",20,startY+size+15);
-        g2d.drawString("  Hero Power ",20,startY+500);
-        g2d.drawString("Special Cards" , 20 ,startY+750);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setFont(f2.deriveFont(35.0f));
+            FontMetrics fontMetrics = g2d.getFontMetrics(f2);
+            g2d.setColor(Color.BLUE);
+            g2d.drawString("Mage", (startX + 120), startY + size + 15);
+            g2d.drawString("Rogue", (startX + 120) + spacing, startY + size + 15);
+            g2d.drawString("warlock", (startX + 120) + 2 * spacing, startY + size + 15);
 
-
-        g2d.drawImage(magePower , startX+70 , startY+370,180,250,null);
-        g2d.drawImage(magePower , (startX+70)+spacing+10 , startY+370,180,250,null);
-        g2d.drawImage(magePower , (startX+70)+2*spacing+10 , startY+370,180,250,null);
-
-
-        g.drawImage(cardPics.get("polymorph") ,startX-50,startY+610,width,height,null);
-        g.drawImage(cardPics.get("flamestrike"),startX+150,startY+610,width,height,null);
-        g2d.drawImage(cardPics.get("friendlysmith") , (startX-50)+spacing +10, startY+610,width,height,null);
-        g2d.drawImage(cardPics.get("umbralskulker") , (startX+150)+spacing +10, startY+610,width,height,null);
-        g2d.drawImage(cardPics.get("dreadscale") , (startX-50)+2*spacing +20, startY+610,width,height,null);
-        g2d.drawImage(cardPics.get("darkskies") , (startX+150)+2*spacing +20, startY+610,width,height,null);
+            g2d.setFont(f2.deriveFont(40.0f));
+            g2d.setColor(Color.YELLOW);
+            g2d.drawString("     Hero    ", 20, startY + size + 15);
+            g2d.drawString("  Hero Power ", 20, startY + 500);
+            g2d.drawString("Special Cards", 20, startY + 750);
 
 
-        g2d.setColor(Color.RED);
-        g2d.setFont(designer);
-        g2d.drawString("Designed by Ghaffari" , 5,940);
+            g2d.drawImage(magePower, startX + 70, startY + 370, 180, 250, null);
+            g2d.drawImage(magePower, (startX + 70) + spacing + 10, startY + 370, 180, 250, null);
+            g2d.drawImage(magePower, (startX + 70) + 2 * spacing + 10, startY + 370, 180, 250, null);
 
 
-    }
+            g2d.drawImage(cardPics.get("polymorph"), startX - 50, startY + 610, width, height, null);
+            ar.add(new Images("polymorph", startX - 50, startY + 610, width, height));
+            g2d.drawImage(cardPics.get("flamestrike"), startX + 150, startY + 610, width, height, null);
+            ar.add(new Images("flamestrike", startX + 150, startY + 610, width, height));
+            g2d.drawImage(cardPics.get("friendlysmith"), (startX - 50) + spacing + 10, startY + 610, width, height, null);
+            ar.add(new Images("friendlysmith", (startX - 50) + spacing + 10, startY + 610, width, height));
+            g2d.drawImage(cardPics.get("umbralskulker"), (startX + 150) + spacing + 10, startY + 610, width, height, null);
+            ar.add(new Images("umbralskulker", (startX + 150) + spacing + 10, startY + 610, width, height));
+            g2d.drawImage(cardPics.get("dreadscale"), (startX - 50) + 2 * spacing + 20, startY + 610, width, height, null);
+            ar.add(new Images("dreadscale", (startX - 50) + 2 * spacing + 20, startY + 610, width, height));
+            g2d.drawImage(cardPics.get("darkskies"), (startX + 150) + 2 * spacing + 20, startY + 610, width, height, null);
+            ar.add(new Images("darkskies", (startX + 150) + 2 * spacing + 20, startY + 610, width, height));
+
+            g2d.setColor(Color.RED);
+            g2d.setFont(designer);
+            g2d.drawString("Designed by Ghaffari", 5, 940);
+            flag2=false;
+        }else{
+            if (!flag2) {
+                removeAll();
+                ar.clear();
+                g2d.setColor(new Color(222, 222, 222, 170));
+                g2d.fillRect(0, 0, 1600, 1000);
+                g2d.setColor(Color.white);
+                flag2=true;
+            }
+            g2d.drawImage(cardPics.get(name) , 620 , 270, null);
+
+            revalidate();
+        }
+
+
+        }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         src= (JButton) e.getSource();
         if (src==mage){
             hero="mage";
+            System.out.println("mage selected");
         }
         else if (src==rogue){
             hero="rogue";
+            System.out.println("rogue selected");
         }
         else if (src==warlock){
             hero="warlock";
+            System.out.println("warlock selected");
         }
         else if (src==choose){
+            System.out.println("here");
             if (hero==null || hero=="")
                 return;
-            switch (hero){
-                case "mage":
-                    ArrayList<Carts> ar= Gamestate.getPlayer().getPlayerCarts();
-                    ar.add(Carts.polymorph);
-                    Gamestate.getPlayer().setPlayerCarts(ar);
-                    try {
-                        Gamestate.getPlayer().setSelectedHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(),"mage"));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-                case "rouge":
-                    ArrayList<Carts> ar1=Gamestate.getPlayer().getPlayerCarts();
-                    ar1.add(Carts.friendlysmith);
-                    Gamestate.getPlayer().setPlayerCarts(ar1);
-                    try {
-                        Gamestate.getPlayer().setSelectedHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(),"rouge"));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-                case "warlock":
-                    ArrayList<Carts> ar2=Gamestate.getPlayer().getPlayerCarts();
-                    ar2.add(Carts.dreadscale);
-                    Gamestate.getPlayer().setPlayerCarts(ar2);
-                    try {
-                        Gamestate.getPlayer().setSelectedHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(),"warlock"));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-            }
+
+            Update.updateFirstHero(hero);
+
             LOGGER.playerlog(Gamestate.getPlayer(), String.format("Select : %s as first selected hero", hero.toUpperCase()));
             Gamestate.getPlayer().setNewToGame(false);
             ArrayList<Heroes> ar1=Gamestate.getPlayer().getPlayerHeroes();
             if (Gamestate.getPlayer().getPlayerHeroes()==null)  ar1=new ArrayList<Heroes>();
             ar1.add(Heroes.valueOf(hero));
             Gamestate.getPlayer().setPlayerHeroes(ar1);
-            try {
-                JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
+            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+            Constants.addPanels();
+            SoundAdmin.clip.stop();
+            SoundAdmin.play("resources\\Sounds\\3.wav");
             MyFrame.getInstance().changePanel("menu");
         }
+
+    }
+
+
+    private void drawBigger(String st){
+        flag=true;
+        name=st;
+        repaint();
+        revalidate();
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int x=e.getX();
+        int y=e.getY();
+        String st = null;
+        for (Images images : ar) {
+           if ( (x>= images.getX() && x<=images.getX()+images.getWidth())  && (y>=images.getY() && y<=images.getY()+images.getHeigth()) ){
+               st=images.getName();
+               break;
+           }
+        }
+
+        System.out.println("name :   " +  st);
+        if (st == null  || st == ""){
+            flag=false;
+            repaint();
+            revalidate();
+            return;
+        }
+        System.out.println(st);
+        drawBigger(st);
+        repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }

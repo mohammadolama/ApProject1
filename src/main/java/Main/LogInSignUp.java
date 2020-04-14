@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class LogInSignUp {
     static String user;
     static String password;
-    static File file = new File("Main.Player.txt");
+    static File file = new File("resources\\Main.Player.txt");
 
     static String DuplicateUserChecker() throws FileNotFoundException {
         Scanner sc = new Scanner(System.in);
@@ -148,7 +148,7 @@ public class LogInSignUp {
 
 
    public static boolean UserFinder(String user) throws FileNotFoundException {
-        file = new File("Main.Player.txt");
+        file = new File("resources\\Main.Player.txt");
         Scanner sc2 = new Scanner(file);
         boolean flag = false;
         while (sc2.hasNext()) {
@@ -192,12 +192,12 @@ public class LogInSignUp {
 
    public static String create(String user , String pass) throws IOException {
         if (DuplicateUserChecker(user)){
-            FileWriter fileWriter = new FileWriter("Main.Player.txt", true);
+            FileWriter fileWriter = new FileWriter("resources\\Main.Player.txt", true);
             PrintWriter pw = new PrintWriter(fileWriter);
             pw.write("User : " + user + "\n");
             pw.write("Password : " + pass + "\n");
             pw.write("**********************" + "\n" + "\n");
-            Player player = new Player(user, password);
+            Player player = new Player(user, pass);
             JsonBuilders.PlayerJsonBuilder(user, player);
             JsonBuilders.NewPlayerHeroBuilder(player);
             pw.close();

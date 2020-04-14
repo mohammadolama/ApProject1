@@ -2,7 +2,7 @@ package Enums;
 
 public enum Heroes {
     mage,
-    rouge,
+    rogue,
     warlock,
     hunter,
     priest

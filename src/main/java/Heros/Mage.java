@@ -26,7 +26,7 @@ public class Mage extends Hero {
 
 
 
-    private ArrayList<Carts> Spcards() {
+    public static ArrayList<Carts> Spcards() {
         ArrayList<Carts> ar = new ArrayList<>();
         ar.add(Carts.polymorph);
         ar.add(Carts.flamestrike);

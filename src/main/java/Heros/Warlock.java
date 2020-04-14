@@ -22,7 +22,7 @@ public class Warlock extends Hero {
         this.setSPcarts(Spcards());
     }
 
-    private ArrayList<Carts> Spcards() {
+    public static ArrayList<Carts> Spcards() {
         ArrayList<Carts> ar = new ArrayList<>();
         ar.add(Carts.darkskies);
         ar.add(Carts.dreadscale);

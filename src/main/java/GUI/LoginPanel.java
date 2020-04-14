@@ -1,6 +1,9 @@
 package GUI;
 
+import G_L_Interface.Update;
+import Main.Gamestate;
 import Main.LogInSignUp;
+import Sounds.SoundAdmin;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,7 +12,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static GUI.Constants.f1;
 import static GUI.Constants.f2;
@@ -110,8 +112,17 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
                     String st = LogInSignUp.check(userField.getText(), passField.getText());
                     switch (st) {
                         case "ok":
-                            Update.upcdate();
-                            MyFrame.getInstance().changePanel("menu");
+//                            Update.update();
+                            if (Gamestate.getPlayer().getNewToGame()) {
+                                MyFrame.getInstance().changePanel("hero");
+//                                Update.update();
+                            }else {
+                                SoundAdmin.clip.stop();
+                                SoundAdmin.play("resources\\Sounds\\3.wav");
+                                MyFrame.getInstance().changePanel("menu");
+                                Constants.addPanels();
+//                                Update.update();
+                            }
                             userField.setText("");
                             passField.setText("");
                             break;

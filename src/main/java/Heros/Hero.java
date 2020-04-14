@@ -1,5 +1,6 @@
 package Heros;
 
+import AllCards.Cards;
 import Enums.*;
 import Main.JsonReaders;
 import Main.Player;
@@ -124,27 +125,6 @@ public class Hero {
 
 
 
-    public  void UpdateDeck() throws IOException, InterruptedException { // biuld card objects from json using enum
-        ArrayList ar = new ArrayList();
-        for (Carts cartss : Dcarts) {
-            for (MinionCarts minionCarts : MinionCarts.values()) {
-                if (cartss.toString().equals(minionCarts.toString())) {
-                    ar.add(JsonReaders.MinionsReader(cartss.name()));
-                }
-            }
-            for (SpellCarts spellCarts : SpellCarts.values()) {
-                if (cartss.toString().equals(spellCarts.toString())) {
-                    ar.add(JsonReaders.SpellReader(cartss.name()));
-                }
-            }
-            for (WeaponCarts weaponCarts : WeaponCarts.values()) {
-                if (cartss.toString().equals(weaponCarts.toString())) {
-                    ar.add(JsonReaders.WeaponReader(cartss.name()));
-                }
-            }
-        }
-        CardsInDeck = ar;
-    }
 
     public void UpdateAddPurchasedCards(Carts cartss) {
         ArrayList<Carts> ar = this.Pcarts;

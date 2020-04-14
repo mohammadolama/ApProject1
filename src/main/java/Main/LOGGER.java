@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public class LOGGER {
     public static void playerlog(Player player, String string){
-        String st=String.format("players\\%s-%s.log",player.getUsername(),player.getId());
+        String st=String.format("resources\\players\\%s-%s.log",player.getUsername(),player.getId());
         Calendar calendar = Calendar.getInstance();
         try {
             FileWriter fileWriter=new FileWriter(st,true);

@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @JsonIgnoreProperties({"purchasedCards", "CardsInDeck"})
-public class Rouge extends Hero {
-    public Rouge(Player player) throws IOException {
+public class Rogue extends Hero {
+    public Rogue(Player player) throws IOException {
         super(player);
-        this.setName("Rouge");
+        this.setName("Rogue");
         this.setCanAttack(false);
         this.setATT(0);
         this.setHP(30);
@@ -22,7 +22,7 @@ public class Rouge extends Hero {
 
     }
 
-    private ArrayList<Carts> Spcards() {
+    public static ArrayList<Carts> Spcards() {
         ArrayList<Carts> ar = new ArrayList<>();
         ar.add(Carts.friendlysmith);
         ar.add(Carts.umbralskulker);

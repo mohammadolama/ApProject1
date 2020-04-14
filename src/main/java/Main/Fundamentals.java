@@ -5,24 +5,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Fundamentals {
-    static void MkDirs() {
+    public static void MkDirs() {
         try {
-            File file = new File("players");
+            File file = new File("resources\\players");
             if (file.isDirectory() == false) file.mkdir();
-            file = new File("Jsons\\players");
+            file = new File("resources\\Jsons\\players");
             if (file.isDirectory() == false) file.mkdir();
-            file = new File("Main.Player.txt");
-            file = new File("Jsons\\Weapons");
-            if (file.isDirectory() == false) file.mkdir();
+            file = new File("resources\\Main.Player.txt");
             if (file.exists() == false) {
-                FileWriter fileWriter = new FileWriter("Main.Player.txt");
+                FileWriter fileWriter = new FileWriter("resources\\Main.Player.txt");
                 fileWriter.close();
             }
-            file = new File("user");
+            file = new File("resources\\user");
             if (file.isDirectory() == false) file.mkdir();
-            file = new File("user\\temp.txt");
+            file = new File("resources\\user\\temp.txt");
             if (file.exists() == false) {
-                FileWriter fileWriter = new FileWriter("user\\temp.txt");
+                FileWriter fileWriter = new FileWriter("resources\\user\\temp.txt");
                 fileWriter.close();
             }
         } catch (IOException e) {
