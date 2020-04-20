@@ -1,8 +1,7 @@
 package Heros;
 
-import AllCards.Cards;
-import Enums.*;
-import Main.JsonReaders;
+
+import Enums.Carts;
 import Main.Player;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;

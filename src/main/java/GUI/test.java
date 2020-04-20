@@ -21,6 +21,17 @@ public class test {
         SoundAdmin.play("resources\\Sounds\\2.wav");
         MyFrame.getInstance();
 
+//        JFrame frame=new JFrame();
+//        frame.setLayout(null);
+//        frame.setSize(1600,1000);
+//        frame.setPreferredSize(new Dimension(1600,1000));
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setLocationRelativeTo(null);
+//        Panel panel=new Panel();
+//        panel.setBounds(0,0,1600,1000);
+//        CollectionPanel collectionPanel=CollectionPanel.getInstance();
+//        frame.add(collectionPanel);
+//        frame.setVisible(true);
 
 
 

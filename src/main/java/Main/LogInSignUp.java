@@ -134,51 +134,62 @@ public class LogInSignUp {
 
 
 
-   public static boolean DuplicateUserChecker(String user) throws FileNotFoundException {
+   public static boolean DuplicateUserChecker(String user) {
         boolean flag = true;
+            try {
+                Scanner sc2 = new Scanner(file);
+                while (sc2.hasNext()) {
+                    String st56 = sc2.nextLine();
+                    if (st56.equals("User : " + user)) {
+                        return false;
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+       return true;
+    }
+
+
+   public static boolean UserFinder(String user) {
+        file = new File("resources\\Main.Player.txt");
+       Scanner sc2 = null;
+       try {
+           sc2 = new Scanner(file);
+           boolean flag = false;
+           while (sc2.hasNext()) {
+               String st56 = sc2.nextLine();
+               if (st56.equals("User : " + user)) {
+                   flag = true;
+               }
+           }
+           if (flag) {
+               return true;
+           }
+       } catch (FileNotFoundException e) {
+           e.printStackTrace();
+       }
+           return false;
+    }
+
+   public static boolean PassChecker(String username , String password)  {
+        try {
+
             Scanner sc2 = new Scanner(file);
+            boolean flag = false;
             while (sc2.hasNext()) {
                 String st56 = sc2.nextLine();
-                if (st56.equals("User : " + user)) {
-                    return false;
+                if (st56.equals("User : " + username) && sc2.nextLine().equals("Password : " + password)) {
+                    flag = true;
                 }
             }
-        return true;
-    }
-
-
-   public static boolean UserFinder(String user) throws FileNotFoundException {
-        file = new File("resources\\Main.Player.txt");
-        Scanner sc2 = new Scanner(file);
-        boolean flag = false;
-        while (sc2.hasNext()) {
-            String st56 = sc2.nextLine();
-            if (st56.equals("User : " + user)) {
-                flag = true;
+            if (flag) {
+                return true;
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        if (flag) {
-            return true;
-        } else {
             return false;
-        }
-    }
-
-   public static boolean PassChecker(String username , String password) throws FileNotFoundException {
-
-        Scanner sc2 = new Scanner(file);
-        boolean flag = false;
-        while (sc2.hasNext()) {
-            String st56 = sc2.nextLine();
-            if (st56.equals("User : " + username) && sc2.nextLine().equals("Password : " + password)) {
-                flag = true;
-            }
-        }
-        if (flag) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
 
@@ -190,28 +201,30 @@ public class LogInSignUp {
 
 
 
-   public static String create(String user , String pass) throws IOException {
-        if (DuplicateUserChecker(user)){
-            FileWriter fileWriter = new FileWriter("resources\\Main.Player.txt", true);
-            PrintWriter pw = new PrintWriter(fileWriter);
-            pw.write("User : " + user + "\n");
-            pw.write("Password : " + pass + "\n");
-            pw.write("**********************" + "\n" + "\n");
-            Player player = new Player(user, pass);
-            JsonBuilders.PlayerJsonBuilder(user, player);
-            JsonBuilders.NewPlayerHeroBuilder(player);
-            pw.close();
-            return "ok";
-        }
-        else {
-            return "user already exist";
-        }
-    }
-   public static String check(String user , String password) throws IOException {
+   public static String create(String user , String pass) {
+       try {
+           if (DuplicateUserChecker(user)) {
+               FileWriter fileWriter = new FileWriter("resources\\Main.Player.txt", true);
+               PrintWriter pw = new PrintWriter(fileWriter);
+               pw.write("User : " + user + "\n");
+               pw.write("Password : " + pass + "\n");
+               pw.write("**********************" + "\n");
+               Player player = new Player(user, pass);
+               System.out.println(player);
+               JsonBuilders.PlayerJsonBuilder(user, player);
+               JsonBuilders.NewPlayerHeroBuilder(player);
+               pw.close();
+               return "ok";
+           }
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+       return "user already exist";
+   }
+   public static String check(String user , String password) {
         if (UserFinder(user)){
             if (PassChecker(user,password)){
                 Player player = JsonReaders.PlayerJsonReader(user);
-                System.out.println(player);
                 Gamestate.setPlayer(player);
                 LOGGER.playerlog(player, "Sign_in");
                 return "ok";

@@ -11,34 +11,40 @@ public class MyFrame extends JFrame {
     CardLayout cardLayout;
 
     private MyFrame() {
-
-        cardLayout = new CardLayout();
-        panel = new JPanel();
         setSize(1600, 1000);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        cardLayout = new CardLayout();
+        panel = new JPanel();
+
+
         panel.setLayout(cardLayout);
         LoginPanel loginPanel = LoginPanel.getInstance();
         MenuPanel menuPanel = MenuPanel.getInstance();
-        FirstHeroSelector firstHeroSelector = new FirstHeroSelector();
-
 
         panel.add(loginPanel, "login");
         panel.add(menuPanel, "menu");
 
-        panel.add(firstHeroSelector, "hero");
-
         add(panel);
         setVisible(true);
 
-        System.out.println(getSize());
-        System.out.println(getPreferredSize());
+        setPreferredSize(new Dimension(1600,1000));
 
 
     }
 
     public static MyFrame getInstance() {
         return frame;
+    }
+
+    public static JPanel getPanel() {
+        return panel;
+    }
+
+    public static void setPanel(JPanel panel) {
+        MyFrame.panel = panel;
     }
 
     public void changePanel(String string) {

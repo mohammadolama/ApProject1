@@ -1,0 +1,11 @@
+{
+  "name": "ArcaniteReaper",
+  "description": "No Special description",
+  "type": "Weapon",
+  "price": 20,
+  "heroClass": "Neutral",
+  "rarity": "Common",
+  "durability": 2,
+  "att": 4,
+  "manaCost": 5
+}

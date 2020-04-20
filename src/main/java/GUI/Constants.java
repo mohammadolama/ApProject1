@@ -1,5 +1,7 @@
 package GUI;
 
+//import GUI.DrawingPanels.TestPanel;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +16,7 @@ public class Constants {
     static int gameHight = 1000;
 
 
-    static Font f2 = new Font("Serif", Font.BOLD, 25);
+    public static Font f2 = new Font("Serif", Font.BOLD, 25);
     static Font f1 = new Font("Serif", Font.BOLD, 20);
     static Font Title = new Font("Serif", Font.BOLD, 90);
     static Font designer = new Font("Serif", Font.BOLD, 12);
@@ -31,7 +33,7 @@ public class Constants {
     private static BufferedImage login;
     private static BufferedImage main;
     static private BufferedImage shop;
-    static BufferedImage status;
+    public static BufferedImage status;
     static BufferedImage playpanel;
 
     static BufferedImage mage;
@@ -47,7 +49,7 @@ public class Constants {
 
 
     static BufferedImage status2;
-    static BufferedImage tick;
+    public static BufferedImage tick;
 
     static BufferedImage arcanitereaper;
     static BufferedImage ashbringer;
@@ -88,9 +90,13 @@ public class Constants {
     static BufferedImage umbralskulker;
 
 
-    static HashMap<String, BufferedImage> cardPics;
+    static ImageIcon exitIcon;
+    static ImageIcon backIcon;
+
+
+    public static HashMap<String, BufferedImage> cardPics;
     static HashMap<String, BufferedImage> gamePics;
-    static HashMap<String, BufferedImage> heroPics;
+    public static HashMap<String, BufferedImage> heroPics;
 
     static void pictureLoader() {
         cardPics = new HashMap<>();
@@ -225,17 +231,10 @@ public class Constants {
             e.printStackTrace();
         }
 
-
+         exitIcon=new ImageIcon("resources\\pics\\game\\exit.png");
+         backIcon=new ImageIcon("resources\\pics\\game\\back.png");
     }
 
 
-    public static void addPanels(){
-        CollectionPanel collectionPanel=CollectionPanel.getInstance();
-        ShopPanel shopPanel=ShopPanel.getInstance();
-        StatusPanel statusPanel=StatusPanel.getInstance();
-        MyFrame.panel.add(collectionPanel,"collection");
-        MyFrame.panel.add(shopPanel,"shop");
-        MyFrame.panel.add(statusPanel,"status");
-    }
 
 }

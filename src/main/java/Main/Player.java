@@ -3,8 +3,10 @@ package Main;
 
 import Enums.*;
 import Heros.*;
+
 import java.io.*;
 import java.util.*;
+
 import Main.*;
 import org.codehaus.jackson.annotate.JsonAnyGetter;
 
@@ -23,30 +25,31 @@ public class Player implements Serializable {
     private ArrayList<Heroes> PlayerHeroes;
     private Deck selectedDeck;
 
-//    @JsonAnyGetter
-    private HashMap<String ,Deck> allDecks;
-
+    private HashMap<String, Deck> allDecks;
 
 
     public Player() throws IOException {
     }
 
-    public Player(String username, String password) throws IOException {
-        this.username = username;
-        this.password = password;
-        this.level = 0;
-        this.exp = 0;
-        this.setPlayerCarts(DefultAvailableCardsManager());
-        this.setSelectedDeck(DefaultDeck());
-        allDecks=new HashMap<String, Deck>();
-        allDecks.put(getSelectedDeck().getName(),getSelectedDeck());
-        String st1 = System.nanoTime() + "";
-        this.setId(st1);
-        String st = String.format("resources\\players\\%s-%s.log", username, this.getId());
-        PrintWriter vm = new PrintWriter(st);
-        Date date = new Date();
-        vm.write("Created in : " + date.toString()+"\n"+"Password : " + password+"\n"+"User : " + username+"\n"+"**********************" + "\n");
-        vm.close();
+    public Player(String username, String password) {
+        try {
+            this.username = username;
+            this.password = password;
+            this.level = 0;
+            this.exp = 0;
+            this.setPlayerCarts(DefultAvailableCardsManager());
+            this.setSelectedDeck(DefaultDeck());
+            allDecks = new HashMap<String, Deck>();
+            allDecks.put(getSelectedDeck().getName(), getSelectedDeck());
+            this.setId(System.nanoTime() + "");
+            String st = String.format("resources\\players\\%s-%s.log", username, this.getId());
+            PrintWriter vm = new PrintWriter(st);
+            Date date = new Date();
+            vm.write("Created in : " + date.toString() + "\n" + "Password : " + password + "\n" + "User : " + username + "\n" + "**********************" + "\n");
+            vm.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -1,9 +1,7 @@
 package GUI;
 
-import G_L_Interface.Update;
-import Main.Gamestate;
-import Main.LogInSignUp;
-import Sounds.SoundAdmin;
+
+import Util.Admin;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,24 +11,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static GUI.Constants.f1;
-import static GUI.Constants.f2;
+import static GUI.Constants.*;
 
 public class LoginPanel extends JPanel implements ActionListener,MouseListener {
     private static final LoginPanel loginpanel = new LoginPanel();
-    static BufferedImage bf;
+    private static BufferedImage bf;
 
     private JButton source;
 
 
     private JButton createAccount;
     private JButton enter;
+    private JButton exit;
     private JLabel userLabel;
     private JLabel passLabel;
     private JLabel error;
     private JTextField userField;
     private JTextField passField;
 
+    private int userlabelX=900;
+    private int userLabelY=350;
+    private int userLabelWidth=150;
+    private int userLabelHeight=27;
 
     {
         try {
@@ -41,44 +43,58 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
     }
 
     private LoginPanel() {
-        repaint();
-
+        setLayout(null);
         createAccount = new JButton("Create new Account");
         createAccount.setFont(f1);
+
         enter = new JButton("Enter");
         enter.setFont(f1);
+
         userLabel = new JLabel("Username : ");
         userLabel.setFont(f2);
         userLabel.setForeground(Color.YELLOW);
+
         passLabel = new JLabel("Password  : ");
         passLabel.setFont(f2);
         passLabel.setForeground(Color.YELLOW);
+
         error = new JLabel("");
         error.setFont(f2);
         error.setForeground(Color.RED);
+
         userField = new JTextField(10);
         passField = new JTextField(10);
-
 
         createAccount.setFont(f1);
         createAccount.setFocusable(false);
         createAccount.addActionListener(this);
         createAccount.addMouseListener(this);
+
         enter.setFont(f1);
         enter.setFocusable(false);
         enter.addActionListener(this);
         enter.addMouseListener(this);
 
+        exit=new JButton();
+        exit.setIcon(exitIcon);
+        exit.setFocusable(false);
+        exit.setContentAreaFilled(false);
+        exit.setRolloverEnabled(false);
+        exit.setBorderPainted(false);
+        exit.addActionListener(this);
 
-        setLayout(null);
-        userField.setBounds(1050, 350, 150, 27);
-        passField.setBounds(1050, 400, 150, 27);
-        userLabel.setBounds(900, 350, 150, 27);
-        passLabel.setBounds(900, 400, 150, 27);
+
+        userField.setBounds(userlabelX+150, userLabelY, userLabelWidth, userLabelHeight);
+        passField.setBounds(userlabelX+150, userLabelY+50, userLabelWidth, userLabelHeight);
+        userLabel.setBounds(userlabelX, userLabelY, userLabelWidth, userLabelHeight);
+        passLabel.setBounds(userlabelX, userLabelY+50, userLabelWidth, userLabelHeight);
         error.setBounds(900, 300, 300, 27);
         enter.setBounds(1000, 500, 250, 30);
         createAccount.setBounds(1000, 550, 250, 30);
+        exit.setBounds(1500, 890, 60, 60);
 
+
+        add(exit);
         add(userField);
         add(passField);
         add(userLabel);
@@ -88,7 +104,7 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
         add(error);
     }
 
-    static LoginPanel getInstance() {
+    public static LoginPanel getInstance() {
         return loginpanel;
     }
 
@@ -97,9 +113,6 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
     protected void paintComponent(Graphics gd) {
         Graphics2D g = (Graphics2D) gd;
         g.drawImage(Constants.gamePics.get("login"), 0, 0,  null);
-
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
     }
 
     @Override
@@ -107,63 +120,17 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
         if (e.getSource() == enter) {
             if (userField.getText().equals("") || passField.getText().equals("")) {
                 return;
-            } else {
-                try {
-                    String st = LogInSignUp.check(userField.getText(), passField.getText());
-                    switch (st) {
-                        case "ok":
-//                            Update.update();
-                            if (Gamestate.getPlayer().getNewToGame()) {
-                                MyFrame.getInstance().changePanel("hero");
-//                                Update.update();
-                            }else {
-                                SoundAdmin.clip.stop();
-                                SoundAdmin.play("resources\\Sounds\\3.wav");
-                                MyFrame.getInstance().changePanel("menu");
-                                Constants.addPanels();
-//                                Update.update();
-                            }
-                            userField.setText("");
-                            passField.setText("");
-                            break;
-                        case "wrong password":
-                            error.setText("Wrong Password");
-                            revalidate();
-                            break;
-                        case "user not found":
-                            error.setText("Username not Found.");
-                            revalidate();
-                            break;
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-
             }
+                Admin.getInstance().logIn(userField.getText(), passField.getText());
         }
         else if (e.getSource() == createAccount) {
             if (userField.getText().equals("") || passField.getText().equals("")) {
                 return;
-            } else {
-                try {
-                    String st=LogInSignUp.create(userField.getText(),passField.getText());
-                    switch (st){
-                        case "ok":
-                            error.setForeground(Color.GREEN);
-                            error.setText("Account Created.");
-                            revalidate();
-                            error.setForeground(Color.red);
-                            break;
-                        case "user already exist":
-                            error.setText("User already exists.");
-                            revalidate();
-                            break;
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
             }
+            Admin.getInstance().signUp(userField.getText(), passField.getText());
+        }
+        else if (e.getSource() == exit){
+            System.exit(0);
         }
     }
 
@@ -192,4 +159,19 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
     public void mouseExited(MouseEvent e) {
         source.setBackground(Color.WHITE);
     }
+
+    public JLabel getError() {
+        return error;
+    }
+
+
+    public JTextField getUserField() {
+        return userField;
+    }
+
+
+    public JTextField getPassField() {
+        return passField;
+    }
+
 }

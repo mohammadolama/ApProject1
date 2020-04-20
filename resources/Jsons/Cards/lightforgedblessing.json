@@ -1,0 +1,11 @@
+{
+  "name": "LightforgedBlessing",
+  "description": "Give a friendly minion, Lifesteal.",
+  "type": "Spell",
+  "heroClass": "Neutral",
+  "rarity": "Rare",
+  "price": 20,
+  "usageTimes": 2,
+  "title": "Twinspell",
+  "manaCost": 2
+}

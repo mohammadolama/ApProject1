@@ -1,7 +1,9 @@
 package GUI;
 
 import AllCards.Cards;
+import G_L_Interface.Update;
 import Main.Gamestate;
+import Main.JsonBuilders;
 import Main.Shop;
 
 import javax.swing.*;
@@ -32,9 +34,10 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private JButton spellButton = new JButton("Spell");
     private JButton weaponButton = new JButton("Weapon");
     private JButton allbutton=new JButton("All");
-    private JButton backButton = new JButton("Back");
+    private JButton backButton = new JButton();
     private JButton buyActivatedButton = new JButton("Buy");
     private JButton sellActivatedButton = new JButton("Sell");
+    private JButton exit=new JButton();
     private JButton buyButton;
     private JButton sellButton;
     private ArrayList<Images> images;
@@ -63,6 +66,8 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private int startY2 = 80;
     private int width = 130;
     private int height = 195;
+
+    private int priceX=480;
 
     private ShopPanel() {
         setLayout(null);
@@ -98,11 +103,21 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         weaponButton.setFont(f2);
 
 
-        backButton.addMouseListener(this);
-        backButton.setFont(f2);
+        backButton.setIcon(backIcon);
         backButton.addActionListener(this);
-        backButton.setBounds(startX1, startY1 + 6*spacing1, 200, 50);
+        backButton.setBounds(startX1+75, startY1 + 6*spacing1, 60, 60);
         backButton.setFocusable(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setRolloverEnabled(false);
+        backButton.setBorderPainted(false);
+
+        exit.addActionListener(this);
+        exit.setIcon(exitIcon);
+        exit.setBounds(startX1+150, startY1 + 6*spacing1, 60, 60);
+        exit.setFocusable(false);
+        exit.setContentAreaFilled(false);
+        exit.setRolloverEnabled(false);
+        exit.setBorderPainted(false);
 
 
         buyActivatedButton.addActionListener(this);
@@ -205,6 +220,11 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         sellButton.addActionListener(this);
 
 
+
+
+
+
+
         addMouseListener(this);
     }
 
@@ -230,6 +250,14 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         return table;
     }
 
+    String getClass(String string){
+        for (Cards card : cards) {
+            if (card.getName().equalsIgnoreCase(string)){
+                return card.getHeroClass();
+            }
+        }
+        return "Neutral";
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -247,6 +275,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             add(manaFilter);
             add(searchField);
             add(walletLabel);
+            add(exit);
             g2d.setFont(f2.deriveFont(30.0f));
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setColor(Color.white);
@@ -285,8 +314,6 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                     buyButton.setEnabled(true);
                     buyButton.setBackground(Color.ORANGE);
                     g2d.setFont(f2.deriveFont(50.0f));
-                    g2d.setColor(Color.red);
-                    g2d.drawString("Price : " + Shop.Price(name.toLowerCase()), 720, 480);
                     if (Shop.Price((name.toLowerCase())) > Gamestate.getPlayer().getMoney()) {
                         buyButton.setEnabled(false);
                         buyButton.setBackground(Color.LIGHT_GRAY);
@@ -296,18 +323,24 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 else {
                     sellButton.setEnabled(true);
                     sellButton.setBackground(Color.ORANGE);
-                    g2d.setFont(f2.deriveFont(50.0f));
-                    g2d.setColor(Color.red);
-                    g2d.drawString("Price : " + Shop.Price(name.toLowerCase()) / 2, 800, 480);
                     if (!Shop.CanBeSold(name.toLowerCase())) {
                         g2d.setFont(f2);
-                        g2d.drawString("Can't be sold,It's in one of your decks.",700,520);
+                        g2d.setColor(Color.RED);
+                        g2d.drawString("Can't be sold,It's in one of your decks.",700,priceX+40);
                         sellButton.setEnabled(false);
                         sellButton.setBackground(Color.LIGHT_GRAY);
                     }
+
                     add(sellButton);
 
                 }
+                g2d.setFont(f2.deriveFont(40.0f));
+                g2d.setColor(Color.red);
+                g2d.drawString("Price : " + Shop.Price(name.toLowerCase()), 720, priceX);
+                g2d.drawString("Class : " , 720, priceX-40);
+                g2d.setColor(Color.BLUE);
+                g2d.drawString( getClass(name.toLowerCase()), 850, priceX-40);
+
             }
             g2d.drawImage(cardPics.get(name), 300, 220, null);
 
@@ -379,8 +412,13 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
         JButton src = (JButton) e.getSource();
         if (src == backButton) {
+            Update.saveAndUpdate();
             MyFrame.getInstance().changePanel("menu");
-        } else if (src == buyActivatedButton) {
+        }else if (src == exit){
+            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
+            System.exit(0);
+        }
+        else if (src == buyActivatedButton) {
             buyActivatedButton.setBackground(Color.yellow);
             sellActivatedButton.setBackground(Color.WHITE);
             buyActivated = true;
@@ -452,7 +490,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             repaint();
             return;
         }
-        System.out.println(st);
+
         drawBigger(st);
         repaint();
     }

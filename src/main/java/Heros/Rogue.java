@@ -1,6 +1,6 @@
 package Heros;
 
-import Main.Player;
+import Main.*;
 import Enums.*;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import java.io.IOException;

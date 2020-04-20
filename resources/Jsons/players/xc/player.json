@@ -1,0 +1,87 @@
+{
+  "username": "xc",
+  "password": "xc",
+  "id": "59392952331000",
+  "level": 0,
+  "exp": 0,
+  "money": 1000,
+  "selectedDeck": {
+    "deck": [
+      "fierywaraxe",
+      "evasivewyrm",
+      "blessingoftheancients",
+      "tastyflyfish",
+      "lightforgedblessing",
+      "depthcharge",
+      "cobaltspellkin",
+      "koboldstickyfinger",
+      "tombwarden"
+    ],
+    "hero": {
+      "name": "Rogue",
+      "heroPowerManaCost": 3,
+      "hp": 30,
+      "att": 0,
+      "canAttack": false,
+      "heroPower": "Steal a card from opponent's hand and add it to your hand .Costs 3 mana\n Upgrade : if you have a weapon , You Steal a card from opponent's hand and a card from opponent's deck randomly.",
+      "pcarts": [],
+      "specialPower": "A card which is not in your class or not neutral, costs 2 less mana .",
+      "dcarts": [
+        "fierywaraxe",
+        "evasivewyrm",
+        "blessingoftheancients",
+        "tastyflyfish",
+        "lightforgedblessing",
+        "depthcharge",
+        "cobaltspellkin",
+        "koboldstickyfinger",
+        "tombwarden",
+        "friendlysmith"
+      ],
+      "spcarts": [
+        "friendlysmith",
+        "umbralskulker"
+      ]
+    },
+    "mostUsedCard": null,
+    "totalPlays": 0,
+    "totalWins": 0,
+    "name": "Default Deck"
+  },
+  "allDecks": {
+    "Default Deck": {
+      "deck": [
+        "fierywaraxe",
+        "evasivewyrm",
+        "blessingoftheancients",
+        "tastyflyfish",
+        "lightforgedblessing",
+        "depthcharge",
+        "cobaltspellkin",
+        "koboldstickyfinger",
+        "tombwarden"
+      ],
+      "hero": null,
+      "mostUsedCard": null,
+      "totalPlays": 0,
+      "totalWins": 0,
+      "name": "Default Deck"
+    }
+  },
+  "playerCarts": [
+    "fierywaraxe",
+    "evasivewyrm",
+    "blessingoftheancients",
+    "tastyflyfish",
+    "lightforgedblessing",
+    "depthcharge",
+    "cobaltspellkin",
+    "koboldstickyfinger",
+    "tombwarden",
+    "friendlysmith"
+  ],
+  "newToGame": false,
+  "playerHeroes": [
+    "rogue"
+  ]
+}

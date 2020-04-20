@@ -1,22 +1,16 @@
 package GUI;
 
-import Main.*;
-import Main.Menu;
-import Sounds.SoundAdmin;
+import Util.Admin;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import static GUI.Constants.*;
 
-public class MenuPanel extends JPanel implements ActionListener, MouseMotionListener, MouseListener,KeyListener {
+public class MenuPanel extends JPanel implements ActionListener, MouseListener {
 
-    private int startY=100;
+    private int startY=200;
     private int startX=20;
     private int spcaing=100;
 
@@ -26,17 +20,13 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
     private static JButton setting=new JButton("Setting");
     private static JButton status=new JButton("Status");
     private static JButton logout=new JButton("Log Out");
-    private static JButton exit=new JButton("Exit");
+    private static JButton exit=new JButton();
     private static JButton src;
-    private static JDialog jDialog=new JDialog();
-    private static JTextField cheatField;
-    private static boolean cheatActivated;
 
     private static final MenuPanel menu=new MenuPanel();
 
     private MenuPanel(){
         setLayout(null);
-        addKeyListener(this);
         setFocusable(true);
 
 
@@ -83,84 +73,56 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
         logout.setFocusable(false);
         logout.setText("Log Out");
         logout.setFont(f2);
-
         add(logout);
+
         exit.addActionListener(this);
-        exit.addMouseListener(this);
-        exit.setBounds(startX,startY+ 6 *spcaing,200,50);
+        exit.setIcon(exitIcon);
+        exit.setBounds(10,890,60,60);
         exit.setFocusable(false);
-        exit.setFont(f2);
+        exit.setContentAreaFilled(false);
+        exit.setRolloverEnabled(false);
+        exit.setBorderPainted(false);
         add(exit);
-
-        jDialog.setSize(new Dimension(400,200));
-        jDialog.setLocationRelativeTo(null);
-        jDialog.addKeyListener(this);
-        jDialog.setLayout(new BorderLayout());
-        cheatField=new JTextField();
-        cheatField.setSize(new Dimension(200,100));
-        cheatField.setFocusable(false);
-        jDialog.add(cheatField,BorderLayout.CENTER);
-
-
-
     }
 
-    static MenuPanel getInstance(){
+   public static MenuPanel getInstance(){
         return menu;
     }
 
 
     @Override
-    protected void paintComponent(Graphics g)
-    {
+    protected void paintComponent(Graphics g) {
         g.drawImage(Constants.gamePics.get("main"),0,0,null);
         g.setColor(new Color(254, 255, 253,170));
         g.fillRect(0,0,250,1000);
-
         Graphics2D g2d=(Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setFont(Constants.Title);
-        g2d.setColor(Color.ORANGE);
+        g2d.setColor(Color.red);
         g2d.drawString("Math & CStone" , 550,100);
         g2d.setColor(Color.RED);
         g2d.setFont(designer);
-        g2d.drawString("Designed by Ghaffari" , 5,940);
-
-
+        g2d.drawString("Designed by Ghaffari" , 1450,940);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button=(JButton)e.getSource();
         if (button == logout){
-            LOGGER.playerlog(Gamestate.getPlayer(),"Sign out ");
-            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
-            MyFrame.getInstance().changePanel("login");
-        }
+            Admin.getInstance().logOut();
+            }
         else if (button == exit){
-            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
-            System.exit(0);
+            Admin.getInstance().exit();
         }
         else if (button == status){
-            StatusPanel.getInstance().revalidate();
-            StatusPanel.getInstance().repaint();
-            MyFrame.getInstance().changePanel("status");
-            StatusPanel.getInstance().requestFocus();
-            revalidate();
+            Admin.getInstance().setVisiblePanel("status");
         }
         else if (button==store){
-            ShopPanel.getInstance().revalidate();
-            ShopPanel.getInstance().repaint();
-            MyFrame.getInstance().changePanel("shop");
-            ShopPanel.getInstance().requestFocus();
-            revalidate();
+            Admin.getInstance().setVisiblePanel("store");
         }else if(button==setting){
-            menu.requestFocus();
+
         }else if (button == collection){
-            CollectionPanel.getInstance().revalidate();
-            CollectionPanel.getInstance().repaint();
-            MyFrame.getInstance().changePanel("collection");
-            CollectionPanel.getInstance().requestFocus();
+            Admin.getInstance().setVisiblePanel("collection");
         }
     }
 
@@ -188,46 +150,5 @@ public class MenuPanel extends JPanel implements ActionListener, MouseMotionList
     @Override
     public void mouseExited(MouseEvent e) {
         src.setBackground(Color.WHITE);
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
-        int str=e.getKeyCode();
-        System.out.println(str);
-        if (str == KeyEvent.VK_T){
-           jDialog.setVisible(true);
-            cheatActivated=true;
-        }
-        if (str == KeyEvent.VK_R){
-            if (cheatActivated){
-                if (cheatField.getText().equalsIgnoreCase("hesoyam")){
-                    Gamestate.getPlayer().setLevel(Gamestate.getPlayer().getLevel() + 1);
-                    JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
-                }
-                cheatActivated=false;
-                jDialog.setVisible(false);
-            }
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }

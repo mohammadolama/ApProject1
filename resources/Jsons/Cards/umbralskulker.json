@@ -1,0 +1,15 @@
+{
+  "name": "UmbralSkulker",
+  "description": "Deathrattle , Steal your opponent's Legenedary or Epic card when die .",
+  "type": "Minion",
+  "heroClass": "Rogue",
+  "price": 1200,
+  "rarity": "Epic",
+  "title": null,
+  "attribute": [
+    "Deathrattle"
+  ],
+  "attack": 4,
+  "health": 4,
+  "manaCost": 4
+}

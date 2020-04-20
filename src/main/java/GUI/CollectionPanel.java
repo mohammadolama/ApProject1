@@ -2,8 +2,10 @@ package GUI;
 
 import AllCards.Cards;
 import Enums.Carts;
+import G_L_Interface.Update;
 import Main.Deck;
 import Main.Gamestate;
+import Main.JsonBuilders;
 import Main.Shop;
 
 import javax.swing.*;
@@ -24,10 +26,11 @@ import java.util.Map;
 
 import static GUI.Constants.*;
 
-public class CollectionPanel extends JPanel implements ActionListener, MouseListener, ChangeListener {
+public class CollectionPanel extends JPanel implements ActionListener, MouseListener,ChangeListener {
 
+    private static final CollectionPanel col=new CollectionPanel();
 
-    private JButton backButton = new JButton("Back");
+    private JButton backButton = new JButton();
     private JButton allCards = new JButton("All");
     private JButton lockedCards = new JButton("Locked");
     private JButton unlockedCards = new JButton("Unlocked");
@@ -35,26 +38,28 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     private JButton specialCards = new JButton("Special");
     private JButton newDeck = new JButton("New Deck");
     private JButton changeButton = new JButton("Change");
+    private JButton exit=new JButton();
+    private JLabel errorLabel=new JLabel();
     private JButton buyButton;
     private JTextField searchField = new JTextField();
     private JSlider manaFilter = new JSlider();
-
-
+    private JScrollPane scrollPane;
     private ArrayList<Images> images;
     private ArrayList<Cards> cards;
+    private CollectionDrawingPanel collectionDrawingPanel;
 
     private static ArrayList<BufferedImage> bufferedImages;
     private static ArrayList<BufferedImage> purchasedCards;
     private static ArrayList<BufferedImage> notPurchasedCards;
-    private static ArrayList<JButton> buttons = new ArrayList<>();
+    private static ArrayList<JButton> buttons;
     private static HashMap<String, Deck> decks;
 
     private Deck selectedDeck;
 
     private int searchHeight = 50;
-    private int searchX = 150;
+    private int searchX = 180;
     private int searchY = 20;
-    private int allCardsX = 520;
+    private int allCardsX = 560;
     private int allCardWidth = 140;
     private int manaX = 30;
     private int manaY = 885;
@@ -78,18 +83,17 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     private boolean specialSelected;
 
 
-    private static final CollectionPanel collectionPanel = new CollectionPanel();
 
-    private CollectionPanel() {
-        images = new ArrayList<>();
-        cards = Cards.allCards();
-        pictures(cards);
-        showDecksButtons();
-//        buttons.get(0).doClick();
+
+
+    private CollectionPanel(){
+        setSize(1600,1000);
+        setPreferredSize(new Dimension(1600,1000));
+
         setLayout(null);
-        allCards.doClick();
-        addMouseListener(this);
-        update();
+
+        buttons=new ArrayList<>();
+
 
         searchField = new JTextField();
         searchField.setFont(f2.deriveFont(25.0f));
@@ -112,7 +116,6 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
             }
 
             public void warn() {
-                searchField.requestFocus();
                 if (searchField.getText() == null || searchField.getText() == "") {
                     return;
                 }
@@ -123,9 +126,8 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
                         cards.add(cards1);
                     }
                 }
-                pictures(cards);
+                CollectionDrawingPanel.getInstance().updateContent(cards);
                 repaint();
-                searchField.requestFocus();
 
             }
         });
@@ -185,37 +187,86 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         changeButton.addMouseListener(this);
         changeButton.setFont(f2);
         changeButton.addActionListener(this);
-        changeButton.setBounds(manaX + manaWidth + 250, manaY, deckWidth, deckHeight);
+        changeButton.setBounds(manaX + manaWidth+ 30, manaY, deckWidth, deckHeight);
         changeButton.setFocusable(false);
         changeButton.setEnabled(false);
 
+        errorLabel.setFont(f2);
+        errorLabel.setForeground(Color.red);
+        errorLabel.setFocusable(false);
+        errorLabel.setBounds(changeButton.getX() +deckWidth+60 , manaY , 400,deckHeight);
+
+
 
         backButton.addMouseListener(this);
-        backButton.setFont(f2);
         backButton.addActionListener(this);
-        backButton.setBounds(deckX, 880, deckWidth, deckHeight);
+        backButton.setBounds(deckX+75, 880, 60, 60);
         backButton.setFocusable(false);
+        backButton.setIcon(backIcon);
+        backButton.setContentAreaFilled(false);
+        backButton.setRolloverEnabled(false);
+        backButton.setBorderPainted(false);
 
-        buyButton = new JButton("Buy");
-        buyButton.setFocusable(false);
-        buyButton.setEnabled(true);
-        buyButton.setFont(f2.deriveFont(30.0f));
-        buyButton.setBackground(Color.orange);
-        buyButton.setBounds(720, 550, 200, 50);
-        buyButton.addActionListener(this);
+        exit.addActionListener(this);
+        exit.addMouseListener(this);
+        exit.setIcon(exitIcon);
+        exit.setBounds(deckX + 150,880,60,60);
+        exit.setFocusable(false);
+        exit.setContentAreaFilled(false);
+        exit.setRolloverEnabled(false);
+        exit.setBorderPainted(false);
 
 
-        requestFocus();
+        setLayout(null);
+        collectionDrawingPanel =CollectionDrawingPanel.getInstance();
+        collectionDrawingPanel.setSize(1000, 1600);
+        collectionDrawingPanel.setPreferredSize(new Dimension(1000, 1600));
+        collectionDrawingPanel.setBounds(0, 0, 1000, 1600);
+        collectionDrawingPanel.setFocusable(true);
+        collectionDrawingPanel.requestFocus();
+
+
+        scrollPane = new JScrollPane(collectionDrawingPanel);
+        scrollPane.setSize(1000, 600);
+        scrollPane.setPreferredSize(new Dimension(1000, 600));
+        scrollPane.setBounds(0, searchHeight + 35, 1350, manaY - 100);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+        scrollPane.setFocusable(false);
+
+
+
+
+
+        add(scrollPane);
+        add(searchField);
+        add(allCards);
+        add(backButton);
+        add(allCards);
+        add(lockedCards);
+        add(unlockedCards);
+        add(manaFilter);
+        add(newDeck);
+        add(changeButton);
+        add(neutralCards);
+        add(specialCards);
+        add(errorLabel);
+        add(exit);
+        showDecksButtons();
+
+
+//
+
+        Col_Change col_change=Col_Change.getInstance();
+        MyFrame.panel.add(col_change,"col");
+
+
         setFocusable(true);
-        setBackground(Color.LIGHT_GRAY);
-        revalidate();
+//        revalidate();
         repaint();
-
+//
     }
 
-    public static CollectionPanel getInstance() {
-        return collectionPanel;
-    }
 
     public Hashtable<Integer, JComponent> getTable() {
         Hashtable<Integer, JComponent> table =
@@ -237,6 +288,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     private void showDecksButtons() {
         if (Gamestate.getPlayer() != null) {
             int i = 1;
+            buttons.clear();
             for (Map.Entry<String, Deck> entry : Gamestate.getPlayer().getAllDecks().entrySet()) {
                 String s = entry.getKey();
                 JButton button = new JButton(s);
@@ -253,114 +305,26 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         }
     }
 
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-
-        if (!clicked) {
-            removeAll();
-            for (JButton button : buttons) {
-                add(button);
-            }
-            add(searchField);
-            add(allCards);
-            add(backButton);
-            add(allCards);
-            add(lockedCards);
-            add(unlockedCards);
-            add(manaFilter);
-            add(newDeck);
-            add(changeButton);
-            add(neutralCards);
-            add(specialCards);
-            update();
-            g.setColor(Color.YELLOW);
-            g.drawImage(status, 0, 0, 1600, 1000, null);
-            g.drawLine(1350, 0, 1350, 1000);
-            g.drawLine(0, searchY + searchHeight + 10, 1350, searchY + searchHeight + 10);
-
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.setFont(f2.deriveFont(40.0f));
-            g2d.setColor(Color.YELLOW);
-            g2d.setFont(f2);
-            g2d.setColor(Color.yellow);
-            g2d.drawString("Search :", 30, 55);
-            g2d.drawLine(0, manaY - 10, 1350, manaY - 10);
-            int i = 0;
-            System.out.println(cards.size());
-            while (i < bufferedImages.size()) {
-                if (specialSelected) {
-                    cardsY = searchY + searchHeight + 300;
-                    if (i > 1 && i % 2 == 0) {
-                        g2d.setColor(Color.yellow);
-                        g2d.drawLine(cardsX, searchY + searchHeight + 10, cardsX, manaY - 10);
-                    }
-                }
-
-                g2d.drawImage(bufferedImages.get(i), cardsX, cardsY, cardWidth, cardHeight, null);
-                images.add(new Images(cards.get(i).getName().toLowerCase(), cardsX, cardsY, cardWidth, cardHeight));
-
-                g2d.setColor(new Color(50, 50, 50, 180));
-                if (contains(bufferedImages.get(i))) {
-                    g2d.fillRect(cardsX + 10, cardsY + 10, cardWidth - 15, cardHeight - 15);
-                }
-                else {
-                    g2d.drawImage(tick,cardsX+50, cardsY,null);
-                }
-                cardsX = cardsX + cardWidth;
-                if (cardsX >= 1200) {
-                    cardsX = 15;
-                    cardsY = cardsY + (cardHeight);
-                }
-                i++;
-            }
-            cardsX = 15;
-            cardsY = searchY + searchHeight + 20;
-            if (specialSelected) {
-                g2d.drawImage(heroPics.get("rogue"), 30, cardsY, cardWidth * 3 / 2, cardHeight * 3 / 2, null);
-                g2d.drawImage(heroPics.get("mage"), 330, cardsY, cardWidth * 3 / 2, cardHeight * 3 / 2, null);
-                g2d.drawImage(heroPics.get("warlock"), 580, cardsY, cardWidth * 3 / 2, cardHeight * 3 / 2, null);
-                g2d.drawImage(heroPics.get("hunter"), 850, cardsY, cardWidth * 3 / 2, cardHeight * 3 / 2, null);
-                g2d.drawImage(heroPics.get("priest"), 1100, cardsY, cardWidth * 3 / 2, cardHeight * 3 / 2, null);
-            }
-            mate = false;
-            revalidate();
-        } else {
-            if (!mate) {
-                removeAll();
-                images.clear();
-                g2d.setColor(new Color(222, 222, 222, 200));
-                g2d.fillRect(0, 0, 1600, 1000);
-                g2d.setColor(Color.white);
-                mate = true;
-                if (contains(cardPics.get(name))) {
-                    buyButton.setEnabled(true);
-                    buyButton.setBackground(Color.ORANGE);
-                    g2d.setFont(f2.deriveFont(50.0f));
-                    g2d.setColor(Color.red);
-                    g2d.drawString("Price : " + Shop.Price(name.toLowerCase()), 720, 480);
-                    if (Shop.Price((name.toLowerCase())) > Gamestate.getPlayer().getMoney()) {
-                        buyButton.setEnabled(false);
-                        buyButton.setBackground(Color.LIGHT_GRAY);
-                    }
-                    add(buyButton);
-                }
-            }
-            g2d.drawImage(cardPics.get(name), 300, 220, null);
-        }
-        searchField.requestFocus();
+    public void refresh(){
+        removeAll();
+        add(scrollPane);
+        add(searchField);
+        add(allCards);
+        add(backButton);
+        add(allCards);
+        add(lockedCards);
+        add(unlockedCards);
+        add(manaFilter);
+        add(newDeck);
+        add(changeButton);
+        add(neutralCards);
+        add(specialCards);
+        add(errorLabel);
+        add(exit);
+        showDecksButtons();
 
     }
 
-    public void pictures(ArrayList<Cards> ar) {
-        bufferedImages = new ArrayList();
-        for (Cards cards1 : ar) {
-            BufferedImage bf = cardPics.get(cards1.getName().toLowerCase());
-            bufferedImages.add(bf);
-        }
-
-    }
 
     private void updateSelectedDeck(String name) {
         if (Gamestate.getPlayer() != null) {
@@ -375,123 +339,98 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         }
     }
 
-    boolean contains(BufferedImage bufferedImage) {
-        for (BufferedImage notPurchasedCard : notPurchasedCards) {
-            if (notPurchasedCard.equals(bufferedImage)) {
-                return true;
-            }
-        }
-        return false;
+
+        public static CollectionPanel getInstance(){
+        return col;
     }
 
-    void update() {
-        purchasedCards = new ArrayList<>();
-        notPurchasedCards = new ArrayList<>();
+    @Override
+    protected void paintComponent(Graphics g) {
 
-        for (Cards purchasedCard : Cards.purchasedCards()) {
-            BufferedImage bf = cardPics.get(purchasedCard.getName().toLowerCase());
-            purchasedCards.add(bf);
-        }
-        for (Cards lockedCard : Cards.lockedCards()) {
-            BufferedImage bf = cardPics.get(lockedCard.getName().toLowerCase());
-            notPurchasedCards.add(bf);
-        }
-    }
-
-    private void drawBigger(String st) {
-        clicked = true;
-        name = st;
-        repaint();
+        Graphics2D g2d=(Graphics2D) g;
+        g.setColor(Color.YELLOW);
+        g.drawImage(status, 0, 0, 1600, 1000, null);
+        g.drawLine(1350, 0, 1350, 1000);
+        g.drawLine(0, searchY + searchHeight + 10, 1350, searchY + searchHeight + 10);
+        g.drawLine(0, manaY - 10, 1350, manaY - 10);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setFont(f2.deriveFont(28.0f));
+        g2d.drawString("Search :", 75, 55);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        specialSelected = false;
-        JButton src = (JButton) e.getSource();
+        JButton src=(JButton) e.getSource();
         if (src == backButton) {
+            Update.saveAndUpdate();
             MyFrame.getInstance().changePanel("menu");
-        } else if (src == newDeck) {
-            Col_Change col_change=Col_Change.getInstance();
-            MyFrame.panel.add(col_change,"col");
+        }else if (src == exit){
+            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
+            System.exit(0);
+        }
+        else if (src == newDeck) {
+            if (Gamestate.getPlayer().getAllDecks().size()<10)
             MyFrame.getInstance().changePanel("col");
+            else {
+                errorLabel.setText("Can not create more than 10 decks");
+                revalidate();
+                return;
+            }
         } else if (src == allCards) {
+            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
             changeButton.setEnabled(false);
             cards = new ArrayList<>();
             cards = Cards.allCards();
-            pictures(cards);
-            images.clear();
+            CollectionDrawingPanel.getInstance().updateContent(cards);
             repaint();
         } else if (src == lockedCards) {
+            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
             changeButton.setEnabled(false);
             cards = new ArrayList<>();
             cards = Cards.lockedCards();
-            pictures(cards);
-            images.clear();
-            repaint();
+            CollectionDrawingPanel.getInstance().updateContent(cards);
         } else if (src == unlockedCards) {
+            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
             changeButton.setEnabled(false);
             cards = new ArrayList<>();
             cards = Cards.purchasedCards();
-            pictures(cards);
-            images.clear();
-            repaint();
+            CollectionDrawingPanel.getInstance().updateContent(cards);
         } else if (src == neutralCards) {
-            changeButton.setEnabled(false);
-            cards = new ArrayList<>();
-            cards = Cards.neutralCardsFilter();
-            pictures(cards);
-            images.clear();
-            repaint();
+            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
+            cards=new ArrayList<>();
+            cards=Cards.neutralCardsFilter();
+            CollectionDrawingPanel.getInstance().updateContent(cards);
         } else if (src == specialCards) {
-            specialSelected = true;
-            changeButton.setEnabled(false);
+            CollectionDrawingPanel.getInstance().setSpecialSelected(true);
             cards = new ArrayList<>();
             cards = Cards.specialCardsFilter();
-            pictures(cards);
-            images.clear();
-            repaint();
-        } else if (src == buyButton) {
-            Shop.Buy(name.toLowerCase());
-            cards = new ArrayList<>();
-            cards = Cards.allCards();
-            pictures(cards);
-            images.clear();
-            clicked = false;
-            repaint();
-        } else {
+            CollectionDrawingPanel.getInstance().updateContent(cards);
+        }else if (src == changeButton){
+            Col_Change.getInstance().getDeckName().setText(selectedDeck.getName());
+            Col_Change.getInstance().updateSelectedDeck(selectedDeck.getHero().getName());
+            Col_Change.getInstance().setHeroSelected(true);
+            Col_Change.getInstance().setSelectedCards(selectedDeck.getDeck());
+            Col_Change.getInstance().setSelectedDeck(selectedDeck);
+            Col_Change.getInstance().changeButtonAction();
+            MyFrame.getInstance().changePanel("col");
+        }else {
             changeButton.setEnabled(true);
             for (JButton button : buttons) {
-                if (src == button) {
+                CollectionDrawingPanel.getInstance().setSpecialSelected(false);
+                if (src.getName().equalsIgnoreCase( button.getName())) {
                     updateSelectedDeck(button.getName());
-                    System.out.println(selectedDeck.getName());
-                    revalidate();
-                    repaint();
+                    CollectionDrawingPanel.getInstance().updateContent(cards);
 
                 }
             }
         }
+
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        String st = null;
-        for (Images images : images) {
-            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                st = images.getName();
-                break;
-            }
-        }
 
-        if (st == null || st == "") {
-            clicked = false;
-            repaint();
-            return;
-        }
-        System.out.println(st);
-        drawBigger(st);
-        repaint();
     }
 
     @Override
@@ -520,10 +459,8 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         if (value == 11) {
             cards = new ArrayList<>();
             cards = Cards.allCards();
-            pictures(cards);
-
+            CollectionDrawingPanel.getInstance().updateContent(cards);
         } else {
-            images.clear();
             ArrayList<Cards> ar;
             ar = Cards.allCards();
             cards = new ArrayList<>();
@@ -532,8 +469,25 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
                     cards.add(cards1);
                 }
             }
-            pictures(cards);
+            CollectionDrawingPanel.getInstance().updateContent(cards);
         }
         repaint();
+    }
+
+    static int calculateHeight(int rows , int cardHeight){
+        int height=0;
+        height=rows * cardHeight ;
+        if (height<=800){
+            return 800;
+        }
+       return height;
+    }
+
+    void updateDimension(int rows , int cardHeight){
+        Dimension d=collectionDrawingPanel.getPreferredSize();
+        d.height=calculateHeight(rows,cardHeight);;
+        collectionDrawingPanel.setPreferredSize(d);
+        repaint();
+        revalidate();
     }
 }

@@ -1,0 +1,11 @@
+{
+  "name": "Polymorph",
+  "description": "Transform a minion into a 1/1 sheep .",
+  "type": "Spell",
+  "heroClass": "Mage",
+  "rarity": "Rare",
+  "price": 20,
+  "manaCost": 4,
+  "usageTimes": 1,
+  "title": null
+}

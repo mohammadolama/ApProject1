@@ -11,9 +11,11 @@ public enum SpecialCarts {
     darkskies,
     dreadscale,
 
-    highpriestamet,
+
     swampkingdred,
+    deadlyshot,
+
 
     sandbreath,
-    deadlyshot
+    highpriestamet
 }

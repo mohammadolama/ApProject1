@@ -1,10 +1,13 @@
 package Heros;
 
-import Main.Player;
 import Enums.*;
+import Heros.Hero;
+import Main.*;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 @JsonIgnoreProperties({"purchasedCards", "CardsInDeck"})
 public class Warlock extends Hero {

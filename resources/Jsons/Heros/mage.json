@@ -1,0 +1,27 @@
+{
+  "name": "Mage",
+  "heroPowerManaCost": 2,
+  "canAttack": false,
+
+  "heroPower": "FireBlast : Deal 1 damage , Costs 2 Mana",
+  "pcarts": [],
+  "specialPower": "They use 2 less mana for using Spells .",
+  "spcarts": [
+    "polymorph",
+    "flamestrike"
+  ],
+  "att": 0,
+  "dcarts": [
+    "fierywaraxe",
+    "evasivewyrm",
+    "blessingoftheancients",
+    "tastyflyfish",
+    "lightforgedblessing",
+    "depthcharge",
+    "cobaltspellkin",
+    "koboldstickyfinger",
+    "tombwarden",
+    "polymorph"
+  ],
+  "hp": 30
+}

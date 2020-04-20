@@ -1,0 +1,15 @@
+{
+  "name": "DepthCharge",
+  "description": "At the start of your turn, deal 5 damage to All minions .",
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Rare",
+  "price": 20,
+  "title": null,
+  "attribute": [
+    null
+  ],
+  "attack": 0,
+  "health": 5,
+  "manaCost": 1
+}

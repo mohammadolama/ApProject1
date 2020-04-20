@@ -1,0 +1,15 @@
+{
+  "name": "CobaltSpellkin",
+  "description": "Battlecry , Add two 1-Cost spells from your class to your hand",
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "price": 20,
+  "rarity": "Rare",
+  "title": "Dragon",
+  "attribute": [
+    "BattleCry"
+  ],
+  "attack": 3,
+  "health": 5,
+  "manaCost": 5
+}
