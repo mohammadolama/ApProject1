@@ -1,24 +1,17 @@
 package GUI;
 
 import AllCards.Cards;
-import G_L_Interface.Update;
 import Main.Gamestate;
-import Main.JsonBuilders;
-import Main.Shop;
+
+import Util.Admin;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Hashtable;
+
 
 import static GUI.Constants.*;
 
@@ -46,17 +39,13 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private JTextField searchField;
     private JSlider manaFilter;
 
-
-    private boolean minionActivated;
-    private boolean spellActivated;
-    private boolean weaponActivated;
     private boolean buyActivated = true;
     private boolean clicked;
     private boolean mate;
 
     private String name;
 
-
+private Admin admin;
 
     private int startX1 = 1350;
     private int startY1 = 280;
@@ -67,12 +56,13 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private int width = 130;
     private int height = 195;
 
-    private int priceX=480;
+    private int priceY =480;
 
     private ShopPanel() {
         setLayout(null);
+        admin=Admin.getInstance();
         images = new ArrayList<>();
-        cards = Shop.Buyable();
+        cards = admin.properCards(1);
         pictures(cards);
 
 
@@ -170,17 +160,12 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 warn();
             }
 
-            public void warn() {
+            void warn() {
                 searchField.requestFocus();
-                if (searchField.getText() == null || searchField.getText() == "") {
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     return;
                 }
-                ArrayList<Cards> ar;
-                if (buyActivated){
-                     ar= Shop.Buyable();
-                }else {
-                     ar = Shop.Sellable();
-                }
+                ArrayList<Cards> ar=admin.properCards(buyActivated ? 1:2);
                 cards = new ArrayList<>();
                 for (Cards cards1 : ar) {
                     if (cards1.getName().toLowerCase().contains(searchField.getText())) {
@@ -189,8 +174,6 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 }
                 pictures(cards);
                 repaint();
-                searchField.requestFocus();
-
             }
         });
         add(searchField);
@@ -219,12 +202,6 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         sellButton.setBounds(790, 550, 200, 50);
         sellButton.addActionListener(this);
 
-
-
-
-
-
-
         addMouseListener(this);
     }
 
@@ -233,24 +210,9 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     }
 
 
-    public Hashtable<Integer, JComponent> getTable() {
-        Hashtable<Integer, JComponent> table =
-                new Hashtable<Integer, JComponent>();
-        table.put(new Integer(1), new JLabel("1"));
-        table.put(new Integer(2), new JLabel("2"));
-        table.put(new Integer(3), new JLabel("3"));
-        table.put(new Integer(4), new JLabel("4"));
-        table.put(new Integer(5), new JLabel("5"));
-        table.put(new Integer(6), new JLabel("6"));
-        table.put(new Integer(7), new JLabel("7"));
-        table.put(new Integer(8), new JLabel("8"));
-        table.put(new Integer(9), new JLabel("9"));
-        table.put(new Integer(10), new JLabel("10"));
-        table.put(new Integer(11), new JLabel("All"));
-        return table;
-    }
 
-    String getClass(String string){
+
+    private String getClass(String string){
         for (Cards card : cards) {
             if (card.getName().equalsIgnoreCase(string)){
                 return card.getHeroClass();
@@ -259,23 +221,27 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         return "Neutral";
     }
 
+    private void refresh(){
+        removeAll();
+        add(allbutton);
+        add(minionButton);
+        add(spellButton);
+        add(weaponButton);
+        add(backButton);
+        add(buyActivatedButton);
+        add(sellActivatedButton);
+        add(manaFilter);
+        add(searchField);
+        add(walletLabel);
+        add(exit);
+    }
+
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        if (!clicked) {
+        refresh();
             g.clearRect(0, 0, 1600, 1000);
-            removeAll();
-            add(allbutton);
-            add(minionButton);
-            add(spellButton);
-            add(weaponButton);
-            add(backButton);
-            add(buyActivatedButton);
-            add(sellActivatedButton);
-            add(manaFilter);
-            add(searchField);
-            add(walletLabel);
-            add(exit);
             g2d.setFont(f2.deriveFont(30.0f));
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setColor(Color.white);
@@ -285,24 +251,9 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             g2d.drawLine(0, 870, startX1 - 10, 870);
             g2d.setColor(Color.yellow);
             g2d.drawString("Search :", 30, 55);
+            drawImages(g2d);
 
-            int i = 0;
-            while (i < cards.size()) {
-                g.drawImage(bufferedImages.get(i), startX2, startY2, width, height, null);
-                images.add(new Images(cards.get(i).getName().toLowerCase(), startX2, startY2, width, height));
-                startX2 = startX2 + width;
-                if (startX2 >= 1300) {
-                    startX2 = 20;
-                    startY2 = startY2 + (height);
-                }
-                i++;
-            }
-            i = 0;
-            startX2 = 20;
-            startY2 = 80;
-            mate = false;
-        }
-        else {
+        if (clicked){
             if (!mate) {
                 removeAll();
                 images.clear();
@@ -314,7 +265,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                     buyButton.setEnabled(true);
                     buyButton.setBackground(Color.ORANGE);
                     g2d.setFont(f2.deriveFont(50.0f));
-                    if (Shop.Price((name.toLowerCase())) > Gamestate.getPlayer().getMoney()) {
+                    if (admin.price((name.toLowerCase())) > Gamestate.getPlayer().getMoney()) {
                         buyButton.setEnabled(false);
                         buyButton.setBackground(Color.LIGHT_GRAY);
                     }
@@ -323,23 +274,21 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 else {
                     sellButton.setEnabled(true);
                     sellButton.setBackground(Color.ORANGE);
-                    if (!Shop.CanBeSold(name.toLowerCase())) {
+                    if (!admin.canBeSold(name.toLowerCase())) {
                         g2d.setFont(f2);
                         g2d.setColor(Color.RED);
-                        g2d.drawString("Can't be sold,It's in one of your decks.",700,priceX+40);
+                        g2d.drawString("Can't be sold,It's in one of your decks.",700, priceY +40);
                         sellButton.setEnabled(false);
                         sellButton.setBackground(Color.LIGHT_GRAY);
                     }
-
                     add(sellButton);
-
                 }
                 g2d.setFont(f2.deriveFont(40.0f));
                 g2d.setColor(Color.red);
-                g2d.drawString("Price : " + Shop.Price(name.toLowerCase()), 720, priceX);
-                g2d.drawString("Class : " , 720, priceX-40);
+                g2d.drawString("Price : " + admin.price(name.toLowerCase()), 720, priceY);
+                g2d.drawString("Class : " , 720, priceY -40);
                 g2d.setColor(Color.BLUE);
-                g2d.drawString( getClass(name.toLowerCase()), 850, priceX-40);
+                g2d.drawString( getClass(name.toLowerCase()), 850, priceY -40);
 
             }
             g2d.drawImage(cardPics.get(name), 300, 220, null);
@@ -348,8 +297,26 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         searchField.requestFocus();
     }
 
-    public void pictures(ArrayList<Cards> ar) {
-        bufferedImages = new ArrayList();
+
+    private void drawImages(Graphics2D g){
+        int i = 0;
+        while (i < cards.size()) {
+            g.drawImage(bufferedImages.get(i), startX2, startY2, width, height, null);
+            images.add(new Images(cards.get(i).getName().toLowerCase(), startX2, startY2, width, height));
+            startX2 = startX2 + width;
+            if (startX2 >= 1300) {
+                startX2 = 20;
+                startY2 = startY2 + (height);
+            }
+            i++;
+        }
+        startX2 = 20;
+        startY2 = 80;
+        mate = false;
+    }
+
+    private void pictures(ArrayList<Cards> ar) {
+        bufferedImages = new ArrayList<>();
         for (Cards cards1 : ar) {
             BufferedImage bf = cardPics.get(cards1.getName().toLowerCase());
             bufferedImages.add(bf);
@@ -367,12 +334,18 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
     private void BuySellChanger() {
         images.clear();
-        cards = new ArrayList<>();
-        if (buyActivated)
-            cards = Shop.Buyable();
-        else
-            cards = Shop.Sellable();
+        cards = Admin.getInstance().properCards(buyActivated ? 1:2);
         pictures(cards);
+        repaint();
+    }
+
+    private void revalidateCards(Boolean buyActivated){
+        cards = new ArrayList<>();
+        cards=Admin.getInstance().properCards(buyActivated ? 1:2);
+        pictures(cards);
+        images.clear();
+        walletLabel.setText(Gamestate.getPlayer().getMoney() + "   AP");
+        clicked = false;
         repaint();
     }
 
@@ -381,29 +354,18 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     public void stateChanged(ChangeEvent e) {
         int value = manaFilter.getValue();
         if (value == 11) {
-            cards = new ArrayList<>();
-            if (buyActivated)
-                cards = Shop.Buyable();
-            else
-                cards = Shop.Sellable();
-            pictures(cards);
-
+            cards = Admin.getInstance().properCards(buyActivated ? 1:2);
         } else {
             images.clear();
-            ArrayList<Cards> ar;
-            if (buyActivated) {
-                ar = Shop.Buyable();
-            } else {
-                ar = Shop.Sellable();
-            }
+            ArrayList<Cards> ar=Admin.getInstance().properCards(buyActivated ? 1:2);
             cards = new ArrayList<>();
             for (Cards cards1 : ar) {
                 if (cards1.getManaCost() == value) {
                     cards.add(cards1);
                 }
             }
-            pictures(cards);
         }
+        pictures(cards);
         repaint();
     }
 
@@ -412,11 +374,10 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
         JButton src = (JButton) e.getSource();
         if (src == backButton) {
-            Update.saveAndUpdate();
+            Admin.getInstance().saveAndUpdate();
             MyFrame.getInstance().changePanel("menu");
         }else if (src == exit){
-            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
-            System.exit(0);
+            Admin.getInstance().exit();
         }
         else if (src == buyActivatedButton) {
             buyActivatedButton.setBackground(Color.yellow);
@@ -424,37 +385,19 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             buyActivated = true;
             BuySellChanger();
         } else if (src == sellActivatedButton) {
-
             buyActivatedButton.setBackground(Color.white);
             sellActivatedButton.setBackground(Color.yellow);
             buyActivated = false;
             BuySellChanger();
         } else if (src == buyButton) {
-            Shop.Buy(name.toLowerCase());
-            cards = new ArrayList<>();
-            cards = Shop.Buyable();
-            pictures(cards);
-            images.clear();
-            walletLabel.setText(Gamestate.getPlayer().getMoney() + "   AP");
-            clicked = false;
-            repaint();
+            admin.buyCard(name);
+           revalidateCards(true);
         } else if (src == sellButton) {
-            Shop.Sell(name.toLowerCase());
-            cards = new ArrayList<>();
-            cards = Shop.Sellable();
-            pictures(cards);
-            images.clear();
-            walletLabel.setText(Gamestate.getPlayer().getMoney() + "   AP");
-            clicked = false;
-            repaint();
+            admin.sellCard(name);
+            revalidateCards(false);
         } else {
             images.clear();
-            ArrayList<Cards> ar;
-            if (buyActivated) {
-                ar = Shop.Buyable();
-            }else {
-                ar=Shop.Sellable();
-            }
+            ArrayList<Cards> ar=Admin.getInstance().properCards(buyActivated ? 1:2);
             cards = new ArrayList<>();
             for (Cards cards1 : ar) {
                 if (src==allbutton){
@@ -467,16 +410,15 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 }
             }
             pictures(cards);
-            repaint();
         }
-
-
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
         int x = e.getX();
         int y = e.getY();
+        System.out.println(x + "  " + y);
         String st = null;
         for (Images images : images) {
             if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
@@ -484,14 +426,14 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 break;
             }
         }
-
-        if (st == null || st == "") {
+        if (st == null || st.equals("")) {
+            System.out.println("here");
             clicked = false;
             repaint();
             return;
         }
-
         drawBigger(st);
+        revalidate();
         repaint();
     }
 

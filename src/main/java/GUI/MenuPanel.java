@@ -1,5 +1,6 @@
 package GUI;
 
+import Main.Gamestate;
 import Util.Admin;
 
 import javax.swing.*;
@@ -117,13 +118,14 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener {
         else if (button == status){
             Admin.getInstance().setVisiblePanel("status");
         }
-        else if (button==store){
-            Admin.getInstance().setVisiblePanel("store");
-        }else if(button==setting){
-
+        else if (button==store) {
+            Admin.getInstance().setVisiblePanel("shop");
         }else if (button == collection){
             Admin.getInstance().setVisiblePanel("collection");
+        }else if (button == play){
+            System.out.println(Gamestate.getPlayer().getSelectedDeck());
         }
+
     }
 
     @Override

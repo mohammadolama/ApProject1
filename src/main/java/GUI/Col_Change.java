@@ -12,6 +12,7 @@ import Main.Deck;
 import Main.Gamestate;
 import Main.JsonBuilders;
 import Main.JsonReaders;
+import Util.Admin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,7 @@ import static GUI.Constants.*;
 
 
 public class Col_Change extends JPanel implements ActionListener, MouseListener {
-    private static final Col_Change col_change = new Col_Change();
+    private static  Col_Change col_change = new Col_Change();
 
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<Images> images;
@@ -469,9 +470,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
             repaint();
         }else if (src == deckRemoveButton){
             if (selectedDeck != null){
-                Gamestate.getPlayer().getAllDecks().remove(selectedDeck.getName());
-                Update.saveAndUpdate();
-                MyFrame.getInstance().changePanel("collection");
+                Admin.getInstance().removeDeck(selectedDeck);
             }
         }
         else if (src == createButton) {

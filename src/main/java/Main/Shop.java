@@ -42,10 +42,7 @@ public class Shop {
 
     public static boolean CanBeSold(String st) {
         ArrayList<Carts> ar = Update.UpdateSellCards();
-        if (ar.contains(Carts.valueOf(st.toLowerCase()))) {
-            return false;
-        }
-        return true;
+        return !ar.contains(Carts.valueOf(st.toLowerCase()));
     }
 
 

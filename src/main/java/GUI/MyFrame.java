@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class MyFrame extends JFrame {
     private static final MyFrame frame = new MyFrame();
-    static JPanel panel;
-    CardLayout cardLayout;
+    private static JPanel panel;
+    private CardLayout cardLayout;
 
     private MyFrame() {
         setSize(1600, 1000);
@@ -41,10 +41,6 @@ public class MyFrame extends JFrame {
 
     public static JPanel getPanel() {
         return panel;
-    }
-
-    public static void setPanel(JPanel panel) {
-        MyFrame.panel = panel;
     }
 
     public void changePanel(String string) {

@@ -8,7 +8,7 @@ public class Images {
     private int width;
     private int heigth;
 
-    public Images(String name, int x, int y, int width, int heigth) {
+    Images(String name, int x, int y, int width, int heigth) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -24,35 +24,26 @@ public class Images {
         this.name = name;
     }
 
-    public int getX() {
+    int getX() {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
 
-    public int getY() {
+    int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
 
-    public int getWidth() {
+
+    int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
 
-    public int getHeigth() {
+
+    int getHeigth() {
         return heigth;
     }
 
-    public void setHeigth(int heigth) {
-        this.heigth = heigth;
-    }
+
 }

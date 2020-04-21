@@ -3,6 +3,7 @@ package GUI;
 import AllCards.Cards;
 import Main.Gamestate;
 import Main.Shop;
+import Util.Admin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collection;
+
 
 import static GUI.CollectionPanel.calculateHeight;
 import static GUI.Constants.*;
@@ -25,32 +26,19 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     private static ArrayList<BufferedImage> bufferedImages;
     private static ArrayList<BufferedImage> purchasedCards;
     private static ArrayList<BufferedImage> notPurchasedCards;
-    private Cards selectedCard;
 
     private JButton buyButton;
 
     private int searchHeight = 50;
-    private int searchX = 150;
     private int searchY = 20;
-    private int allCardsX = 520;
-    private int allCardWidth = 140;
-    private int manaX = 30;
     private int manaY = 885;
-    private int manaWidth = 600;
-
-    private int deckX = 1360;
-    private int deckY = 20;
-    private int deckWidth = 200;
-    private int deckHeight = 60;
-    private int deckSpacing = 75;
-
     private int cardsX = 15;
     private int cardsY =  20;
     private int cardHeight = 195;
     private int cardWidth = 130;
 
 
-
+    private Admin admin;
 
 
 
@@ -68,14 +56,13 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     private static final CollectionDrawingPanel col=new CollectionDrawingPanel();
 
     private CollectionDrawingPanel(){
+        admin=Admin.getInstance();
         cards=new ArrayList<>();
         images=new ArrayList<>();
         bufferedImages=new ArrayList<>();
-        cards=Cards.allCards();
+        cards=admin.properCards(3);
         pictures(cards);
-        setBackground(Color.RED);
         addMouseListener(this);
-
 
         buyButton = new JButton("Buy");
         buyButton.setFocusable(false);
@@ -99,8 +86,8 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     }
 
 
-    public void pictures(ArrayList<Cards> ar) {
-        bufferedImages = new ArrayList();
+    private void pictures(ArrayList<Cards> ar) {
+        bufferedImages = new ArrayList<>();
         for (Cards cards1 : ar) {
             BufferedImage bf = cardPics.get(cards1.getName().toLowerCase());
             bufferedImages.add(bf);
@@ -108,7 +95,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
 
     }
 
-    void updateContent(ArrayList<Cards> cards) {
+    public void updateContent(ArrayList<Cards> cards) {
         images.clear();
         this.cards = new ArrayList<>();
         this.cards = cards;
@@ -118,7 +105,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
 
     }
 
-    String getClass(String string){
+    private String getClass(String string){
         for (Cards card : cards) {
             if (card.getName().equalsIgnoreCase(string)){
                 return card.getHeroClass();
@@ -129,7 +116,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
 
 
 
-    void update() {
+    private void update() {
         purchasedCards = new ArrayList<>();
         notPurchasedCards = new ArrayList<>();
 
@@ -143,7 +130,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
         }
     }
 
-    boolean contains(BufferedImage bufferedImage) {
+    private boolean contains(BufferedImage bufferedImage) {
         if (purchasedCards == null && notPurchasedCards == null) {
             purchasedCards = new ArrayList<>();
             notPurchasedCards = new ArrayList<>();
@@ -157,12 +144,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     }
 
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2d=(Graphics2D) g;
-        removeAll();
-        g.setColor(Color.YELLOW);
-        g.drawImage(status, 0, 0, 1600, panelHeight+20, null);
+    private void DrawImage(Graphics2D g2d){
         int i = 0;
         int rows=0;
         while (i < bufferedImages.size()) {
@@ -183,10 +165,6 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
                 g2d.fillRect(cardsX + 10, cardsY + 10, cardWidth - 15, cardHeight - 15);
             }
 
-
-
-
-
             cardsX = cardsX + cardWidth;
             if (cardsX >= 1200) {
                 cardsX = 15;
@@ -197,7 +175,21 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
         }
         cardsX = 15;
         cardsY =  20;
+        CollectionPanel.getInstance().updateDimension(rows+1,cardHeight);
+        panelHeight=calculateHeight(rows+1,cardHeight);
 
+    }
+
+
+
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2d=(Graphics2D) g;
+        removeAll();
+        g.setColor(Color.YELLOW);
+        g.drawImage(status, 0, 0, 1600, panelHeight+20, null);
+        DrawImage(g2d);
         if (specialSelected) {
             g2d.drawImage(heroPics.get("rogue"), 30, cardsY, cardWidth * 3 / 2, cardHeight * 3 / 2, null);
             g2d.drawImage(heroPics.get("mage"), 330, cardsY, cardWidth * 3 / 2, cardHeight * 3 / 2, null);
@@ -231,20 +223,17 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
             }
             g2d.setFont(f2.deriveFont(40.0f));
             g2d.drawImage(cardPics.get(name), 300, panelHeight/2-200, null);
-            g2d.setColor(Color.green);
+            g2d.setColor(Color.BLUE);
             g2d.drawString( getClass(name.toLowerCase()), 850, panelHeight/2-50);
             g2d.setColor(Color.red);
             g2d.drawString("Class : " , 720, panelHeight/2-50);
 
 
         }
-        CollectionPanel.getInstance().updateDimension(rows+1,cardHeight);
-        panelHeight=calculateHeight(rows+1,cardHeight);
-    }
+        }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        panelHeight+=20;
         int x = e.getX();
         int y = e.getY();
         String st = null;
@@ -292,9 +281,8 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     public void actionPerformed(ActionEvent e) {
         JButton src=(JButton) e.getSource();
         if (src == buyButton){
-            Shop.Buy(name.toLowerCase());
-            cards = new ArrayList<>();
-            cards = Cards.allCards();
+            admin.buyCard(name);
+            cards = admin.properCards(3);
             pictures(cards);
             images.clear();
             update();

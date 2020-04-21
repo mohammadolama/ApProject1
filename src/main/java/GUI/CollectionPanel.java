@@ -1,27 +1,17 @@
 package GUI;
 
 import AllCards.Cards;
-import Enums.Carts;
-import G_L_Interface.Update;
 import Main.Deck;
 import Main.Gamestate;
-import Main.JsonBuilders;
-import Main.Shop;
+import Util.Admin;
+import Util.CustomScrollBarUI;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import static GUI.Constants.*;
@@ -38,23 +28,21 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     private JButton specialCards = new JButton("Special");
     private JButton newDeck = new JButton("New Deck");
     private JButton changeButton = new JButton("Change");
-    private JButton exit=new JButton();
+    private JButton exitButton =new JButton();
+    private JButton selectButton=new JButton();
     private JLabel errorLabel=new JLabel();
-    private JButton buyButton;
-    private JTextField searchField = new JTextField();
-    private JSlider manaFilter = new JSlider();
+    private JTextField searchField;
+    private JSlider manaFilter ;
     private JScrollPane scrollPane;
-    private ArrayList<Images> images;
     private ArrayList<Cards> cards;
     private CollectionDrawingPanel collectionDrawingPanel;
 
     private static ArrayList<BufferedImage> bufferedImages;
-    private static ArrayList<BufferedImage> purchasedCards;
-    private static ArrayList<BufferedImage> notPurchasedCards;
     private static ArrayList<JButton> buttons;
-    private static HashMap<String, Deck> decks;
 
     private Deck selectedDeck;
+
+    private Admin admin;
 
     private int searchHeight = 50;
     private int searchX = 180;
@@ -71,25 +59,12 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     private int deckHeight = 60;
     private int deckSpacing = 75;
 
-    private int cardsX = 15;
-    private int cardsY = searchY + searchHeight + 20;
-    private int cardWidth = 130;
-    private int cardHeight = 195;
-
-    private String name;
-
-    private boolean clicked;
-    private boolean mate;
-    private boolean specialSelected;
-
 
 
 
 
     private CollectionPanel(){
-        setSize(1600,1000);
-        setPreferredSize(new Dimension(1600,1000));
-
+        admin=Admin.getInstance();
         setLayout(null);
 
         buttons=new ArrayList<>();
@@ -115,8 +90,8 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
                 warn();
             }
 
-            public void warn() {
-                if (searchField.getText() == null || searchField.getText() == "") {
+            void warn() {
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     return;
                 }
                 ArrayList<Cards> ar = Cards.allCards();    ////////////////////////////////////////////////////////////////////
@@ -207,17 +182,27 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         backButton.setRolloverEnabled(false);
         backButton.setBorderPainted(false);
 
-        exit.addActionListener(this);
-        exit.addMouseListener(this);
-        exit.setIcon(exitIcon);
-        exit.setBounds(deckX + 150,880,60,60);
-        exit.setFocusable(false);
-        exit.setContentAreaFilled(false);
-        exit.setRolloverEnabled(false);
-        exit.setBorderPainted(false);
+        exitButton.addActionListener(this);
+        exitButton.addMouseListener(this);
+        exitButton.setIcon(exitIcon);
+        exitButton.setBounds(deckX + 150,880,60,60);
+        exitButton.setFocusable(false);
+        exitButton.setContentAreaFilled(false);
+        exitButton.setRolloverEnabled(false);
+        exitButton.setBorderPainted(false);
 
 
-        setLayout(null);
+        selectButton.addActionListener(this);
+        selectButton.addMouseListener(this);
+        selectButton.setIcon(selectIcon);
+        selectButton.setBounds(deckX ,880,60,60);
+        selectButton.setFocusable(false);
+        selectButton.setContentAreaFilled(false);
+        selectButton.setRolloverEnabled(false);
+        selectButton.setBorderPainted(false);
+
+
+
         collectionDrawingPanel =CollectionDrawingPanel.getInstance();
         collectionDrawingPanel.setSize(1000, 1600);
         collectionDrawingPanel.setPreferredSize(new Dimension(1000, 1600));
@@ -251,39 +236,13 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         add(neutralCards);
         add(specialCards);
         add(errorLabel);
-        add(exit);
+        add(exitButton);
+        add(selectButton);
         showDecksButtons();
-
-
-//
-
-        Col_Change col_change=Col_Change.getInstance();
-        MyFrame.panel.add(col_change,"col");
-
-
-        setFocusable(true);
-//        revalidate();
-        repaint();
-//
     }
 
 
-    public Hashtable<Integer, JComponent> getTable() {
-        Hashtable<Integer, JComponent> table =
-                new Hashtable<Integer, JComponent>();
-        table.put(new Integer(1), new JLabel("1"));
-        table.put(new Integer(2), new JLabel("2"));
-        table.put(new Integer(3), new JLabel("3"));
-        table.put(new Integer(4), new JLabel("4"));
-        table.put(new Integer(5), new JLabel("5"));
-        table.put(new Integer(6), new JLabel("6"));
-        table.put(new Integer(7), new JLabel("7"));
-        table.put(new Integer(8), new JLabel("8"));
-        table.put(new Integer(9), new JLabel("9"));
-        table.put(new Integer(10), new JLabel("10"));
-        table.put(new Integer(11), new JLabel("All"));
-        return table;
-    }
+
 
     private void showDecksButtons() {
         if (Gamestate.getPlayer() != null) {
@@ -320,23 +279,10 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         add(neutralCards);
         add(specialCards);
         add(errorLabel);
-        add(exit);
+        add(exitButton);
+        add(selectButton);
         showDecksButtons();
 
-    }
-
-
-    private void updateSelectedDeck(String name) {
-        if (Gamestate.getPlayer() != null) {
-            selectedDeck = Deck.changeSelectedDeck(Gamestate.getPlayer().getAllDecks().get(name));
-            cards = Deck.UpdateDeck(selectedDeck.getDeck());
-            bufferedImages = new ArrayList<>();
-            ArrayList<Carts> ar3 = selectedDeck.getDeck();
-            for (Carts carts : ar3) {
-                BufferedImage bf = cardPics.get(carts.toString());
-                bufferedImages.add(bf);
-            }
-        }
     }
 
 
@@ -362,49 +308,23 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     public void actionPerformed(ActionEvent e) {
         JButton src=(JButton) e.getSource();
         if (src == backButton) {
-            Update.saveAndUpdate();
-            MyFrame.getInstance().changePanel("menu");
-        }else if (src == exit){
-            JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername() , Gamestate.getPlayer());
-            System.exit(0);
+            admin.saveAndUpdate();
+           admin.setVisiblePanel("menu");
+        }else if (src == exitButton){
+            admin.exit();
         }
         else if (src == newDeck) {
-            if (Gamestate.getPlayer().getAllDecks().size()<10)
-            MyFrame.getInstance().changePanel("col");
-            else {
-                errorLabel.setText("Can not create more than 10 decks");
-                revalidate();
-                return;
-            }
+            admin.createNewDeck();
         } else if (src == allCards) {
-            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
-            changeButton.setEnabled(false);
-            cards = new ArrayList<>();
-            cards = Cards.allCards();
-            CollectionDrawingPanel.getInstance().updateContent(cards);
-            repaint();
+            admin.updateDrawingPanel("all");
         } else if (src == lockedCards) {
-            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
-            changeButton.setEnabled(false);
-            cards = new ArrayList<>();
-            cards = Cards.lockedCards();
-            CollectionDrawingPanel.getInstance().updateContent(cards);
+            admin.updateDrawingPanel("locked");
         } else if (src == unlockedCards) {
-            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
-            changeButton.setEnabled(false);
-            cards = new ArrayList<>();
-            cards = Cards.purchasedCards();
-            CollectionDrawingPanel.getInstance().updateContent(cards);
+            admin.updateDrawingPanel("unlocked");
         } else if (src == neutralCards) {
-            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
-            cards=new ArrayList<>();
-            cards=Cards.neutralCardsFilter();
-            CollectionDrawingPanel.getInstance().updateContent(cards);
+            admin.updateDrawingPanel("neutral");
         } else if (src == specialCards) {
-            CollectionDrawingPanel.getInstance().setSpecialSelected(true);
-            cards = new ArrayList<>();
-            cards = Cards.specialCardsFilter();
-            CollectionDrawingPanel.getInstance().updateContent(cards);
+            admin.updateDrawingPanel("special");
         }else if (src == changeButton){
             Col_Change.getInstance().getDeckName().setText(selectedDeck.getName());
             Col_Change.getInstance().updateSelectedDeck(selectedDeck.getHero().getName());
@@ -413,14 +333,20 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
             Col_Change.getInstance().setSelectedDeck(selectedDeck);
             Col_Change.getInstance().changeButtonAction();
             MyFrame.getInstance().changePanel("col");
-        }else {
+        }else if (src == selectButton){
+            if (selectedDeck != null){
+                admin.setSelectedDeck(selectedDeck);
+            }
+        }
+        else {
             changeButton.setEnabled(true);
             for (JButton button : buttons) {
                 CollectionDrawingPanel.getInstance().setSpecialSelected(false);
                 if (src.getName().equalsIgnoreCase( button.getName())) {
-                    updateSelectedDeck(button.getName());
-                    CollectionDrawingPanel.getInstance().updateContent(cards);
-
+                    selectedDeck=Gamestate.getPlayer().getAllDecks().get(button.getName());
+                    System.out.println(selectedDeck.getName());
+                    admin.updateDrawingPanel(button.getName());
+                    changeButton.setEnabled(true);
                 }
             }
         }
@@ -457,37 +383,43 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     public void stateChanged(ChangeEvent e) {
         int value = manaFilter.getValue();
         if (value == 11) {
-            cards = new ArrayList<>();
-            cards = Cards.allCards();
-            CollectionDrawingPanel.getInstance().updateContent(cards);
+            cards = admin.properCards(3);
+
         } else {
-            ArrayList<Cards> ar;
-            ar = Cards.allCards();
+            ArrayList<Cards> ar=admin.properCards(3);
             cards = new ArrayList<>();
             for (Cards cards1 : ar) {
                 if (cards1.getManaCost() == value) {
                     cards.add(cards1);
                 }
             }
-            CollectionDrawingPanel.getInstance().updateContent(cards);
         }
-        repaint();
+        CollectionDrawingPanel.getInstance().updateContent(cards);
     }
 
     static int calculateHeight(int rows , int cardHeight){
-        int height=0;
-        height=rows * cardHeight ;
+        int height=rows * cardHeight ;
         if (height<=800){
             return 800;
         }
-       return height;
+       return height+50;
     }
 
     void updateDimension(int rows , int cardHeight){
         Dimension d=collectionDrawingPanel.getPreferredSize();
-        d.height=calculateHeight(rows,cardHeight);;
+        d.height=calculateHeight(rows,cardHeight);
         collectionDrawingPanel.setPreferredSize(d);
-        repaint();
-        revalidate();
+    }
+
+    public JLabel getErrorLabel() {
+        return errorLabel;
+    }
+
+    public JButton getChangeButton() {
+        return changeButton;
+    }
+
+    public void setSelectedDeck(Deck selectedDeck) {
+        this.selectedDeck = selectedDeck;
     }
 }

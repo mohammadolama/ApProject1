@@ -8,7 +8,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 public class Constants {
 
@@ -92,6 +94,7 @@ public class Constants {
 
     static ImageIcon exitIcon;
     static ImageIcon backIcon;
+    static ImageIcon selectIcon;
 
 
     public static HashMap<String, BufferedImage> cardPics;
@@ -233,8 +236,25 @@ public class Constants {
 
          exitIcon=new ImageIcon("resources\\pics\\game\\exit.png");
          backIcon=new ImageIcon("resources\\pics\\game\\back.png");
+         URL url;
+         selectIcon=new ImageIcon("resources\\pics\\game\\select.png");
     }
 
-
+    static Hashtable<Integer, JComponent> getTable() {
+        Hashtable<Integer, JComponent> table =
+                new Hashtable<Integer, JComponent>();
+        table.put(1, new JLabel("1"));
+        table.put(2, new JLabel("2"));
+        table.put(3, new JLabel("3"));
+        table.put(4, new JLabel("4"));
+        table.put(5, new JLabel("5"));
+        table.put(6, new JLabel("6"));
+        table.put(7, new JLabel("7"));
+        table.put(8, new JLabel("8"));
+        table.put(9, new JLabel("9"));
+        table.put(10, new JLabel("10"));
+        table.put(11, new JLabel("All"));
+        return table;
+    }
 
 }

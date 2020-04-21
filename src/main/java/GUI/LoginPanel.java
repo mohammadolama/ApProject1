@@ -1,6 +1,5 @@
 package GUI;
 
-
 import Util.Admin;
 
 import javax.imageio.ImageIO;
@@ -65,6 +64,7 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
         userField = new JTextField(10);
         passField = new JTextField(10);
 
+
         createAccount.setFont(f1);
         createAccount.setFocusable(false);
         createAccount.addActionListener(this);
@@ -102,6 +102,7 @@ public class LoginPanel extends JPanel implements ActionListener,MouseListener {
         add(enter);
         add(createAccount);
         add(error);
+
     }
 
     public static LoginPanel getInstance() {
