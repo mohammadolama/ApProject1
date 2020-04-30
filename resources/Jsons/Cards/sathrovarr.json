@@ -3,7 +3,7 @@
   "description": "Battlecry , Choose a friendly minion. Add a copy of it to your hand, deck,and battlefield .",
   "type": "Minion",
   "heroClass": "Neutral",
-  "rarity": "Legendray",
+  "rarity": "Legendary",
   "price": 20,
   "title": "Demon",
   "attribute": [

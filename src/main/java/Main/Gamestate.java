@@ -11,13 +11,6 @@ public class Gamestate {
     }
 
     public static void setPlayer(Player player) {
-//        if (Gamestate.player == null){
-//            try {
-//                player=new Player();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
         Gamestate.player = player;
     }
 }

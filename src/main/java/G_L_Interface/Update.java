@@ -1,8 +1,8 @@
 package G_L_Interface;
 
 import Enums.Carts;
-import GUI.CollectionPanel;
-import GUI.StatusPanel;
+import GUI.Panels.CollectionPanel;
+import GUI.Panels.StatusPanel;
 import Main.Deck;
 import Main.Gamestate;
 import Main.JsonBuilders;
@@ -12,23 +12,13 @@ import java.util.ArrayList;
 
 public class Update {
 
-    public static void update() {
-//        System.out.println(Gamestate.getPlayer());
-//        StatusPanel.setPlayer(Gamestate.getPlayer());
-        String name=Gamestate.getPlayer().getUsername();
-        Gamestate.setPlayer(null);
-        Gamestate.setPlayer(JsonReaders.PlayerJsonReader(name));
-        StatusPanel.getInstance().revalidate();
-        StatusPanel.getInstance().repaint();
-    }
-
-    public static void refresh(){
+    public static void refresh() {
         CollectionPanel.getInstance().refresh();
         StatusPanel.getInstance().refresh();
     }
 
-    public static void saveAndUpdate(){
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(),Gamestate.getPlayer());
+    public static void saveAndUpdate() {
+        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
         refresh();
     }
 
@@ -42,11 +32,12 @@ public class Update {
                 Gamestate.getPlayer().setPlayerCarts(ar);
                 ar = Gamestate.getPlayer().getSelectedDeck().getDeck();
                 ar.add(Carts.polymorph);
-                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("polymorph" , 0);
-                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("polymorph" , 0);
+                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("polymorph", 0);
+                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("polymorph", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName() , Gamestate.getPlayer().getSelectedDeck());
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "mage"));
+                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 break;
             case "rogue":
                 ArrayList<Carts> ar1 = Gamestate.getPlayer().getPlayerCarts();
@@ -54,10 +45,11 @@ public class Update {
                 Gamestate.getPlayer().setPlayerCarts(ar1);
                 ar = Gamestate.getPlayer().getSelectedDeck().getDeck();
                 ar.add(Carts.friendlysmith);
-                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("friendlysmith" , 0);
-                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("friendlysmith" , 0);
+                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("friendlysmith", 0);
+                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("friendlysmith", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName() , Gamestate.getPlayer().getSelectedDeck());
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "rogue"));
                 break;
             case "warlock":
@@ -66,10 +58,11 @@ public class Update {
                 Gamestate.getPlayer().setPlayerCarts(ar2);
                 ar = Gamestate.getPlayer().getSelectedDeck().getDeck();
                 ar.add(Carts.dreadscale);
-                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("dreadscale" , 0);
-                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("dreadscale" , 0);
+                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("dreadscale", 0);
+                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("dreadscale", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName() , Gamestate.getPlayer().getSelectedDeck());
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "warlock"));
                 break;
             case "priest":
@@ -78,10 +71,11 @@ public class Update {
                 Gamestate.getPlayer().setPlayerCarts(ar3);
                 ar = Gamestate.getPlayer().getSelectedDeck().getDeck();
                 ar.add(Carts.highpriestamet);
-                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("highpriestamet" , 0);
-                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("highpriestamet" , 0);
+                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("highpriestamet", 0);
+                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("highpriestamet", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName() , Gamestate.getPlayer().getSelectedDeck());
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "priest"));
                 break;
             case "hunter":
@@ -90,22 +84,15 @@ public class Update {
                 Gamestate.getPlayer().setPlayerCarts(ar4);
                 ar = Gamestate.getPlayer().getSelectedDeck().getDeck();
                 ar.add(Carts.swampkingdred);
-                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("swampkingdred" , 0);
-                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("swampkingdred" , 0);
+                Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("swampkingdred", 0);
+                Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("swampkingdred", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName() , Gamestate.getPlayer().getSelectedDeck());
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "hunter"));
                 break;
         }
-        System.out.println(Gamestate.getPlayer().getAllDecks().get("Default Deck"));
-        System.out.println("selected : " + Gamestate.getPlayer().getSelectedDeck());
-        System.out.println("used : " + Gamestate.getPlayer().getSelectedDeck());
         Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
         Gamestate.getPlayer().getAllDecks().get(Gamestate.getPlayer().getSelectedDeck().getName()).setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
-
     }
-
-
-
-
 }

@@ -1,20 +1,24 @@
 package Sounds;
 
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+
 import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class SoundAdmin {
 
     public static Clip clip;
+    private static Clip clip2;
 
-    private static float soundVolume = 1f;
-    private static AudioInputStream audioInputStream;
+
+    private static float soundVolume = 0.2f;
     private static boolean muteSound = false;
+    private static String path = "resources\\Sounds\\";
 
-    public static void play(String string) {
+    public static void play1(String string) {
         try {
-            if (clip!=null){
+            if (clip != null) {
                 clip.stop();
             }
             clip = AudioSystem.getClip();
@@ -37,11 +41,54 @@ public class SoundAdmin {
         }
     }
 
-    public static void decreaseSound() {
-        soundVolume -= 0.06;
+    private static void play2(String string) {
+        try {
+            if (clip2 != null) {
+                clip2.stop();
+            }
+            clip2 = AudioSystem.getClip();
+            clip2.open(AudioSystem.getAudioInputStream(new File(string)));
+            clip2.start();
+            FloatControl floatControl = (FloatControl) clip2.getControl(FloatControl.Type.MASTER_GAIN);
+            floatControl.setValue(20f * (float) Math.log10(soundVolume));
+            if (muteSound) {
+                BooleanControl booleanControl = (BooleanControl) clip2.getControl(BooleanControl.Type.MUTE);
+                booleanControl.setValue(true);
+            } else {
+                BooleanControl booleanControl = (BooleanControl) clip2.getControl(BooleanControl.Type.MUTE);
+                booleanControl.setValue(false);
+            }
 
-        FloatControl floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        floatControl.setValue(20f * (float) Math.log10(soundVolume));
+
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void playSound(String sound) {
+        String pt = path + sound + ".wav";
+        play2(pt);
+    }
+
+
+    public static void stopStart(int i) {
+        muteSound = !muteSound;
+        if (i % 2 == 0) {
+            clip.stop();
+        } else {
+            clip.start();
+        }
+    }
+
+
+    public static void decreaseSound() {
+        if (soundVolume > 0.07) {
+            soundVolume -= 0.06;
+
+            FloatControl floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            floatControl.setValue(20f * (float) Math.log10(soundVolume));
+        }
     }
 
     public static void increaseSound() {

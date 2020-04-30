@@ -1,7 +1,9 @@
 package Heros;
 
 
+import AllCards.HeroPower;
 import Enums.Carts;
+import Enums.Heroes;
 import Main.Player;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -13,23 +15,15 @@ import java.util.ArrayList;
 public class Hero {
     private Player player;
     private String name;
-    private int HP;
-    private Boolean CanAttack;
-    private int ATT;
-    private String SpecialPower;
-    private String HeroPower;
-    private int HeroPowerManaCost;
+    private int hp;
+    private Boolean canAttack;
+    private int att;
+    private String specialPower;
+    private HeroPower heroPower;
+    private int heroPowerManaCost;
+    private int defence;
 
-    private  ArrayList<Carts> Pcarts = new ArrayList<>(); //Purchased Not in deck Cards
-    private  ArrayList<Carts> Dcarts;   //Cards in your deck
-    private  ArrayList<Carts> SPcarts;   //SPecial cards of each hero
-    @JsonIgnore
-    private static ArrayList CardsInDeck;
-
-    public Hero(Player player){
-        this.player=player;
-    }
-    public Hero(){
+    public Hero() {
     }
 
     public String getName() {
@@ -40,108 +34,97 @@ public class Hero {
         this.name = name;
     }
 
-
-    public int getHP() {
-        return HP;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setHP(int HP) {
-        this.HP = HP;
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 
     public Boolean getCanAttack() {
-        return CanAttack;
+        return canAttack;
     }
 
     public void setCanAttack(Boolean canAttack) {
-        CanAttack = canAttack;
+        this.canAttack = canAttack;
     }
 
-    public int getATT() {
-        return ATT;
+    public int getAtt() {
+        return att;
     }
 
-    public void setATT(int ATT) {
-        this.ATT = ATT;
+    public void setAtt(int att) {
+        this.att = att;
     }
 
     public String getSpecialPower() {
-        return SpecialPower;
+        return specialPower;
     }
 
     public void setSpecialPower(String specialPower) {
-        SpecialPower = specialPower;
+        this.specialPower = specialPower;
     }
 
-    public String getHeroPower() {
-        return HeroPower;
+    public HeroPower getHeroPower() {
+        return heroPower;
     }
 
-    public void setHeroPower(String heroPower) {
-        HeroPower = heroPower;
+    public void setHeroPower(HeroPower heroPower) {
+        this.heroPower = heroPower;
     }
 
     public int getHeroPowerManaCost() {
-        return HeroPowerManaCost;
+        return heroPowerManaCost;
     }
 
     public void setHeroPowerManaCost(int heroPowerManaCost) {
-        HeroPowerManaCost = heroPowerManaCost;
+        this.heroPowerManaCost = heroPowerManaCost;
     }
 
-    public ArrayList<Carts> getPcarts() {
-        return Pcarts;
+    public int getDefence() {
+        return defence;
     }
 
-    public void setPcarts(ArrayList<Carts> pcarts) {
-        Pcarts = pcarts;
+    public void setDefence(int defence) {
+        this.defence = defence;
     }
 
-    public ArrayList<Carts> getDcarts() {
-        return Dcarts;
+    public static void HeroAdder(Player player) {
+        ArrayList<Heroes> ar = player.getPlayerHeroes();
+        if (!ar.contains(Heroes.mage))
+            ar.add(Heroes.mage);
+        if (!ar.contains(Heroes.warlock))
+            ar.add(Heroes.warlock);
+        if (!ar.contains(Heroes.rogue))
+            ar.add(Heroes.rogue);
+        if (!ar.contains(Heroes.priest))
+            ar.add(Heroes.priest);
+        if (!ar.contains(Heroes.hunter))
+            ar.add(Heroes.hunter);
+        player.setPlayerHeroes(ar);
+        ArrayList<Carts> ar2 = player.getPlayerCarts();
+        if (!ar2.contains(Carts.dreadscale))
+            ar2.add(Carts.dreadscale);
+        if (!ar2.contains(Carts.polymorph))
+            ar2.add(Carts.polymorph);
+        if (!ar2.contains(Carts.friendlysmith))
+            ar2.add(Carts.friendlysmith);
+        if (!ar2.contains(Carts.swampkingdred))
+            ar2.add(Carts.swampkingdred);
+        if (!ar2.contains(Carts.highpriestamet))
+            ar2.add(Carts.highpriestamet);
+        player.setPlayerCarts(ar2);
     }
 
-    public void setDcarts(ArrayList<Carts> dcarts) {
-        Dcarts = dcarts;
-    }
-
-    public ArrayList<Carts> getSPcarts() {
-        return SPcarts;
-    }
-
-    public void setSPcarts(ArrayList<Carts> SPcarts) {
-        this.SPcarts = SPcarts;
-    }
-
-    public static ArrayList getCardsInDeck() {
-        return CardsInDeck;
-    }
-
-    public static void setCardsInDeck(ArrayList cardsInDeck) {
-        CardsInDeck = cardsInDeck;
-    }
-
-
-
-
-
-    public void UpdateAddPurchasedCards(Carts cartss) {
-        ArrayList<Carts> ar = this.Pcarts;
-        ar.add(cartss);
-        this.Pcarts = ar;
-    }
-
-    public void UpdateAddDeckCards(Carts cartss) {
-        ArrayList<Carts> ar = this.Dcarts;
-        ar.add(cartss);
-        this.Dcarts = ar;
-    }
-
-    public void UpdateRemovePurchasedCards(Carts cartss) {
-        ArrayList<Carts> ar = this.Pcarts;
-        ar.remove(cartss);
-        this.Pcarts = ar;
-    }
 }
 
 

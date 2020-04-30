@@ -1,0 +1,20 @@
+{
+  "deckX": 1360,
+  "deckY": 130,
+  "deckWidth": 200,
+  "deckHeight": 60,
+  "deckSpacing": 75,
+  "searchHeight": 50,
+  "nameX": 600,
+  "nameY": 20,
+  "cardsX": 15,
+  "cardsY": 90,
+  "cardWidth": 130,
+  "cardHeight": 195,
+  "maxCardInDeck": 30,
+  "minCardInDeck": 15,
+  "addButtonX": 720,
+  "addButtonY": 550,
+  "addButtonWidth": 200,
+  "addButtonHeight": 50
+}

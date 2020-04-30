@@ -2,13 +2,9 @@ package Main;
 
 
 import Enums.*;
-import Heros.*;
 
 import java.io.*;
 import java.util.*;
-
-import Main.*;
-import org.codehaus.jackson.annotate.JsonAnyGetter;
 
 import static Main.Deck.DefaultDeck;
 import static Main.Deck.DefultAvailableCardsManager;
@@ -24,11 +20,11 @@ public class Player implements Serializable {
     private ArrayList<Carts> PlayerCarts;
     private ArrayList<Heroes> PlayerHeroes;
     private Deck selectedDeck;
-
+    private InfoPassive selectedPassive;
     private HashMap<String, Deck> allDecks;
 
 
-    public Player() throws IOException {
+    public Player() {
     }
 
     public Player(String username, String password) {
@@ -135,6 +131,13 @@ public class Player implements Serializable {
         this.selectedDeck = selectedDeck;
     }
 
+    public InfoPassive getSelectedPassive() {
+        return selectedPassive;
+    }
+
+    public void setSelectedPassive(InfoPassive selectedPassive) {
+        this.selectedPassive = selectedPassive;
+    }
 
     public HashMap<String, Deck> getAllDecks() {
         return allDecks;
@@ -144,45 +147,4 @@ public class Player implements Serializable {
         this.allDecks = allDecks;
     }
 
-    //    void SetFirstHero(Player player) throws IOException {
-//        Scanner sc = new Scanner(System.in);
-//        String hero = null;
-//        boolean flag = true;
-//        if (player.getNewToGame() == true) {
-//            while (flag) {
-//                System.out.println(ConsoleColors.YELLOW_BOLD + "Please select your Hero" + ConsoleColors.RESET);
-//                System.out.println(ConsoleColors.CYAN_BOLD + "Mage" + ConsoleColors.RED_BOLD_BRIGHT + "     Rogue" + ConsoleColors.GREEN_BOLD + "       Warlock" + ConsoleColors.RESET);
-//                hero = sc.next().toLowerCase();
-//                switch (hero) {
-//                    case "mage":
-//                        ArrayList<Carts> ar=player.getPlayerCarts();
-//                        ar.add(Carts.polymorph);
-//                        player.setPlayerCarts(ar);
-//                        player.setSelectedHero(JsonReaders.HeroJsonReader(player,"mage"));flag=false;
-//                        break;
-//                    case "rogue":
-//                        ArrayList<Carts> ar1=player.getPlayerCarts();
-//                        ar1.add(Carts.friendlysmith);
-//                        player.setPlayerCarts(ar1);
-//                        player.setSelectedHero(JsonReaders.HeroJsonReader(player,"rogue"));flag=false;
-//                        break;
-//                    case "warlock":
-//                        ArrayList<Carts> ar2=player.getPlayerCarts();
-//                        ar2.add(Carts.dreadscale);
-//                        player.setPlayerCarts(ar2);
-//                        player.setSelectedHero(JsonReaders.HeroJsonReader(player,"warlock"));flag=false;
-//                        break;
-//                    default:System.out.println(ConsoleColors.RED_BOLD + "invalid input" + ConsoleColors.RESET);
-//                }
-//            }
-//            System.out.println("\n"+String.format("You choose %s as your hero. You can change that anytime later.", hero.toUpperCase())+"\n"+"\n");
-//            LOGGER.playerlog(player, String.format("Select : %s as first selected hero", hero.toUpperCase()));
-//            player.setNewToGame(false);
-//            ArrayList<Heroes> ar1=getPlayerHeroes();
-//            if (getPlayerHeroes()==null)  ar1=new ArrayList<Heroes>();
-//            ar1.add(Heroes.valueOf(hero));
-//            player.setPlayerHeroes(ar1);
-//            JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
-//        }
-//    }
 }

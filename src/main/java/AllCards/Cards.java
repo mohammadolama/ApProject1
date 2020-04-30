@@ -1,10 +1,9 @@
 package AllCards;
 
-import Enums.Carts;
-import Enums.NeutralCarts;
-import Enums.SpecialCarts;
+import Enums.*;
 import Main.Deck;
 import Main.Gamestate;
+import Main.JsonReaders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,9 +12,9 @@ public class Cards {
     private String name;
     private String description;
     private int ManaCost;
-    private String type;
+    private Type type;
     private String heroClass;
-    private String rarity;
+    private Rarity rarity;
     private int price;
 
     public String getName() {
@@ -42,11 +41,11 @@ public class Cards {
         ManaCost = manaCost;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -58,7 +57,7 @@ public class Cards {
         this.heroClass = heroClass;
     }
 
-    public String getRarity() {
+    public Rarity getRarity() {
         return rarity;
     }
 
@@ -70,32 +69,41 @@ public class Cards {
         this.price = price;
     }
 
-    public void setRarity(String rarity) {
+    public void setRarity(Rarity rarity) {
         this.rarity = rarity;
     }
 
-    public static ArrayList<Cards> allCards(){
-        ArrayList<Carts> ar=new ArrayList<>();
+    public int getRarityI() {
+        return getRarity().getI();
+    }
+
+    public int getTypeI() {
+        return getType().getI();
+    }
+
+    public static ArrayList<Cards> allCards() {
+        ArrayList<Carts> ar = new ArrayList<>();
         for (Carts carts : Carts.values()) {
             ar.add(carts);
         }
 
-    return Deck.UpdateDeck(ar);
+        return Deck.UpdateDeck(ar);
     }
 
-    public static ArrayList<Cards> purchasedCards(){
-        ArrayList<Carts> ar=new ArrayList<>();
+    public static ArrayList<Cards> purchasedCards() {
+        ArrayList<Carts> ar = new ArrayList<>();
         for (Carts cart : Gamestate.getPlayer().getPlayerCarts()) {
             ar.add(cart);
         }
         return Deck.UpdateDeck(ar);
     }
 
-    public static ArrayList<Cards> lockedCards(){
-        ArrayList<Carts> ar=new ArrayList<>();
-        outer :for (Carts carts : Carts.values()) {
+    public static ArrayList<Cards> lockedCards() {
+        ArrayList<Carts> ar = new ArrayList<>();
+        outer:
+        for (Carts carts : Carts.values()) {
             for (Carts playerCart : Gamestate.getPlayer().getPlayerCarts()) {
-                if (carts.toString().equalsIgnoreCase(playerCart.toString())){
+                if (carts.toString().equalsIgnoreCase(playerCart.toString())) {
                     continue outer;
                 }
             }
@@ -104,19 +112,41 @@ public class Cards {
         return Deck.UpdateDeck(ar);
     }
 
-    public static ArrayList<Cards> neutralCardsFilter(){
-        ArrayList<Carts> ar=new ArrayList<>();
+    public static ArrayList<Cards> neutralCardsFilter() {
+        ArrayList<Carts> ar = new ArrayList<>();
         for (NeutralCarts value : NeutralCarts.values()) {
             ar.add(Carts.valueOf(value.toString()));
         }
         return Deck.UpdateDeck(ar);
     }
 
-    public static ArrayList<Cards> specialCardsFilter(){
-        ArrayList<Carts> ar=new ArrayList<>();
+    public static ArrayList<Cards> specialCardsFilter() {
+        ArrayList<Carts> ar = new ArrayList<>();
         for (SpecialCarts value : SpecialCarts.values()) {
             ar.add(Carts.valueOf(value.toString()));
         }
         return Deck.UpdateDeck(ar);
+    }
+
+    public static Cards getCardOf(String name) {
+        outer:
+        for (int i = 0; i < 1; i++) {
+            for (MinionCarts value : MinionCarts.values()) {
+                if (value.toString().equalsIgnoreCase(name)) {
+                    return JsonReaders.MinionsReader(name.toLowerCase());
+                }
+            }
+            for (SpellCarts value : SpellCarts.values()) {
+                if (value.toString().equalsIgnoreCase(name)) {
+                    return JsonReaders.SpellReader(name.toLowerCase());
+                }
+            }
+            for (WeaponCarts value : WeaponCarts.values()) {
+                if (value.toString().equalsIgnoreCase(name)) {
+                    return JsonReaders.WeaponReader(name.toLowerCase());
+                }
+            }
+        }
+        return null;
     }
 }

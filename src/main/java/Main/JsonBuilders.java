@@ -2,14 +2,12 @@ package Main;
 
 import AllCards.*;
 import Heros.Hero;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
 
 public class JsonBuilders {
-    static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     public static void PlayerJsonBuilder(String username, Player player) {
         try {
@@ -26,7 +24,7 @@ public class JsonBuilders {
         }
     }
 
-    public static void NewPlayerHeroBuilder(Player player) throws IOException {
+    static void NewPlayerHeroBuilder(Player player) throws IOException {
         String path = String.format("resources\\Jsons\\Players\\%s", player.getUsername());
         String st = path + "\\mage.json";
         FileWriter fileWriter = new FileWriter(st);
@@ -40,27 +38,52 @@ public class JsonBuilders {
         fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, JsonReaders.NewPlayerHeroReader("warlock"));
         fileWriter.close();
+        st = path + "\\priest.json";
+        fileWriter = new FileWriter(st);
+        objectMapper.writeValue(fileWriter, JsonReaders.NewPlayerHeroReader("priest"));
+        fileWriter.close();
+        st = path + "\\hunter.json";
+        fileWriter = new FileWriter(st);
+        objectMapper.writeValue(fileWriter, JsonReaders.NewPlayerHeroReader("hunter"));
+        fileWriter.close();
+
     }
 
 
-    public static void HeroBuilder(Player player, Hero hero) throws IOException {
+    private static void HeroBuilder(Player player, Hero hero) throws IOException {
         String st = String.format("resources\\Jsons\\Players\\%s\\%s.json", player.getUsername(), hero.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, hero);
         fileWriter.close();
     }
 
-    public static void WeaponBuilder(Weapon weapon) throws IOException {
+    static void HeroBuildeeer(Hero hero) throws IOException {
+        String st = String.format("resources\\Jsons\\%s.json", hero.getName().toLowerCase());
+        FileWriter fileWriter = new FileWriter(st);
+        objectMapper.writeValue(fileWriter, hero);
+        fileWriter.close();
+    }
+
+
+    private static void WeaponBuilder(Weapon weapon) throws IOException {
         String st = String.format("resources\\Jsons\\Cards\\%s.json", weapon.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, weapon);
         fileWriter.close();
     }
 
-    public static void SpellBuilder(Spell spell) throws IOException {
+    private static void SpellBuilder(Spell spell) throws IOException {
         String st = String.format("resources\\Jsons\\Cards\\%s.json", spell.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, spell);
         fileWriter.close();
     }
+
+    private static void minionBuilder(Minions minions) throws IOException {
+        String st = String.format("resources\\Jsons\\%s.json", minions.getName().toLowerCase());
+        FileWriter fileWriter = new FileWriter(st);
+        objectMapper.writeValue(fileWriter, minions);
+        fileWriter.close();
+    }
+
 }

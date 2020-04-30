@@ -2,9 +2,9 @@ package AllCards;
 
 public class Spell extends Cards {
 
-     int usageTimes;
+    int usageTimes;
 
-     String title;
+    String title;
 
     public int getUsageTimes() {
         return usageTimes;

@@ -4,7 +4,7 @@ import Enums.Attribute;
 
 import java.util.ArrayList;
 
-public class Minions  extends Cards  {
+public class Minions extends Cards {
     private int Attack;
     private int Health;
     private ArrayList<Enums.Attribute> Attribute;

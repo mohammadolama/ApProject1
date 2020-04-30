@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 
-import static GUI.Constants.status;
 
 public class CustomScrollBarUI extends BasicScrollBarUI {
 

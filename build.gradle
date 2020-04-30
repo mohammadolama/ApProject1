@@ -26,6 +26,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl
     compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.9'
 
+    // https://mvnrepository.com/artifact/javazoom/jlayer
+    compile group: 'javazoom', name: 'jlayer', version: '1.0.1'
+
 
 
 

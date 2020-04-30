@@ -1,18 +1,15 @@
 package Main;
 
 import AllCards.Cards;
-import AllCards.Spell;
 import Enums.Carts;
 import Enums.MinionCarts;
 import Enums.SpellCarts;
 import Enums.WeaponCarts;
 import Heros.Hero;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 public class Deck {
     private ArrayList<Carts> deck;
@@ -70,23 +67,27 @@ public class Deck {
 
 
     public double avarageMana() {
-        int x = 0;
-
-
-        return x;
+        ArrayList<Cards> ar = Deck.UpdateDeck(getDeck());
+        double i = 0;
+        for (Cards card : ar) {
+            i = i + card.getManaCost();
+        }
+        i = i / ar.size();
+        BigDecimal bd = new BigDecimal(Double.toString(i));
+        bd = bd.setScale(3, RoundingMode.HALF_EVEN);
+        return bd.doubleValue();
     }
 
     public double winRate() {
         if (totalPlays == 0) {
             return 0;
         }
-        double x = totalWins / totalPlays;
-        return x;
+        return totalWins / totalPlays;
     }
 
 
-    public static ArrayList<Carts> DefultAvailableCardsManager() {
-        ArrayList ar = new ArrayList();
+    static ArrayList<Carts> DefultAvailableCardsManager() {
+        ArrayList<Carts> ar = new ArrayList<>();
         ar.add(Carts.fierywaraxe);
         ar.add(Carts.evasivewyrm);
         ar.add(Carts.blessingoftheancients);
@@ -99,14 +100,9 @@ public class Deck {
         return ar;
     }
 
-    public static Deck DefaultDeck() {
+    static Deck DefaultDeck() {
         Deck deck = new Deck(0, 0, "Default Deck");
-        System.out.println(1);
-        System.out.println(deck);
         deck.setMostUsedCard(mostUsedCard(deck));
-
-
-        System.out.println(2);
         return deck;
     }
 
@@ -156,167 +152,94 @@ public class Deck {
     }
 
     public static ArrayList<Cards> UpdateDeck(ArrayList<Carts> arrayList) { // biuld card objects from json using enum
-        ArrayList<Cards> ar = new ArrayList();
-        try {
+        ArrayList<Cards> ar = new ArrayList<>();
 
-            for (Carts cartss : arrayList) {
-                for (MinionCarts minionCarts : MinionCarts.values()) {
-                    if (cartss.toString().equals(minionCarts.toString())) {
-                        ar.add(JsonReaders.MinionsReader(cartss.name()));
-                    }
-                }
-                for (SpellCarts spellCarts : SpellCarts.values()) {
-                    if (cartss.toString().equals(spellCarts.toString())) {
-                        ar.add(JsonReaders.SpellReader(cartss.name()));
-                    }
-                }
-                for (WeaponCarts weaponCarts : WeaponCarts.values()) {
-                    if (cartss.toString().equals(weaponCarts.toString())) {
-                        ar.add(JsonReaders.WeaponReader(cartss.name()));
-                    }
+        for (Carts cartss : arrayList) {
+            for (MinionCarts minionCarts : MinionCarts.values()) {
+                if (cartss.toString().equals(minionCarts.toString())) {
+                    ar.add(JsonReaders.MinionsReader(cartss.name()));
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            for (SpellCarts spellCarts : SpellCarts.values()) {
+                if (cartss.toString().equals(spellCarts.toString())) {
+                    ar.add(JsonReaders.SpellReader(cartss.name()));
+                }
+            }
+            for (WeaponCarts weaponCarts : WeaponCarts.values()) {
+                if (cartss.toString().equals(weaponCarts.toString())) {
+                    ar.add(JsonReaders.WeaponReader(cartss.name()));
+                }
+            }
         }
         return ar;
     }
 
-    public void usedTimeUpdater(){
+    private void usedTimeUpdater() {
         for (Carts carts : deck) {
-            usedTimes.put(carts.toString() , 0);
+            usedTimes.put(carts.toString(), 0);
         }
     }
 
+
     public static Carts mostUsedCard(Deck deck) {
-        System.out.println(deck.toString());
         int i = 0;
-        String name;
         int j = 0;
         ArrayList<Carts> ar = new ArrayList<>();
         for (Map.Entry<String, Integer> Entry : deck.usedTimes.entrySet()) {
-            System.out.println(Entry.getKey() + " : " + Entry.getValue());
             i = Entry.getValue();
             if (j < i) {
                 j = i;
             }
         }
-
         for (Map.Entry<String, Integer> Entry : deck.usedTimes.entrySet()) {
             if (Entry.getValue() == j) {
                 ar.add(Carts.valueOf(Entry.getKey().toLowerCase()));
             }
         }
-        System.out.println("ar1 :  " + ar.size());
         if (ar.size() == 1) {
             return ar.get(0);
         } else {
             ArrayList<Cards> ar2 = Deck.UpdateDeck(ar);
-            System.out.println("ar2 :  " + ar2.size());
             ArrayList<Cards> ar3 = new ArrayList<>();
-            for (int k = 0; k < 1; k++) {
-                for (Cards cards : ar2) {
-                    System.out.println(cards.getName() + " : " + cards.getRarity());
-                    if (cards.getRarity().equalsIgnoreCase("Legendary")) {
-                        ar3.add(cards);
-                    }
-                }
-                System.out.println(ar3.toString());
-                if (ar3.size() > 0) {
-                    break;
-                }
-                for (Cards cards : ar2) {
-                    if (cards.getRarity().equalsIgnoreCase("Epic")) {
-                        ar3.add(cards);
-                    }
-                }
-                if (ar3.size() > 0) {
-                    break;
-                }
-                for (Cards cards : ar2) {
-                    if (cards.getRarity().equalsIgnoreCase("Rare")) {
-                        ar3.add(cards);
-                    }
-                }
-                if (ar3.size() > 0) {
-                    break;
-                }
-                for (Cards cards : ar2) {
-                    if (cards.getRarity().equalsIgnoreCase("Common")) {
-                        ar3.add(cards);
-                    }
-                }
-                if (ar3.size() > 0) {
-                    break;
-                }
-            }
-            if (ar3.size() == 1) {
-                return Carts.valueOf(ar3.get(0).getName().toLowerCase());
-            } else{
-                System.out.println("ar3 :  " + ar3.size());
-                ArrayList<Cards> ar4=new ArrayList<>();
-                i=0;
-                j=0;
-                for (Cards cards : ar3) {
-                    i=cards.getManaCost();
-                    if (j<i){
-                        j=i;
-                    }
-                }
-                for (Cards cards : ar3) {
-                    if (cards.getManaCost()==j){
-                        ar4.add(cards);
-                    }
-                }
-                System.out.println("ar4 :  " + ar4.size());
-                if (ar4.size()==1){
-                    return Carts.valueOf(ar4.get(0).getName().toLowerCase());
-                }else{
-                    ar2=new ArrayList<>();
-                    for (int k = 0; k < 1; k++) {
-                        for (Cards cards : ar4) {
-                            if (cards.getType().equalsIgnoreCase("minion")){
-                                ar2.add(cards);
-                            }
-                        }
-                        if (ar2.size()>0){
-                            break;
-                        }
-                        for (Cards cards : ar4) {
-                            if (cards.getType().equalsIgnoreCase("spell")){
-                                ar2.add(cards);
-                            }
-                        }
-                        if (ar2.size()>0){
-                            break;
-                        }
-                        for (Cards cards : ar4) {
-                            if (cards.getType().equalsIgnoreCase("weapon")){
-                                ar2.add(cards);
-                            }
-                        }
-                    }
-                    System.out.println("ar2 :  " + ar2.size());
-                    Random rand=new Random();
-                    i=rand.nextInt();
-                    j=i%ar2.size();
-                    return Carts.valueOf(ar2.get(j).getName().toLowerCase());
-                }
-            }
+            Collections.sort(ar2, Comparator.comparing(Cards::getRarityI).thenComparing(Cards::getManaCost).thenComparing(Cards::getTypeI));
+            System.out.println(ar2.get(ar2.size() - 1));
+            return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
         }
     }
 
-    @Override
-    public String toString() {
-        return "Deck{" +
-                "deck=" + deck +
-                ", hero=" + hero +
-                ", mostUsedCard=" + mostUsedCard +
-                ", totalPlays=" + totalPlays +
-                ", totalWins=" + totalWins +
-                ", name='" + name + '\'' +
-                ", usedTimes=" + usedTimes +
-                '}';
+    public static ArrayList<String> bestDeck(Player player) {
+        ArrayList<Deck> ar = new ArrayList<>();
+        for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
+            ar.add(entry.getValue());
+        }
+        System.out.println(" ");
+        Collections.sort(ar, Comparator.comparing(Deck::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(Deck::avarageMana));
+
+        ArrayList<String> arrayList = new ArrayList<>();
+        if (ar.size() <= 10) {
+            for (Deck deck : ar) {
+                arrayList.add(deck.getName());
+            }
+            return arrayList;
+        } else {
+            for (int i = 0; i < 10; i++) {
+                arrayList.add(ar.get(i).getName());
+            }
+            return arrayList;
+        }
+    }
+
+
+    static ArrayList<Carts> UpdateSellCards() {
+        ArrayList<Carts> ar = new ArrayList<>();
+        for (Map.Entry<String, Deck> entry : Gamestate.getPlayer().getAllDecks().entrySet()) {
+            Deck deck = entry.getValue();
+            for (Carts carts : deck.getDeck()) {
+                ar.add(carts);
+            }
+        }
+        return ar;
+
     }
 
     public HashMap<String, Integer> getUsedTimes() {
@@ -325,5 +248,13 @@ public class Deck {
 
     public void setUsedTimes(HashMap<String, Integer> usedTimes) {
         this.usedTimes = usedTimes;
+    }
+
+    public static HashMap<String, Integer> resetUsedTimes(ArrayList<Carts> carts, Deck deck) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        for (Carts cart : carts) {
+            hashMap.put(cart.toString().toLowerCase(), 0);
+        }
+        return hashMap;
     }
 }
