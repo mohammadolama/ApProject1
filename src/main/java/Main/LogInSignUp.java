@@ -6,12 +6,12 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class LogInSignUp {
-    private static File file = new File("resources\\Main.Player.txt");
+    private static File file = new File("resources/Main.Player.txt");
 
     public void DeleteAccount(Player player) {
         try {
             Scanner sc2 = new Scanner(file);
-            File temp = new File("resources\\user\\temp.txt");
+            File temp = new File("resources/user/temp.txt");
             PrintWriter pw1 = new PrintWriter(temp);
             while (sc2.hasNext()) {
                 String st56 = sc2.nextLine();
@@ -29,8 +29,8 @@ public class LogInSignUp {
                 pw1.write(st56 + "\n");
             }
             pw1.close();
-            String st = String.format("resources\\players\\%s-%s.log", player.getUsername(), player.getId());
-            temp = new File("resources\\players\\temp.log");
+            String st = String.format("resources/players/%s-%s.log", player.getUsername(), player.getId());
+            temp = new File("resources/players/temp.log");
             file = new File(st);
             FileReader fileReader = new FileReader(file);
             FileWriter fileWriter = new FileWriter(temp);
@@ -81,7 +81,7 @@ public class LogInSignUp {
 
 
     private boolean UserFinder(String user) {
-        file = new File("resources\\Main.Player.txt");
+        file = new File("resources/Main.Player.txt");
         Scanner sc2;
         try {
             sc2 = new Scanner(file);
@@ -124,7 +124,7 @@ public class LogInSignUp {
     public String create(String user, String pass) {
         try {
             if (DuplicateUserChecker(user)) {
-                FileWriter fileWriter = new FileWriter("resources\\Main.Player.txt", true);
+                FileWriter fileWriter = new FileWriter("resources/Main.Player.txt", true);
                 PrintWriter pw = new PrintWriter(fileWriter);
                 pw.write("User : " + user + "\n");
                 pw.write("Password : " + pass + "\n");

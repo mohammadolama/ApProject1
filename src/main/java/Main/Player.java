@@ -38,7 +38,7 @@ public class Player implements Serializable {
             allDecks = new HashMap<String, Deck>();
             allDecks.put(getSelectedDeck().getName(), getSelectedDeck());
             this.setId(System.nanoTime() + "");
-            String st = String.format("resources\\players\\%s-%s.log", username, this.getId());
+            String st = String.format("resources/players/%s-%s.log", username, this.getId());
             PrintWriter vm = new PrintWriter(st);
             Date date = new Date();
             vm.write("Created in : " + date.toString() + "\n" + "Password : " + password + "\n" + "User : " + username + "\n" + "**********************" + "\n");

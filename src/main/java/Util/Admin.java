@@ -6,7 +6,8 @@ import AllCards.Spell;
 import AllCards.Weapon;
 import Enums.Carts;
 import Enums.Heroes;
-import GUI.Panels.*;
+import Model.CardModelView;
+import View.GUI.Panels.*;
 import G_L_Interface.Update;
 import Heros.Hero;
 import Main.*;
@@ -17,7 +18,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static GUI.Panels.Constants.powerPics;
+import static View.GUI.Panels.Constants.powerPics;
 
 public class Admin {
     private static Admin admin;
@@ -112,7 +113,7 @@ public class Admin {
                     new Thread(this::addPanels).start();
                     frameRender();
                     SoundAdmin.clip.stop();
-                    SoundAdmin.play1("resources\\Sounds\\menu.wav");
+                    SoundAdmin.play1("resources/Sounds/menu.wav");
                     playSound("welcome");
                     MyFrame.getInstance().changePanel("menu");
                     MenuPanel.getInstance().setFocusable(true);
@@ -166,7 +167,7 @@ public class Admin {
     }
 
     private void playMusic(String track) {
-        String st = String.format("resources\\Sounds\\%s.wav", track);
+        String st = String.format("resources/Sounds/%s.wav", track);
         SoundAdmin.play1(st);
     }
 
@@ -355,40 +356,79 @@ public class Admin {
     public Player player() {
         return Gamestate.getPlayer();
     }
+//    public Player gamePlayer(){
+//        return gameManager.getFriendlyPlayer();
+//    }
+//
+//    public ArrayList<Cards> deckCards() {
+//        return gameManager.getFriendlyDeckCards();
+//    }
+//
+//    public ArrayList<Cards> handCards() {
+//        return gameManager.getFriendLyHandCards();
+//    }
+//
+//    public ArrayList<Cards> playedCards() {
+//        return gameManager.getFriendlyPlayedCards();
+//    }
 
-    public ArrayList<Cards> deckCards() {
-        return gameManager.getDeckCards();
+    public Player friendlyPlayer(){
+        return gameManager.getFriendlyPlayer();
+    }
+    public Player enemyPlayer(){
+        return gameManager.getEnemyPlayer();
+    }
+    public ArrayList<Cards> friendlyDeckCards() {
+        return gameManager.getFriendlyDeckCards();
+    }
+    public ArrayList<Cards> enemyDeckCards() {
+        return gameManager.getEnemyDeckCards();
+    }
+//
+    public ArrayList<Cards> friendlyHandCards() {
+        return gameManager.getFriendLyHandCards();
+    }
+    public ArrayList<Cards> enemyHandCards() {
+        return gameManager.getEnemyHandCards();
     }
 
-    public ArrayList<Cards> handCards() {
-        return gameManager.getHandCards();
+
+//
+    public ArrayList<Cards> friendlyPlayedCards() {
+        return gameManager.getFriendlyPlayedCards();
     }
 
-    public ArrayList<Cards> playedCards() {
-        return gameManager.getPlayedCards();
+    public ArrayList<Cards> enemyPlayedCards() {
+        return gameManager.getEnemyPlayedCards();
     }
 
-    public ArrayList<Cards> cardsOfPlayer() {
-        return gameManager.getCardsofPlayer();
-    }
+
 
     public void endTurn() {
-        gameManager.refillMana();
-        gameManager.nextCard();
+//        gameManager.refillMana();
+//        gameManager.nextCard();
+        gameManager.endTurn();
         playSound("nextturn");
         updateGameLog(String.format("%s  EndTurn .", player().getUsername()));
     }
 
     public int notUsedmana() {
-        return gameManager.getNotUsedMana();
+        return gameManager.getFriendlyNotUsedMana();
     }
 
-    public int totalMana() {
-        return gameManager.getTotalMana();
+    public int friendlyTotalMana(){
+        return gameManager.getFriendlyTotalMana();
+    }
+    public int enemyTotalMana(){
+        return gameManager.getEnemyTotalMana();
     }
 
-    public Hero playerHero() {
-        return gameManager.getPlayerHero();
+    public Hero friendlyHero() {
+        return gameManager.getFriendlyPlayerHero();
+    }
+
+    public Hero enemyHero(){
+        return gameManager.getEnemyPlayerHero();
     }
 
     public String playerHeroName() {
@@ -405,9 +445,9 @@ public class Admin {
 
     public boolean cardCanbePlayed(String name) {
         int i = 0;
-        while (i < admin.handCards().size()) {
-            if (handCards().get(i).getName().equalsIgnoreCase(name)) {
-                if (handCards().get(i).getManaCost() - gameManager.getManaDecrease() > gameManager.getNotUsedMana()) {
+        while (i < friendlyPlayedCards().size()) {
+            if (friendlyHandCards().get(i).getName().equalsIgnoreCase(name)) {
+                if (friendlyHandCards().get(i).getManaCost() - gameManager.getFriendlyManaDecrease() > gameManager.getFriendlyNotUsedMana()) {
                     playSound("mana");
                     return false;
                 }
@@ -418,83 +458,142 @@ public class Admin {
     }
 
 
-    private void playMinion(Minions minions) {
-        if (playedCards().size() < 7) {
+    private void playMinion(Minions minions , int i) {
+        if (friendlyPlayedCards().size() < 7) {
             playSound("minion");
-            gameManager.setNotUsedMana(gameManager.getNotUsedMana() - (minions.getManaCost() - gameManager.getManaDecrease()));
-            playedCards().add(minions);
-            handCards().remove(minions);
+            gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (minions.getManaCost() - gameManager.getFriendlyManaDecrease()));
+            friendlyPlayedCards().add(i,minions);
+            friendlyHandCards().remove(minions);
+            updateGameLog(String.format("%s played", minions.getName().toLowerCase()));
         } else {
             playSound("error");
-            JOptionPane.showMessageDialog(boardPanel, "you have already played 7 Cards.");
+            frameRender();
+//            JOptionPane.showMessageDialog(boardPanel, "you have already played 7 Cards.");
         }
     }
 
     private void playSpell(Spell spell) {
         playSound("spell");
-        gameManager.setNotUsedMana(gameManager.getNotUsedMana() - (spell.getManaCost() - gameManager.getManaDecrease()));
-        handCards().remove(spell);
+        gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (spell.getManaCost() - gameManager.getFriendlyManaDecrease()));
+        friendlyHandCards().remove(spell);
+        updateGameLog(String.format("%s played", spell.getName().toLowerCase()));
     }
 
     private void playWeapon(Weapon weapon) {
         playSound("weapon");
-        gameManager.setNotUsedMana(gameManager.getNotUsedMana() - (weapon.getManaCost() - gameManager.getManaDecrease()));
-        handCards().remove(weapon);
-        gameManager.setWeapon(weapon);
+        gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (weapon.getManaCost() - gameManager.getFriendlyManaDecrease()));
+        friendlyHandCards().remove(weapon);
+        gameManager.setFriendlyWeapon(weapon);
+        updateGameLog(String.format("%s played", weapon.getName().toLowerCase()));
     }
 
-    public Weapon playerWeapon() {
-        return gameManager.getWeapon();
+    public Weapon friendlyWeapon() {
+        return gameManager.getFriendlyWeapon();
+    }
+    public Weapon enemyWeapon(){
+        return gameManager.getEnemyWeapon();
     }
 
     public void playHeroPower(Hero hero) {
-        if (gameManager.getHeroPowerUsageTime() > 0) {
-            if (gameManager.getNotUsedMana() >= hero.getHeroPower().getManaCost() - gameManager.getHeroPowerManaDecrease()) {
+        if (gameManager.getFriendlyHeroPowerUsageTime() > 0) {
+            if (gameManager.getFriendlyNotUsedMana() >= hero.getHeroPower().getManaCost() - gameManager.getFriendlyPowerManaDecrease()) {
                 playSound("heropower");
                 gameManager.updateGameLog("HeroPower played");
-                gameManager.setHeroPowerUsageTime(gameManager.getHeroPowerUsageTime() - 1);
-                gameManager.setNotUsedMana(gameManager.getNotUsedMana() - (hero.getHeroPower().getManaCost() - gameManager.getHeroPowerManaDecrease()));
+                gameManager.setFriendlyHeroPowerUsageTime(gameManager.getFriendlyHeroPowerUsageTime() - 1);
+                gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (hero.getHeroPower().getManaCost() - gameManager.getFriendlyPowerManaDecrease()));
             } else {
                 playSound("mana");
             }
         }
     }
 
-    public int heroPowerusedTimes() {
-        return gameManager.getHeroPowerUsageTime();
+
+    public CardModelView getViewModelOf(String string){
+        Cards cards= getCardOf(string.toLowerCase());
+        BufferedImage image=pictureOf(string.toLowerCase());
+        if (cards instanceof Minions){
+            Minions minions=(Minions) cards;
+            CardModelView modelView=new CardModelView(image ,string, minions.getManaCost() , minions.getAttack() , minions.getHealth() , minions.getType() );
+            return modelView;
+        }else if (cards instanceof Weapon){
+            Weapon weapon=(Weapon) cards;
+            CardModelView modelView=new CardModelView(image ,string, weapon.getManaCost() , weapon.getAtt() , weapon.getDurability(), weapon.getType() );
+            return modelView;
+        }else {
+            Spell spell=(Spell) cards;
+            CardModelView modelView=new CardModelView(image,string,spell.getManaCost());
+            return modelView;
+        }
+
+    }
+
+    public int friendlyHeroPowerusedTimes() {
+        return gameManager.getFriendlyHeroPowerUsageTime();
+    }
+
+    public int enemyHeroPowerusedTimes() {
+        return gameManager.getEnemyHeroPowerUsageTime();
     }
 
 
-    public void playCard(String string) {
-        for (Cards cards : handCards()) {
+    public void playCard(String string , int i) {
+        for (Cards cards : friendlyHandCards()) {
             if (cards.getName().equalsIgnoreCase(string)) {
-                System.out.println("not mana");
-                if (gameManager.getNotUsedMana() >= cards.getManaCost() - gameManager.getManaDecrease()) {
+                if (gameManager.getFriendlyNotUsedMana() >= cards.getManaCost() - gameManager.getFriendlyManaDecrease()) {
                     if (getCardOf(string) instanceof Minions) {
-                        playMinion((Minions) cards);
+                        playMinion((Minions) cards , i);
                     } else if (getCardOf(string) instanceof Spell) {
                         playSpell((Spell) cards);
                     } else if (getCardOf(string) instanceof Weapon) {
                         playWeapon((Weapon) cards);
                     }
-                    updateGameLog(String.format("%s played", cards.getName().toLowerCase()));
                     String log = String.format("Play : played card \"%s\"", cards.getName());
                     Log(log);
                     break;
                 } else {
-                    System.out.println("not mana");
                     playSound("mana");
                 }
             }
         }
     }
 
+    public boolean canBePlayed(String string){
+        for (Cards cards : friendlyHandCards()) {
+            if (cards.getName().equalsIgnoreCase(string)) {
+                if (gameManager.getFriendlyNotUsedMana() >= cards.getManaCost() - gameManager.getFriendlyManaDecrease()) {
+                    if (getCardOf(string) instanceof Minions) {
+                        if (friendlyPlayedCards().size()<7){
+                            return true;
+                        }
+                        else {
+                            playSound("error");
+                            return false;
+                        }
+                    } else if (getCardOf(string) instanceof Spell) {
+                        return true;
+                    } else if (getCardOf(string) instanceof Weapon) {
+                        return true;
+                    }
+                    break;
+                } else {
+                    return false;
+                }
+            }
+        }
+        throw new RuntimeException();
+    }
+
+
     public ArrayList<String> gameLog() {
         return gameManager.getGameLog();
     }
 
-    public int playerPowerMana() {
-        return (playerHero().getHeroPower().getManaCost() - gameManager.getHeroPowerManaDecrease());
+    public int friendlyPowerMana() {
+        return (friendlyHero().getHeroPower().getManaCost() - gameManager.getFriendlyPowerManaDecrease());
+    }
+
+    public int enemyPowerMana(){
+        return (enemyHero().getHeroPower().getManaCost() - gameManager.getEnemyPowerManaDecrease());
     }
 
     public void decreaseVolume() {
@@ -506,7 +605,7 @@ public class Admin {
     }
 
     public int cardMana(Cards cards) {
-        return cards.getManaCost() - gameManager.getManaDecrease();
+        return cards.getManaCost() - gameManager.getFriendlyManaDecrease();
     }
 
     public int defaultCardMana(Cards cards) {
@@ -532,5 +631,4 @@ public class Admin {
     public void playSound(String name) {
         new Thread(() -> SoundAdmin.playSound(name)).start();
     }
-
 }

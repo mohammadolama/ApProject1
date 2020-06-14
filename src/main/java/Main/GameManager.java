@@ -10,78 +10,188 @@ import java.util.Collections;
 
 public class GameManager {
 
-    private Player player;
-    private InfoPassive infoPassive;
-    private int startingMana;
-    private int totalMana;
-    private int notUsedMana;
-    private int drawCardNum;
-    private int heroPowerUsageTime;
-    private int heroPowerManaDecrease;
-    private int manaDecrease;
-    private int defenceAdd;
-    private ArrayList<Cards> cardsofPlayer;
-    private ArrayList<Cards> deckCards;
-    private ArrayList<Cards> handCards;
-    private ArrayList<Cards> playedCards;
+    private Player friendlyPlayer;
+    private Player enemyPlayer;
+    private InfoPassive friendlyInfoPassive;
+    private InfoPassive enemyInfoPassive;
+    private int friendlyStartingMana;
+    private int enemyStartingMana;
+    private int friendlyTotalMana;
+    private int enemyTotalMana;
+    private int friendlyNotUsedMana;
+    private int enemyNotUsedMana;
+    private int friendlyDrawCardNum;
+    private int enemyDrawCardNum;
+    private int friendlyHeroPowerUsageTime;
+    private int enemyHeroPowerUsageTime;
+    private int friendlyPowerManaDecrease;
+    private int enemyPowerManaDecrease;
+    private int friendlyManaDecrease;
+    private int enemyManaDecrease;
+    private int friendlyDefenceAdd;
+    private int enemyDefenceAdd;
+    private ArrayList<Cards> friendlyCardsOfPlayer;
+    private ArrayList<Cards> enemyCardsOfPlayer;
+    private ArrayList<Cards> friendlyDeckCards;
+    private ArrayList<Cards> friendLyHandCards;
+    private ArrayList<Cards> friendlyPlayedCards;
+    private ArrayList<Cards> enemyCardsofPlayer;
+    private ArrayList<Cards> enemyDeckCards;
+    private ArrayList<Cards> enemyHandCards;
+    private ArrayList<Cards> enemyPlayedCards;
     private ArrayList<String> gameLog;
-    private Weapon weapon;
-    private Hero playerHero;
+    private Weapon friendlyWeapon;
+    private Weapon enemyWeapon;
+    private Hero friendlyPlayerHero;
+    private Hero enemyPlayerHero;
+
 
     private GameManager(ArrayList<Cards> arrayList) {
-        playedCards = new ArrayList<>();
-        deckCards = new ArrayList<>();
-        handCards = new ArrayList<>();
+        friendlyPlayedCards = new ArrayList<>();
+        friendlyDeckCards = new ArrayList<>();
+        friendLyHandCards = new ArrayList<>();
         gameLog = new ArrayList<>();
-        cardsofPlayer = arrayList;
-        initCards(cardsofPlayer);
+        friendlyCardsOfPlayer = arrayList;
+        initCards(friendlyCardsOfPlayer);
 
     }
 
     public GameManager(Player player, InfoPassive infoPassive, ArrayList<Cards> arrayList) {
         this(arrayList);
-        this.player = player;
-        this.playerHero = player.getSelectedDeck().getHero();
-        this.infoPassive = infoPassive;
+        this.friendlyPlayer = player;
+        this.friendlyPlayerHero = player.getSelectedDeck().getHero();
+        this.friendlyInfoPassive = infoPassive;
         init(infoPassive);
+        enemyInit();
+    }
+
+    private void enemyInit() {
+        Player player = JsonReaders.PlayerJsonReader("enemy");
+        this.enemyPlayer = player;
+        enemyInfoPassive = InfoPassive.sample();
+        this.enemyStartingMana = 1;
+        friendlyStartingMana = 1;
+        enemyTotalMana = 1;
+        enemyNotUsedMana = 1;
+        enemyDrawCardNum = 1;
+        enemyHeroPowerUsageTime = 1;
+        enemyPowerManaDecrease = 0;
+        enemyManaDecrease = 1;
+        enemyDefenceAdd = 0;
+
+        ArrayList<Cards> ar1=Deck.UpdateDeck(player.getSelectedDeck().getDeck());
+        ArrayList<Cards> ar2=new ArrayList<>();
+        int i=0;
+        while (ar2.size()<3){
+            ar2.add(ar1.get(i));
+            ar1.remove(i);
+        }
+        this.enemyHandCards=ar2;
+        this.enemyDeckCards=ar1;
+        this.enemyPlayedCards=new ArrayList<>();
+        this.enemyCardsofPlayer=new ArrayList<>();
+        this.enemyPlayerHero=player.getSelectedDeck().getHero();
+    }
+
+    private void reversePlayers() {
+        Player playerTemp = this.friendlyPlayer;
+        friendlyPlayer = enemyPlayer;
+        enemyPlayer = playerTemp;
+
+
+        InfoPassive tempInfo=this.friendlyInfoPassive;
+        friendlyInfoPassive=enemyInfoPassive;
+        enemyInfoPassive=tempInfo;
+
+        int startingManaTemp=this.friendlyStartingMana;
+        friendlyStartingMana=enemyStartingMana;
+        enemyStartingMana=startingManaTemp;
+
+        int totalManaTemp=friendlyTotalMana;
+        friendlyTotalMana=enemyTotalMana;
+        enemyTotalMana=totalManaTemp;
+
+        int notUsedTemp=friendlyNotUsedMana;
+        friendlyNotUsedMana=enemyNotUsedMana;
+        enemyNotUsedMana=notUsedTemp;
+
+        int drawNumTemp=friendlyDrawCardNum;
+        friendlyDrawCardNum=enemyDrawCardNum;
+        enemyDrawCardNum=drawNumTemp;
+
+        int heropowerUsageTemp=friendlyHeroPowerUsageTime;
+        friendlyHeroPowerUsageTime=enemyHeroPowerUsageTime;
+        enemyHeroPowerUsageTime=heropowerUsageTemp;
+
+        int manaDecTemp=friendlyManaDecrease;
+        friendlyManaDecrease=enemyManaDecrease;
+        enemyManaDecrease=friendlyManaDecrease;
+
+        int powerManaTemp=friendlyPowerManaDecrease;
+        friendlyPowerManaDecrease=enemyPowerManaDecrease;
+        enemyPowerManaDecrease=powerManaTemp;
+
+        int defenceTemp=friendlyDefenceAdd;
+        friendlyDefenceAdd=enemyDefenceAdd;
+        enemyDefenceAdd=defenceTemp;
+
+        ArrayList<Cards> handsTemp=this.friendLyHandCards;
+        friendLyHandCards=enemyHandCards;
+        enemyHandCards=handsTemp;
+
+        ArrayList<Cards> deckTemp=this.friendlyDeckCards;
+        friendlyDeckCards=enemyDeckCards;
+        enemyDeckCards=deckTemp;
+
+        ArrayList<Cards> playedTemp=this.friendlyPlayedCards;
+        friendlyPlayedCards=enemyPlayedCards;
+        enemyPlayedCards=playedTemp;
+
+        Weapon temp4=this.friendlyWeapon;
+        friendlyWeapon=enemyWeapon;
+        enemyWeapon=temp4;
+
+        Hero heroTemp=friendlyPlayerHero;
+        friendlyPlayerHero=enemyPlayerHero;
+        enemyPlayerHero=heroTemp;
     }
 
 
     private void init(InfoPassive infoPassive) {
-        startingMana = 1;
-        totalMana = 1;
-        notUsedMana = 1;
-        drawCardNum = 1;
-        heroPowerUsageTime = 1;
-        heroPowerManaDecrease = 0;
-        manaDecrease = 0;
-        defenceAdd = 0;
+        friendlyStartingMana = 1;
+        friendlyTotalMana = 1;
+        friendlyNotUsedMana = 1;
+        friendlyDrawCardNum = 1;
+        friendlyHeroPowerUsageTime = 1;
+        friendlyPowerManaDecrease = 0;
+        friendlyManaDecrease = 0;
+        friendlyDefenceAdd = 0;
         String st = infoPassive.getName();
         if (st.equalsIgnoreCase("twiceDraw")) {
-            drawCardNum = 2;
+            friendlyDrawCardNum = 2;
         } else if (st.equalsIgnoreCase("offCards")) {
-            manaDecrease = 1;
+            friendlyManaDecrease = 1;
         } else if (st.equalsIgnoreCase("warriors")) {
-            defenceAdd = 2;
+            friendlyDefenceAdd = 2;
         } else if (st.equalsIgnoreCase("manaJump")) {
-            startingMana = 2;
-            totalMana = 2;
-            notUsedMana = 2;
+            friendlyStartingMana = 2;
+            friendlyTotalMana = 2;
+            friendlyNotUsedMana = 2;
         } else if (st.equalsIgnoreCase("freePower")) {
-            heroPowerUsageTime = 2;
-            heroPowerManaDecrease = 1;
+            friendlyHeroPowerUsageTime = 2;
+            friendlyPowerManaDecrease = 1;
         }
     }
 
     public void nextCard() {
-        if (deckCards.size() > 0) {
-            for (int i = 0; i < drawCardNum; i++) {
-                Cards cards = randomCardDraw(deckCards);
-                if (handCards.size() < 12) {
-                    addCard(handCards, cards);
+        if (friendlyDeckCards.size() > 0) {
+            for (int i = 0; i < friendlyDrawCardNum; i++) {
+                Cards cards = randomCardDraw(friendlyDeckCards);
+                if (friendLyHandCards.size() < 12) {
+                    addCard(friendLyHandCards, cards);
                 }
-                removeCard(deckCards, cards);
-                if (deckCards.size() == 0) {
+                removeCard(friendlyDeckCards, cards);
+                if (friendlyDeckCards.size() == 0) {
                     break;
                 }
             }
@@ -119,8 +229,8 @@ public class GameManager {
             ar.add(arrayList.get(i));
             arrayList.remove(i);
         }
-        handCards = ar;
-        deckCards = arrayList;
+        friendLyHandCards = ar;
+        friendlyDeckCards = arrayList;
     }
 
     private Cards randomCardDraw(ArrayList<Cards> cards) {
@@ -141,152 +251,165 @@ public class GameManager {
     }
 
     public void refillMana() {
-        if (totalMana < 10) {
-            totalMana++;
+        if (friendlyTotalMana < 10) {
+            friendlyTotalMana++;
         }
-        notUsedMana = totalMana;
+        friendlyNotUsedMana = friendlyTotalMana;
+    }
+
+    public void endTurn() {
+        reversePlayers();
+        refillMana();
+        nextCard();
     }
 
     boolean canBePlayed(Cards cards) {
         //////////////////////////////////////////////////////////
-        if (cards.getManaCost() >= notUsedMana) {
+        if (cards.getManaCost() >= friendlyNotUsedMana) {
             return true;
         }
         return false;
     }
 
     void decreaseMana(Cards cards) {
-        notUsedMana -= notUsedMana - cards.getManaCost();
+        friendlyNotUsedMana -= friendlyNotUsedMana - cards.getManaCost();
     }
 
 
-    public Player getPlayer() {
-        return player;
+    public Player getFriendlyPlayer() {
+        return friendlyPlayer;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setFriendlyPlayer(Player friendlyPlayer) {
+        this.friendlyPlayer = friendlyPlayer;
     }
 
-    public InfoPassive getInfoPassive() {
-        return infoPassive;
+    public InfoPassive getFriendlyInfoPassive() {
+        return friendlyInfoPassive;
     }
 
-    public void setInfoPassive(InfoPassive infoPassive) {
-        this.infoPassive = infoPassive;
+    public void setFriendlyInfoPassive(InfoPassive friendlyInfoPassive) {
+        this.friendlyInfoPassive = friendlyInfoPassive;
     }
 
-    public int getStartingMana() {
-        return startingMana;
+    public int getFriendlyStartingMana() {
+        return friendlyStartingMana;
     }
 
-    public void setStartingMana(int startingMana) {
-        this.startingMana = startingMana;
+    public void setFriendlyStartingMana(int friendlyStartingMana) {
+        this.friendlyStartingMana = friendlyStartingMana;
     }
 
-
-    public int getTotalMana() {
-        return totalMana;
+    public int getFriendlyTotalMana() {
+        return friendlyTotalMana;
     }
 
-    public void setTotalMana(int totalMana) {
-        this.totalMana = totalMana;
+    public void setFriendlyTotalMana(int friendlyTotalMana) {
+        this.friendlyTotalMana = friendlyTotalMana;
     }
 
-    public int getNotUsedMana() {
-        return notUsedMana;
+    public int getEnemyTotalMana() {
+        return enemyTotalMana;
     }
 
-    public void setNotUsedMana(int notUsedMana) {
-        this.notUsedMana = notUsedMana;
+    public void setEnemyTotalMana(int enemyTotalMana) {
+        this.enemyTotalMana = enemyTotalMana;
     }
 
-    public int getDrawCardNum() {
-        return drawCardNum;
+    public int getFriendlyNotUsedMana() {
+        return friendlyNotUsedMana;
     }
 
-    public void setDrawCardNum(int drawCardNum) {
-        this.drawCardNum = drawCardNum;
+    public void setFriendlyNotUsedMana(int friendlyNotUsedMana) {
+        this.friendlyNotUsedMana = friendlyNotUsedMana;
     }
 
-    public int getHeroPowerUsageTime() {
-        return heroPowerUsageTime;
+    public int getFriendlyDrawCardNum() {
+        return friendlyDrawCardNum;
     }
 
-    public void setHeroPowerUsageTime(int heroPowerUsageTime) {
-        this.heroPowerUsageTime = heroPowerUsageTime;
+    public void setFriendlyDrawCardNum(int friendlyDrawCardNum) {
+        this.friendlyDrawCardNum = friendlyDrawCardNum;
     }
 
-    public int getHeroPowerManaDecrease() {
-        return heroPowerManaDecrease;
+    public int getFriendlyHeroPowerUsageTime() {
+        return friendlyHeroPowerUsageTime;
     }
 
-    public void setHeroPowerManaDecrease(int heroPowerManaDecrease) {
-        this.heroPowerManaDecrease = heroPowerManaDecrease;
+    public void setFriendlyHeroPowerUsageTime(int friendlyHeroPowerUsageTime) {
+        this.friendlyHeroPowerUsageTime = friendlyHeroPowerUsageTime;
     }
 
-    public int getManaDecrease() {
-        return manaDecrease;
+    public int getFriendlyPowerManaDecrease() {
+        return friendlyPowerManaDecrease;
     }
 
-    public void setManaDecrease(int manaDecrease) {
-        this.manaDecrease = manaDecrease;
+    public void setFriendlyPowerManaDecrease(int friendlyPowerManaDecrease) {
+        this.friendlyPowerManaDecrease = friendlyPowerManaDecrease;
     }
 
-    public int getDefenceAdd() {
-        return defenceAdd;
+    public int getFriendlyManaDecrease() {
+        return friendlyManaDecrease;
     }
 
-    public void setDefenceAdd(int defenceAdd) {
-        this.defenceAdd = defenceAdd;
+    public void setFriendlyManaDecrease(int friendlyManaDecrease) {
+        this.friendlyManaDecrease = friendlyManaDecrease;
     }
 
-    public ArrayList<Cards> getCardsofPlayer() {
-        return cardsofPlayer;
+    public int getFriendlyDefenceAdd() {
+        return friendlyDefenceAdd;
     }
 
-    public void setCardsofPlayer(ArrayList<Cards> cardsofPlayer) {
-        this.cardsofPlayer = cardsofPlayer;
+    public void setFriendlyDefenceAdd(int friendlyDefenceAdd) {
+        this.friendlyDefenceAdd = friendlyDefenceAdd;
     }
 
-    public ArrayList<Cards> getDeckCards() {
-        return deckCards;
+    public ArrayList<Cards> getFriendlyCardsOfPlayer() {
+        return friendlyCardsOfPlayer;
     }
 
-    public void setDeckCards(ArrayList<Cards> deckCards) {
-        this.deckCards = deckCards;
+    public void setFriendlyCardsOfPlayer(ArrayList<Cards> friendlyCardsOfPlayer) {
+        this.friendlyCardsOfPlayer = friendlyCardsOfPlayer;
     }
 
-    public ArrayList<Cards> getHandCards() {
-        return handCards;
+    public ArrayList<Cards> getFriendlyDeckCards() {
+        return friendlyDeckCards;
     }
 
-    public void setHandCards(ArrayList<Cards> handCards) {
-        this.handCards = handCards;
+    public void setFriendlyDeckCards(ArrayList<Cards> friendlyDeckCards) {
+        this.friendlyDeckCards = friendlyDeckCards;
     }
 
-    public ArrayList<Cards> getPlayedCards() {
-        return playedCards;
+    public ArrayList<Cards> getFriendLyHandCards() {
+        return friendLyHandCards;
     }
 
-    public void setPlayedCards(ArrayList<Cards> playedCards) {
-        this.playedCards = playedCards;
+    public void setFriendLyHandCards(ArrayList<Cards> friendLyHandCards) {
+        this.friendLyHandCards = friendLyHandCards;
     }
 
-    public Weapon getWeapon() {
-        return weapon;
+    public ArrayList<Cards> getFriendlyPlayedCards() {
+        return friendlyPlayedCards;
     }
 
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+    public void setFriendlyPlayedCards(ArrayList<Cards> friendlyPlayedCards) {
+        this.friendlyPlayedCards = friendlyPlayedCards;
     }
 
-    public Hero getPlayerHero() {
-        return playerHero;
+    public Weapon getFriendlyWeapon() {
+        return friendlyWeapon;
     }
 
-    public void setPlayerHero(Hero playerHero) {
-        this.playerHero = playerHero;
+    public void setFriendlyWeapon(Weapon friendlyWeapon) {
+        this.friendlyWeapon = friendlyWeapon;
+    }
+
+    public Hero getFriendlyPlayerHero() {
+        return friendlyPlayerHero;
+    }
+
+    public void setFriendlyPlayerHero(Hero friendlyPlayerHero) {
+        this.friendlyPlayerHero = friendlyPlayerHero;
     }
 
     public ArrayList<String> getGameLog() {
@@ -295,6 +418,134 @@ public class GameManager {
 
     public void setGameLog(ArrayList<String> gameLog) {
         this.gameLog = gameLog;
+    }
+
+    public Player getEnemyPlayer() {
+        return enemyPlayer;
+    }
+
+    public void setEnemyPlayer(Player enemyPlayer) {
+        this.enemyPlayer = enemyPlayer;
+    }
+
+    public InfoPassive getEnemyInfoPassive() {
+        return enemyInfoPassive;
+    }
+
+    public void setEnemyInfoPassive(InfoPassive enemyInfoPassive) {
+        this.enemyInfoPassive = enemyInfoPassive;
+    }
+
+    public int getEnemyStartingMana() {
+        return enemyStartingMana;
+    }
+
+    public void setEnemyStartingMana(int enemyStartingMana) {
+        this.enemyStartingMana = enemyStartingMana;
+    }
+
+    public int getEnemyNotUsedMana() {
+        return enemyNotUsedMana;
+    }
+
+    public void setEnemyNotUsedMana(int enemyNotUsedMana) {
+        this.enemyNotUsedMana = enemyNotUsedMana;
+    }
+
+    public int getEnemyDrawCardNum() {
+        return enemyDrawCardNum;
+    }
+
+    public void setEnemyDrawCardNum(int enemyDrawCardNum) {
+        this.enemyDrawCardNum = enemyDrawCardNum;
+    }
+
+    public int getEnemyHeroPowerUsageTime() {
+        return enemyHeroPowerUsageTime;
+    }
+
+    public void setEnemyHeroPowerUsageTime(int enemyHeroPowerUsageTime) {
+        this.enemyHeroPowerUsageTime = enemyHeroPowerUsageTime;
+    }
+
+    public int getEnemyPowerManaDecrease() {
+        return enemyPowerManaDecrease;
+    }
+
+    public void setEnemyPowerManaDecrease(int enemyPowerManaDecrease) {
+        this.enemyPowerManaDecrease = enemyPowerManaDecrease;
+    }
+
+    public int getEnemyManaDecrease() {
+        return enemyManaDecrease;
+    }
+
+    public void setEnemyManaDecrease(int enemyManaDecrease) {
+        this.enemyManaDecrease = enemyManaDecrease;
+    }
+
+    public int getEnemyDefenceAdd() {
+        return enemyDefenceAdd;
+    }
+
+    public void setEnemyDefenceAdd(int enemyDefenceAdd) {
+        this.enemyDefenceAdd = enemyDefenceAdd;
+    }
+
+    public ArrayList<Cards> getEnemyCardsofPlayer() {
+        return enemyCardsofPlayer;
+    }
+
+    public void setEnemyCardsofPlayer(ArrayList<Cards> enemyCardsofPlayer) {
+        this.enemyCardsofPlayer = enemyCardsofPlayer;
+    }
+
+    public ArrayList<Cards> getEnemyDeckCards() {
+        return enemyDeckCards;
+    }
+
+    public void setEnemyDeckCards(ArrayList<Cards> enemyDeckCards) {
+        this.enemyDeckCards = enemyDeckCards;
+    }
+
+    public ArrayList<Cards> getEnemyHandCards() {
+        return enemyHandCards;
+    }
+
+    public void setEnemyHandCards(ArrayList<Cards> enemyHandCards) {
+        this.enemyHandCards = enemyHandCards;
+    }
+
+    public ArrayList<Cards> getEnemyPlayedCards() {
+        return enemyPlayedCards;
+    }
+
+    public void setEnemyPlayedCards(ArrayList<Cards> enemyPlayedCards) {
+        this.enemyPlayedCards = enemyPlayedCards;
+    }
+
+    public Weapon getEnemyWeapon() {
+        return enemyWeapon;
+    }
+
+    public void setEnemyWeapon(Weapon enemyWeapon) {
+        this.enemyWeapon = enemyWeapon;
+    }
+
+    public Hero getEnemyPlayerHero() {
+        return enemyPlayerHero;
+    }
+
+    public void setEnemyPlayerHero(Hero enemyPlayerHero) {
+        this.enemyPlayerHero = enemyPlayerHero;
+    }
+
+    public ArrayList<Cards> getEnemyCardsOfPlayer() {
+        return enemyCardsOfPlayer;
+    }
+
+    public void setEnemyCardsOfPlayer(ArrayList<Cards> enemyCardsOfPlayer) {
+        this.enemyCardsOfPlayer = enemyCardsOfPlayer;
     }
 }
 

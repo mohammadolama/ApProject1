@@ -41,4 +41,11 @@ public class Minions extends Cards {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public void act(){
+        System.out.println("action from minion");
+
+    }
+
+
 }

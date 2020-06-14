@@ -8,7 +8,7 @@ import java.io.*;
 
 public class JsonReaders {
     static Player PlayerJsonReader(String username) {
-        String path = String.format("resources\\Jsons\\Players\\%s\\player.json", username);
+        String path = String.format("resources/Jsons/Players/%s/player.json", username);
         Player player = null;
         try {
             FileReader fileReader = new FileReader(path);
@@ -22,7 +22,7 @@ public class JsonReaders {
     }
 
     static Hero NewPlayerHeroReader(String hero) {
-        String path = String.format("resources\\Jsons\\Heros\\%s.json", hero.toLowerCase());
+        String path = String.format("resources/Jsons/Heros/%s.json", hero.toLowerCase());
         Hero hero1 = null;
         try {
             FileReader fileReader = new FileReader(path);
@@ -36,7 +36,7 @@ public class JsonReaders {
     }
 
     public static Hero HeroJsonReader(Player player, String hero) {
-        String path = String.format("resources\\Jsons\\Players\\%s\\%s.json", player.getUsername(), hero.toLowerCase());
+        String path = String.format("resources/Jsons/Players/%s/%s.json", player.getUsername(), hero.toLowerCase());
         Hero hero1 = null;
         try {
             FileReader fileReader = new FileReader(path);
@@ -50,7 +50,7 @@ public class JsonReaders {
     }
 
     public static Minions MinionsReader(String minions) {
-        String path = String.format("resources\\Jsons\\Cards\\%s.json", minions);
+        String path = String.format("resources/Jsons/Cards/%s.json", minions);
         Minions minion = null;
         try {
             FileReader fileReader = new FileReader(path);
@@ -64,7 +64,7 @@ public class JsonReaders {
     }
 
     public static Spell SpellReader(String spell) {
-        String path = String.format("resources\\Jsons\\Cards\\%s.json", spell);
+        String path = String.format("resources/Jsons/Cards/%s.json", spell);
         Spell spells = null;
         try {
             FileReader fileReader = new FileReader(path);
@@ -78,7 +78,7 @@ public class JsonReaders {
     }
 
     public static Weapon WeaponReader(String weapon) {
-        String path = String.format("resources\\Jsons\\Cards\\%s.json", weapon);
+        String path = String.format("resources/Jsons/Cards/%s.json", weapon);
         Weapon weapon1 = null;
         try {
             FileReader fileReader = new FileReader(path);

@@ -1,8 +1,8 @@
 package G_L_Interface;
 
 import Enums.Carts;
-import GUI.Panels.CollectionPanel;
-import GUI.Panels.StatusPanel;
+import View.GUI.Panels.CollectionPanel;
+import View.GUI.Panels.StatusPanel;
 import Main.Deck;
 import Main.Gamestate;
 import Main.JsonBuilders;

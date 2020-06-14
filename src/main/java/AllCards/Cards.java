@@ -4,10 +4,11 @@ import Enums.*;
 import Main.Deck;
 import Main.Gamestate;
 import Main.JsonReaders;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+@JsonIgnoreProperties( {"rarityI" , "typeI"})
 public class Cards {
     private String name;
     private String description;
@@ -128,7 +129,7 @@ public class Cards {
         return Deck.UpdateDeck(ar);
     }
 
-    public static Cards getCardOf(String name) {
+    public  static Cards getCardOf(String name) {
         outer:
         for (int i = 0; i < 1; i++) {
             for (MinionCarts value : MinionCarts.values()) {
@@ -148,5 +149,12 @@ public class Cards {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Cards{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

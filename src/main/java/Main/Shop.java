@@ -80,7 +80,7 @@ public class Shop {
         long n = 0;
         try {
             JSONParser jsonParser = new JSONParser();
-            FileReader fileReader = new FileReader(String.format("resources\\Jsons\\Cards\\%s.json", name));
+            FileReader fileReader = new FileReader(String.format("resources/Jsons/Cards/%s.json", name));
             Object object = jsonParser.parse(fileReader);
             JSONObject jsonObject = (JSONObject) object;
             n = (Long) jsonObject.get("price");

@@ -29,6 +29,10 @@ public class InfoPassive {
         return ar;
     }
 
+    public static InfoPassive sample(){
+        return infoPassiveCreator().get(2);
+    }
+
 
     public static ArrayList<InfoPassive> randomGenerate(ArrayList<InfoPassive> passives) {
         ArrayList<InfoPassive> ar = new ArrayList<>();
