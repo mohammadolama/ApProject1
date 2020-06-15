@@ -14,6 +14,7 @@ import Main.*;
 import Sounds.SoundAdmin;
 
 
+import javax.smartcardio.Card;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -439,13 +440,17 @@ public class Admin {
         return Constants.cardPics.get(name.toLowerCase());
     }
 
+    public BufferedImage gamePictureOf(String name){
+        return Constants.gamePics.get(name.toLowerCase());
+    }
+
     public ImageIcon gifOf(String name) {
         return Constants.heroGifs.get(name.toLowerCase());
     }
 
     public boolean cardCanbePlayed(String name) {
         int i = 0;
-        while (i < friendlyPlayedCards().size()) {
+        while (i < friendlyHandCards().size()) {
             if (friendlyHandCards().get(i).getName().equalsIgnoreCase(name)) {
                 if (friendlyHandCards().get(i).getManaCost() - gameManager.getFriendlyManaDecrease() > gameManager.getFriendlyNotUsedMana()) {
                     playSound("mana");
@@ -507,8 +512,46 @@ public class Admin {
         }
     }
 
+    public CardModelView getViewModelOf(String list , int index){
+        if (list.equalsIgnoreCase("friendly")){
+            Cards cards=gameManager.getFriendlyPlayedCards().get(index);
+            String string=cards.getName().toLowerCase();
+            BufferedImage image=pictureOf(string);
+            if (cards instanceof Minions){
+                Minions minions=(Minions) cards;
+                CardModelView modelView=new CardModelView(image ,string, minions.getManaCost() , minions.getAttack() , minions.getHealth() , minions.getType() );
+                return modelView;
+            }else if (cards instanceof Weapon){
+                Weapon weapon=(Weapon) cards;
+                CardModelView modelView=new CardModelView(image ,string, weapon.getManaCost() , weapon.getAtt() , weapon.getDurability(), weapon.getType() );
+                return modelView;
+            }else {
+                Spell spell=(Spell) cards;
+                CardModelView modelView=new CardModelView(image,string,spell.getManaCost());
+                return modelView;
+            }
+        }else{
+            Cards cards=gameManager.getEnemyPlayedCards().get(index);
+            String string=cards.getName().toLowerCase();
+            BufferedImage image=pictureOf(string);
+            if (cards instanceof Minions){
+                Minions minions=(Minions) cards;
+                CardModelView modelView=new CardModelView(image ,string, minions.getManaCost() , minions.getAttack() , minions.getHealth() , minions.getType() );
+                return modelView;
+            }else if (cards instanceof Weapon){
+                Weapon weapon=(Weapon) cards;
+                CardModelView modelView=new CardModelView(image ,string, weapon.getManaCost() , weapon.getAtt() , weapon.getDurability(), weapon.getType() );
+                return modelView;
+            }else {
+                Spell spell=(Spell) cards;
+                CardModelView modelView=new CardModelView(image,string,spell.getManaCost());
+                return modelView;
+            }
+        }
+    }
 
-    public CardModelView getViewModelOf(String string){
+
+    public CardModelView getPureViewModelOf(String string){
         Cards cards= getCardOf(string.toLowerCase());
         BufferedImage image=pictureOf(string.toLowerCase());
         if (cards instanceof Minions){

@@ -172,7 +172,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
             }
 
             g2d.drawImage(bufferedImages.get(i), config.getCardsX(), config.getCardsY(), config.getCardWidth(), config.getCardHeight(), null);
-            images.add(new Images(cards.get(i).getName().toLowerCase(), config.getCardsX(), config.getCardsY(), config.getCardWidth(), config.getCardHeight()));
+            images.add(new Images(cards.get(i).getName().toLowerCase(), config.getCardsX(), config.getCardsY(), config.getCardWidth(), config.getCardHeight() , i));
 
 
             g2d.setColor(new Color(50, 50, 50, 180));

@@ -248,12 +248,12 @@ public class Constants {
             gamePics.put("collection", collection);
             gamePics.put("status", status);
             gamePics.put("status2", status2);
-            gamePics.put("playBoard", playBoard);
-            gamePics.put("playBackground", playBackground);
+            gamePics.put("playboard", playBoard);
+            gamePics.put("playbackground", playBackground);
             gamePics.put("store", store);
             gamePics.put("setting", setting);
             gamePics.put("info", info);
-            gamePics.put("heroBackground", heroBackground);
+            gamePics.put("herobackground", heroBackground);
             gamePics.put("tick", tick);
             gamePics.put("mana", mana);
             gamePics.put("blood", blood);

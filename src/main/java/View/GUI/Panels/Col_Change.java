@@ -350,7 +350,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
             while (i < allBufferedImages.size()) {
 
                 g2d.drawImage(allBufferedImages.get(i), config.getCardsX(), config.getCardsY(), config.getCardWidth(), config.getCardHeight(), null);
-                images.add(new Images(cards.get(i).getName().toLowerCase(), config.getCardsX(), config.getCardsY(), config.getCardWidth(), config.getCardHeight()));
+                images.add(new Images(cards.get(i).getName().toLowerCase(), config.getCardsX(), config.getCardsY(), config.getCardWidth(), config.getCardHeight() , i));
                 if (selectedCards != null && selectedCards.contains(Carts.valueOf(cards.get(i).getName().toLowerCase()))) {
                     g2d.drawImage(gamePics.get("tick"), config.getCardsX() + 50, config.getCardsY(), null);
                 }

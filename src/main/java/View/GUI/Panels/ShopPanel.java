@@ -329,7 +329,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         int i = 0;
         while (i < cards.size()) {
             g.drawImage(bufferedImages.get(i), config.getStartX2(), config.getStartY2(), config.getWidth(), config.getHeight(), null);
-            images.add(new Images(cards.get(i).getName().toLowerCase(), config.getStartX2(), config.getStartY2(), config.getWidth(), config.getHeight()));
+            images.add(new Images(cards.get(i).getName().toLowerCase(), config.getStartX2(), config.getStartY2(), config.getWidth(), config.getHeight() , i));
             config.setStartX2(config.getStartX2() + config.getWidth());
             if (config.getStartX2() >= 1300) {
                 config.setStartX2(20);

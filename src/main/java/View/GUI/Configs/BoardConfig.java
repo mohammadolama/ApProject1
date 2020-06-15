@@ -18,6 +18,7 @@ public class BoardConfig {
     private int cardHeight;
     private int playerPlayedCardX;
     private int playerPlayedCardY;
+    private int opponentPlayedCardY;
     private int playerHeroPowerX;
     private int playerHeroPowerY;
     private int opponentHeroPowerY;
@@ -328,5 +329,13 @@ public class BoardConfig {
 
     public void setMiddleY(int middleY) {
         this.middleY = middleY;
+    }
+
+    public int getOpponentPlayedCardY() {
+        return opponentPlayedCardY;
+    }
+
+    public void setOpponentPlayedCardY(int opponentPlayedCardY) {
+        this.opponentPlayedCardY = opponentPlayedCardY;
     }
 }
