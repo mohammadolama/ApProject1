@@ -125,7 +125,7 @@ public class GameManager {
 
         int manaDecTemp=friendlyManaDecrease;
         friendlyManaDecrease=enemyManaDecrease;
-        enemyManaDecrease=friendlyManaDecrease;
+        enemyManaDecrease=manaDecTemp;
 
         int powerManaTemp=friendlyPowerManaDecrease;
         friendlyPowerManaDecrease=enemyPowerManaDecrease;

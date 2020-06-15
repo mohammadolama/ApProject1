@@ -94,6 +94,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         enemyHero.setBounds(710, 35, 175, 279);
         enemyHero.setIcon(admin.gifOf(admin.enemyPlayer().getSelectedDeck().getHero().getName().toLowerCase()));
         enemyHero.setIgnoreRepaint(true);
+        enemyHero.addMouseListener(enemyMouseListener);
         add(enemyHero);
 
 
@@ -389,12 +390,98 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         enemyPlayedImages = new ArrayList<>();
     }
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        if (disabled) {
+    private void friendlyPlayedView(int x , int y){
+        int i = -1;
+        for (Images images : friendlyPlayedImages) {
+            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
+                i = images.getIndex();
+                break;
+            }
+        }
+        if (i == (-1)) {
             return;
         }
-        cardPreview.setVisible(false);
+        cardPreview.setCardModelView(admin.getViewModelOf("friendly", i));
+        cardPreview.setBounds(x - 50, y - 360, 260, 370);
+        cardPreview.setVisible(true);
+    }
+
+    private void enemyPlayedView(int x , int y){
+        int i = -1;
+        for (Images images : enemyPlayedImages) {
+            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
+                i = images.getIndex();
+                break;
+            }
+        }
+        if (i == (-1)) {
+            return;
+        }
+        cardPreview.setCardModelView(admin.getViewModelOf("enemy", i));
+        cardPreview.setBounds(x - 50, y, 260, 370);
+        cardPreview.setVisible(true);
+    }
+
+    private void friendlyHandView(int x , int y){
+        String st = null;
+        for (Images images : handImages) {
+            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
+                st = images.getName();
+                break;
+            }
+        }
+        if (st == null || st.equals("")) {
+            return;
+        }
+        cardPreview.setCardModelView(admin.getPureViewModelOf(st.toLowerCase()));
+        cardPreview.setBounds(x - 50, y - 360, 260, 370);
+        cardPreview.setVisible(true);
+
+    }
+
+    private void cardSelectedAction(int x , int y){
+        deckIndex = 0;
+        if (friendlyPlayedImages.size() > 0) {
+            if (x <= friendlyPlayedImages.get(0).getX()) {
+                deckIndex = 0;
+            } else if (x >= friendlyPlayedImages.get(friendlyPlayedImages.size() - 1).getX()) {
+                deckIndex = friendlyPlayedImages.size();
+            } else {
+                for (int j = 0; j < friendlyPlayedImages.size() - 1; j++) {
+
+                    if ((x > (friendlyPlayedImages.get(j).getX() + friendlyPlayedImages.get(j).getWidth() - 10)) && (x < (friendlyPlayedImages.get(j + 1).getX() + 15))) {
+                        deckIndex = j + 1;
+                        break;
+                    }
+                }
+            }
+        }
+        if (admin.canBePlayed(name)) {
+            config.setPlayAnimation(true);
+            X = mouseStartX;
+            Y = mouseStartY;
+            playTimer.start();
+        }
+    }
+
+    private void selectCard(int x , int y){
+        String st = null;
+        for (Images images : handImages) {
+            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
+                st = images.getName();
+                break;
+            }
+        }
+        if (st == null || st.equals("")) {
+            return;
+        }
+        if (admin.cardCanbePlayed(st)) {
+            name = st;
+            cardSelected = true;
+            System.out.println(name + " selected");
+        }
+        revalidate();
+        repaint();
     }
 
     @Override
@@ -405,54 +492,15 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         cardPreview.setVisible(false);
         int x = e.getX();
         int y = e.getY();
-
         if (y >= config.getPlayerHandY()) {
-            String st = null;
-            for (Images images : handImages) {
-                if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                    st = images.getName();
-                    break;
-                }
-            }
-            if (st == null || st.equals("")) {
-                return;
-            }
-            cardPreview.setCardModelView(admin.getPureViewModelOf(st.toLowerCase()));
-            cardPreview.setBounds(x - 50, y - 360, 260, 370);
-            cardPreview.setVisible(true);
-
+            friendlyHandView(x,y);
         } else if (y < config.getPlayerHandY()) {
             if (y > config.getMiddleLineY()) {
-                int i = -1;
-                for (Images images : friendlyPlayedImages) {
-                    if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                        i = images.getIndex();
-                        break;
-                    }
-                }
-                if (i == (-1)) {
-                    return;
-                }
-                cardPreview.setCardModelView(admin.getViewModelOf("friendly", i));
-                cardPreview.setBounds(x - 50, y - 360, 260, 370);
-                cardPreview.setVisible(true);
+                friendlyPlayedView(x,y);
             } else {
-                int i = -1;
-                for (Images images : enemyPlayedImages) {
-                    if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                        i = images.getIndex();
-                        break;
-                    }
-                }
-                if (i == (-1)) {
-                    return;
-                }
-                cardPreview.setCardModelView(admin.getViewModelOf("enemy", i));
-                cardPreview.setBounds(x - 50, y, 260, 370);
-                cardPreview.setVisible(true);
+                enemyPlayedView(x,y);
             }
         }
-
     }
 
     @Override
@@ -473,54 +521,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             mouseDesX = x;
             mouseDesY = y;
             if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getMiddleLineY() && y <= config.getPlayAreaY()) {
-                deckIndex = 0;
-                if (friendlyPlayedImages.size() > 0) {
-                    if (x <= friendlyPlayedImages.get(0).getX()) {
-                        deckIndex = 0;
-                    } else if (x >= friendlyPlayedImages.get(friendlyPlayedImages.size() - 1).getX()) {
-                        deckIndex = friendlyPlayedImages.size();
-                    } else {
-                        for (int j = 0; j < friendlyPlayedImages.size() - 1; j++) {
-
-                            if ((x > (friendlyPlayedImages.get(j).getX() + friendlyPlayedImages.get(j).getWidth() - 10)) && (x < (friendlyPlayedImages.get(j + 1).getX() + 15))) {
-                                deckIndex = j + 1;
-
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (admin.canBePlayed(name)) {
-                    config.setPlayAnimation(true);
-                    X = mouseStartX;
-                    Y = mouseStartY;
-                    playTimer.start();
-                }
+                cardSelectedAction(x,y);
             }
             cardSelected = false;
             return;
         }
-
         if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getPlayerHandY()) {
-            String st = null;
-            for (Images images : handImages) {
-                if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                    st = images.getName();
-                    break;
-                }
-            }
-            if (st == null || st.equals("")) {
-                return;
-            }
-            if (admin.cardCanbePlayed(st)) {
-                name = st;
-                cardSelected = true;
-                System.out.println(name + " selected");
-            }
-            revalidate();
-            repaint();
+            selectCard(x,y);
         }
-
     }
 
     @Override
@@ -538,6 +546,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
         revalidate();
         repaint();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        cardPreview.setVisible(false);
     }
 
     @Override
@@ -639,4 +655,12 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     };
 
+    MouseListener enemyMouseListener =new MouseAdapter() {
+        int i=0;
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            System.out.println( i + "Label is clicked");
+            i++;
+        }
+    };
 }

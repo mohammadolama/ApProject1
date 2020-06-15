@@ -554,17 +554,18 @@ public class Admin {
     public CardModelView getPureViewModelOf(String string){
         Cards cards= getCardOf(string.toLowerCase());
         BufferedImage image=pictureOf(string.toLowerCase());
+        int mana=cards.getManaCost() - gameManager.getFriendlyManaDecrease();
         if (cards instanceof Minions){
             Minions minions=(Minions) cards;
-            CardModelView modelView=new CardModelView(image ,string, minions.getManaCost() , minions.getAttack() , minions.getHealth() , minions.getType() );
+            CardModelView modelView=new CardModelView(image ,string, mana , minions.getAttack() , minions.getHealth() , minions.getType() );
             return modelView;
         }else if (cards instanceof Weapon){
             Weapon weapon=(Weapon) cards;
-            CardModelView modelView=new CardModelView(image ,string, weapon.getManaCost() , weapon.getAtt() , weapon.getDurability(), weapon.getType() );
+            CardModelView modelView=new CardModelView(image ,string, mana , weapon.getAtt() , weapon.getDurability(), weapon.getType() );
             return modelView;
         }else {
             Spell spell=(Spell) cards;
-            CardModelView modelView=new CardModelView(image,string,spell.getManaCost());
+            CardModelView modelView=new CardModelView(image,string,mana);
             return modelView;
         }
 
