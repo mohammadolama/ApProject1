@@ -1,13 +1,12 @@
 package View.GUI.Panels;
 
 import AllCards.Cards;
-import AllCards.Minions;
-import AllCards.Spell;
-import AllCards.Weapon;
 import Enums.Type;
+import Model.CardModelView;
+import Model.Images;
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
 import View.GUI.Configs.ShopConfig;
-import Main.Gamestate;
 
 import Util.Admin;
 
@@ -64,7 +63,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         setLayout(null);
         admin = Admin.getInstance();
         images = new ArrayList<>();
-        cards = admin.properCards(1);
+        cards = RequestHandler.SendRequest.ProperCards.response(null,1);
         pictures(cards);
 
 
@@ -167,7 +166,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 if (searchField.getText() == null || searchField.getText().equals("")) {
                     return;
                 }
-                ArrayList<Cards> ar = admin.properCards(buyActivated ? 1 : 2);
+                ArrayList<Cards> ar = RequestHandler.SendRequest.ProperCards.response(null , buyActivated ? 1 : 2);
                 cards = new ArrayList<>();
                 for (Cards cards1 : ar) {
                     if (cards1.getName().toLowerCase().contains(searchField.getText())) {
@@ -180,7 +179,8 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         });
         add(searchField);
 
-        walletLabel = new JLabel(Gamestate.getPlayer().getMoney() + "   AP");
+        long money=RequestHandler.SendRequest.Wallet.response(null);
+        walletLabel = new JLabel(money + "   AP");
         walletLabel.setBackground(Color.LIGHT_GRAY);
         walletLabel.setFont(f2.deriveFont(28.0f));
         walletLabel.setForeground(Color.yellow);
@@ -245,7 +245,8 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         g2d.setFont(f2.deriveFont(30.0f));
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setColor(Color.white);
-        g2d.drawImage(gamePics.get("store"), 0, 0, 1600, 1000, null);
+        BufferedImage image=gamePics.get("store");
+        g2d.drawImage(image, 0, 0, 1600, 1000, null);
         g2d.drawLine(0, config.getStartY1() - 200, config.getStartX1() - 10, config.getStartY1() - 197);
         g2d.drawLine(config.getStartX1() - 10, 0, config.getStartX1() - 10, 1000);
         g2d.drawLine(0, 870, config.getStartX1() - 10, 870);
@@ -271,7 +272,9 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
                 buyButton.setEnabled(true);
                 buyButton.setBackground(Color.ORANGE);
                 g2d.setFont(f2.deriveFont(50.0f));
-                if (admin.price((name.toLowerCase())) > Gamestate.getPlayer().getMoney()) {
+                long price=RequestHandler.SendRequest.Price.response(name.toLowerCase());
+                long money=RequestHandler.SendRequest.Wallet.response(null);
+                if (price > money) {
                     admin.playSound("gold");
                     buyButton.setEnabled(false);
                     buyButton.setBackground(Color.LIGHT_GRAY);
@@ -291,7 +294,8 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             }
             g2d.setFont(f2.deriveFont(40.0f));
             g2d.setColor(Color.red);
-            g2d.drawString("Price : " + admin.price(name.toLowerCase()), 720, config.getPriceY());
+            long price=RequestHandler.SendRequest.Price.response(name.toLowerCase());
+            g2d.drawString("Price : " + price, 720, config.getPriceY());
             g2d.drawString("Class : ", 720, config.getPriceY() - 40);
             g2d.setColor(Color.BLUE);
             g2d.drawString(getClass(name.toLowerCase()), 850, config.getPriceY() - 40);
@@ -305,22 +309,23 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private void drawCardInfo(Graphics2D g, String cards, int xe, int ye) {
         g.setFont(fantasy.deriveFont(60.0f));
         g.setColor(Color.WHITE);
-        if (admin.getCardOf(cards) instanceof Minions) {
+        CardModelView view=RequestHandler.SendRequest.PureModelView.response(cards);
+        if (view.getType().equals(Type.Minion)) {
             int x = xe + 40;
             int y = ye + 95;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardMAttack((Minions) admin.getCardOf(cards)) + ""), x, y + 445);
-            g.drawString((admin.cardHp((Minions) admin.getCardOf(cards)) + ""), x + 300, y + 440);
-        } else if (admin.getCardOf(cards) instanceof Weapon) {
+            g.drawString(view.getManaCost() + "", x, y);
+            g.drawString(view.getDamage() + "", x, y + 445);
+            g.drawString((view.getHp() + ""), x + 300, y + 440);
+        } else if (view.getType().equals(Type.Weapon)) {
             int x = xe + 45;
             int y = ye + 65;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardWAttack((Weapon) admin.getCardOf(cards)) + ""), x, y + 445);
-            g.drawString((admin.cardDurability((Weapon) admin.getCardOf(cards)) + ""), x + 300, y + 440);
-        } else if (admin.getCardOf(cards) instanceof Spell) {
+            g.drawString(view.getManaCost() + "", x, y);
+            g.drawString((view.getDamage() + ""), x, y + 445);
+            g.drawString((view.getHp() + ""), x + 300, y + 440);
+        } else if (view.getType().equals(Type.Spell)) {
             int x = xe + 45;
             int y = ye + 60;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
+            g.drawString(view.getManaCost() + "", x, y);
         }
     }
 
@@ -361,17 +366,17 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
     private void BuySellChanger() {
         images.clear();
-        cards = Admin.getInstance().properCards(buyActivated ? 1 : 2);
+        cards = RequestHandler.SendRequest.ProperCards.response(null ,buyActivated ? 1 : 2);
         pictures(cards);
         repaint();
     }
 
     private void revalidateCards(Boolean buyActivated) {
         cards = new ArrayList<>();
-        cards = Admin.getInstance().properCards(buyActivated ? 1 : 2);
+        cards = RequestHandler.SendRequest.ProperCards.response(null ,buyActivated ? 1 : 2);
         pictures(cards);
         images.clear();
-        walletLabel.setText(Gamestate.getPlayer().getMoney() + "   AP");
+        walletLabel.setText(RequestHandler.SendRequest.Wallet.response(null) + "   AP");
         clicked = false;
         repaint();
     }
@@ -381,10 +386,10 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     public void stateChanged(ChangeEvent e) {
         int value = manaFilter.getValue();
         if (value == 11) {
-            cards = Admin.getInstance().properCards(buyActivated ? 1 : 2);
+            cards = RequestHandler.SendRequest.ProperCards.response(null ,buyActivated ? 1 : 2);
         } else {
             images.clear();
-            ArrayList<Cards> ar = Admin.getInstance().properCards(buyActivated ? 1 : 2);
+            ArrayList<Cards> ar = RequestHandler.SendRequest.ProperCards.response(null ,buyActivated ? 1 : 2);
             cards = new ArrayList<>();
             for (Cards cards1 : ar) {
                 if (cards1.getManaCost() == value) {
@@ -401,13 +406,13 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
         JButton src = (JButton) e.getSource();
         if (src == backButton) {
-            Admin.getInstance().saveAndUpdate();
-            MyFrame.getInstance().changePanel("menu");
-            admin.Log("Click_Button : Back Button");
-            admin.Log("Navigate : Main Menu");
+            RequestHandler.SendRequest.SaveAndUpdate.response(null);
+            RequestHandler.SendRequest.VisiblePanel.response("menu");
+            RequestHandler.SendRequest.Log.response("Click_Button : Back Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Main Menu");
         } else if (src == exit) {
-            admin.Log("Click_Button : Exit Button");
-            Admin.getInstance().exit();
+            RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
+            RequestHandler.SendRequest.Exit.response(null);
         } else if (src == buyActivatedButton) {
             buyActivatedButton.setBackground(Color.yellow);
             sellActivatedButton.setBackground(Color.WHITE);
@@ -416,19 +421,20 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         } else if (src == sellActivatedButton) {
             buyActivatedButton.setBackground(Color.white);
             sellActivatedButton.setBackground(Color.yellow);
+
             buyActivated = false;
             BuySellChanger();
         } else if (src == buyButton) {
-            admin.Log("Click_Button : Buy Button");
-            admin.buyCard(name);
+            RequestHandler.SendRequest.Log.response("Click_Button : Buy Button");
+            RequestHandler.SendRequest.BuyCard.response(name);
             revalidateCards(true);
         } else if (src == sellButton) {
-            admin.Log("Click_Button : Sell Button");
-            admin.sellCard(name);
+            RequestHandler.SendRequest.Log.response("Click_Button : Sell Button");
+            RequestHandler.SendRequest.SellCard.response(name);
             revalidateCards(false);
         } else {
             images.clear();
-            ArrayList<Cards> ar = Admin.getInstance().properCards(buyActivated ? 1 : 2);
+            ArrayList<Cards> ar = RequestHandler.SendRequest.ProperCards.response(null ,buyActivated ? 1 : 2);
             cards = new ArrayList<>();
             for (Cards cards1 : ar) {
                 if (src == allbutton) {

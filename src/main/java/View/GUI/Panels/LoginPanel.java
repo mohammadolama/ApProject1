@@ -1,5 +1,6 @@
 package View.GUI.Panels;
 
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
 import View.GUI.Configs.LoginConfig;
 import Util.Admin;
@@ -105,7 +106,7 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
     @Override
     protected void paintComponent(Graphics gd) {
         Graphics2D g = (Graphics2D) gd;
-        g.drawImage(Constants.gamePics.get("login"), 0, 0, null);
+        g.drawImage(gamePics.get("login"), 0, 0, null);
     }
 
     @Override
@@ -114,12 +115,12 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
             if (userField.getText().equals("") || passField.getText().equals("")) {
                 return;
             }
-            Admin.getInstance().logIn(userField.getText(), passField.getText());
+            RequestHandler.SendRequest.LogIn.response(userField.getText(), passField.getText());
         } else if (e.getSource() == createAccount) {
             if (userField.getText().equals("") || passField.getText().equals("")) {
                 return;
             }
-            Admin.getInstance().signUp(userField.getText(), passField.getText());
+            RequestHandler.SendRequest.SignUp.response(userField.getText(), passField.getText());
         } else if (e.getSource() == exit) {
             System.exit(0);
         }

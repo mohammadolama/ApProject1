@@ -1,8 +1,10 @@
 package Main;
 
 import AllCards.Cards;
+import AllCards.Minions;
 import AllCards.Spell;
 import AllCards.Weapon;
+import Enums.Attribute;
 import Heros.Hero;
 
 import java.util.*;
@@ -257,8 +259,40 @@ public class GameManager {
         friendlyNotUsedMana = friendlyTotalMana;
     }
 
+    private void wakeUp(){
+        for (Cards card : friendlyPlayedCards) {
+            ((Minions)card).setSleep(false);
+        }
+    }
+
+    private void canBeAttackedUpdater(){
+        boolean flag=false;
+        for (Cards cards : enemyPlayedCards) {
+            if (((Minions)cards).getAttribute()!=null && ((Minions)cards).getAttribute().contains(Attribute.Taunt)){
+                System.out.println(cards.getName() + " Is Taunt");
+                flag=true;
+                break;
+            }
+        }
+        if (flag) {
+            for (Cards cards : enemyPlayedCards) {
+                if (((Minions)cards).getAttribute()!=null && ((Minions)cards).getAttribute().contains(Attribute.Taunt)){
+                    ((Minions)cards).setCanBeAttacked(true);
+                }else {
+                    ((Minions)cards).setCanBeAttacked(false);
+                }
+            }
+        }else {
+            for (Cards card : enemyPlayedCards) {
+                ((Minions)card).setCanBeAttacked(true);
+            }
+        }
+    }
+
     public void endTurn() {
         reversePlayers();
+        canBeAttackedUpdater();
+        wakeUp();
         refillMana();
         nextCard();
     }

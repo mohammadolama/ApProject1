@@ -1,7 +1,8 @@
-package G_L_Interface;
+package View.GUI.Update;
 
 import Enums.Carts;
 import View.GUI.Panels.CollectionPanel;
+import View.GUI.Panels.MyFrame;
 import View.GUI.Panels.StatusPanel;
 import Main.Deck;
 import Main.Gamestate;
@@ -13,13 +14,18 @@ import java.util.ArrayList;
 public class Update {
 
     public static void refresh() {
+        render();
         CollectionPanel.getInstance().refresh();
         StatusPanel.getInstance().refresh();
     }
 
+    public static  void render(){
+        MyFrame.getInstance().revalidate();
+        MyFrame.getInstance().repaint();
+
+    }
     public static void saveAndUpdate() {
         JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
-        refresh();
     }
 
 

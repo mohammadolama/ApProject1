@@ -1,7 +1,11 @@
 package View.GUI.Panels;
 
+import Enums.Attribute;
+import Enums.Type;
+import Model.CardModelView;
+import Model.Images;
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
-import Util.Admin;
 import View.GUI.Configs.BoardConfig;
 
 import javax.swing.*;
@@ -21,16 +25,16 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private int mouseDesX;
     private int mouseDesY;
     private boolean cardSelected = false;
-
-
-    private String name;
-
+    private boolean playedCardSelected = false;
+    private String handCardSelectedName;
+    private String playedCardSelectedName;
+    private int playedIndex;
     private BoardConfig config;
     private JButton nextTurnButton;
     private ArrayList<Images> handImages;
     private ArrayList<Images> friendlyPlayedImages;
     private ArrayList<Images> enemyPlayedImages;
-    private Admin admin;
+//    private Admin admin;
 
     private JButton back;
     private JButton exit;
@@ -40,7 +44,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private Timer toMiddleTimer;
     private Timer toHandTimer;
     private Timer playTimer;
-
+    private Timer sleepTimer;
     private int X;
     private int Y;
     private int XA;
@@ -50,6 +54,11 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private JLabel enemyHero;
     private Boolean ourTurn = true;
     private int deckIndex;
+
+    private int index = 0;
+    private float size = 20;
+    private Font font = new Font("Serif", Font.PLAIN, 20);
+
 
     private boolean disabled;
 
@@ -67,7 +76,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         setLayout(null);
         addMouseMotionListener(this);
         addMouseListener(this);
-        admin = Admin.getInstance();
+//        admin = Admin.getInstance();
         handImages = new ArrayList<>();
         friendlyPlayedImages = new ArrayList<>();
         enemyPlayedImages = new ArrayList<>();
@@ -75,6 +84,8 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         toMiddleTimer = new Timer(1000 / 60, middleTimerListener);
         toHandTimer = new Timer(1000 / 60, handTimerListener);
         playTimer = new Timer(1000 / 60, playTimerListener);
+        sleepTimer = new Timer(300, sleepTimerListener);
+        sleepTimer.start();
 
         cardPreview = CardPreview.getInstance();
         cardPreview.setBounds(0, 0, 600, 600);
@@ -85,15 +96,17 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
         friendlyHero = new JLabel();
         friendlyHero.setBounds(710, 615, 175, 279);
-        friendlyHero.setIcon(admin.gifOf(admin.playerHeroName()));
+        String name = RequestHandler.SendRequest.FriendlyHeroName.response(null);
+        friendlyHero.setIcon(heroGifs.get(name));
         friendlyHero.setOpaque(false);
         add(friendlyHero);
 
 
         enemyHero = new JLabel();
         enemyHero.setBounds(710, 35, 175, 279);
-        enemyHero.setIcon(admin.gifOf(admin.enemyPlayer().getSelectedDeck().getHero().getName().toLowerCase()));
-        enemyHero.setIgnoreRepaint(true);
+        name = RequestHandler.SendRequest.EnemyHeroName.response(null);
+        enemyHero.setIcon(heroGifs.get(name));
+//        enemyHero.setIgnoreRepaint(true);
         enemyHero.addMouseListener(enemyMouseListener);
         add(enemyHero);
 
@@ -133,12 +146,15 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
     @Override
     protected void paintComponent(Graphics gx) {
+        long time = System.nanoTime();
         Graphics2D g = (Graphics2D) gx;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g.clearRect(0, 0, 1600, 1000);
-        g.drawImage(admin.gamePictureOf("playBackground"), 0, 0, 1600, 1000, null);
-        g.drawImage(admin.gamePictureOf("playBoard"), config.getLeftLineX(), config.getUpLineY(), config.getRightLineX() - config.getLeftLineX(), config.getBottomLineY() - config.getUpLineY(), null);
+        BufferedImage temp1 = gamePics.get("playbackground");
+        BufferedImage temp2 = gamePics.get("playboard");
+        g.drawImage(temp1, 0, 0, 1600, 1000, null);
+        g.drawImage(temp2, config.getLeftLineX(), config.getUpLineY(), config.getRightLineX() - config.getLeftLineX(), config.getBottomLineY() - config.getUpLineY(), null);
 
         g.setFont(fantasy.deriveFont(30.f));
         g.setColor(Color.yellow);
@@ -166,28 +182,30 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         drawDeckAnimation(g);
 
         drawSelectionStatus(g);
-
+//        System.out.println((System.nanoTime()-time)/1000);
     }
 
 
     private void drawUserInfo(Graphics2D g) {
-        g.drawString(admin.friendlyPlayer().getUsername(), 30, 920);
-        g.drawString(admin.enemyPlayer().getUsername(), 30, 50);
+        String down = RequestHandler.SendRequest.FriendlyName.response(null);
+        String up = RequestHandler.SendRequest.EnemyName.response(null);
+        g.drawString(down, 30, 920);
+        g.drawString(up, 30, 50);
     }
 
     private void playCardAnimation(Graphics2D g) {
         if (config.isPlayAnimation()) {
-            BufferedImage image = admin.pictureOf(name.toLowerCase());
+            BufferedImage image = cardPics.get(handCardSelectedName.toLowerCase());
             g.drawImage(image, X, Y, config.getCardWidth(), config.getCardHeight(), null);
         }
     }
 
     private void drawDeckAnimation(Graphics2D g) {
         if (config.isAnimated()) {
-            BufferedImage card = cardPics.get(admin.friendlyHandCards().get(admin.friendlyHandCards().size() - 1).getName().toLowerCase());
+            BufferedImage card = RequestHandler.SendRequest.DeckAnimationPicture.response(null);
             if (config.isToMiddle()) {
                 Color color = g.getColor();
-                g.setColor(new Color(222, 222, 222, 0 + config.getBlur()));
+                g.setColor(new Color(222, 222, 222, config.getBlur()));
                 g.fillRect(0, 0, 1600, 1000);
                 g.setColor(color);
                 config.setMaxWidth(config.getCardWidth() + config.getBlur());
@@ -213,20 +231,29 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         g.setColor(Color.cyan);
         g.drawString("Choosed", 1440, 680);
         if (cardSelected) {
-            g.drawImage(admin.pictureOf(name), 1420, 690, 150, 200, null);
+            BufferedImage image = cardPics.get(handCardSelectedName.toLowerCase());
+            g.drawImage(image, 1420, 690, 150, 200, null);
         }
     }
 
 
     private void drawHeroPower(Graphics2D g) {
         g.setFont(fantasy.deriveFont(24.0f));
-        if (admin.friendlyHeroPowerusedTimes() > 0) {
-            g.drawImage(admin.powerPicuterOf(admin.friendlyPlayer().getSelectedDeck().getHero().getName()), config.getPlayerHeroPowerX(), config.getPlayerHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
-            g.drawString(admin.friendlyPowerMana() + "", config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, config.getPlayerHeroPowerY() + 25);
+        int down = RequestHandler.SendRequest.DownPowerUsage.response(null);
+        int up = RequestHandler.SendRequest.UpPowerUsage.response(null);
+        if (down > 0) {
+            String name = RequestHandler.SendRequest.FriendlyHeroName.response(null);
+            BufferedImage temp = powerPics.get(name);
+            String mana = RequestHandler.SendRequest.DownPowerMana.response(null);
+            g.drawImage(temp, config.getPlayerHeroPowerX(), config.getPlayerHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
+            g.drawString(mana, config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, config.getPlayerHeroPowerY() + 25);
         }
-        if (admin.enemyHeroPowerusedTimes() > 0) {
-            g.drawImage(admin.powerPicuterOf(admin.enemyPlayer().getSelectedDeck().getHero().getName()), config.getPlayerHeroPowerX(), config.getOpponentHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
-            g.drawString(admin.enemyPowerMana() + "", config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, (config.getOpponentHeroPowerY()) + 25);
+        if (up > 0) {
+            String name = RequestHandler.SendRequest.EnemyHeroName.response(null);
+            BufferedImage temp = powerPics.get(name);
+            String mana = RequestHandler.SendRequest.UpPowerMana.response(null);
+            g.drawImage(temp, config.getPlayerHeroPowerX(), config.getOpponentHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
+            g.drawString(mana, config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, (config.getOpponentHeroPowerY()) + 25);
         }
     }
 
@@ -236,8 +263,10 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         g.fillRoundRect(10, 80, config.getInfoWidth(), 790, 50, 50);
         g.setColor(Color.white);
         g.setFont(fantasy.deriveFont(20.0f));
-        if (admin.gameLog().size() > 0) {
-            for (String s : admin.gameLog()) {
+        int size = RequestHandler.SendRequest.GameLogSize.response(null);
+        if (size > 0) {
+            ArrayList<String> log = RequestHandler.SendRequest.GameLog.response(null);
+            for (String s : log) {
                 g.drawString(s, config.getLogX(), config.getLogY());
                 config.setLogY(config.getLogY() + config.getLogSpace());
             }
@@ -247,16 +276,20 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
     private void cardnumber(Graphics2D g) {
         g.setFont(fantasy.deriveFont(50.0f));
-        g.drawString(admin.friendlyDeckCards().size() + "", 1430, 620);
-        g.drawString(admin.enemyDeckCards().size() + "", 1430, 320);
+        String down = RequestHandler.SendRequest.DownDeckSize.response(null);
+        String up = RequestHandler.SendRequest.UpDeckSize.response(null);
+        g.drawString(down, 1430, 620);
+        g.drawString(up, 1430, 320);
     }
 
     private void drawWeapon(Graphics2D g) {
-        if (admin.friendlyWeapon() != null) {
-            g.drawImage(admin.pictureOf(admin.friendlyWeapon().getName().toLowerCase()), 615, 680, config.getCardWidth() + 50, config.getCardHeight() + 50, null);
+        if (RequestHandler.SendRequest.DownHasWeapon.response(0, null)) {
+            CardModelView view = RequestHandler.SendRequest.DownWeapon.response(null);
+            g.drawImage(view.getImage(), 615, 680, config.getCardWidth() + 50, config.getCardHeight() + 50, null);
         }
-        if (admin.enemyWeapon() != null) {
-            g.drawImage(admin.pictureOf(admin.enemyWeapon().getName().toLowerCase()), 615, 95, config.getCardWidth() + 50, config.getCardHeight() + 50, null);
+        if (RequestHandler.SendRequest.UpHasWeapon.response(0, null)) {
+            CardModelView view = RequestHandler.SendRequest.UpWeapon.response(null);
+            g.drawImage(view.getImage(), 615, 95, config.getCardWidth() + 50, config.getCardHeight() + 50, null);
         }
         drawWeaponInfo(g);
     }
@@ -265,31 +298,30 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private void drawWeaponInfo(Graphics2D g) {
         g.setFont(fantasy.deriveFont(28.0f));
         g.setColor(Color.white);
-        if (admin.friendlyWeapon() != null) {
-            int durability = admin.friendlyWeapon().getDurability();
-            int att = admin.friendlyWeapon().getAtt();
-            int mana = admin.friendlyWeapon().getManaCost();
-            g.drawString(mana + "", 625, 700);
-            g.drawString(att + "", 625, 805);
-            g.drawString(durability + "", 695, 805);
+        if (RequestHandler.SendRequest.DownHasWeapon.response(0, null)) {
+            CardModelView view = RequestHandler.SendRequest.DownWeapon.response(null);
+            g.drawString(view.getManaCost() + "", 625, 700);
+            g.drawString(view.getDamage() + "", 625, 805);
+            g.drawString(view.getHp() + "", 695, 805);
         }
-        if (admin.enemyWeapon() != null) {
-            int durability = admin.enemyWeapon().getDurability();
-            int att = admin.enemyWeapon().getAtt();
-            int mana = admin.enemyWeapon().getManaCost();
-            g.drawString(mana + "", 625, 115);
-            g.drawString(att + "", 625, 220);
-            g.drawString(durability + "", 695, 220);
+        if (RequestHandler.SendRequest.UpHasWeapon.response(0, null)) {
+            CardModelView view = RequestHandler.SendRequest.UpWeapon.response(null);
+            g.drawString(view.getManaCost() + "", 625, 115);
+            g.drawString(view.getDamage() + "", 625, 220);
+            g.drawString(view.getHp() + "", 695, 220);
         }
     }
 
 
     private void drawMana(Graphics2D g) {
         g.setFont(f2.deriveFont(30.0f));
-        g.drawString(admin.notUsedmana() + "/" + admin.friendlyTotalMana(), 1035, 935);
+        int notUsed = RequestHandler.SendRequest.FriendlyNotUsedMana.response(null);
+        int total = RequestHandler.SendRequest.FriendlyTotalMana.response(null);
+        g.drawString(notUsed + "/" + total, 1035, 935);
         int x = 1110;
-        for (int i = 0; i < admin.notUsedmana(); i++) {
-            g.drawImage(admin.gamePictureOf("mana"), x, 917, 30, 30, null);
+        BufferedImage mana = gamePics.get("mana");
+        for (int i = 0; i < notUsed; i++) {
+            g.drawImage(mana, x, 917, 30, 30, null);
             x += 26;
         }
     }
@@ -298,22 +330,25 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private void handCards(Graphics2D g) {
         g.setFont(f2.deriveFont(20.0f));
         handImages.clear();
-        if (admin.friendlyHandCards().size() > 0) {
+        int downSize = RequestHandler.SendRequest.FrinedlyHandSize.response(null);
+        int upSize = RequestHandler.SendRequest.EnemyHandSize.response(null);
+        if (downSize > 0) {
             int i = 0;
-            int j1 = admin.friendlyHandCards().size();
             if (toHandTimer.isRunning() || toMiddleTimer.isRunning()) {
-                j1--;
+                downSize--;
             }
-            while (i < j1) {
-                handImages.add(new Images(admin.friendlyHandCards().get(i).getName(), config.getPlayerHandX(), config.getPlayerHandY(), config.getCardWidth(), config.getCardHeight(), i));
+            while (i < downSize) {
+                String name = RequestHandler.SendRequest.FriendlyHandCradName.response(null, i);
+                handImages.add(new Images(name, config.getPlayerHandX(), config.getPlayerHandY(), config.getCardWidth(), config.getCardHeight(), i));
                 drawHandCard(g, i, config.getPlayerHandX(), config.getPlayerHandY(), config.getCardWidth(), config.getCardHeight());
                 config.setPlayerHandX(config.getPlayerHandX() + config.getCardWidth() - 15);
                 i++;
             }
             config.setPlayerHandX(570);
-            i = 0;
-            int j2 = admin.enemyHandCards().size();
-            while (i < j2) {
+        }
+        if (upSize > 0) {
+            int i = 0;
+            while (i < upSize) {
                 drawEnemyCard(g, config.getPlayerHandX(), config.getOpponentHandY(), config.getCardWidth(), config.getCardHeight());
                 config.setPlayerHandX(config.getPlayerHandX() + config.getCardWidth() - 15);
                 i++;
@@ -324,24 +359,26 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
     private void playedCard(Graphics2D g) {
         friendlyPlayedImages = new ArrayList<>();
-        if (admin.friendlyPlayedCards().size() > 0) {
+        int downSize = RequestHandler.SendRequest.FriendlyPlayedSize.response(null);
+        int upSize = RequestHandler.SendRequest.EnemyPlayedSize.response(null);
+        if (downSize > 0) {
             int i = 0;
             int Spacing = 5;
             if (cardSelected) {
                 config.setPlayerPlayedCardX(config.getPlayerPlayedCardX() - 30);
                 Spacing = 30;
             }
-            while (i < admin.friendlyPlayedCards().size()) {
+            while (i < downSize) {
                 drawPlayedCard(g, i, config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2);
                 config.setPlayerPlayedCardX(config.getPlayerPlayedCardX() + config.getCardWidth() * 2 + Spacing);
                 i++;
             }
             config.setPlayerPlayedCardX(430);
         }
-        if (admin.enemyPlayedCards().size() > 0) {
+        if (upSize > 0) {
             int i = 0;
             int Spacing = 5;
-            while (i < admin.enemyPlayedCards().size()) {
+            while (i < upSize) {
                 drawEnemyPlayedCard(g, i);
                 config.setPlayerPlayedCardX(config.getPlayerPlayedCardX() + config.getCardWidth() * 2 + Spacing);
                 i++;
@@ -351,37 +388,85 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     }
 
     private void drawEnemyPlayedCard(Graphics2D g, int i) {
-        g.drawImage(cardPics.get(admin.enemyPlayedCards().get(i).getName().toLowerCase()), config.getPlayerPlayedCardX(), config.getOpponentPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2 - 30, null);
-        enemyPlayedImages.add(new Images(admin.enemyPlayedCards().get(i).getName().toLowerCase(), config.getPlayerPlayedCardX(), config.getOpponentPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i));
+        CardModelView view = RequestHandler.SendRequest.ModelView.response("enemy", i);
+        String name = RequestHandler.SendRequest.EnemyPlayedCardName.response(null, i);
+        g.drawImage(view.getImage(), config.getPlayerPlayedCardX(), config.getOpponentPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2 - 30, null);
+        enemyPlayedImages.add(new Images(view.getName(), config.getPlayerPlayedCardX(), config.getOpponentPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i, view.getSleep()));
+        if (playedCardSelected) {
+            if (view.isCanBeAttacked())
+                g.drawImage(gamePics.get("target"), (config.getPlayerPlayedCardX() + config.getCardWidth()), (config.getOpponentPlayedCardY() + config.getCardHeight()), null);
+        }
     }
 
     private void drawPlayedCard(Graphics2D g, int i, int x, int y, int width, int height) {
-        g.drawImage(cardPics.get(admin.friendlyPlayedCards().get(i).getName().toLowerCase()), config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2 - 30, null);
-        friendlyPlayedImages.add(new Images(admin.friendlyPlayedCards().get(i).getName(), config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i));
+        CardModelView view = RequestHandler.SendRequest.ModelView.response("friendly", i);
+        g.drawImage(view.getImage(), config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2 - 30, null);
+        if (view.getType().equals(Type.Minion))
+            drawSpecialInfo(g, view);
+        if (view.getSleep())
+            drawZzz(g, view, config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY());
+        friendlyPlayedImages.add(new Images(view.getName(), config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i, view.getSleep()));
+    }
+
+    private void drawSpecialInfo(Graphics2D g, CardModelView view) {
+        if (view.getAttributes() != null && view.getAttributes().contains(Attribute.DivineShield)) {
+            g.setColor(Color.RED);
+            g.setFont(f2.deriveFont(30.0f));
+            int x = config.getPlayerPlayedCardX();
+            int y = config.getPlayerPlayedCardY() + (config.getCardHeight() * 2);
+            g.drawString("S", x, y);
+        }
+        if (view.getAttributes() != null && view.getAttributes().contains(Attribute.Taunt)) {
+            g.setColor(Color.BLUE);
+            g.setFont(f2.deriveFont(30.0f));
+            int x = config.getPlayerPlayedCardX() + (config.getCardWidth() * 2 - 30);
+            int y = config.getPlayerPlayedCardY() + (config.getCardHeight() * 2);
+            g.drawString("T", x, y);
+        }
+    }
+
+    private void drawZzz(Graphics2D g, CardModelView view, int x, int y) {
+        g.setColor(Color.GREEN);
+        g.setFont(font.deriveFont(size));
+//        y=y+config.getCardHeight();
+        int xa, ya;
+        if (index == 0) {
+            xa = x + 5;
+            ya = y;
+        } else if (index == 1) {
+            xa = x + 6;
+            ya = y - 3;
+        } else {
+            xa = x + 7;
+            ya = y - 6;
+        }
+        g.drawString("Z", xa, ya);
     }
 
     private void drawHandCard(Graphics2D g, int i, int x, int y, int width, int height) {
-        g.drawImage(cardPics.get(admin.friendlyHandCards().get(i).getName().toLowerCase()), config.getPlayerHandX(), config.getPlayerHandY(), config.getCardWidth(), config.getCardHeight(), null);
+        BufferedImage image = RequestHandler.SendRequest.FriendlyHandCard.response(null, i);
+        g.drawImage(image, config.getPlayerHandX(), config.getPlayerHandY(), config.getCardWidth(), config.getCardHeight(), null);
     }
 
     private void drawEnemyCard(Graphics2D g, int x, int y, int width, int height) {
-        g.drawImage(admin.gamePictureOf("enemycard"), x, y, width, height, null);
+        BufferedImage image = gamePics.get("enemycard");
+        g.drawImage(image, x, y, width, height, null);
     }
 
 
     private void drawHeroInfo(Graphics2D g) {
         g.setFont(fantasy.deriveFont(28.0f));
         g.setColor(Color.white);
-        g.drawImage(admin.gamePictureOf("blood"), 860, 800, 70, 70, null);
-        g.drawImage(admin.gamePictureOf("defence"), 670, 815, 45, 45, null);
-        g.drawImage(admin.gamePictureOf("blood"), 860, 210, 70, 70, null);
-        g.drawImage(admin.gamePictureOf("defence"), 670, 225, 45, 45, null);
-        if (admin.player() != null) {
-            g.drawString(admin.friendlyHero().getHp() + "", 882, 855);
-        }
-        if (admin.enemyPlayer() != null) {
-            g.drawString(admin.enemyHero().getHp() + "", 882, 265);
-        }
+        BufferedImage blood = gamePics.get("blood");
+        BufferedImage defence = gamePics.get("defence");
+        g.drawImage(blood, 860, 800, 70, 70, null);
+        g.drawImage(defence, 670, 815, 45, 45, null);
+        g.drawImage(blood, 860, 210, 70, 70, null);
+        g.drawImage(defence, 670, 225, 45, 45, null);
+        String DownHp = RequestHandler.SendRequest.DownHp.response(null);
+        String UpHp = RequestHandler.SendRequest.UpHp.response(null);
+        g.drawString(DownHp, 882, 855);
+        g.drawString(UpHp, 882, 265);
     }
 
     void clear() {
@@ -390,7 +475,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         enemyPlayedImages = new ArrayList<>();
     }
 
-    private void friendlyPlayedView(int x , int y){
+    private void friendlyPlayedView(int x, int y) {
         int i = -1;
         for (Images images : friendlyPlayedImages) {
             if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
@@ -401,12 +486,13 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         if (i == (-1)) {
             return;
         }
-        cardPreview.setCardModelView(admin.getViewModelOf("friendly", i));
+        CardModelView view = RequestHandler.SendRequest.ModelView.response("friendly", i);
+        cardPreview.setCardModelView(view);
         cardPreview.setBounds(x - 50, y - 360, 260, 370);
         cardPreview.setVisible(true);
     }
 
-    private void enemyPlayedView(int x , int y){
+    private void enemyPlayedView(int x, int y) {
         int i = -1;
         for (Images images : enemyPlayedImages) {
             if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
@@ -417,12 +503,13 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         if (i == (-1)) {
             return;
         }
-        cardPreview.setCardModelView(admin.getViewModelOf("enemy", i));
+        CardModelView view = RequestHandler.SendRequest.ModelView.response("enemy", i);
+        cardPreview.setCardModelView(view);
         cardPreview.setBounds(x - 50, y, 260, 370);
         cardPreview.setVisible(true);
     }
 
-    private void friendlyHandView(int x , int y){
+    private void friendlyHandView(int x, int y) {
         String st = null;
         for (Images images : handImages) {
             if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
@@ -433,13 +520,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         if (st == null || st.equals("")) {
             return;
         }
-        cardPreview.setCardModelView(admin.getPureViewModelOf(st.toLowerCase()));
+        CardModelView model = RequestHandler.SendRequest.PureModelView.response(st.toLowerCase());
+        cardPreview.setCardModelView(model);
         cardPreview.setBounds(x - 50, y - 360, 260, 370);
         cardPreview.setVisible(true);
 
     }
 
-    private void cardSelectedAction(int x , int y){
+    private void cardSelectedAction(int x, int y) {
         deckIndex = 0;
         if (friendlyPlayedImages.size() > 0) {
             if (x <= friendlyPlayedImages.get(0).getX()) {
@@ -456,7 +544,8 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
                 }
             }
         }
-        if (admin.canBePlayed(name)) {
+        Boolean flag = RequestHandler.SendRequest.CanBePlayed.response(0, handCardSelectedName);
+        if (flag) {
             config.setPlayAnimation(true);
             X = mouseStartX;
             Y = mouseStartY;
@@ -464,7 +553,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     }
 
-    private void selectCard(int x , int y){
+    private void selectCard(int x, int y) {
         String st = null;
         for (Images images : handImages) {
             if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
@@ -475,10 +564,32 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         if (st == null || st.equals("")) {
             return;
         }
-        if (admin.cardCanbePlayed(st)) {
-            name = st;
+        Boolean flag = RequestHandler.SendRequest.CheckMana.response(0, st);
+        if (flag) {
+            handCardSelectedName = st;
             cardSelected = true;
-            System.out.println(name + " selected");
+            System.out.println(handCardSelectedName + " selected");
+        }
+        revalidate();
+        repaint();
+    }
+
+    private void selectPlayedCard(int x, int y) {
+        String st = null;
+        for (Images images : handImages) {
+            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
+                st = images.getName();
+                break;
+            }
+        }
+        if (st == null || st.equals("")) {
+            return;
+        }
+        Boolean flag = RequestHandler.SendRequest.CheckMana.response(0, st);
+        if (flag) {
+            handCardSelectedName = st;
+            cardSelected = true;
+            System.out.println(handCardSelectedName + " selected");
         }
         revalidate();
         repaint();
@@ -493,12 +604,12 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         int x = e.getX();
         int y = e.getY();
         if (y >= config.getPlayerHandY()) {
-            friendlyHandView(x,y);
+            friendlyHandView(x, y);
         } else if (y < config.getPlayerHandY()) {
             if (y > config.getMiddleLineY()) {
-                friendlyPlayedView(x,y);
+                friendlyPlayedView(x, y);
             } else {
-                enemyPlayedView(x,y);
+                enemyPlayedView(x, y);
             }
         }
     }
@@ -510,26 +621,58 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
         int x = e.getX();
         int y = e.getY();
-        if (!cardSelected) {
-            mouseStartX = x;
-            mouseStartY = y;
-        }
-        if (x >= config.getPlayerHeroPowerX() && x <= (config.getPlayerHeroPowerX() + config.getHeroPoerWidth()) && y >= config.getPlayerHeroPowerY() && y <= (config.getPlayerHeroPowerY() + config.getHeroPowerHeight())) {
-            admin.playHeroPower(admin.friendlyHero());
-        }
-        if (cardSelected) {
-            mouseDesX = x;
-            mouseDesY = y;
-            if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getMiddleLineY() && y <= config.getPlayAreaY()) {
-                cardSelectedAction(x,y);
+        if (y >= config.getPlayerHeroPowerY()) {
+            if (!cardSelected) {
+                mouseStartX = x;
+                mouseStartY = y;
             }
-            cardSelected = false;
-            return;
-        }
-        if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getPlayerHandY()) {
-            selectCard(x,y);
+            if (x >= config.getPlayerHeroPowerX() && x <= (config.getPlayerHeroPowerX() + config.getHeroPoerWidth()) && y >= config.getPlayerHeroPowerY() && y <= (config.getPlayerHeroPowerY() + config.getHeroPowerHeight())) {
+                RequestHandler.SendRequest.PlayHeroPower.response(null);
+            }
+            if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getPlayerHandY()) {
+                selectCard(x, y);
+            }
+        } else if (y >= config.getMiddleLineY() && y < config.getPlayerHeroPowerY()) {
+            if (cardSelected) {
+                mouseDesX = x;
+                mouseDesY = y;
+                if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getMiddleLineY() && y <= config.getPlayAreaY()) {
+                    cardSelectedAction(x, y);
+                }
+                cardSelected = false;
+                return;
+            } else {
+                for (Images image : friendlyPlayedImages) {
+                    if (x >= image.getX() && x <= image.getX() + image.getWidth() && y >= image.getY() && y <= image.getY() + image.getHeigth()) {
+                        boolean flag = RequestHandler.SendRequest.CanDoAction.response(image.getIndex(), null);
+                        if (flag) {
+                            playedCardSelected = true;
+                            playedCardSelectedName = image.getName();
+                            playedIndex = image.getIndex();
+                            System.out.println(playedCardSelectedName + " Has beem Selected");
+                            return;
+                        }
+                    }
+                }
+                playedCardSelected = false;
+            }
+
+        } else if (y < config.getMiddleLineY() && y >= 200) {
+            if (playedCardSelected) {
+                for (Images image : enemyPlayedImages) {
+                    if (x >= image.getX() && x <= image.getX() + image.getWidth() && y >= image.getY() && y <= image.getY() + image.getHeigth()) {
+                        System.out.println(playedCardSelectedName + " has attacked " + image.getName());
+                        RequestHandler.SendRequest.SetSleep.response(null, playedIndex);
+                        playedCardSelected = false;
+                        playedCardSelectedName = null;
+                        playedIndex = -1;
+                        break;
+                    }
+                }
+            }
         }
     }
+
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -568,13 +711,13 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
         if (src == exit) {
-            admin.Log("Click_Button : Exit Button");
-            admin.exit();
+            RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
+            RequestHandler.SendRequest.Exit.response(null);
         } else if (src == back) {
-            admin.Log("Click_Button : Back Button");
-            admin.setVisiblePanel("menu");
+            RequestHandler.SendRequest.Log.response("Click_Button : Back Button");
+            RequestHandler.SendRequest.VisiblePanel.response("menu");
         } else if (src == nextTurnButton) {
-            admin.Log("Click_Button : NextTurn Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : NextTurn Button");
             ourTurn = !ourTurn;
             if (ourTurn) {
                 enemyHero.setBounds(710, 35, 175, 279);
@@ -584,11 +727,15 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
                 friendlyHero.setBounds(710, 35, 175, 279);
             }
             clear();
-            admin.endTurn();
-            config.setToMiddle(true);
-            config.setBlur(0);
-            config.setAnimated(true);
-            toMiddleTimer.start();
+            Boolean flag = RequestHandler.SendRequest.DeckHasNext.response(0, null);
+            RequestHandler.SendRequest.EndTurn.response(null);
+            if (flag) {
+                config.setToMiddle(true);
+                config.setBlur(0);
+                config.setAnimated(true);
+                toMiddleTimer.start();
+            }
+            playedCardSelected = false;
             revalidate();
             repaint();
         }
@@ -648,18 +795,34 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             if (Y < mouseDesY) {
                 config.setPlayAnimation(false);
                 System.out.println("timer stop");
-                admin.playCard(name, deckIndex);
+                RequestHandler.SendRequest.PlayCard.response(handCardSelectedName, deckIndex);
                 disabled = false;
                 playTimer.stop();
             }
         }
     };
 
-    MouseListener enemyMouseListener =new MouseAdapter() {
-        int i=0;
+    ActionListener sleepTimerListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            size += 10;
+            if (size >= 45) {
+                size = 20;
+            }
+            index++;
+            if (index == 3) {
+                index = 0;
+            }
+            repaint();
+        }
+    };
+
+    MouseListener enemyMouseListener = new MouseAdapter() {
+        int i = 0;
+
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println( i + "Label is clicked");
+            System.out.println(i + "Label is clicked");
             i++;
         }
     };

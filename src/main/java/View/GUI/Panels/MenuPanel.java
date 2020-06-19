@@ -1,5 +1,6 @@
 package View.GUI.Panels;
 
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
 import View.GUI.Configs.MenuConfig;
 import Util.Admin;
@@ -112,7 +113,7 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener, 
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.drawImage(Constants.gamePics.get("main"), 0, 0, null);
+        g.drawImage(gamePics.get("main"), 0, 0, null);
         g.setColor(new Color(254, 255, 253, 170));
         g.fillRect(0, 0, 250, 1000);
         Graphics2D g2d = (Graphics2D) g;
@@ -130,8 +131,8 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener, 
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         if (button == logout) {
-            admin.Log("Click_Button : Logout Button");
-            Admin.getInstance().logOut();
+            RequestHandler.SendRequest.Log.response("Click_Button : Logout Button");
+           RequestHandler.SendRequest.LogOut.response(null);
         } else if (button == cheat) {
             String st = JOptionPane.showInputDialog(this, "Don't Cheat!!");
             if (st.equalsIgnoreCase("lvlup")) {
@@ -142,27 +143,27 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener, 
                 JOptionPane.showMessageDialog(this, "All heroes unlocked!");
             }
         } else if (button == exit) {
-            admin.Log("Click_Button : Exit Button");
-            Admin.getInstance().exit();
+            RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
+            RequestHandler.SendRequest.Exit.response(null);
         } else if (button == play) {
-            admin.Log("Click_Button : Play Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : Play Button");
             Admin.getInstance().enterGame();
         } else if (button == status) {
-            admin.Log("Click_Button : Status Button");
-            Admin.getInstance().setVisiblePanel("status");
-            admin.Log("Navigate : Status");
+            RequestHandler.SendRequest.Log.response("Click_Button : Status Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Status");
+            RequestHandler.SendRequest.VisiblePanel.response("status");
         } else if (button == setting) {
-            admin.Log("Click_Button : Setting Button");
-            admin.Log("Navigate : Setting");
-            admin.setVisiblePanel("setting");
+            RequestHandler.SendRequest.Log.response("Click_Button : Setting Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Setting");
+            RequestHandler.SendRequest.VisiblePanel.response("setting");
         } else if (button == store) {
-            admin.Log("Click_Button : Store Button");
-            admin.Log("Navigate : Store");
-            Admin.getInstance().setVisiblePanel("shop");
+            RequestHandler.SendRequest.Log.response("Click_Button : Store Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Store");
+            RequestHandler.SendRequest.VisiblePanel.response("shop");
         } else if (button == collection) {
-            admin.Log("Click_Button : Collection Button");
-            admin.Log("Navigate : Collection");
-            Admin.getInstance().setVisiblePanel("collection");
+            RequestHandler.SendRequest.Log.response("Click_Button : Collection Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Collection");
+            RequestHandler.SendRequest.VisiblePanel.response("collection");
         }
 
     }

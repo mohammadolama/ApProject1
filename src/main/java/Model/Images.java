@@ -1,4 +1,4 @@
-package View.GUI.Panels;
+package Model;
 
 public class Images {
 
@@ -8,8 +8,9 @@ public class Images {
     private int width;
     private int heigth;
     private int index;
+    private boolean sleep;
 
-    Images(String name, int x, int y, int width, int heigth , int index) {
+    public Images(String name, int x, int y, int width, int heigth, int index) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -17,8 +18,18 @@ public class Images {
         this.heigth = heigth;
         this.index=index;
     }
+    public Images(String name, int x, int y, int width, int heigth, int index , boolean sleep) {
+        this(name,x,y,width,heigth,index);
+        this.sleep=sleep;
+    }
 
+    public boolean isSleep() {
+        return sleep;
+    }
 
+    public void setSleep(boolean sleep) {
+        this.sleep = sleep;
+    }
 
     public String getName() {
         return name;
@@ -28,22 +39,22 @@ public class Images {
         this.name = name;
     }
 
-    int getX() {
+    public int getX() {
         return x;
     }
 
 
-    int getY() {
+    public int getY() {
         return y;
     }
 
 
-    int getWidth() {
+    public int getWidth() {
         return width;
     }
 
 
-    int getHeigth() {
+    public int getHeigth() {
         return heigth;
     }
 

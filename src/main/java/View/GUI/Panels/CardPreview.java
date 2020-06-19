@@ -14,14 +14,13 @@ import static View.GUI.Panels.Constants.fantasy;
 public class CardPreview extends JPanel implements ActionListener {
 
     private CardModelView cardModelView;
-    private Admin admin;
     private int cardwidth = 250;
     private int cardheight =350;
 
     private static CardPreview cardPreview=new CardPreview();
 
-    private CardPreview(){
-        admin=Admin.getInstance();
+    private CardPreview() {
+
     }
 
     public static CardPreview getInstance(){

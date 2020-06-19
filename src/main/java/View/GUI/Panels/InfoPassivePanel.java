@@ -1,5 +1,6 @@
 package View.GUI.Panels;
 
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
 import Main.Gamestate;
 import Main.InfoPassive;
@@ -52,7 +53,7 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         backButton.setBorderPainted(false);
         add(backButton);
 
-        passives = admin.generatePassive();
+        passives = RequestHandler.SendRequest.PassiveList.response(null);
         createButton(passives);
     }
 
@@ -114,8 +115,8 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         if (src == start) {
             if (infoPassive != null) {
                 admin.createPlayBoard(infoPassive);
-                admin.Log("Click_Button : Start Button");
-                admin.Log("Start the Battle");
+                RequestHandler.SendRequest.Log.response("Click_Button : Start Button");
+                RequestHandler.SendRequest.Log.response("Start the Battle");
             }
         }
         passive1.setBackground(Color.white);
@@ -128,9 +129,9 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         }
         if (src == backButton) {
             Gamestate.getPlayer().setSelectedPassive(null);
-            admin.Log("Click_Button : Back Button");
-            admin.Log("Navigate : Main Menu");
-            admin.setVisiblePanel("menu");
+            RequestHandler.SendRequest.Log.response("Click_Button : Back Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Main Menu");
+            RequestHandler.SendRequest.VisiblePanel.response("menu");
             return;
         }
 

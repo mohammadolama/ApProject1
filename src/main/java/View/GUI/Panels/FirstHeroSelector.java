@@ -4,6 +4,9 @@ package View.GUI.Panels;
 import AllCards.Minions;
 import AllCards.Spell;
 import AllCards.Weapon;
+import Enums.Type;
+import Model.CardModelView;
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
 import Util.Admin;
 import View.GUI.Configs.FirstHeroConfig;
@@ -87,33 +90,43 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g.drawImage(gamePics.get("heroBackground"), 0, 0, 1600, 1000, null);
+        g.drawImage(gamePics.get("herobackground"), 0, 0, 1600, 1000, null);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         g2d.setFont(f2.deriveFont(35.0f));
         g2d.setColor(Color.BLUE);
         g2d.drawString("Mage", (config.getStartX() + 120), config.getStartY() + config.getSize() + 15);
         g2d.drawString("Rogue", (config.getStartX() + 120) + config.getSpacing(), config.getStartY() + config.getSize() + 15);
         g2d.drawString("warlock", (config.getStartX() + 120) + 2 * config.getSpacing(), config.getStartY() + config.getSize() + 15);
+
         g2d.setFont(f2.deriveFont(40.0f));
         g2d.setColor(Color.YELLOW);
         g2d.drawString("     Hero    ", 20, config.getStartY() + config.getSize() + 15);
         g2d.drawString("  Hero Power ", 20, config.getStartY() + 500);
         g2d.drawString("Special Cards", 20, config.getStartY() + 750);
+
         g2d.drawImage(powerPics.get("mage"), config.getStartX() + 70, config.getStartY() + 370, 180, 250, null);
         g2d.drawImage(powerPics.get("rogue"), (config.getStartX() + 70) + config.getSpacing() + 10, config.getStartY() + 370, 180, 250, null);
         g2d.drawImage(powerPics.get("warlock"), (config.getStartX() + 70) + 2 * config.getSpacing() + 10, config.getStartY() + 370, 180, 250, null);
+
         g2d.drawImage(cardPics.get("polymorph"), config.getStartX() - 50, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "polymorph", config.getStartX() - 50, config.getStartY() + 610);
+
         g2d.drawImage(cardPics.get("flamestrike"), config.getStartX() + 150, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "flamestrike", config.getStartX() + 150, config.getStartY() + 610);
+
         g2d.drawImage(cardPics.get("friendlysmith"), (config.getStartX() - 50) + config.getSpacing() + 10, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "friendlysmith", (config.getStartX() - 50) + config.getSpacing() + 10, config.getStartY() + 610);
+
         g2d.drawImage(cardPics.get("umbralskulker"), (config.getStartX() + 150) + config.getSpacing() + 10, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "umbralskulker", (config.getStartX() + 150) + config.getSpacing() + 10, config.getStartY() + 610);
+
         g2d.drawImage(cardPics.get("dreadscale"), (config.getStartX() - 50) + 2 * config.getSpacing() + 20, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "dreadscale", (config.getStartX() - 50) + 2 * config.getSpacing() + 20, config.getStartY() + 610);
+
         g2d.drawImage(cardPics.get("darkskies"), (config.getStartX() + 150) + 2 * config.getSpacing() + 20, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "darkskies", (config.getStartX() + 150) + 2 * config.getSpacing() + 20, config.getStartY() + 610);
+
         g2d.setColor(Color.RED);
         g2d.setFont(designer);
         g2d.drawString("Designed by Ghaffari", 5, 940);
@@ -122,22 +135,23 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
     private void drawCardInfo(Graphics2D g, String cards, int xe, int ye) {
         g.setFont(fantasy.deriveFont(50.0f));
         g.setColor(Color.WHITE);
-        if (admin.getCardOf(cards) instanceof Minions) {
+        CardModelView view=RequestHandler.SendRequest.PureModelView.response(cards);
+        if (view.getType().equals(Type.Minion)) {
             int x = xe + 20;
             int y = ye + 65;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardMAttack((Minions) admin.getCardOf(cards)) + ""), x, y + 230);
-            g.drawString((admin.cardHp((Minions) admin.getCardOf(cards)) + ""), x + 150, y + 230);
-        } else if (admin.getCardOf(cards) instanceof Weapon) {
+            g.drawString(view.getManaCost() + "", x, y);
+            g.drawString((view.getDamage() + ""), x, y + 230);
+            g.drawString((view.getHp() + ""), x + 150, y + 230);
+        } else if (view.getType().equals(Type.Weapon)) {
             int x = xe + 45;
             int y = ye + 65;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardWAttack((Weapon) admin.getCardOf(cards)) + ""), x, y + 445);
-            g.drawString((admin.cardDurability((Weapon) admin.getCardOf(cards)) + ""), x + 300, y + 440);
-        } else if (admin.getCardOf(cards) instanceof Spell) {
+            g.drawString(view.getManaCost() + "", x, y);
+            g.drawString((view.getDamage() + ""), x, y + 445);
+            g.drawString((view.getHp() + ""), x + 300, y + 440);
+        } else if (view.getType().equals(Type.Spell)) {
             int x = xe + 25;
             int y = ye + 50;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
+            g.drawString(view.getManaCost() + "", x, y);
         }
     }
 

@@ -46,6 +46,7 @@ public class Constants {
     private static BufferedImage blood;
     private static BufferedImage defence;
     private static BufferedImage enemycard;
+    private static BufferedImage target;
 
     private static BufferedImage mage;
     private static BufferedImage rogue;
@@ -243,6 +244,7 @@ public class Constants {
             defence = ImageIO.read(new File(gamePicsPath + "defence.png"));
             tick = ImageIO.read(new File(gamePicsPath + "tick.png"));
             enemycard = ImageIO.read(new File(gamePicsPath + "enemycard.png"));
+            target=ImageIO.read(new File(gamePicsPath+"target.png"));
             gamePics.put("login", login);
             gamePics.put("main", main);
             gamePics.put("collection", collection);
@@ -259,6 +261,7 @@ public class Constants {
             gamePics.put("blood", blood);
             gamePics.put("defence", defence);
             gamePics.put("enemycard", enemycard);
+            gamePics.put("target" , target);
 
             gameIcon = new HashMap<>();
             exitIcon = new ImageIcon(gamePicsPath + "exit.png");

@@ -1,8 +1,10 @@
 package Model;
 
+import Enums.Attribute;
 import Enums.Type;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class CardModelView {
 
@@ -12,17 +14,23 @@ public class CardModelView {
     private int hp;
     private Type type;
     private String name;
+    private boolean sleep;
+    private boolean canBeAttacked;
+    private ArrayList<Attribute> attributes;
 
-    public CardModelView(BufferedImage image,String name, int manaCost, int damage, int hp , Type type) {
+    public CardModelView(BufferedImage image,String name, int manaCost, int damage, int hp , Type type , ArrayList<Attribute> attributes, boolean sleep , boolean canBeAttacked ) {
         this.image = image;
         this.manaCost = manaCost;
         this.damage = damage;
         this.hp = hp;
         this.type=type;
         this.name=name;
+        this.attributes=attributes;
+        this.sleep=sleep;
+        this.canBeAttacked=canBeAttacked;
     }
 
-    public CardModelView(BufferedImage image,String name, int manaCost) {
+    public CardModelView(BufferedImage image,String name, int manaCost , Type type) {
         this.image = image;
         this.manaCost = manaCost;
         this.name=name;
@@ -75,5 +83,29 @@ public class CardModelView {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<Attribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    public Boolean getSleep() {
+        return sleep;
+    }
+
+    public void setSleep(Boolean sleep) {
+        this.sleep = sleep;
+    }
+
+    public boolean isCanBeAttacked() {
+        return canBeAttacked;
+    }
+
+    public void setCanBeAttacked(boolean canBeAttacked) {
+        this.canBeAttacked = canBeAttacked;
     }
 }

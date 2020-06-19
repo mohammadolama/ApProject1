@@ -9,6 +9,21 @@ public class Minions extends Cards {
     private int Health;
     private ArrayList<Enums.Attribute> Attribute;
     private String title;
+    private boolean sleep;
+    private boolean canBeAttacked;
+
+    public Minions() {
+        sleep=true;
+        canBeAttacked=false;
+    }
+
+    public boolean isCanBeAttacked() {
+        return canBeAttacked;
+    }
+
+    public void setCanBeAttacked(boolean canBeAttacked) {
+        this.canBeAttacked = canBeAttacked;
+    }
 
     public int getAttack() {
         return Attack;
@@ -47,5 +62,11 @@ public class Minions extends Cards {
 
     }
 
+    public boolean isSleep() {
+        return sleep;
+    }
 
+    public void setSleep(boolean sleep) {
+        this.sleep = sleep;
+    }
 }

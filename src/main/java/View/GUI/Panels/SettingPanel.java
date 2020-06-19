@@ -1,6 +1,7 @@
 package View.GUI.Panels;
 
-import G_L_Interface.Update;
+import Util.RequestHandler;
+import View.GUI.Update.Update;
 import Sounds.SoundAdmin;
 import Util.Admin;
 
@@ -91,24 +92,23 @@ public class SettingPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton sr = (JButton) e.getSource();
         if (sr == decreaseSound) {
-            admin.Log("Click_Button : Volume_Down Button");
-            admin.decreaseVolume();
+            RequestHandler.SendRequest.Log.response("Click_Button : Volume_Down Button");
+            RequestHandler.SendRequest.DecreaseSound.response(null,0);
         } else if (sr == increaseSound) {
-            admin.Log("Click_Button : Up Button");
-            admin.increaseVolume();
+            RequestHandler.SendRequest.Log.response("Click_Button : Volume_Up Button");
+            RequestHandler.SendRequest.IncreaseSound.response(null,0);
         } else if (sr == muteSound) {
-            admin.Log("Click_Button : Mute Button");
-            SoundAdmin.stopStart(i);
+            RequestHandler.SendRequest.Log.response("Click_Button : Mute Button");
+            RequestHandler.SendRequest.MuteSound.response(null,i);
             i++;
         } else if (sr == back) {
-            Admin.getInstance().Log("Click_Button : Exit Button");
-            Update.saveAndUpdate();
-            Admin.getInstance().Log("Navigate : Main Menu");
-            MyFrame.getInstance().changePanel("menu");
-            MyFrame.getInstance().requestFocus();
+            RequestHandler.SendRequest.Log.response("Click_Button : Back Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Main Menu");
+            RequestHandler.SendRequest.SaveAndUpdate.response(null);
+            RequestHandler.SendRequest.VisiblePanel.response("menu");
         } else if (sr == exit) {
-            Admin.getInstance().Log("Click_Button : Exit Button");
-            Admin.getInstance().exit();
+            RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
+            RequestHandler.SendRequest.Exit.response(null);
         }
     }
 }

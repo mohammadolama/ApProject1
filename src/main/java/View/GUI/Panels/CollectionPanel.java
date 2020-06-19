@@ -1,6 +1,8 @@
 package View.GUI.Panels;
 
 import AllCards.Cards;
+import Main.Player;
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
 import Main.Deck;
 import Main.Gamestate;
@@ -14,6 +16,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 import static View.GUI.Panels.Constants.*;
 
@@ -230,7 +233,8 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         if (Gamestate.getPlayer() != null) {
             int i = 1;
             buttons.clear();
-            for (Map.Entry<String, Deck> entry : Gamestate.getPlayer().getAllDecks().entrySet()) {
+            Player player=RequestHandler.SendRequest.Player.response(null);
+            for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
                 String s = entry.getKey();
                 JButton button = new JButton(s);
                 button.setName(s);
@@ -274,15 +278,14 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
 
     @Override
     protected void paintComponent(Graphics g) {
-
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(Color.YELLOW);
+        g2d.setFont(f2.deriveFont(28.0f));
         g.drawImage(gamePics.get("collection"), 0, 0, 1600, 1000, null);
         g.drawLine(1350, 0, 1350, 1000);
         g.drawLine(0, config.getSearchY() + config.getSearchHeight() + 10, 1350, config.getSearchY() + config.getSearchHeight() + 10);
         g.drawLine(0, config.getManaY() - 10, 1350, config.getManaY() - 10);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setFont(f2.deriveFont(28.0f));
         g2d.drawString("Search :", 75, 55);
     }
 
@@ -291,33 +294,33 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         JButton src = (JButton) e.getSource();
         if (src == backButton) {
             allCards.doClick();
-            admin.saveAndUpdate();
-            admin.Log("Click_Button : Back Button");
-            admin.Log("Navigate : Main Menu");
-            admin.setVisiblePanel("menu");
+            RequestHandler.SendRequest.SaveAndUpdate.response(null);
+            RequestHandler.SendRequest.Log.response("Click_Button : Back Button");
+            RequestHandler.SendRequest.Log.response("Navigate : Main Menu");
+            RequestHandler.SendRequest.VisiblePanel.response("menu");
         } else if (src == exitButton) {
-            admin.Log("Click_Button : Exit Button");
-            admin.exit();
+            RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
+            RequestHandler.SendRequest.Exit.response(null);
         } else if (src == newDeck) {
-            admin.Log("Click_Button : New_Deck Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : New_Deck Button");
             admin.createNewDeck();
         } else if (src == allCards) {
-            admin.Log("Click_Button : AllCards Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : AllCards Button");
             admin.updateDrawingPanel("all");
         } else if (src == lockedCards) {
-            admin.Log("Click_Button : LockedCards Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : LockedCards Button");
             admin.updateDrawingPanel("locked");
         } else if (src == unlockedCards) {
-            admin.Log("Click_Button : UnlockedCards Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : UnlockedCards Button");
             admin.updateDrawingPanel("unlocked");
         } else if (src == neutralCards) {
-            admin.Log("Click_Button : NeutralCards Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : NeutralCards Button");
             admin.updateDrawingPanel("neutral");
         } else if (src == specialCards) {
-            admin.Log("Click_Button : SpecialCards Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : SpecialCards Button");
             admin.updateDrawingPanel("special");
         } else if (src == changeButton) {
-            admin.Log("Click_Button : Change_Deck Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : Change_Deck Button");
             allCards.doClick();
             Col_Change.getInstance().setCreateMode(false);
             Col_Change.getInstance().getDeckName().setText(selectedDeck.getName());
@@ -330,8 +333,8 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         } else if (src == selectButton) {
             if (selectedDeck != null) {
                 admin.setSelectedDeck(selectedDeck);
-                admin.Log("Click_Button : Select Button");
-                admin.Log(String.format("Deck : choose \"%s\" as selected deck.", selectedDeck.getName()));
+                RequestHandler.SendRequest.Log.response("Click_Button : Select Button");
+                RequestHandler.SendRequest.Log.response(String.format("Deck : choose \"%s\" as selected deck.", selectedDeck.getName()));
             }
         } else {
             changeButton.setEnabled(true);
@@ -377,10 +380,10 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
     public void stateChanged(ChangeEvent e) {
         int value = manaFilter.getValue();
         if (value == 11) {
-            cards = admin.properCards(3);
+            cards = RequestHandler.SendRequest.ProperCards.response(null,3);
 
         } else {
-            ArrayList<Cards> ar = admin.properCards(3);
+            ArrayList<Cards> ar = RequestHandler.SendRequest.ProperCards.response(null,3);
             cards = new ArrayList<>();
             for (Cards cards1 : ar) {
                 if (cards1.getManaCost() == value) {

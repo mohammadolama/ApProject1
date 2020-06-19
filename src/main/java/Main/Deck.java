@@ -140,7 +140,7 @@ public class Deck {
         this.name = name;
     }
 
-    public static Deck changeSelectedDeck(Deck deck) {
+    public static Deck cloneDeck(Deck deck) {
         Deck deck1 = new Deck();
         deck1.setDeck(deck.getDeck());
         deck1.setHero(deck.getHero());

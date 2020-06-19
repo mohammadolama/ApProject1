@@ -1,15 +1,14 @@
 package View.GUI.Panels;
 
-import AllCards.Minions;
-import AllCards.Spell;
-import AllCards.Weapon;
 import Enums.Carts;
+import Enums.Type;
+import Main.Player;
+import Model.CardModelView;
+import Util.RequestHandler;
 import View.GUI.Configs.ConfigsLoader;
 import View.GUI.Configs.StatusConfig;
-import G_L_Interface.Update;
 import Main.Deck;
 import Main.Gamestate;
-import Util.Admin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +25,6 @@ public class StatusPanel extends JPanel implements ActionListener {
     private static ArrayList<JButton> buttons = new ArrayList<>();
 
     private Deck selectedDeck;
-    private Admin admin;
     private StatusConfig config;
 
     private JButton back;
@@ -41,7 +39,6 @@ public class StatusPanel extends JPanel implements ActionListener {
 
     private StatusPanel() {
         initConfig();
-        admin = Admin.getInstance();
         showDecks();
         setLayout(null);
         back = new JButton();
@@ -57,12 +54,8 @@ public class StatusPanel extends JPanel implements ActionListener {
 
         deleteAccount = new JButton();
         deleteAccount.setIcon(gameIcon.get("delete"));
-//        deleteAccount.setBackground(Color.ORANGE);
         deleteAccount.setBounds(1370, 890, 50, 50);
-//        deleteAccount.setContentAreaFilled(false);
-//        deleteAccount.setBorderPainted(false);
         deleteAccount.setFocusable(false);
-//        deleteAccount.setRolloverEnabled(false);
         deleteAccount.addActionListener(this);
         add(deleteAccount);
 
@@ -85,21 +78,23 @@ public class StatusPanel extends JPanel implements ActionListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        System.out.println("asdadas");
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.YELLOW);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(gamePics.get("status"), 0, 0, 1600, 1000, null);
-        g2d.drawImage(gamePics.get("status2"), 0, -55, 300, 970, null);
+        BufferedImage status= gamePics.get("status");
+        BufferedImage status2=gamePics.get("status2");
+        g2d.drawImage(status, 0, 0, 1600, 1000, null);
+        g2d.drawImage(status2, 0, -55, 300, 970, null);
         g2d.drawLine(1250, 0, 1250, 1000);
         g2d.setFont(f2.deriveFont(40.0f));
         g2d.drawString("My Decks", 1330, 40);
         g2d.setFont(f2);
-        g2d.drawString("Username: " + Gamestate.getPlayer().getUsername(), 50, 200);
-        g2d.drawString("Level   : " + Gamestate.getPlayer().getLevel(), 50, 300);
-        g2d.drawString("EXP     : " + Gamestate.getPlayer().getExp(), 50, 400);
-        g2d.drawString("Wallet: " + Gamestate.getPlayer().getMoney(), 50, 500);
-        g2d.drawString("Deck: " + Gamestate.getPlayer().getSelectedDeck().getName(), 50, 600);
+        Player player=RequestHandler.SendRequest.Player.response(null);
+        g2d.drawString("Username: " + player.getUsername(), 50, 200);
+        g2d.drawString("Level   : " + player.getLevel(), 50, 300);
+        g2d.drawString("EXP     : " + player.getExp(), 50, 400);
+        g2d.drawString("Wallet: " + player.getMoney(), 50, 500);
+        g2d.drawString("Deck: " + player.getSelectedDeck().getName(), 50, 600);
         g2d.drawLine(300, config.getStartY() - 10, 1250, config.getStartY() - 10);
         g2d.setFont(f2.deriveFont(18.0f));
         if (selectedDeck != null) {
@@ -118,22 +113,23 @@ public class StatusPanel extends JPanel implements ActionListener {
     private void drawCardInfo(Graphics2D g, String cards, int xe, int ye) {
         g.setFont(fantasy.deriveFont(40.0f));
         g.setColor(Color.WHITE);
-        if (admin.getCardOf(cards) instanceof Minions) {
+        CardModelView view= RequestHandler.SendRequest.PureModelView.response(cards);
+        if (view.getType().equals(Type.Minion)) {
             int x = xe + (config.getWidth() / 6) - 10;
             int y = ye + (config.getHeight() / 6) + 10;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardMAttack((Minions) admin.getCardOf(cards)) + ""), x, y + (config.getHeight() * 4 / 5) - 10);
-            g.drawString((admin.cardHp((Minions) admin.getCardOf(cards)) + ""), (x + config.getWidth() * 4 / 5) - 15, y + (config.getHeight() * 4 / 5) - 10);
-        } else if (admin.getCardOf(cards) instanceof Weapon) {
+            g.drawString(view.getManaCost()+"", x, y);
+            g.drawString(view.getDamage()+"", x, y + (config.getHeight() * 4 / 5) - 10);
+            g.drawString(view.getHp()+"", (x + config.getWidth() * 4 / 5) - 15, y + (config.getHeight() * 4 / 5) - 10);
+        } else if (view.getType().equals(Type.Weapon)) {
             int x = xe + (config.getWidth() / 6) - 10;
             int y = ye + (config.getHeight() / 6);
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardWAttack((Weapon) admin.getCardOf(cards)) + ""), x, y + (config.getHeight() * 4 / 5));
-            g.drawString((admin.cardDurability((Weapon) admin.getCardOf(cards)) + ""), (x + config.getWidth() * 4 / 5) - 10, y + (config.getHeight() * 4 / 5));
-        } else if (admin.getCardOf(cards) instanceof Spell) {
+            g.drawString(view.getManaCost()+"", x, y);
+            g.drawString(view.getDamage()+"", x, y + (config.getHeight() * 4 / 5));
+            g.drawString(view.getHp()+"", (x + config.getWidth() * 4 / 5) - 10, y + (config.getHeight() * 4 / 5));
+        } else if (view.getType().equals(Type.Spell)) {
             int x = xe + (config.getWidth() / 6) - 10;
             int y = ye + (config.getHeight() / 6);
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
+            g.drawString(view.getManaCost()+"", x, y);
         }
     }
 
@@ -176,7 +172,7 @@ public class StatusPanel extends JPanel implements ActionListener {
             int i = 0;
             buttons = new ArrayList<>();
             System.out.println();
-            ArrayList<String> ar = Deck.bestDeck(admin.player());
+            ArrayList<String> ar = RequestHandler.SendRequest.BestDecks.response(null);
             for (String string : ar) {
                 String s = string;
                 JButton button = new JButton(s);
@@ -195,7 +191,7 @@ public class StatusPanel extends JPanel implements ActionListener {
     private void updateSelectedDeck(String name) {
         if (Gamestate.getPlayer() != null) {
             selectedDeck = new Deck();
-            selectedDeck = Deck.changeSelectedDeck(Gamestate.getPlayer().getAllDecks().get(name));
+            selectedDeck = RequestHandler.SendRequest.CloneDeck.response(name);
             ar1 = new ArrayList<>();
             card = selectedDeck.getDeck();
             for (Carts carts : card) {
@@ -214,25 +210,23 @@ public class StatusPanel extends JPanel implements ActionListener {
         JButton src = (JButton) e.getSource();
         if (src == back) {
             ShopPanel.getInstance().grabFocus();
-            admin.Log("Click_Button : Exit Button");
-            Update.saveAndUpdate();
+            RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
+            RequestHandler.SendRequest.SaveAndUpdate.response(null);
             ar1 = null;
             selectedDeck = null;
-            admin.Log("Navigate : Main Menu");
-            MyFrame.getInstance().changePanel("menu");
-            MyFrame.getInstance().requestFocus();
+            RequestHandler.SendRequest.Log.response("Navigate : Main Menu");
+            RequestHandler.SendRequest.VisiblePanel.response("menu");
         } else if (src == deleteAccount) {
-            admin.Log("Click_Button : DeleteAccount Button");
-            admin.deleteAccount();
+            RequestHandler.SendRequest.Log.response("Click_Button : DeleteAccount Button");
+            RequestHandler.SendRequest.DeleteAccount.response(null);
         } else if (src == exit) {
-            admin.Log("Click_Button : Exit Button");
-            admin.exit();
+            RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
+            RequestHandler.SendRequest.Exit.response(null);
         } else {
             for (JButton button : buttons) {
                 if (src.getName().equalsIgnoreCase(button.getName())) {
                     updateSelectedDeck(button.getName());
-                    revalidate();
-                    repaint();
+                    RequestHandler.SendRequest.FrameRender.response(null);
                 }
             }
         }
