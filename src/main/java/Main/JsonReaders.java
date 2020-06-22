@@ -1,7 +1,7 @@
 package Main;
 
-import AllCards.*;
-import Heros.Hero;
+import Model.Cards.*;
+import Model.Heros.Hero;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
@@ -49,13 +49,13 @@ public class JsonReaders {
         return hero1;
     }
 
-    public static Minions MinionsReader(String minions) {
+    public static Minion MinionsReader(String minions) {
         String path = String.format("resources/Jsons/Cards/%s.json", minions);
-        Minions minion = null;
+        Minion minion = null;
         try {
             FileReader fileReader = new FileReader(path);
             ObjectMapper objectMapper = new ObjectMapper();
-            minion = objectMapper.readValue(fileReader, Minions.class);
+            minion = objectMapper.readValue(fileReader, Minion.class);
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();

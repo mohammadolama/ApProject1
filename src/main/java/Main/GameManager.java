@@ -1,11 +1,11 @@
 package Main;
 
-import AllCards.Cards;
-import AllCards.Minions;
-import AllCards.Spell;
-import AllCards.Weapon;
-import Enums.Attribute;
-import Heros.Hero;
+import Model.Cards.Card;
+import Model.Cards.Minion;
+import Model.Cards.Spell;
+import Model.Cards.Weapon;
+import Model.Enums.Attribute;
+import Model.Heros.Hero;
 
 import java.util.*;
 import java.util.Collections;
@@ -32,15 +32,15 @@ public class GameManager {
     private int enemyManaDecrease;
     private int friendlyDefenceAdd;
     private int enemyDefenceAdd;
-    private ArrayList<Cards> friendlyCardsOfPlayer;
-    private ArrayList<Cards> enemyCardsOfPlayer;
-    private ArrayList<Cards> friendlyDeckCards;
-    private ArrayList<Cards> friendLyHandCards;
-    private ArrayList<Cards> friendlyPlayedCards;
-    private ArrayList<Cards> enemyCardsofPlayer;
-    private ArrayList<Cards> enemyDeckCards;
-    private ArrayList<Cards> enemyHandCards;
-    private ArrayList<Cards> enemyPlayedCards;
+    private ArrayList<Card> friendlyCardsOfPlayer;
+    private ArrayList<Card> enemyCardsOfPlayer;
+    private ArrayList<Card> friendlyDeckCards;
+    private ArrayList<Card> friendLyHandCards;
+    private ArrayList<Card> friendlyPlayedCards;
+    private ArrayList<Card> enemyCardsofPlayer;
+    private ArrayList<Card> enemyDeckCards;
+    private ArrayList<Card> enemyHandCards;
+    private ArrayList<Card> enemyPlayedCards;
     private ArrayList<String> gameLog;
     private Weapon friendlyWeapon;
     private Weapon enemyWeapon;
@@ -48,7 +48,7 @@ public class GameManager {
     private Hero enemyPlayerHero;
 
 
-    private GameManager(ArrayList<Cards> arrayList) {
+    private GameManager(ArrayList<Card> arrayList) {
         friendlyPlayedCards = new ArrayList<>();
         friendlyDeckCards = new ArrayList<>();
         friendLyHandCards = new ArrayList<>();
@@ -58,7 +58,7 @@ public class GameManager {
 
     }
 
-    public GameManager(Player player, InfoPassive infoPassive, ArrayList<Cards> arrayList) {
+    public GameManager(Player player, InfoPassive infoPassive, ArrayList<Card> arrayList) {
         this(arrayList);
         this.friendlyPlayer = player;
         this.friendlyPlayerHero = player.getSelectedDeck().getHero();
@@ -81,8 +81,8 @@ public class GameManager {
         enemyManaDecrease = 1;
         enemyDefenceAdd = 0;
 
-        ArrayList<Cards> ar1=Deck.UpdateDeck(player.getSelectedDeck().getDeck());
-        ArrayList<Cards> ar2=new ArrayList<>();
+        ArrayList<Card> ar1=Deck.UpdateDeck(player.getSelectedDeck().getDeck());
+        ArrayList<Card> ar2=new ArrayList<>();
         int i=0;
         while (ar2.size()<3){
             ar2.add(ar1.get(i));
@@ -137,15 +137,15 @@ public class GameManager {
         friendlyDefenceAdd=enemyDefenceAdd;
         enemyDefenceAdd=defenceTemp;
 
-        ArrayList<Cards> handsTemp=this.friendLyHandCards;
+        ArrayList<Card> handsTemp=this.friendLyHandCards;
         friendLyHandCards=enemyHandCards;
         enemyHandCards=handsTemp;
 
-        ArrayList<Cards> deckTemp=this.friendlyDeckCards;
+        ArrayList<Card> deckTemp=this.friendlyDeckCards;
         friendlyDeckCards=enemyDeckCards;
         enemyDeckCards=deckTemp;
 
-        ArrayList<Cards> playedTemp=this.friendlyPlayedCards;
+        ArrayList<Card> playedTemp=this.friendlyPlayedCards;
         friendlyPlayedCards=enemyPlayedCards;
         enemyPlayedCards=playedTemp;
 
@@ -188,7 +188,7 @@ public class GameManager {
     public void nextCard() {
         if (friendlyDeckCards.size() > 0) {
             for (int i = 0; i < friendlyDrawCardNum; i++) {
-                Cards cards = randomCardDraw(friendlyDeckCards);
+                Card cards = randomCardDraw(friendlyDeckCards);
                 if (friendLyHandCards.size() < 12) {
                     addCard(friendLyHandCards, cards);
                 }
@@ -209,15 +209,15 @@ public class GameManager {
         }
     }
 
-    private void initCards(ArrayList<Cards> arrayList) {
+    private void initCards(ArrayList<Card> arrayList) {
         threePrimitiveRandom(arrayList);
     }
 
-    private void threePrimitiveRandom(ArrayList<Cards> arrayList) {
-        ListIterator<Cards> iterator = arrayList.listIterator();
-        ArrayList<Cards> ar = new ArrayList<>();
+    private void threePrimitiveRandom(ArrayList<Card> arrayList) {
+        ListIterator<Card> iterator = arrayList.listIterator();
+        ArrayList<Card> ar = new ArrayList<>();
         while (iterator.hasNext()) {
-            Cards cards = iterator.next();
+            Card cards = iterator.next();
             if (cards instanceof Spell && ((Spell) cards).getTitle() != null && ((Spell) cards).getTitle().equalsIgnoreCase("quest")) {
                 ar.add(cards);
                 iterator.remove();
@@ -235,7 +235,7 @@ public class GameManager {
         friendlyDeckCards = arrayList;
     }
 
-    private Cards randomCardDraw(ArrayList<Cards> cards) {
+    private Card randomCardDraw(ArrayList<Card> cards) {
         if (cards.size() == 0)
             return null;
         Collections.shuffle(cards);
@@ -244,11 +244,11 @@ public class GameManager {
         return cards.get(0);
     }
 
-    private void addCard(ArrayList<Cards> arrayList, Cards cards) {
+    private void addCard(ArrayList<Card> arrayList, Card cards) {
         arrayList.add(cards);
     }
 
-    private void removeCard(ArrayList<Cards> arrayList, Cards cards) {
+    private void removeCard(ArrayList<Card> arrayList, Card cards) {
         arrayList.remove(cards);
     }
 
@@ -260,31 +260,31 @@ public class GameManager {
     }
 
     private void wakeUp(){
-        for (Cards card : friendlyPlayedCards) {
-            ((Minions)card).setSleep(false);
+        for (Card card : friendlyPlayedCards) {
+            ((Minion)card).setSleep(false);
         }
     }
 
     private void canBeAttackedUpdater(){
         boolean flag=false;
-        for (Cards cards : enemyPlayedCards) {
-            if (((Minions)cards).getAttribute()!=null && ((Minions)cards).getAttribute().contains(Attribute.Taunt)){
+        for (Card cards : enemyPlayedCards) {
+            if (((Minion)cards).getAttribute()!=null && ((Minion)cards).getAttribute().contains(Attribute.Taunt)){
                 System.out.println(cards.getName() + " Is Taunt");
                 flag=true;
                 break;
             }
         }
         if (flag) {
-            for (Cards cards : enemyPlayedCards) {
-                if (((Minions)cards).getAttribute()!=null && ((Minions)cards).getAttribute().contains(Attribute.Taunt)){
-                    ((Minions)cards).setCanBeAttacked(true);
+            for (Card cards : enemyPlayedCards) {
+                if (((Minion)cards).getAttribute()!=null && ((Minion)cards).getAttribute().contains(Attribute.Taunt)){
+                    ((Minion)cards).setCanBeAttacked(true);
                 }else {
-                    ((Minions)cards).setCanBeAttacked(false);
+                    ((Minion)cards).setCanBeAttacked(false);
                 }
             }
         }else {
-            for (Cards card : enemyPlayedCards) {
-                ((Minions)card).setCanBeAttacked(true);
+            for (Card card : enemyPlayedCards) {
+                ((Minion)card).setCanBeAttacked(true);
             }
         }
     }
@@ -297,7 +297,7 @@ public class GameManager {
         nextCard();
     }
 
-    boolean canBePlayed(Cards cards) {
+    boolean canBePlayed(Card cards) {
         //////////////////////////////////////////////////////////
         if (cards.getManaCost() >= friendlyNotUsedMana) {
             return true;
@@ -305,7 +305,7 @@ public class GameManager {
         return false;
     }
 
-    void decreaseMana(Cards cards) {
+    void decreaseMana(Card cards) {
         friendlyNotUsedMana -= friendlyNotUsedMana - cards.getManaCost();
     }
 
@@ -398,35 +398,35 @@ public class GameManager {
         this.friendlyDefenceAdd = friendlyDefenceAdd;
     }
 
-    public ArrayList<Cards> getFriendlyCardsOfPlayer() {
+    public ArrayList<Card> getFriendlyCardsOfPlayer() {
         return friendlyCardsOfPlayer;
     }
 
-    public void setFriendlyCardsOfPlayer(ArrayList<Cards> friendlyCardsOfPlayer) {
+    public void setFriendlyCardsOfPlayer(ArrayList<Card> friendlyCardsOfPlayer) {
         this.friendlyCardsOfPlayer = friendlyCardsOfPlayer;
     }
 
-    public ArrayList<Cards> getFriendlyDeckCards() {
+    public ArrayList<Card> getFriendlyDeckCards() {
         return friendlyDeckCards;
     }
 
-    public void setFriendlyDeckCards(ArrayList<Cards> friendlyDeckCards) {
+    public void setFriendlyDeckCards(ArrayList<Card> friendlyDeckCards) {
         this.friendlyDeckCards = friendlyDeckCards;
     }
 
-    public ArrayList<Cards> getFriendLyHandCards() {
+    public ArrayList<Card> getFriendLyHandCards() {
         return friendLyHandCards;
     }
 
-    public void setFriendLyHandCards(ArrayList<Cards> friendLyHandCards) {
+    public void setFriendLyHandCards(ArrayList<Card> friendLyHandCards) {
         this.friendLyHandCards = friendLyHandCards;
     }
 
-    public ArrayList<Cards> getFriendlyPlayedCards() {
+    public ArrayList<Card> getFriendlyPlayedCards() {
         return friendlyPlayedCards;
     }
 
-    public void setFriendlyPlayedCards(ArrayList<Cards> friendlyPlayedCards) {
+    public void setFriendlyPlayedCards(ArrayList<Card> friendlyPlayedCards) {
         this.friendlyPlayedCards = friendlyPlayedCards;
     }
 
@@ -526,35 +526,35 @@ public class GameManager {
         this.enemyDefenceAdd = enemyDefenceAdd;
     }
 
-    public ArrayList<Cards> getEnemyCardsofPlayer() {
+    public ArrayList<Card> getEnemyCardsofPlayer() {
         return enemyCardsofPlayer;
     }
 
-    public void setEnemyCardsofPlayer(ArrayList<Cards> enemyCardsofPlayer) {
+    public void setEnemyCardsofPlayer(ArrayList<Card> enemyCardsofPlayer) {
         this.enemyCardsofPlayer = enemyCardsofPlayer;
     }
 
-    public ArrayList<Cards> getEnemyDeckCards() {
+    public ArrayList<Card> getEnemyDeckCards() {
         return enemyDeckCards;
     }
 
-    public void setEnemyDeckCards(ArrayList<Cards> enemyDeckCards) {
+    public void setEnemyDeckCards(ArrayList<Card> enemyDeckCards) {
         this.enemyDeckCards = enemyDeckCards;
     }
 
-    public ArrayList<Cards> getEnemyHandCards() {
+    public ArrayList<Card> getEnemyHandCards() {
         return enemyHandCards;
     }
 
-    public void setEnemyHandCards(ArrayList<Cards> enemyHandCards) {
+    public void setEnemyHandCards(ArrayList<Card> enemyHandCards) {
         this.enemyHandCards = enemyHandCards;
     }
 
-    public ArrayList<Cards> getEnemyPlayedCards() {
+    public ArrayList<Card> getEnemyPlayedCards() {
         return enemyPlayedCards;
     }
 
-    public void setEnemyPlayedCards(ArrayList<Cards> enemyPlayedCards) {
+    public void setEnemyPlayedCards(ArrayList<Card> enemyPlayedCards) {
         this.enemyPlayedCards = enemyPlayedCards;
     }
 
@@ -574,11 +574,11 @@ public class GameManager {
         this.enemyPlayerHero = enemyPlayerHero;
     }
 
-    public ArrayList<Cards> getEnemyCardsOfPlayer() {
+    public ArrayList<Card> getEnemyCardsOfPlayer() {
         return enemyCardsOfPlayer;
     }
 
-    public void setEnemyCardsOfPlayer(ArrayList<Cards> enemyCardsOfPlayer) {
+    public void setEnemyCardsOfPlayer(ArrayList<Card> enemyCardsOfPlayer) {
         this.enemyCardsOfPlayer = enemyCardsOfPlayer;
     }
 }

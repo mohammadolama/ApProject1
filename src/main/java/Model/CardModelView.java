@@ -1,7 +1,7 @@
 package Model;
 
-import Enums.Attribute;
-import Enums.Type;
+import Model.Enums.Attribute;
+import Model.Enums.Type;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

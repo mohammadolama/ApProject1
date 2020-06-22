@@ -1,7 +1,7 @@
 package Main;
 
-import AllCards.*;
-import Heros.Hero;
+import Model.Cards.*;
+import Model.Heros.Hero;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
@@ -79,7 +79,7 @@ public class JsonBuilders {
         fileWriter.close();
     }
 
-    private static void minionBuilder(Minions minions) throws IOException {
+    private static void minionBuilder(Minion minions) throws IOException {
         String st = String.format("resources/Jsons/%s.json", minions.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, minions);

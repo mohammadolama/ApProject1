@@ -1,7 +1,7 @@
 package Main;
 
-import AllCards.Cards;
-import Enums.*;
+import Model.Cards.Card;
+import Model.Enums.*;
 
 
 import org.json.simple.JSONObject;
@@ -21,16 +21,16 @@ public class Shop {
         JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
     }
 
-    public static ArrayList<Cards> Buyable() {
+    public static ArrayList<Card> Buyable() {
         ArrayList<Carts> ar = BuyableCards();
-        ArrayList<Cards> ar2 = null;
+        ArrayList<Card> ar2 = null;
         ar2 = Deck.UpdateDeck(ar);
         return ar2;
     }
 
-    public static ArrayList<Cards> Sellable() {
+    public static ArrayList<Card> Sellable() {
         ArrayList<Carts> ar = Gamestate.getPlayer().getPlayerCarts();
-        ArrayList<Cards> ar2 = null;
+        ArrayList<Card> ar2 = null;
         ar2 = Deck.UpdateDeck(ar);
         return ar2;
     }

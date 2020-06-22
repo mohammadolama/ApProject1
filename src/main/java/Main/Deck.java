@@ -1,11 +1,11 @@
 package Main;
 
-import AllCards.Cards;
-import Enums.Carts;
-import Enums.MinionCarts;
-import Enums.SpellCarts;
-import Enums.WeaponCarts;
-import Heros.Hero;
+import Model.Cards.Card;
+import Model.Enums.Carts;
+import Model.Enums.MinionCarts;
+import Model.Enums.SpellCarts;
+import Model.Enums.WeaponCarts;
+import Model.Heros.Hero;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -67,9 +67,9 @@ public class Deck {
 
 
     public double avarageMana() {
-        ArrayList<Cards> ar = Deck.UpdateDeck(getDeck());
+        ArrayList<Card> ar = Deck.UpdateDeck(getDeck());
         double i = 0;
-        for (Cards card : ar) {
+        for (Card card : ar) {
             i = i + card.getManaCost();
         }
         i = i / ar.size();
@@ -151,8 +151,8 @@ public class Deck {
         return deck1;
     }
 
-    public static ArrayList<Cards> UpdateDeck(ArrayList<Carts> arrayList) { // biuld card objects from json using enum
-        ArrayList<Cards> ar = new ArrayList<>();
+    public static ArrayList<Card> UpdateDeck(ArrayList<Carts> arrayList) { // biuld card objects from json using enum
+        ArrayList<Card> ar = new ArrayList<>();
 
         for (Carts cartss : arrayList) {
             for (MinionCarts minionCarts : MinionCarts.values()) {
@@ -199,9 +199,9 @@ public class Deck {
         if (ar.size() == 1) {
             return ar.get(0);
         } else {
-            ArrayList<Cards> ar2 = Deck.UpdateDeck(ar);
-            ArrayList<Cards> ar3 = new ArrayList<>();
-            Collections.sort(ar2, Comparator.comparing(Cards::getRarityI).thenComparing(Cards::getManaCost).thenComparing(Cards::getTypeI));
+            ArrayList<Card> ar2 = Deck.UpdateDeck(ar);
+            ArrayList<Card> ar3 = new ArrayList<>();
+            Collections.sort(ar2, Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
             System.out.println(ar2.get(ar2.size() - 1));
             return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
         }

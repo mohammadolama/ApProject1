@@ -1,7 +1,7 @@
 package Main;
 
 
-import Enums.*;
+import Model.Enums.*;
 
 import java.io.*;
 import java.util.*;
