@@ -1,22 +1,75 @@
 package Model.Cards;
 
+import Controller.Actions.Visitor;
 import Model.Enums.*;
 import Main.Deck;
 import Main.Gamestate;
 import Main.JsonReaders;
+import Model.Heros.Hero;
+import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 
-@JsonIgnoreProperties( {"rarityI" , "typeI"})
-public class Card {
+@JsonIgnoreProperties({"rarityI", "typeI", "life", "attack"})
+public class Card implements Character {
     private String name;
     private String description;
-    private int ManaCost;
+    private int manaCost;
     private Type type;
     private String heroClass;
     private Rarity rarity;
     private int price;
+    private ArrayList<Model.Enums.Attribute> attributes;
+    private boolean targetNeeded;
+    private boolean continiousAction;
+    private int healthRestore;
+    private int attackRestore;
+
+    public void accept(Visitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
+
+    }
+
+
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<Attribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    public boolean isContiniousAction() {
+        return continiousAction;
+    }
+
+    public void setContiniousAction(boolean continiousAction) {
+        this.continiousAction = continiousAction;
+    }
+
+    public boolean isTargetNeeded() {
+        return targetNeeded;
+    }
+
+    public void setTargetNeeded(boolean targetNeeded) {
+        this.targetNeeded = targetNeeded;
+    }
+
+    public int getHealthRestore() {
+        return healthRestore;
+    }
+
+    public void setHealthRestore(int healthRestore) {
+        this.healthRestore = healthRestore;
+    }
+
+    public int getAttackRestore() {
+        return attackRestore;
+    }
+
+    public void setAttackRestore(int attackRestore) {
+        this.attackRestore = attackRestore;
+    }
 
     public String getName() {
         return name;
@@ -35,11 +88,11 @@ public class Card {
     }
 
     public int getManaCost() {
-        return ManaCost;
+        return manaCost;
     }
 
     public void setManaCost(int manaCost) {
-        ManaCost = manaCost;
+        this.manaCost = manaCost;
     }
 
     public Type getType() {
@@ -152,9 +205,22 @@ public class Card {
     }
 
     @Override
-    public String toString() {
-        return "Model.Cards{" +
-                "name='" + name + '\'' +
-                '}';
+    public int getAttack() {
+        return 0;
+    }
+
+    @Override
+    public void setAttack(int i) {
+
+    }
+
+    @Override
+    public int getLife() {
+        return 0;
+    }
+
+    @Override
+    public void setLife(int i) {
+
     }
 }

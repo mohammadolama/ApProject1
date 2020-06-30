@@ -3,11 +3,16 @@ package Main;
 import Model.Cards.*;
 import Model.Heros.Hero;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 
 import java.io.*;
 
 public class JsonBuilders {
     private static ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        objectMapper.enable(SerializationConfig.Feature.INDENT_OUTPUT);
+    }
 
     public static void PlayerJsonBuilder(String username, Player player) {
         try {
@@ -65,22 +70,22 @@ public class JsonBuilders {
     }
 
 
-    private static void WeaponBuilder(Weapon weapon) throws IOException {
+    public static void WeaponBuilder(Weapon weapon) throws IOException {
         String st = String.format("resources/Jsons/Cards/%s.json", weapon.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, weapon);
         fileWriter.close();
     }
 
-    private static void SpellBuilder(Spell spell) throws IOException {
+    public static void SpellBuilder(Spell spell) throws IOException {
         String st = String.format("resources/Jsons/Cards/%s.json", spell.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, spell);
         fileWriter.close();
     }
 
-    private static void minionBuilder(Minion minions) throws IOException {
-        String st = String.format("resources/Jsons/%s.json", minions.getName().toLowerCase());
+    public static void minionBuilder(Minion minions) throws IOException {
+        String st = String.format("resources/Jsons/Cards/%s.json", minions.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, minions);
         fileWriter.close();

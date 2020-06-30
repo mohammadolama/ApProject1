@@ -1,8 +1,11 @@
 package Model.Interface;
 
 public interface Character {
-    public int getat();
-    public int getHE();
-    public void setHE(int i);
-    public void setat(int i);
+    public int getAttack();
+
+    public void setAttack(int i);
+
+    public int getLife();
+
+    public void setLife(int i);
 }

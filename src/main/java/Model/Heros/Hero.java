@@ -1,7 +1,7 @@
 package Model.Heros;
 
 
-import Model.Cards.HeroPower;
+import Model.HeroPower;
 import Model.Enums.Carts;
 import Model.Enums.Heroes;
 import Main.Player;
@@ -10,13 +10,13 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 
-@JsonIgnoreProperties({"purchasedCards", "CardsInDeck"})
+@JsonIgnoreProperties({"purchasedCards", "CardsInDeck", "hp", "att"})
 public class Hero implements Character {
-    private Player player;
     private String name;
-    private int hp;
+    private int health;
+    private int maxHealth;
     private Boolean canAttack;
-    private int att;
+    private int damage;
     private String specialPower;
     private HeroPower heroPower;
     private int heroPowerManaCost;
@@ -33,20 +33,35 @@ public class Hero implements Character {
         this.name = name;
     }
 
-    public Player getPlayer() {
-        return player;
+    public static void HeroAdder(Player player) {
+        ArrayList<Heroes> ar = player.getPlayerHeroes();
+        if (!ar.contains(Heroes.mage))
+            ar.add(Heroes.mage);
+        if (!ar.contains(Heroes.warlock))
+            ar.add(Heroes.warlock);
+        if (!ar.contains(Heroes.rogue))
+            ar.add(Heroes.rogue);
+        if (!ar.contains(Heroes.priest))
+            ar.add(Heroes.priest);
+        if (!ar.contains(Heroes.hunter))
+            ar.add(Heroes.hunter);
+        player.setPlayerHeroes(ar);
+        ArrayList<Carts> ar2 = player.getPlayerCarts();
+        if (!ar2.contains(Carts.benyamin))
+            ar2.add(Carts.benyamin);
+        if (!ar2.contains(Carts.polymorph))
+            ar2.add(Carts.polymorph);
+        if (!ar2.contains(Carts.aylar))
+            ar2.add(Carts.aylar);
+        if (!ar2.contains(Carts.faeze))
+            ar2.add(Carts.faeze);
+        if (!ar2.contains(Carts.shahryar))
+            ar2.add(Carts.shahryar);
+        player.setPlayerCarts(ar2);
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public int getHp() {
-        return hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
+    public int getHealth() {
+        return health;
     }
 
     public Boolean getCanAttack() {
@@ -57,12 +72,12 @@ public class Hero implements Character {
         this.canAttack = canAttack;
     }
 
-    public int getAtt() {
-        return att;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
-    public void setAtt(int att) {
-        this.att = att;
+    public int getDamage() {
+        return damage;
     }
 
     public String getSpecialPower() {
@@ -97,51 +112,36 @@ public class Hero implements Character {
         this.defence = defence;
     }
 
-    public static void HeroAdder(Player player) {
-        ArrayList<Heroes> ar = player.getPlayerHeroes();
-        if (!ar.contains(Heroes.mage))
-            ar.add(Heroes.mage);
-        if (!ar.contains(Heroes.warlock))
-            ar.add(Heroes.warlock);
-        if (!ar.contains(Heroes.rogue))
-            ar.add(Heroes.rogue);
-        if (!ar.contains(Heroes.priest))
-            ar.add(Heroes.priest);
-        if (!ar.contains(Heroes.hunter))
-            ar.add(Heroes.hunter);
-        player.setPlayerHeroes(ar);
-        ArrayList<Carts> ar2 = player.getPlayerCarts();
-        if (!ar2.contains(Carts.dreadscale))
-            ar2.add(Carts.dreadscale);
-        if (!ar2.contains(Carts.polymorph))
-            ar2.add(Carts.polymorph);
-        if (!ar2.contains(Carts.friendlysmith))
-            ar2.add(Carts.friendlysmith);
-        if (!ar2.contains(Carts.swampkingdred))
-            ar2.add(Carts.swampkingdred);
-        if (!ar2.contains(Carts.highpriestamet))
-            ar2.add(Carts.highpriestamet);
-        player.setPlayerCarts(ar2);
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     @Override
-    public int getat() {
-        return getAtt();
+    public int getAttack() {
+        return getDamage();
     }
 
     @Override
-    public int getHE() {
-        return getHp();
+    public void setAttack(int i) {
+        setDamage(i);
     }
 
     @Override
-    public void setHE(int i) {
-        setHp(i);
+    public int getLife() {
+        return getHealth();
     }
 
     @Override
-    public void setat(int i) {
-        setAtt(i);
+    public void setLife(int i) {
+        setHealth(i);
     }
 }
 

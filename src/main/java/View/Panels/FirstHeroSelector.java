@@ -112,14 +112,14 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
         g2d.drawImage(cardPics.get("flamestrike"), config.getStartX() + 150, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "flamestrike", config.getStartX() + 150, config.getStartY() + 610);
 
-        g2d.drawImage(cardPics.get("friendlysmith"), (config.getStartX() - 50) + config.getSpacing() + 10, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
-        drawCardInfo(g2d, "friendlysmith", (config.getStartX() - 50) + config.getSpacing() + 10, config.getStartY() + 610);
+        g2d.drawImage(cardPics.get("aylar"), (config.getStartX() - 50) + config.getSpacing() + 10, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
+        drawCardInfo(g2d, "aylar", (config.getStartX() - 50) + config.getSpacing() + 10, config.getStartY() + 610);
 
-        g2d.drawImage(cardPics.get("umbralskulker"), (config.getStartX() + 150) + config.getSpacing() + 10, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
-        drawCardInfo(g2d, "umbralskulker", (config.getStartX() + 150) + config.getSpacing() + 10, config.getStartY() + 610);
+        g2d.drawImage(cardPics.get("yasaman"), (config.getStartX() + 150) + config.getSpacing() + 10, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
+        drawCardInfo(g2d, "yasaman", (config.getStartX() + 150) + config.getSpacing() + 10, config.getStartY() + 610);
 
-        g2d.drawImage(cardPics.get("dreadscale"), (config.getStartX() - 50) + 2 * config.getSpacing() + 20, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
-        drawCardInfo(g2d, "dreadscale", (config.getStartX() - 50) + 2 * config.getSpacing() + 20, config.getStartY() + 610);
+        g2d.drawImage(cardPics.get("benyamin"), (config.getStartX() - 50) + 2 * config.getSpacing() + 20, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
+        drawCardInfo(g2d, "benyamin", (config.getStartX() - 50) + 2 * config.getSpacing() + 20, config.getStartY() + 610);
 
         g2d.drawImage(cardPics.get("darkskies"), (config.getStartX() + 150) + 2 * config.getSpacing() + 20, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "darkskies", (config.getStartX() + 150) + 2 * config.getSpacing() + 20, config.getStartY() + 610);

@@ -1,17 +1,37 @@
 package Model.Cards;
 
-import Model.Interface.Character;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
-import java.util.ArrayList;
-
-public class Minion extends Card implements Character {
-    private int Attack;
-    private int Health;
-    private ArrayList<Model.Enums.Attribute> Attribute;
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "model")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = AghaHaghi.class, name = "aghahaghi"),
+        @JsonSubTypes.Type(value = Ali.class, name = "ali"),
+        @JsonSubTypes.Type(value = Benyamin.class, name = "benyamin"),
+        @JsonSubTypes.Type(value = Cat.class, name = "cat"),
+        @JsonSubTypes.Type(value = Faeze.class, name = "faeze"),
+        @JsonSubTypes.Type(value = HighMasterSaman.class, name = "highmastersaman"),
+        @JsonSubTypes.Type(value = HosseinHima.class, name = "hosseinhima"),
+        @JsonSubTypes.Type(value = Hossein.class, name = "hossein"),
+        @JsonSubTypes.Type(value = Javad.class, name = "javad"),
+        @JsonSubTypes.Type(value = Khashayar.class, name = "khashayar"),
+        @JsonSubTypes.Type(value = Lachin.class, name = "lachin"),
+        @JsonSubTypes.Type(value = Matin.class, name = "matin"),
+        @JsonSubTypes.Type(value = Mobin.class, name = "mobin"),
+        @JsonSubTypes.Type(value = Nima.class, name = "nima"),
+        @JsonSubTypes.Type(value = Shahryar.class, name = "shahryar"),
+        @JsonSubTypes.Type(value = Yasaman.class, name = "yasaman"),
+})
+public class Minion extends Card implements Cloneable {
+    private int damage;
+    private int health;
+    private int maxHealth;
     private String title;
     private boolean sleep;
     private boolean canBeAttacked;
-    private int healthRestore;
 
     public Minion() {
         sleep=true;
@@ -26,28 +46,20 @@ public class Minion extends Card implements Character {
         this.canBeAttacked = canBeAttacked;
     }
 
-    public int getAttack() {
-        return Attack;
+    public int getDamage() {
+        return damage;
     }
 
-    public void setAttack(int attack) {
-        Attack = attack;
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     public int getHealth() {
-        return Health;
+        return health;
     }
 
     public void setHealth(int health) {
-        Health = health;
-    }
-
-    public ArrayList<Model.Enums.Attribute> getAttribute() {
-        return Attribute;
-    }
-
-    public void setAttribute(ArrayList<Model.Enums.Attribute> attribute) {
-        Attribute = attribute;
+        this.health = health;
     }
 
     public String getTitle() {
@@ -60,7 +72,6 @@ public class Minion extends Card implements Character {
 
     public void act(){
         System.out.println("action from minion");
-
     }
 
     public boolean isSleep() {
@@ -71,31 +82,40 @@ public class Minion extends Card implements Character {
         this.sleep = sleep;
     }
 
-    @Override
-    public int getat() {
-        return getAttack();
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     @Override
-    public int getHE() {
+    public int getAttack() {
+        return getDamage();
+    }
+
+    @Override
+    public void setAttack(int i) {
+        setDamage(i);
+    }
+
+    @Override
+    public int getLife() {
         return getHealth();
     }
 
     @Override
-    public void setHE(int i) {
+    public void setLife(int i) {
         setHealth(i);
     }
 
     @Override
-    public void setat(int i) {
-            setAttack(i);
-    }
-
-    public int getHealthRestore() {
-        return healthRestore;
-    }
-
-    public void setHealthRestore(int healthRestore) {
-        this.healthRestore = healthRestore;
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
+
+
+
+

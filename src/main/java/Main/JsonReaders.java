@@ -5,14 +5,62 @@ import Model.Heros.Hero;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
+import java.util.HashMap;
 
 public class JsonReaders {
+    private static HashMap<String, Class> classes;
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        classes = new HashMap<>();
+        classes.put("aghahaghi", AghaHaghi.class);
+        classes.put("ali", Ali.class);
+        classes.put("arcanitereaper", ArcaniteReaper.class);
+        classes.put("ashbringer", Ashbringer.class);
+        classes.put("aylar", Aylar.class);
+        classes.put("benyamin", Benyamin.class);
+        classes.put("blessingoftheancients", BlessingOfTheAncients.class);
+        classes.put("bloodfury", BloodFury.class);
+        classes.put("bookofspecters", BookOFSpecters.class);
+        classes.put("cat", Cat.class);
+        classes.put("cookie", Cookie.class);
+        classes.put("darkskies", DarkSkies.class);
+        classes.put("faeze", Faeze.class);
+        classes.put("fierywaraxe", FieryWarAxe.class);
+        classes.put("flamestrike", Flamestrike.class);
+        classes.put("gearblade", Gearblade.class);
+        classes.put("highmastersaman", HighMasterSaman.class);
+        classes.put("shahryar", Shahryar.class);
+        classes.put("holylight", HolyLight.class);
+        classes.put("hossein", Hossein.class);
+        classes.put("hosseinhima", HosseinHima.class);
+        classes.put("javad", Javad.class);
+        classes.put("khashayar", Khashayar.class);
+        classes.put("lachin", Lachin.class);
+        classes.put("learnjavadonic", LearnJavadonic.class);
+        classes.put("lightforgedblessing", LightforgedBlessing.class);
+        classes.put("matin", Matin.class);
+        classes.put("mobin", Mobin.class);
+        classes.put("nima", Nima.class);
+        classes.put("polymorph", Polymorph.class);
+        classes.put("quiz", Quiz.class);
+        classes.put("sandbreath", SandBreath.class);
+        classes.put("silversword", SilverSword.class);
+        classes.put("soroush", Soroush.class);
+        classes.put("sprint", Sprint.class);
+        classes.put("strengthinnumbers", StrengthInNumbers.class);
+        classes.put("swarmofcats", SwarmOfCats.class);
+        classes.put("truesilverchampion", TrueSilverChampion.class);
+        classes.put("yasaman", Yasaman.class);
+    }
+
+
+
     static Player PlayerJsonReader(String username) {
         String path = String.format("resources/Jsons/Players/%s/player.json", username);
         Player player = null;
         try {
             FileReader fileReader = new FileReader(path);
-            ObjectMapper objectMapper = new ObjectMapper();
             player = objectMapper.readValue(fileReader, Player.class);
             fileReader.close();
         } catch (IOException e) {
@@ -26,7 +74,6 @@ public class JsonReaders {
         Hero hero1 = null;
         try {
             FileReader fileReader = new FileReader(path);
-            ObjectMapper objectMapper = new ObjectMapper();
             hero1 = objectMapper.readValue(fileReader, Hero.class);
             fileReader.close();
         } catch (IOException e) {
@@ -40,7 +87,6 @@ public class JsonReaders {
         Hero hero1 = null;
         try {
             FileReader fileReader = new FileReader(path);
-            ObjectMapper objectMapper = new ObjectMapper();
             hero1 = objectMapper.readValue(fileReader, Hero.class);
             fileReader.close();
         } catch (IOException e) {
@@ -54,8 +100,9 @@ public class JsonReaders {
         Minion minion = null;
         try {
             FileReader fileReader = new FileReader(path);
-            ObjectMapper objectMapper = new ObjectMapper();
-            minion = objectMapper.readValue(fileReader, Minion.class);
+            Class clas = classes.get(minions.toLowerCase());
+            System.out.println(minions);
+            minion = (Minion) objectMapper.readValue(fileReader, clas);
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,8 +115,8 @@ public class JsonReaders {
         Spell spells = null;
         try {
             FileReader fileReader = new FileReader(path);
-            ObjectMapper objectMapper = new ObjectMapper();
-            spells = objectMapper.readValue(fileReader, Spell.class);
+            Class clas = classes.get(spell.toLowerCase());
+            spells = (Spell) objectMapper.readValue(fileReader, clas);
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,8 +129,9 @@ public class JsonReaders {
         Weapon weapon1 = null;
         try {
             FileReader fileReader = new FileReader(path);
-            ObjectMapper objectMapper = new ObjectMapper();
-            weapon1 = objectMapper.readValue(fileReader, Weapon.class);
+            Class clas = classes.get(weapon.toLowerCase());
+            System.out.println(weapon);
+            weapon1 = (Weapon) objectMapper.readValue(fileReader, clas);
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();

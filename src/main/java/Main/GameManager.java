@@ -218,7 +218,7 @@ public class GameManager {
         ArrayList<Card> ar = new ArrayList<>();
         while (iterator.hasNext()) {
             Card cards = iterator.next();
-            if (cards instanceof Spell && ((Spell) cards).getTitle() != null && ((Spell) cards).getTitle().equalsIgnoreCase("quest")) {
+            if (cards instanceof Spell && ((Spell) cards).getAttributes() != null && ((Spell) cards).getAttributes().contains(Attribute.Reward)) {
                 ar.add(cards);
                 iterator.remove();
                 if (ar.size() == 3)
@@ -268,7 +268,7 @@ public class GameManager {
     private void canBeAttackedUpdater(){
         boolean flag=false;
         for (Card cards : enemyPlayedCards) {
-            if (((Minion)cards).getAttribute()!=null && ((Minion)cards).getAttribute().contains(Attribute.Taunt)){
+            if (((Minion) cards).getAttributes() != null && ((Minion) cards).getAttributes().contains(Attribute.Taunt)) {
                 System.out.println(cards.getName() + " Is Taunt");
                 flag=true;
                 break;
@@ -276,7 +276,7 @@ public class GameManager {
         }
         if (flag) {
             for (Card cards : enemyPlayedCards) {
-                if (((Minion)cards).getAttribute()!=null && ((Minion)cards).getAttribute().contains(Attribute.Taunt)){
+                if (((Minion) cards).getAttributes() != null && ((Minion) cards).getAttributes().contains(Attribute.Taunt)) {
                     ((Minion)cards).setCanBeAttacked(true);
                 }else {
                     ((Minion)cards).setCanBeAttacked(false);

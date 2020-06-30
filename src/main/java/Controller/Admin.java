@@ -1,5 +1,8 @@
 package Controller;
 
+import Controller.Actions.ActionHandler;
+import Controller.Actions.ActionVisitor;
+import Controller.Actions.BattlecryVisitor;
 import Model.Cards.Card;
 import Model.Cards.Minion;
 import Model.Cards.Spell;
@@ -19,6 +22,8 @@ import View.Sounds.SoundAdmin;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 import static View.Panels.Constants.powerPics;
 
@@ -423,6 +428,7 @@ public class Admin {
 //        gameManager.refillMana();
 //        gameManager.nextCard();
         gameManager.endTurn();
+        checkDestroyMinion();
         playSound("nextturn");
         updateGameLog(String.format("%s  EndTurn .", enemyPlayer().getUsername()));
     }
@@ -463,9 +469,6 @@ public class Admin {
         return Constants.gamePics.get(name.toLowerCase());
     }
 
-    public ImageIcon gifOf(String name) {
-        return Constants.heroGifs.get(name.toLowerCase());
-    }
 
     public ImageIcon gameIconOf(String name) {
         return Constants.gameIcon.get(name);
@@ -490,7 +493,7 @@ public class Admin {
         if (friendlyPlayedCards().size() < 7) {
             playSound("minion");
             gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (minions.getManaCost() - gameManager.getFriendlyManaDecrease()));
-            if (minions.getAttribute()!=null && (minions.getAttribute().contains(Attribute.Charge) || minions.getAttribute().contains(Attribute.Rush))){
+            if (minions.getAttributes() != null && (minions.getAttributes().contains(Attribute.Charge) || minions.getAttributes().contains(Attribute.Rush))) {
                 minions.setSleep(false);
             }
             friendlyPlayedCards().add(i, minions);
@@ -507,6 +510,7 @@ public class Admin {
         playSound("spell");
         gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (spell.getManaCost() - gameManager.getFriendlyManaDecrease()));
         friendlyHandCards().remove(spell);
+        spell.accept(new ActionVisitor(), null, friendlyDeckCards(), friendlyHandCards(), friendlyPlayedCards(), enemyDeckCards(), enemyHandCards(), enemyPlayedCards(), friendlyHero(), enemyHero());
         updateGameLog(String.format("%s played", spell.getName().toLowerCase()));
     }
 
@@ -516,6 +520,11 @@ public class Admin {
         friendlyHandCards().remove(weapon);
         gameManager.setFriendlyWeapon(weapon);
         updateGameLog(String.format("%s played", weapon.getName().toLowerCase()));
+    }
+
+    private void checkDestroyMinion() {
+        enemyPlayedCards().removeIf(card -> ((Minion) card).getHealth() <= 0);
+        friendlyPlayedCards().removeIf(card -> ((Minion) card).getHealth() <= 0);
     }
 
     public Weapon friendlyWeapon() {
@@ -542,10 +551,10 @@ public class Admin {
     public CardModelView getWeaponViewModel(String string) {
         if (string.equalsIgnoreCase("friendly")) {
             Weapon weapon = friendlyWeapon();
-            return new CardModelView(pictureOf(weapon.getName().toLowerCase()), weapon.getName(), weapon.getManaCost(), weapon.getAtt(), weapon.getDurability(), Type.Weapon, null,false,false);
+            return new CardModelView(pictureOf(weapon.getName().toLowerCase()), weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false);
         } else {
             Weapon weapon = enemyWeapon();
-            return new CardModelView(pictureOf(weapon.getName().toLowerCase()), weapon.getName(), weapon.getManaCost(), weapon.getAtt(), weapon.getDurability(), Type.Weapon, null,false,false);
+            return new CardModelView(pictureOf(weapon.getName().toLowerCase()), weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false);
         }
     }
 
@@ -556,7 +565,7 @@ public class Admin {
             BufferedImage image = pictureOf(string);
             if (cards instanceof Minion) {
                 Minion minions = (Minion) cards;
-                CardModelView modelView = new CardModelView(image, string, minions.getManaCost(), minions.getAttack(), minions.getHealth(), minions.getType(),minions.getAttribute() , minions.isSleep(),minions.isCanBeAttacked());
+                CardModelView modelView = new CardModelView(image, string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked());
                 return modelView;
             }
             return null;
@@ -566,7 +575,7 @@ public class Admin {
             BufferedImage image = pictureOf(string);
             if (cards instanceof Minion) {
                 Minion minions = (Minion) cards;
-                CardModelView modelView = new CardModelView(image, string, minions.getManaCost(), minions.getAttack(), minions.getHealth(), minions.getType(),minions.getAttribute(),minions.isSleep(),minions.isCanBeAttacked());
+                CardModelView modelView = new CardModelView(image, string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked());
                 return modelView;
             }
             return null;
@@ -595,11 +604,11 @@ public class Admin {
         }
         if (cards instanceof Minion) {
             Minion minions = (Minion) cards;
-            CardModelView modelView = new CardModelView(image, string, mana, minions.getAttack(), minions.getHealth(), minions.getType(),minions.getAttribute(),minions.isSleep(),minions.isCanBeAttacked());
+            CardModelView modelView = new CardModelView(image, string, mana, minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked());
             return modelView;
         } else if (cards instanceof Weapon) {
             Weapon weapon = (Weapon) cards;
-            CardModelView modelView = new CardModelView(image, string, mana, weapon.getAtt(), weapon.getDurability(), weapon.getType(),null,false,false);
+            CardModelView modelView = new CardModelView(image, string, mana, weapon.getDamage(), weapon.getDurability(), weapon.getType(), null, false, false);
             return modelView;
         } else {
             Spell spell = (Spell) cards;
@@ -626,11 +635,13 @@ public class Admin {
         for (Card cards : friendlyHandCards()) {
             if (cards.getName().equalsIgnoreCase(string)) {
                 if (gameManager.getFriendlyNotUsedMana() >= cards.getManaCost() - gameManager.getFriendlyManaDecrease()) {
-                    if (getCardOf(string) instanceof Minion) {
+                    Card card = getCardOf(string);
+                    card.accept(new BattlecryVisitor(), null, friendlyDeckCards(), friendlyHandCards(), friendlyPlayedCards(), enemyDeckCards(), enemyHandCards(), enemyPlayedCards(), friendlyHero(), enemyHero());
+                    if (card instanceof Minion) {
                         playMinion((Minion) cards, i);
-                    } else if (getCardOf(string) instanceof Spell) {
+                    } else if (card instanceof Spell) {
                         playSpell((Spell) cards);
-                    } else if (getCardOf(string) instanceof Weapon) {
+                    } else if (card instanceof Weapon) {
                         playWeapon((Weapon) cards);
                     }
                     String log = String.format("Play : played card \"%s\"", cards.getName());
@@ -641,6 +652,7 @@ public class Admin {
                 }
             }
         }
+        checkDestroyMinion();
     }
 
     public boolean canBePlayed(String string) {
@@ -702,11 +714,11 @@ public class Admin {
     }
 
     public int cardMAttack(Minion minions) {
-        return minions.getAttack();
+        return minions.getDamage();
     }
 
     public int cardWAttack(Weapon weapon) {
-        return weapon.getAtt();
+        return weapon.getDamage();
     }
 
     public int cardDurability(Weapon weapon) {
@@ -735,5 +747,6 @@ public class Admin {
             Hero target1=enemyHero();
             ActionHandler.Attack(attacker1,target1);
         }
+        checkDestroyMinion();
     }
 }

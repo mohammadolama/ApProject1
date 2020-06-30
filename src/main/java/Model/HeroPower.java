@@ -1,4 +1,4 @@
-package Model.Cards;
+package Model;
 
 public class HeroPower {
     private String name;

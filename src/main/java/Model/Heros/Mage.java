@@ -1,6 +1,6 @@
 package Model.Heros;
 
-import Model.Cards.HeroPower;
+import Model.HeroPower;
 import Model.Enums.*;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -11,8 +11,8 @@ public class Mage extends Hero {
     public Mage() {
         this.setName("Mage");
         this.setCanAttack(false);
-        this.setAtt(0);
-        this.setHp(30);
+        this.setDamage(0);
+        this.setHealth(30);
         this.setHeroPower(new HeroPower("FireBlast", 2));
         this.setHeroPowerManaCost(2);
         this.setSpecialPower("They use 2 less mana for using Spells .");

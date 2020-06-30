@@ -27,6 +27,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private int mouseDesY;
     private boolean cardSelected = false;
     private boolean playedCardSelected = false;
+    private boolean targetNeeded;
     private String handCardSelectedName;
     private String playedCardSelectedName;
     private int playedIndex;
@@ -35,6 +36,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private ArrayList<Images> handImages;
     private ArrayList<Images> friendlyPlayedImages;
     private ArrayList<Images> enemyPlayedImages;
+
 //    private Admin admin;
 
     private JButton back;
@@ -59,7 +61,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private int index = 0;
     private float size = 20;
     private Font font = new Font("Serif", Font.PLAIN, 20);
-
+    private ArrayList<JButton> buttons;
 
     private boolean disabled;
 
@@ -81,6 +83,9 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         handImages = new ArrayList<>();
         friendlyPlayedImages = new ArrayList<>();
         enemyPlayedImages = new ArrayList<>();
+        buttons = new ArrayList<>();
+
+
 
         toMiddleTimer = new Timer(1000 / 60, middleTimerListener);
         toHandTimer = new Timer(1000 / 60, handTimerListener);
@@ -95,21 +100,21 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         cardPreview.setOpaque(false);
         add(cardPreview);
 
-        friendlyHero = new JLabel();
-        friendlyHero.setBounds(710, 615, 175, 279);
-        String name = RequestHandler.SendRequest.FriendlyHeroName.response(null);
-        friendlyHero.setIcon(heroGifs.get(name));
-        friendlyHero.setOpaque(false);
-        add(friendlyHero);
+//        friendlyHero = new JLabel();
+//        friendlyHero.setBounds(710, 615, 175, 279);
+//        String name = RequestHandler.SendRequest.FriendlyHeroName.response(null);
+//        friendlyHero.setIcon(heroPortraits.get(name.toLowerCase()));
+//        friendlyHero.setOpaque(false);
+//        add(friendlyHero);
 
 
-        enemyHero = new JLabel();
-        enemyHero.setBounds(710, 35, 175, 279);
-        name = RequestHandler.SendRequest.EnemyHeroName.response(null);
-        enemyHero.setIcon(heroGifs.get(name));
-//        enemyHero.setIgnoreRepaint(true);
-        enemyHero.addMouseListener(enemyMouseListener);
-        add(enemyHero);
+//        enemyHero = new JLabel();
+//        enemyHero.setBounds(710, 35, 175, 279);
+//        name = RequestHandler.SendRequest.EnemyHeroName.response(null);
+//        enemyHero.setIcon(heroPortraits.get(name.toLowerCase()));
+////        enemyHero.setIgnoreRepaint(true);
+//        enemyHero.addMouseListener(enemyMouseListener);
+//        add(enemyHero);
 
 
         nextTurnButton = new JButton();
@@ -164,6 +169,8 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
         drawLog(g);
 
+        drawHeroPortraits(g);
+
         drawHeroPower(g);
 
         drawHeroInfo(g);
@@ -184,6 +191,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
         drawSelectionStatus(g);
 //        System.out.println((System.nanoTime()-time)/1000);
+    }
+
+    private void drawHeroPortraits(Graphics2D g) {
+        String name = RequestHandler.SendRequest.EnemyHeroName.response(null);
+        g.drawImage(heroPortraits.get(name.toLowerCase()), 710, 80, 175, 255, null);
+        name = RequestHandler.SendRequest.FriendlyHeroName.response(null);
+        g.drawImage(heroPortraits.get(name.toLowerCase()), 710, 660, 175, 255, null);
+
     }
 
 
@@ -388,8 +403,27 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     }
 
-    private void addButtons( int x , int y) {
+    private void addButtons(String name, int x, int y) {
+        System.out.println("adding buton" + name);
+        JButton button = new JButton();
+        button.setName(name);
+        button.setBounds(x, y, 100, 50);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(button.getName() + " Has Clicked.");
+            }
+        });
+        buttons.add(button);
+        add(button);
 
+    }
+
+    void removeButton() {
+        for (JButton button : buttons) {
+            remove(button);
+        }
+        buttons.clear();
     }
 
     private void drawEnemyPlayedCard(Graphics2D g, int i) {
@@ -400,6 +434,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         if (playedCardSelected) {
             if (view.isCanBeAttacked()) {
                 g.drawImage(gamePics.get("target"), (config.getPlayerPlayedCardX() + config.getCardWidth()), (config.getOpponentPlayedCardY() + config.getCardHeight()), null);
+                addButtons(view.getName(), (config.getPlayerPlayedCardX() + config.getCardWidth() / 2), (config.getOpponentPlayedCardY() + config.getCardHeight() / 2));
             }
         }
     }
@@ -726,13 +761,13 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         } else if (src == nextTurnButton) {
             RequestHandler.SendRequest.Log.response("Click_Button : NextTurn Button");
             ourTurn = !ourTurn;
-            if (ourTurn) {
-                enemyHero.setBounds(710, 35, 175, 279);
-                friendlyHero.setBounds(710, 615, 175, 279);
-            } else {
-                enemyHero.setBounds(710, 615, 175, 279);
-                friendlyHero.setBounds(710, 35, 175, 279);
-            }
+//            if (ourTurn) {
+//                enemyHero.setBounds(710, 35, 175, 279);
+//                friendlyHero.setBounds(710, 615, 175, 279);
+//            } else {
+//                enemyHero.setBounds(710, 615, 175, 279);
+//                friendlyHero.setBounds(710, 35, 175, 279);
+//            }
             clear();
             Boolean flag = RequestHandler.SendRequest.DeckHasNext.response(0, null);
             RequestHandler.SendRequest.EndTurn.response(null);
@@ -743,6 +778,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
                 toMiddleTimer.start();
             }
             playedCardSelected = false;
+            removeButton();
             revalidate();
             repaint();
         }

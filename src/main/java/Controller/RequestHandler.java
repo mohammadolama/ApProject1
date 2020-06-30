@@ -65,9 +65,10 @@ public class RequestHandler {
                 case DownDeckSize:
                     return (T) (admin.friendlyDeckCards().size() + "");
                 case DownHp:
-                    return (T) (admin.friendlyHero().getHp() + "");
+                    System.out.println(admin.friendlyHero().getHealth());
+                    return (T) (admin.friendlyHero().getHealth() + "");
                 case UpHp:
-                    return (T) (admin.enemyHero().getHp() + "");
+                    return (T) (admin.enemyHero().getHealth() + "");
                 case DownWeapon:
                     return (T) admin.getWeaponViewModel("friendly");
                 case UpWeapon:

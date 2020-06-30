@@ -89,14 +89,19 @@ public class Deck {
     static ArrayList<Carts> DefultAvailableCardsManager() {
         ArrayList<Carts> ar = new ArrayList<>();
         ar.add(Carts.fierywaraxe);
-        ar.add(Carts.evasivewyrm);
+        ar.add(Carts.gearblade);
         ar.add(Carts.blessingoftheancients);
-        ar.add(Carts.tastyflyfish);
+        ar.add(Carts.cookie);
         ar.add(Carts.lightforgedblessing);
-        ar.add(Carts.depthcharge);
-        ar.add(Carts.cobaltspellkin);
-        ar.add(Carts.koboldstickyfinger);
-        ar.add(Carts.tombwarden);
+        ar.add(Carts.swarmofcats);
+        ar.add(Carts.sprint);
+        ar.add(Carts.arcanitereaper);
+        ar.add(Carts.aghahaghi);
+        ar.add(Carts.hossein);
+        ar.add(Carts.hosseinhima);
+        ar.add(Carts.khashayar);
+        ar.add(Carts.lachin);
+        ar.add(Carts.mobin);
         return ar;
     }
 
@@ -157,6 +162,7 @@ public class Deck {
         for (Carts cartss : arrayList) {
             for (MinionCarts minionCarts : MinionCarts.values()) {
                 if (cartss.toString().equals(minionCarts.toString())) {
+//                    System.out.println(minionCarts.toString());
                     ar.add(JsonReaders.MinionsReader(cartss.name()));
                 }
             }

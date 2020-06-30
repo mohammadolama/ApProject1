@@ -2,20 +2,20 @@ package Model.Enums;
 
 public enum SpecialCarts {
 
-    friendlysmith,
-    umbralskulker,
+    aylar,
+    yasaman,
 
     flamestrike,
     polymorph,
 
     darkskies,
-    dreadscale,
+    benyamin,
 
 
-    swampkingdred,
-    deadlyshot,
+    faeze,
+    quiz,
 
 
     sandbreath,
-    highpriestamet
+    shahryar
 }

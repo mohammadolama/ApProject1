@@ -6,6 +6,6 @@ public enum Attribute {
     Rush,
     Charge,
     BattleCry,
-    Lifesteal,
     Taunt,
+    Reward,
 }
