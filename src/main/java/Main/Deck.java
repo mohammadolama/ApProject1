@@ -208,7 +208,6 @@ public class Deck {
             ArrayList<Card> ar2 = Deck.UpdateDeck(ar);
             ArrayList<Card> ar3 = new ArrayList<>();
             Collections.sort(ar2, Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
-            System.out.println(ar2.get(ar2.size() - 1));
             return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
         }
     }
@@ -218,7 +217,6 @@ public class Deck {
         for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
             ar.add(entry.getValue());
         }
-        System.out.println(" ");
         Collections.sort(ar, Comparator.comparing(Deck::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(Deck::avarageMana));
 
         ArrayList<String> arrayList = new ArrayList<>();

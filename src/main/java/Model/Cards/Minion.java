@@ -3,6 +3,10 @@ package Model.Cards;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -110,9 +114,21 @@ public class Minion extends Card implements Cloneable {
         setHealth(i);
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public <T> T cloneMinion(T t) {
+        Class cls = t.getClass();
+        T t1 = null;
+        try {
+            Constructor cons = cls.getConstructor();
+            t1 = (T) cons.newInstance();
+            Field[] fields = cls.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                field.set(t1, field.get(t));
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return t1;
     }
 }
 

@@ -26,7 +26,6 @@ public class Hossein extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Common);
         setDescription("Divine shield");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle(null);

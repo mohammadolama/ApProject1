@@ -3,6 +3,7 @@ package View;
 import Main.JsonBuilders;
 import Model.Cards.*;
 import Model.Enums.Carts;
+import Model.Heros.*;
 import View.Configs.ConfigsLoader;
 import View.Panels.Constants;
 import View.Panels.MyFrame;
@@ -24,6 +25,14 @@ public class test {
         Constants.pictureLoader();
         SoundAdmin.play1("resources\\Sounds\\login.wav");
         MyFrame.getInstance();
+
+
+//        JsonBuilders.HeroBuildeeer(new Rogue());
+//        JsonBuilders.HeroBuildeeer(new Warlock());
+//        JsonBuilders.HeroBuildeeer(new Mage());
+//        JsonBuilders.HeroBuildeeer(new Priest());
+//        JsonBuilders.HeroBuildeeer(new Hunter());
+
 
 //        JsonBuilders.minionBuilder(new AghaHaghi());
 //        JsonBuilders.minionBuilder(new Ali());

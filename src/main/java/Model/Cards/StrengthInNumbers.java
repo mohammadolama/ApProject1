@@ -23,7 +23,6 @@ public class StrengthInNumbers extends Spell {
         setRarity(Rarity.Common);
         setPrice(20);
         setAttributes(new ArrayList<Attribute>(Arrays.asList(Attribute.Reward)));
-        setTargetNeeded(false);
         setContiniousAction(true);
         setHealthRestore(0);
         setAttackRestore(0);

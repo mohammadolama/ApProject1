@@ -21,7 +21,8 @@ public class SandBreath extends Spell {
         setRarity(Rarity.Common);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(true);
+        setNeedEnemyTarget(true);
+        setNeedFriendlyTarget(true);
         setContiniousAction(false);
         setHealthRestore(1);
         setAttackRestore(2);

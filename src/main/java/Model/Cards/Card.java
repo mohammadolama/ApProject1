@@ -21,7 +21,8 @@ public class Card implements Character {
     private Rarity rarity;
     private int price;
     private ArrayList<Model.Enums.Attribute> attributes;
-    private boolean targetNeeded;
+    private boolean needFriendlyTarget;
+    private boolean needEnemyTarget;
     private boolean continiousAction;
     private int healthRestore;
     private int attackRestore;
@@ -30,6 +31,22 @@ public class Card implements Character {
 
     }
 
+
+    public boolean isNeedFriendlyTarget() {
+        return needFriendlyTarget;
+    }
+
+    public void setNeedFriendlyTarget(boolean needFriendlyTarget) {
+        this.needFriendlyTarget = needFriendlyTarget;
+    }
+
+    public boolean isNeedEnemyTarget() {
+        return needEnemyTarget;
+    }
+
+    public void setNeedEnemyTarget(boolean needEnemyTarget) {
+        this.needEnemyTarget = needEnemyTarget;
+    }
 
     public ArrayList<Attribute> getAttributes() {
         return attributes;
@@ -47,13 +64,6 @@ public class Card implements Character {
         this.continiousAction = continiousAction;
     }
 
-    public boolean isTargetNeeded() {
-        return targetNeeded;
-    }
-
-    public void setTargetNeeded(boolean targetNeeded) {
-        this.targetNeeded = targetNeeded;
-    }
 
     public int getHealthRestore() {
         return healthRestore;

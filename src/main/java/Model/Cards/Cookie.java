@@ -21,7 +21,6 @@ public class Cookie extends Spell {
         setRarity(Rarity.Common);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(false);
         setContiniousAction(false);
         setHealthRestore(6);
         setAttackRestore(0);

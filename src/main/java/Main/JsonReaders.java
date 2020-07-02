@@ -55,8 +55,7 @@ public class JsonReaders {
     }
 
 
-
-    static Player PlayerJsonReader(String username) {
+    public static Player PlayerJsonReader(String username) {
         String path = String.format("resources/Jsons/Players/%s/player.json", username);
         Player player = null;
         try {
@@ -101,7 +100,6 @@ public class JsonReaders {
         try {
             FileReader fileReader = new FileReader(path);
             Class clas = classes.get(minions.toLowerCase());
-            System.out.println(minions);
             minion = (Minion) objectMapper.readValue(fileReader, clas);
             fileReader.close();
         } catch (IOException e) {
@@ -130,7 +128,6 @@ public class JsonReaders {
         try {
             FileReader fileReader = new FileReader(path);
             Class clas = classes.get(weapon.toLowerCase());
-            System.out.println(weapon);
             weapon1 = (Weapon) objectMapper.readValue(fileReader, clas);
             fileReader.close();
         } catch (IOException e) {

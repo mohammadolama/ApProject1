@@ -24,7 +24,7 @@ public class RequestHandler {
         GameLog, GameLogSize, DownDeckSize, UpDeckSize, EndTurn, Log, VisiblePanel, Exit, PureModelView, ModelView, DownHp, UpHp,
         FriendlyPlayedCard, EnemyPlayedCard, FriendlyHandCard, FrinedlyHandSize, EnemyHandSize, FriendlyPlayedSize, EnemyPlayedSize,
         FriendlyPlayedCardName, EnemyPlayedCardName, FriendlyHandCradName, EnemyHandCardName, CanBePlayed, CheckMana, PlayCard, PlayHeroPower,
-        DownHasWeapon, UpHasWeapon, DownWeapon, UpWeapon, FriendlyTotalMana, FriendlyNotUsedMana,DeckHasNext,
+        DownHasWeapon, UpHasWeapon, DownWeapon, UpWeapon, FriendlyTotalMana, FriendlyNotUsedMana, DeckHasNext, DownDefence, UpDefence,
 
         /* Status */
         BestDecks, DeleteAccount, CloneDeck, SaveAndUpdate,
@@ -65,10 +65,13 @@ public class RequestHandler {
                 case DownDeckSize:
                     return (T) (admin.friendlyDeckCards().size() + "");
                 case DownHp:
-                    System.out.println(admin.friendlyHero().getHealth());
                     return (T) (admin.friendlyHero().getHealth() + "");
                 case UpHp:
                     return (T) (admin.enemyHero().getHealth() + "");
+                case DownDefence:
+                    return (T) (admin.friendlyHero().getDefence() + "");
+                case UpDefence:
+                    return (T) (admin.enemyHero().getDefence() + "");
                 case DownWeapon:
                     return (T) admin.getWeaponViewModel("friendly");
                 case UpWeapon:
@@ -174,11 +177,18 @@ public class RequestHandler {
                 case MuteSound:
                     SoundAdmin.stopStart(i);
                     return null;
-                case PlayCard:
-                    admin.playCard(value, i);
-                    return null;
                 case ProperCards:
                     return (T) admin.properCards(i);
+                default:
+                    return null;
+            }
+        }
+
+        public <T> T response(String value, int i, int target) {
+            switch (this) {
+                case PlayCard:
+                    admin.playCard(value, i, target);
+                    return null;
                 default:
                     return null;
             }

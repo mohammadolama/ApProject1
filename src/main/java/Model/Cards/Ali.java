@@ -27,7 +27,6 @@ public class Ali extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Legendary);
         setDescription("Battlecry , Choose a friendly minion. Add a copy of it to your hand, deck,and battlefield .");
-        setTargetNeeded(true);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Demon");

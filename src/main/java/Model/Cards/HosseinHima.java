@@ -26,7 +26,6 @@ public class HosseinHima extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Common);
         setDescription("Divine Shield , Rush ");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Dragon");

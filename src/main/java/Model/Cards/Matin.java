@@ -24,7 +24,6 @@ public class Matin extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Rare);
         setDescription("Whenever you draw a card gain +1/+1");
-        setTargetNeeded(false);
         setContiniousAction(true);
         setAttackRestore(1);
         setTitle(null);

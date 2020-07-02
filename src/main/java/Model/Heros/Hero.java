@@ -1,23 +1,38 @@
 package Model.Heros;
 
 
-import Model.HeroPower;
+import Model.Cards.*;
+import Model.HeroPowers.HeroPower;
 import Model.Enums.Carts;
 import Model.Enums.Heroes;
 import Main.Player;
 import Model.Interface.Character;
+import Model.SpecialPowers.SpecialPower;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import java.util.ArrayList;
 
-@JsonIgnoreProperties({"purchasedCards", "CardsInDeck", "hp", "att"})
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "model")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Hunter.class, name = "hunter"),
+        @JsonSubTypes.Type(value = Warlock.class, name = "warlock"),
+        @JsonSubTypes.Type(value = Mage.class, name = "mage"),
+        @JsonSubTypes.Type(value = Rogue.class, name = "rogue"),
+        @JsonSubTypes.Type(value = Priest.class, name = "priest"),
+})
+@JsonIgnoreProperties({"specialPower", "heroPower"})
 public class Hero implements Character {
     private String name;
     private int health;
     private int maxHealth;
     private Boolean canAttack;
     private int damage;
-    private String specialPower;
+    private SpecialPower specialPower;
     private HeroPower heroPower;
     private int heroPowerManaCost;
     private int defence;
@@ -80,11 +95,11 @@ public class Hero implements Character {
         return damage;
     }
 
-    public String getSpecialPower() {
+    public SpecialPower getSpecialPower() {
         return specialPower;
     }
 
-    public void setSpecialPower(String specialPower) {
+    public void setSpecialPower(SpecialPower specialPower) {
         this.specialPower = specialPower;
     }
 

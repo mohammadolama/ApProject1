@@ -23,7 +23,6 @@ public class Shahryar extends Minion {
         setHeroClass("Priest");
         setRarity(Rarity.Legendary);
         setDescription("Whenever you summon a minion, set its Health equal to this minion's");
-        setTargetNeeded(false);
         setContiniousAction(true);
         setAttackRestore(0);
         setTitle(null);

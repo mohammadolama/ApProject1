@@ -26,7 +26,6 @@ public class Khashayar extends Minion {
         setHeroClass("Priest");
         setRarity(Rarity.Rare);
         setDescription("Battlecry : deal 5 damage to All minions .");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle(null);

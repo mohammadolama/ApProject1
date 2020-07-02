@@ -17,6 +17,7 @@ public class Constants {
     private static String heroPicsPath = "resources/pics/hero/";
     private static String gamePicsPath = "resources/pics/game/";
     private static String heroPowerPath = "resources/pics/heropower/";
+    private static String heroPortraitsPath = "resources/pics/hero/portrait/";
     public static HashMap<String, BufferedImage> heroPortraits;
 
     static int gameWidth = 1600;
@@ -46,7 +47,7 @@ public class Constants {
     private static BufferedImage blood;
     private static BufferedImage defence;
     private static BufferedImage enemycard;
-    private static BufferedImage target;
+    private static BufferedImage redTarget;
 
     private static BufferedImage mage;
     private static BufferedImage rogue;
@@ -60,7 +61,7 @@ public class Constants {
     private static BufferedImage warlockPower;
     private static BufferedImage priestPower;
     private static BufferedImage hunterPower;
-    private static String heroPortraitsPath = "resources/pics/hero/portrait/";
+
     private static BufferedImage aghahaghi;
     private static BufferedImage arcanitereaper;
     private static BufferedImage ashbringer;
@@ -99,24 +100,26 @@ public class Constants {
     private static BufferedImage soroush;
     private static BufferedImage truesilverchampion;
     private static BufferedImage swarmofcats;
+    private static BufferedImage yasaman;
 
     private static ImageIcon exitIcon;
     private static ImageIcon backIcon;
     private static ImageIcon selectIcon;
     private static ImageIcon nextTurn;
     private static ImageIcon deleteAccoun;
-    private static BufferedImage yasaman;
+    private static ImageIcon greenTargetIcon;
+    private static ImageIcon redTargetIcon;
+
     private static BufferedImage magePortrait;
     private static BufferedImage roguePortrait;
     private static BufferedImage warlockPortrait;
     private static BufferedImage priestPortrait;
-
+    private static BufferedImage hunterPortrait;
 
     public static HashMap<String, BufferedImage> cardPics;
     public static HashMap<String, BufferedImage> gamePics;
     public static HashMap<String, BufferedImage> heroPics;
     public static HashMap<String, BufferedImage> powerPics;
-    private static BufferedImage hunterPortrait;
     public static HashMap<String, ImageIcon> gameIcon;
 
     public static void pictureLoader() {
@@ -245,7 +248,7 @@ public class Constants {
             defence = ImageIO.read(new File(gamePicsPath + "defence.png"));
             tick = ImageIO.read(new File(gamePicsPath + "tick.png"));
             enemycard = ImageIO.read(new File(gamePicsPath + "enemycard.png"));
-            target=ImageIO.read(new File(gamePicsPath+"target.png"));
+            redTarget = ImageIO.read(new File(gamePicsPath + "redtarget.png"));
             gamePics.put("login", login);
             gamePics.put("main", main);
             gamePics.put("collection", collection);
@@ -262,7 +265,7 @@ public class Constants {
             gamePics.put("blood", blood);
             gamePics.put("defence", defence);
             gamePics.put("enemycard", enemycard);
-            gamePics.put("target" , target);
+            gamePics.put("target", redTarget);
 
             gameIcon = new HashMap<>();
             exitIcon = new ImageIcon(gamePicsPath + "exit.png");
@@ -270,12 +273,16 @@ public class Constants {
             selectIcon = new ImageIcon(gamePicsPath + "select.png");
             nextTurn = new ImageIcon(gamePicsPath + "nextturn.png");
             deleteAccoun = new ImageIcon(gamePicsPath + "delete.png");
+            redTargetIcon = new ImageIcon(gamePicsPath + "redtarget.png");
+            greenTargetIcon = new ImageIcon(gamePicsPath + "greentarget.png");
+
             gameIcon.put("exit", exitIcon);
             gameIcon.put("back", backIcon);
             gameIcon.put("select", selectIcon);
             gameIcon.put("next", nextTurn);
             gameIcon.put("delete", deleteAccoun);
-
+            gameIcon.put("redtarget", redTargetIcon);
+            gameIcon.put("greentarget", greenTargetIcon);
 
             powerPics = new HashMap<>();
             magePower = ImageIO.read(new File(heroPowerPath + "mage.png"));

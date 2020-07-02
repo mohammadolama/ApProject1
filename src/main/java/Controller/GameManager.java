@@ -1,5 +1,9 @@
-package Main;
+package Controller;
 
+import Main.Deck;
+import Main.InfoPassive;
+import Main.JsonReaders;
+import Main.Player;
 import Model.Cards.Card;
 import Model.Cards.Minion;
 import Model.Cards.Spell;
@@ -63,33 +67,67 @@ public class GameManager {
         this.friendlyPlayer = player;
         this.friendlyPlayerHero = player.getSelectedDeck().getHero();
         this.friendlyInfoPassive = infoPassive;
-        init(infoPassive);
+        friendlyInfoInitilize(infoPassive);
         enemyInit();
     }
+
+    public GameManager(Player player, InfoPassive infoPassive, ArrayList<Card> arrayList,
+                       String card1, String card2, String card3) {
+        this(arrayList, card1, card2, card3);
+        this.friendlyPlayer = player;
+        this.friendlyPlayerHero = player.getSelectedDeck().getHero();
+        this.friendlyInfoPassive = infoPassive;
+        friendlyInfoInitilize(infoPassive);
+        enemyInit();
+    }
+
+    private GameManager(ArrayList<Card> arrayList, String card1, String card2, String card3) {
+        friendlyPlayedCards = new ArrayList<>();
+        friendlyDeckCards = new ArrayList<>();
+        friendLyHandCards = new ArrayList<>();
+        gameLog = new ArrayList<>();
+        friendlyCardsOfPlayer = arrayList;
+        initilizeCards(friendlyCardsOfPlayer, card1, card2, card3);
+
+    }
+
+    void initilizeCards(ArrayList<Card> arrayList, String card1, String card2, String card3) {
+        ArrayList<Card> ar = new ArrayList<>();
+        for (Card card : arrayList) {
+            if (card.getName().equalsIgnoreCase(card1)) {
+                ar.add(card);
+                arrayList.remove(card);
+                break;
+            }
+        }
+        for (Card card : arrayList) {
+            if (card.getName().equalsIgnoreCase(card2)) {
+                ar.add(card);
+                arrayList.remove(card);
+                break;
+            }
+        }
+        for (Card card : arrayList) {
+            if (card.getName().equalsIgnoreCase(card3)) {
+                ar.add(card);
+                arrayList.remove(card);
+                break;
+            }
+        }
+
+        friendLyHandCards = ar;
+        friendlyDeckCards = arrayList;
+    }
+
 
     private void enemyInit() {
         Player player = JsonReaders.PlayerJsonReader("enemy");
         this.enemyPlayer = player;
         enemyInfoPassive = InfoPassive.sample();
-        this.enemyStartingMana = 1;
-        friendlyStartingMana = 1;
-        enemyTotalMana = 1;
-        enemyNotUsedMana = 1;
-        enemyDrawCardNum = 1;
-        enemyHeroPowerUsageTime = 1;
-        enemyPowerManaDecrease = 0;
-        enemyManaDecrease = 1;
-        enemyDefenceAdd = 0;
+        enemyInfoInitilize(enemyInfoPassive);
 
-        ArrayList<Card> ar1=Deck.UpdateDeck(player.getSelectedDeck().getDeck());
-        ArrayList<Card> ar2=new ArrayList<>();
-        int i=0;
-        while (ar2.size()<3){
-            ar2.add(ar1.get(i));
-            ar1.remove(i);
-        }
-        this.enemyHandCards=ar2;
-        this.enemyDeckCards=ar1;
+        ArrayList<Card> ar1 = Deck.UpdateDeck(player.getSelectedDeck().getDeck());
+        ThreePrimitiveRandom(ar1, "enemy");
         this.enemyPlayedCards=new ArrayList<>();
         this.enemyCardsofPlayer=new ArrayList<>();
         this.enemyPlayerHero=player.getSelectedDeck().getHero();
@@ -99,7 +137,6 @@ public class GameManager {
         Player playerTemp = this.friendlyPlayer;
         friendlyPlayer = enemyPlayer;
         enemyPlayer = playerTemp;
-
 
         InfoPassive tempInfo=this.friendlyInfoPassive;
         friendlyInfoPassive=enemyInfoPassive;
@@ -158,11 +195,10 @@ public class GameManager {
         enemyPlayerHero=heroTemp;
     }
 
-
-    private void init(InfoPassive infoPassive) {
-        friendlyStartingMana = 1;
-        friendlyTotalMana = 1;
-        friendlyNotUsedMana = 1;
+    private void friendlyInfoInitilize(InfoPassive infoPassive) {
+        friendlyStartingMana = 8;
+        friendlyTotalMana = 8;
+        friendlyNotUsedMana = 8;
         friendlyDrawCardNum = 1;
         friendlyHeroPowerUsageTime = 1;
         friendlyPowerManaDecrease = 0;
@@ -184,6 +220,35 @@ public class GameManager {
             friendlyPowerManaDecrease = 1;
         }
     }
+
+    private void enemyInfoInitilize(InfoPassive infoPassive) {
+        enemyStartingMana = 8;
+        enemyTotalMana = 8;
+        enemyNotUsedMana = 8;
+        enemyDrawCardNum = 1;
+        enemyHeroPowerUsageTime = 1;
+        enemyPowerManaDecrease = 0;
+        enemyManaDecrease = 0;
+        enemyDefenceAdd = 0;
+        String st = infoPassive.getName();
+        if (st.equalsIgnoreCase("twiceDraw")) {
+            enemyDrawCardNum = 2;
+        } else if (st.equalsIgnoreCase("offCards")) {
+            enemyManaDecrease = 1;
+        } else if (st.equalsIgnoreCase("warriors")) {
+            enemyDefenceAdd = 2;
+        } else if (st.equalsIgnoreCase("manaJump")) {
+            enemyStartingMana = 2;
+            enemyTotalMana = 2;
+            enemyNotUsedMana = 2;
+        } else if (st.equalsIgnoreCase("freePower")) {
+            enemyHeroPowerUsageTime = 2;
+            enemyPowerManaDecrease = 1;
+        }
+    }
+
+
+
 
     public void nextCard() {
         if (friendlyDeckCards.size() > 0) {
@@ -210,10 +275,10 @@ public class GameManager {
     }
 
     private void initCards(ArrayList<Card> arrayList) {
-        threePrimitiveRandom(arrayList);
+        ThreePrimitiveRandom(arrayList, "friendly");
     }
 
-    private void threePrimitiveRandom(ArrayList<Card> arrayList) {
+    private void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value) {
         ListIterator<Card> iterator = arrayList.listIterator();
         ArrayList<Card> ar = new ArrayList<>();
         while (iterator.hasNext()) {
@@ -231,8 +296,13 @@ public class GameManager {
             ar.add(arrayList.get(i));
             arrayList.remove(i);
         }
-        friendLyHandCards = ar;
-        friendlyDeckCards = arrayList;
+        if (value.equalsIgnoreCase("friendly")) {
+            friendLyHandCards = ar;
+            friendlyDeckCards = arrayList;
+        } else {
+            enemyHandCards = ar;
+            enemyDeckCards = arrayList;
+        }
     }
 
     private Card randomCardDraw(ArrayList<Card> cards) {
@@ -269,7 +339,6 @@ public class GameManager {
         boolean flag=false;
         for (Card cards : enemyPlayedCards) {
             if (((Minion) cards).getAttributes() != null && ((Minion) cards).getAttributes().contains(Attribute.Taunt)) {
-                System.out.println(cards.getName() + " Is Taunt");
                 flag=true;
                 break;
             }
@@ -291,10 +360,29 @@ public class GameManager {
 
     public void endTurn() {
         reversePlayers();
+        checkDestroyMinion();
         canBeAttackedUpdater();
         wakeUp();
         refillMana();
         nextCard();
+    }
+
+    protected void checkDestroyMinion() {
+        this.enemyPlayedCards.removeIf(card -> ((Minion) card).getHealth() <= 0);
+        ListIterator<Card> iterator = this.enemyPlayedCards.listIterator();
+        while (iterator.hasNext()) {
+            if (((Minion) iterator.next()).getHealth() <= 0) {
+                iterator.remove();
+                enemyPlayerHero.setDefence(enemyPlayerHero.getDefence() + enemyDefenceAdd);
+            }
+        }
+        ListIterator<Card> iterator1 = this.friendlyPlayedCards.listIterator();
+        while (iterator1.hasNext()) {
+            if (((Minion) iterator1.next()).getHealth() <= 0) {
+                iterator1.remove();
+                friendlyPlayerHero.setDefence(friendlyPlayerHero.getDefence() + friendlyDefenceAdd);
+            }
+        }
     }
 
     boolean canBePlayed(Card cards) {

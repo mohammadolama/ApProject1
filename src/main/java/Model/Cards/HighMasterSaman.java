@@ -26,7 +26,6 @@ public class HighMasterSaman extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Legendary);
         setDescription("Battlecry: Destroy all other minions");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Dragon");

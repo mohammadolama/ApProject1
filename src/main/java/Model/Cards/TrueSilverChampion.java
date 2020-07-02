@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 @JsonTypeName("truesilverchampion")
 public class TrueSilverChampion extends Weapon {
-
     public TrueSilverChampion() {
         setName("TrueSilverChampion");
         setManaCost(4);
@@ -23,7 +22,6 @@ public class TrueSilverChampion extends Weapon {
         setHeroClass("Neutral");
         setRarity(Rarity.Rare);
         setDescription(null);
-        setTargetNeeded(true);
         setContiniousAction(false);
         setAttackRestore(0);
         setAttributes(new ArrayList<>());

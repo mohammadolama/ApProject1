@@ -31,6 +31,9 @@ public class MyFrame extends JFrame {
 
 
         panel.setLayout(cardLayout);
+
+//        ThreeCardChooseMenu th=new ThreeCardChooseMenu();
+//        panel.add(th);
         LoginPanel loginPanel = LoginPanel.getInstance();
         MenuPanel menuPanel = MenuPanel.getInstance();
 

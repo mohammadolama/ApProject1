@@ -21,7 +21,6 @@ public class Flamestrike extends Spell {
         setRarity(Rarity.Legendary);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(false);
         setContiniousAction(false);
         setHealthRestore(-4);
         setAttackRestore(0);

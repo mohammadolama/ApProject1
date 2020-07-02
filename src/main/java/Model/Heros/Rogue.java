@@ -1,21 +1,24 @@
 package Model.Heros;
 
-import Model.HeroPower;
+import Model.HeroPowers.HeroPower;
 import Model.Enums.*;
+import Model.HeroPowers.PriestPower;
+import Model.HeroPowers.RoguePower;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonTypeName;
 
 import java.util.ArrayList;
 
-@JsonIgnoreProperties({"purchasedCards", "CardsInDeck"})
+@JsonTypeName("rogue")
 public class Rogue extends Hero {
     public Rogue() {
         this.setName("Rogue");
         this.setCanAttack(false);
         this.setDamage(0);
         this.setHealth(30);
-        this.setHeroPower(new HeroPower("Rubbery", 3));
+        this.setMaxHealth(30);
         this.setHeroPowerManaCost(3);
-        this.setSpecialPower("A card which is not in your class or not neutral, costs 2 less mana .");
+        this.setHeroPower(new RoguePower());
     }
 
     public static ArrayList<Carts> Spcards() {

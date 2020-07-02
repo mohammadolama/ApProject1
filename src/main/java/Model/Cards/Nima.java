@@ -24,8 +24,6 @@ public class Nima extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Epic);
         setDescription("Do Absolutely Nothing . ");
-        setTargetNeeded(false);
-        setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Pirate");
         setSleep(true);

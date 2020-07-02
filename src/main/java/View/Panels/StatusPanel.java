@@ -171,7 +171,6 @@ public class StatusPanel extends JPanel implements ActionListener {
         if (Gamestate.getPlayer() != null) {
             int i = 0;
             buttons = new ArrayList<>();
-            System.out.println();
             ArrayList<String> ar = RequestHandler.SendRequest.BestDecks.response(null);
             for (String string : ar) {
                 String s = string;

@@ -21,7 +21,8 @@ public class Polymorph extends Spell {
         setRarity(Rarity.Rare);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(true);
+        setNeedEnemyTarget(true);
+        setNeedFriendlyTarget(true);
         setContiniousAction(false);
         setHealthRestore(0);
         setAttackRestore(0);

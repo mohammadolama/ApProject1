@@ -26,7 +26,6 @@ public class Faeze extends Minion {
         setHeroClass("Hunter");
         setRarity(Rarity.Legendary);
         setDescription("Alternative for \"Swamp King Dred\" ");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Beast");

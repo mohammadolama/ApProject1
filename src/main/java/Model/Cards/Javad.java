@@ -23,7 +23,6 @@ public class Javad extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Common);
         setDescription(null);
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle(null);

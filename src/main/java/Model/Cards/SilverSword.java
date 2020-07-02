@@ -22,7 +22,6 @@ public class SilverSword extends Weapon {
         setHeroClass("Neutral");
         setRarity(Rarity.Epic);
         setDescription(null);
-        setTargetNeeded(true);
         setContiniousAction(false);
         setAttackRestore(0);
         setAttributes(new ArrayList<>());

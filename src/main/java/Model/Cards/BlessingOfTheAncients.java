@@ -21,7 +21,7 @@ public class BlessingOfTheAncients extends Spell {
         setRarity(Rarity.Common);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(false);
+
         setContiniousAction(false);
         setHealthRestore(1);
         setAttackRestore(1);

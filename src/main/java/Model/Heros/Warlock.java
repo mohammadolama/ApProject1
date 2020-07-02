@@ -1,22 +1,24 @@
 package Model.Heros;
 
-import Model.HeroPower;
+import Model.HeroPowers.HeroPower;
 import Model.Enums.*;
+import Model.HeroPowers.PriestPower;
+import Model.HeroPowers.WarlockPower;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonTypeName;
 
 import java.util.ArrayList;
 
-
-@JsonIgnoreProperties({"purchasedCards", "CardsInDeck"})
+@JsonTypeName("warlock")
 public class Warlock extends Hero {
     public Warlock() {
         this.setName("Warlock");
         this.setCanAttack(false);
         this.setDamage(0);
         this.setHealth(35);
-        this.setHeroPower(new HeroPower("LifeTap", 2));
+        this.setMaxHealth(35);
         this.setHeroPowerManaCost(3);
-        this.setSpecialPower("This hero has 35 HP at the start of the game .");
+        this.setHeroPower(new WarlockPower());
     }
 
     public static ArrayList<Carts> Spcards() {

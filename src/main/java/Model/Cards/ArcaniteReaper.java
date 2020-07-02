@@ -23,7 +23,6 @@ public class ArcaniteReaper extends Weapon {
         setRarity(Rarity.Common);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(true);
         setContiniousAction(false);
         setHealthRestore(0);
         setAttackRestore(0);

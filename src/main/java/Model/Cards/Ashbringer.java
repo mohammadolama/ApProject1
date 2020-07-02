@@ -25,7 +25,6 @@ public class Ashbringer extends Weapon {
         setHeroClass("Neutral");
         setRarity(Rarity.Common);
         setDescription(null);
-        setTargetNeeded(true);
         setContiniousAction(false);
         setAttackRestore(0);
         setAttributes(new ArrayList<>());

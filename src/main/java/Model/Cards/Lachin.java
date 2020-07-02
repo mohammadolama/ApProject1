@@ -24,7 +24,6 @@ public class Lachin extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Rare);
         setDescription("Alternative for \"Security Rover\"");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Mech");

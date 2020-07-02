@@ -62,7 +62,7 @@ public class JsonBuilders {
         fileWriter.close();
     }
 
-    static void HeroBuildeeer(Hero hero) throws IOException {
+    public static void HeroBuildeeer(Hero hero) throws IOException {
         String st = String.format("resources/Jsons/%s.json", hero.getName().toLowerCase());
         FileWriter fileWriter = new FileWriter(st);
         objectMapper.writeValue(fileWriter, hero);

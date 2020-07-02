@@ -1,28 +1,30 @@
 package Controller.Actions;
 
+import Controller.Admin;
 import Model.Cards.*;
+import Model.Enums.Carts;
+import Model.Enums.WeaponCarts;
 import Model.Heros.Hero;
 import Model.Interface.Character;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 public class BattlecryVisitor implements Visitor {
 
 
     @Override
     public void visitAli(Ali ali, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        try {
-            Ali ali1 = (Ali) ((Minion) target).clone();
-            myDeck.add(ali1);
-            Ali ali2 = (Ali) ((Minion) target).clone();
-            myHand.add(ali2);
+        Minion minion1 = ((Minion) target).cloneMinion((Minion) target);
+        myDeck.add(minion1);
+        Minion minion2 = ((Minion) target).cloneMinion((Minion) target);
+        myHand.add(minion2);
             if (myPlayed.size() < 7) {
-                Ali ali3 = (Ali) ((Minion) target).clone();
-                myPlayed.add(ali3);
+                Minion minion3 = ((Minion) target).cloneMinion((Minion) target);
+                myPlayed.add(minion3);
             }
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -160,12 +162,8 @@ public class BattlecryVisitor implements Visitor {
     @Override
     public void visitMobin(Mobin mobin, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         if (myPlayed.size() < 7) {
-            try {
-                Minion minion = (Minion) mobin.clone();
-                myPlayed.add(minion);
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
+            Mobin mobin1 = mobin.cloneMinion(mobin);
+            myPlayed.add(mobin1);
         }
     }
 

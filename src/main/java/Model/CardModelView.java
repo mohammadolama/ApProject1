@@ -16,9 +16,11 @@ public class CardModelView {
     private String name;
     private boolean sleep;
     private boolean canBeAttacked;
+    private boolean needFriendlyTarget;
+    private boolean needEnemyTarget;
     private ArrayList<Attribute> attributes;
 
-    public CardModelView(BufferedImage image,String name, int manaCost, int damage, int hp , Type type , ArrayList<Attribute> attributes, boolean sleep , boolean canBeAttacked ) {
+    public CardModelView(BufferedImage image, String name, int manaCost, int damage, int hp, Type type, ArrayList<Attribute> attributes, boolean sleep, boolean canBeAttacked, boolean needFriendlyTarget, boolean needEnemyTarget) {
         this.image = image;
         this.manaCost = manaCost;
         this.damage = damage;
@@ -28,13 +30,42 @@ public class CardModelView {
         this.attributes=attributes;
         this.sleep=sleep;
         this.canBeAttacked=canBeAttacked;
+        this.needFriendlyTarget = needFriendlyTarget;
+        this.needEnemyTarget = needEnemyTarget;
     }
 
-    public CardModelView(BufferedImage image,String name, int manaCost , Type type) {
+    public CardModelView(BufferedImage image, String name, int manaCost, Type type, boolean needFriendlyTarget, boolean needEnemyTarget) {
         this.image = image;
         this.manaCost = manaCost;
         this.name=name;
         this.type=Type.Spell;
+        this.needFriendlyTarget = needFriendlyTarget;
+        this.needEnemyTarget = needEnemyTarget;
+    }
+
+
+    public boolean isSleep() {
+        return sleep;
+    }
+
+    public void setSleep(boolean sleep) {
+        this.sleep = sleep;
+    }
+
+    public boolean isNeedFriendlyTarget() {
+        return needFriendlyTarget;
+    }
+
+    public void setNeedFriendlyTarget(boolean needFriendlyTarget) {
+        this.needFriendlyTarget = needFriendlyTarget;
+    }
+
+    public boolean isNeedEnemyTarget() {
+        return needEnemyTarget;
+    }
+
+    public void setNeedEnemyTarget(boolean needEnemyTarget) {
+        this.needEnemyTarget = needEnemyTarget;
     }
 
     public BufferedImage getImage() {

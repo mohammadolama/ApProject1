@@ -1,5 +1,7 @@
 package Controller.Actions;
 
+import Controller.Admin;
+import Controller.ThreadColor;
 import Main.JsonReaders;
 import Model.Cards.*;
 import Model.Enums.Attribute;
@@ -31,13 +33,17 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitAylar(Aylar aylar, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
+//        ArrayList<WeaponCarts> list = new ArrayList<>(Arrays.asList(WeaponCarts.values()));
+//        Collections.shuffle(list);
+//        Collections.shuffle(list);
+//        Weapon weapon = JsonReaders.WeaponReader(list.get(0).toString().toLowerCase());
+//        weapon.setDamage(weapon.getDamage() + aylar.getAttackRestore());
+//        weapon.setDurability(weapon.getDurability() + aylar.getHealthRestore());
+//        myDeck.add(weapon);
+        System.out.println("Start action of aylar");
         ArrayList<WeaponCarts> list = new ArrayList<>(Arrays.asList(WeaponCarts.values()));
         Collections.shuffle(list);
-        Collections.shuffle(list);
-        Weapon weapon = JsonReaders.WeaponReader(list.get(0).toString().toLowerCase());
-        weapon.setDamage(weapon.getDamage() + aylar.getAttackRestore());
-        weapon.setDurability(weapon.getDurability() + aylar.getHealthRestore());
-        myDeck.add(weapon);
+        Admin.getInstance().discoverMode(list.get(0).name(), list.get(1).name(), list.get(2).name());
     }
 
     @Override
@@ -231,6 +237,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitSoroush(Soroush soroush, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
+        System.out.println(ThreadColor.ANSI_BLUE + target + ThreadColor.ANSI_RESET);
         ((Minion) target).setHealth(((Minion) target).getHealth() + soroush.getHealthRestore());
         ((Minion) target).setDamage(((Minion) target).getDamage() + soroush.getAttackRestore());
         if (((Minion) target).getAttributes() != null && !((Minion) target).getAttributes().contains(Attribute.DivineShield)) {

@@ -21,7 +21,8 @@ public class Soroush extends Spell {
         setRarity(Rarity.Rare);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(true);
+        setNeedEnemyTarget(true);
+        setNeedFriendlyTarget(true);
         setContiniousAction(false);
         setHealthRestore(4);
         setAttackRestore(4);

@@ -1,21 +1,20 @@
 package Model.Heros;
 
-import Model.HeroPower;
 import Model.Enums.*;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
+import Model.HeroPowers.MagePower;
+import org.codehaus.jackson.annotate.JsonTypeName;
 import java.util.ArrayList;
 
-@JsonIgnoreProperties({"purchasedCards", "CardsInDeck"})
+@JsonTypeName("mage")
 public class Mage extends Hero {
     public Mage() {
         this.setName("Mage");
         this.setCanAttack(false);
         this.setDamage(0);
         this.setHealth(30);
-        this.setHeroPower(new HeroPower("FireBlast", 2));
+        this.setMaxHealth(30);
         this.setHeroPowerManaCost(2);
-        this.setSpecialPower("They use 2 less mana for using Spells .");
+        this.setHeroPower(new MagePower());
     }
 
     public static ArrayList<Carts> Spcards() {

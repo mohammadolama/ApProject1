@@ -26,7 +26,8 @@ public class Yasaman extends Minion {
         setHeroClass("Rogue");
         setRarity(Rarity.Legendary);
         setDescription("Battlecry : Destroy a minion and gain its health .");
-        setTargetNeeded(true);
+        setNeedFriendlyTarget(true);
+        setNeedEnemyTarget(true);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle(null);

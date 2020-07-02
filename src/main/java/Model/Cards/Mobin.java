@@ -26,7 +26,6 @@ public class Mobin extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Rare);
         setDescription("Taunt , Battlecry: Summon a copy of this minion");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Mech");

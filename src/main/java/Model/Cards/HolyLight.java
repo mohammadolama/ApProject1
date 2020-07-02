@@ -22,7 +22,6 @@ public class HolyLight extends Spell {
         setRarity(Rarity.Epic);
         setPrice(20);
         setAttributes(new ArrayList<>());
-        setTargetNeeded(false);
         setContiniousAction(false);
         setHealthRestore(2);
         setAttackRestore(0);

@@ -26,7 +26,6 @@ public class AghaHaghi extends Minion {
         setHeroClass("Neutral");
         setRarity(Rarity.Rare);
         setDescription("Rush");
-        setTargetNeeded(false);
         setContiniousAction(false);
         setAttackRestore(0);
         setTitle("Dragon");

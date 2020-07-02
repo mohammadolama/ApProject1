@@ -26,7 +26,6 @@ public class Benyamin extends Minion {
         setHeroClass("Warlock");
         setRarity(Rarity.Legendary);
         setDescription("At the end of your turn , deal 1 damage to all other minions .");
-        setTargetNeeded(false);
         setContiniousAction(true);
         setAttackRestore(0);
         setTitle("Beast");
