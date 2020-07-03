@@ -629,7 +629,7 @@ public class Admin {
 
     }
 
-    public void SetSleep(int i) {
+    public void setSleep(int i) {
         ((Minion) friendlyPlayedCards().get(i)).setSleep(true);
     }
 
@@ -765,23 +765,28 @@ public class Admin {
         new Thread(() -> SoundAdmin.playSound(name)).start();
     }
 
-    public void Attack(int attacker, int target) {
+    public void Attack(int attacker, int target, BoardPanel panel) {
+        ActionHandler actionHandler = new ActionHandler();
         if (attacker >= 0 && target >= 0) {
             Minion attacker1 = (Minion) friendlyPlayedCards().get(attacker);
             Minion target1 = (Minion) enemyPlayedCards().get(target);
-            ActionHandler.Attack(attacker1, target1);
+            actionHandler.Attack(attacker1, target1, enemyPlayedCards());
+            setSleep(attacker);
+            panel.draw(attacker, target, attacker1.getAttack(), target1.getAttack());
         } else if (attacker >= 0 && target < 0) {
             Minion attacker1 = (Minion) friendlyPlayedCards().get(attacker);
             Hero target1 = enemyHero();
-            ActionHandler.Attack(attacker1, target1);
+            actionHandler.Attack(attacker1, target1, enemyPlayedCards());
+            setSleep(attacker);
+            panel.draw(attacker, target, attacker1.getAttack(), target1.getAttack());
         } else if (attacker < 0 && target >= 0) {
             Hero attacker1 = friendlyHero();
             Minion target1 = (Minion) enemyPlayedCards().get(attacker);
-            ActionHandler.Attack(attacker1, target1);
+            actionHandler.Attack(attacker1, target1, enemyPlayedCards());
         } else if (attacker < 0 && target < 0) {
             Hero attacker1 = friendlyHero();
             Hero target1 = enemyHero();
-            ActionHandler.Attack(attacker1, target1);
+            actionHandler.Attack(attacker1, target1, enemyPlayedCards());
         }
         gameManager.checkDestroyMinion();
     }
@@ -837,7 +842,23 @@ public class Admin {
         createPlayBoard(infoPassive, card1, card2, card3);
     }
 
-
+    public void listOfTargets(BoardPanel boardPanel) {
+        ArrayList<Integer> targets = new ArrayList<>();
+        int i = 0;
+        for (Card card : enemyPlayedCards()) {
+            if (((Minion) card).getAttributes().contains(Attribute.Taunt)) {
+                targets.add(i);
+            }
+            i++;
+        }
+        if (targets.size() == 0) {
+            for (int j = 0; j < enemyPlayedCards().size(); j++) {
+                targets.add(j);
+            }
+            targets.add(-1);
+        }
+        boardPanel.drawTargets(targets);
+    }
 }
 
 

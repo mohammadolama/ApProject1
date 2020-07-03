@@ -162,7 +162,7 @@ public class RequestHandler {
                 case EnemyHandCardName:
                     return null;
                 case SetSleep:
-                    admin.SetSleep(i);
+                    admin.setSleep(i);
                     return null;
                 case FriendlyHandCard:
                     return (T) admin.pictureOf(admin.friendlyHandCards().get(i).getName().toLowerCase());

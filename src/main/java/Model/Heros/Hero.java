@@ -36,6 +36,7 @@ public class Hero implements Character {
     private HeroPower heroPower;
     private int heroPowerManaCost;
     private int defence;
+    private Weapon weapon;
 
     public Hero() {
     }
@@ -137,6 +138,14 @@ public class Hero implements Character {
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
     }
 
     @Override

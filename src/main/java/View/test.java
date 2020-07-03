@@ -1,25 +1,19 @@
 package View;
 
 import Main.JsonBuilders;
-import Model.Cards.*;
-import Model.Enums.Carts;
-import Model.Heros.*;
+import Model.Heros.Warlock;
 import View.Configs.ConfigsLoader;
 import View.Panels.Constants;
 import View.Panels.MyFrame;
 import Main.Fundamentals;
 import View.Sounds.SoundAdmin;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
 
 public class test {
     static Clip clip;
 
-    public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+    public static void main(String[] args) {
         ConfigsLoader configsLoader=ConfigsLoader.getInstance();
         Fundamentals.MkDirs();
         Constants.pictureLoader();
@@ -32,8 +26,8 @@ public class test {
 //        JsonBuilders.HeroBuildeeer(new Mage());
 //        JsonBuilders.HeroBuildeeer(new Priest());
 //        JsonBuilders.HeroBuildeeer(new Hunter());
-
-
+//
+//
 //        JsonBuilders.minionBuilder(new AghaHaghi());
 //        JsonBuilders.minionBuilder(new Ali());
 //        JsonBuilders.minionBuilder(new Benyamin());

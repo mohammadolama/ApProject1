@@ -524,6 +524,7 @@ public class GameManager {
 
     public void setFriendlyWeapon(Weapon friendlyWeapon) {
         this.friendlyWeapon = friendlyWeapon;
+        this.friendlyPlayerHero.setAttack(friendlyWeapon.getAttack());
     }
 
     public Hero getFriendlyPlayerHero() {

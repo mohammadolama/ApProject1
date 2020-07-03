@@ -29,6 +29,7 @@ public class Ali extends Minion {
         setDescription("Battlecry , Choose a friendly minion. Add a copy of it to your hand, deck,and battlefield .");
         setContiniousAction(false);
         setAttackRestore(0);
+        setNeedFriendlyTarget(true);
         setTitle("Demon");
         setSleep(true);
         setCanBeAttacked(false);
