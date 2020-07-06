@@ -200,8 +200,6 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
         if (src.equals(ok)) {
-            System.out.println("action");
-            System.out.println(model1.getName() + "\t" + model2.getName() + "\t" + model3.getName());
             Admin.getInstance().create(infoPassive, model1.getName(), model2.getName(), model3.getName());
         } else if (src.equals(card1)) {
             button1Action();
@@ -230,7 +228,6 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
             repaint();
             card2.setEnabled(false);
         } else {
-            System.out.println(card2.getName());
             Admin.getInstance().aylarAction(card2.getName());
         }
     }

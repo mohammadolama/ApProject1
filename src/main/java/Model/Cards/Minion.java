@@ -29,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
         @JsonSubTypes.Type(value = Shahryar.class, name = "shahryar"),
         @JsonSubTypes.Type(value = Yasaman.class, name = "yasaman"),
 })
-public class Minion extends Card implements Cloneable {
+public abstract class Minion extends Card implements Cloneable {
     private int damage;
     private int health;
     private int maxHealth;
@@ -74,10 +74,6 @@ public class Minion extends Card implements Cloneable {
         this.title = title;
     }
 
-    public void act(){
-        System.out.println("action from minion");
-    }
-
     public boolean isSleep() {
         return sleep;
     }
@@ -96,22 +92,27 @@ public class Minion extends Card implements Cloneable {
 
     @Override
     public int getAttack() {
-        return getDamage();
+        return this.getDamage();
     }
 
     @Override
     public void setAttack(int i) {
-        setDamage(i);
+        this.setDamage(i);
     }
 
     @Override
     public int getLife() {
-        return getHealth();
+        return this.getHealth();
     }
 
     @Override
     public void setLife(int i) {
-        setHealth(i);
+        this.setHealth(i);
+    }
+
+    @Override
+    public int getMaxLife() {
+        return this.getMaxHealth();
     }
 
     public <T> T cloneMinion(T t) {

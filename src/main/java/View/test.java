@@ -1,7 +1,9 @@
 package View;
 
 import Main.JsonBuilders;
-import Model.Heros.Warlock;
+import Model.Cards.LearnJavadonic;
+import Model.Cards.StrengthInNumbers;
+import Model.Heros.*;
 import View.Configs.ConfigsLoader;
 import View.Panels.Constants;
 import View.Panels.MyFrame;
@@ -9,6 +11,7 @@ import Main.Fundamentals;
 import View.Sounds.SoundAdmin;
 
 import javax.sound.sampled.Clip;
+import java.util.Random;
 
 public class test {
     static Clip clip;
@@ -73,7 +76,6 @@ public class test {
 //        for (Carts value : Carts.values()) {
 //            System.out.println(String.format("cardPics.put(\"%s\", %s);" , value,value));
 //        }
-
 
     }
 }

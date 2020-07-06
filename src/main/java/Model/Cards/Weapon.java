@@ -26,7 +26,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
         @JsonSubTypes.Type(value = Shahryar.class, name = "shahryar"),
         @JsonSubTypes.Type(value = Yasaman.class, name = "yasaman"),
 })
-public class Weapon extends Card {
+public abstract class Weapon extends Card {
     private int damage;
     private int durability;
 
@@ -48,21 +48,26 @@ public class Weapon extends Card {
 
     @Override
     public int getAttack() {
-        return super.getAttack();
+        return this.getAttack();
     }
 
     @Override
     public void setAttack(int i) {
-        super.setAttack(i);
+        this.setAttack(i);
     }
 
     @Override
     public int getLife() {
-        return super.getLife();
+        return this.getLife();
     }
 
     @Override
     public void setLife(int i) {
-        super.setLife(i);
+        this.setLife(i);
+    }
+
+    @Override
+    public int getMaxLife() {
+        return getMaxLife();
     }
 }

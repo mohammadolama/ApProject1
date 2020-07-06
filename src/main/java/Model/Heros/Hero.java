@@ -1,13 +1,15 @@
 package Model.Heros;
 
 
+import Controller.Actions.SPVisitor.PowerVisitor;
+import Controller.ThreadColor;
 import Model.Cards.*;
 import Model.HeroPowers.HeroPower;
 import Model.Enums.Carts;
 import Model.Enums.Heroes;
 import Main.Player;
 import Model.Interface.Character;
-import Model.SpecialPowers.SpecialPower;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -25,16 +27,17 @@ import java.util.ArrayList;
         @JsonSubTypes.Type(value = Rogue.class, name = "rogue"),
         @JsonSubTypes.Type(value = Priest.class, name = "priest"),
 })
-@JsonIgnoreProperties({"specialPower", "heroPower"})
-public class Hero implements Character {
+@JsonIgnoreProperties({"specialPower", "heroPower", "maxLife"})
+public abstract class Hero implements Character {
     private String name;
     private int health;
     private int maxHealth;
     private Boolean canAttack;
     private int damage;
-    private SpecialPower specialPower;
     private HeroPower heroPower;
     private int heroPowerManaCost;
+    private boolean powerNeedFriendlyTarget;
+    private boolean powerNeedEnemyTarget;
     private int defence;
     private Weapon weapon;
 
@@ -96,14 +99,6 @@ public class Hero implements Character {
         return damage;
     }
 
-    public SpecialPower getSpecialPower() {
-        return specialPower;
-    }
-
-    public void setSpecialPower(SpecialPower specialPower) {
-        this.specialPower = specialPower;
-    }
-
     public HeroPower getHeroPower() {
         return heroPower;
     }
@@ -145,7 +140,31 @@ public class Hero implements Character {
     }
 
     public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+        if (weapon != null) {
+            this.weapon = weapon;
+            this.canAttack = true;
+            this.damage = weapon.getDamage();
+        } else {
+            this.weapon = null;
+            this.canAttack = false;
+            this.damage = 0;
+        }
+    }
+
+    public boolean isPowerNeedFriendlyTarget() {
+        return powerNeedFriendlyTarget;
+    }
+
+    public void setPowerNeedFriendlyTarget(boolean powerNeedFriendlyTarget) {
+        this.powerNeedFriendlyTarget = powerNeedFriendlyTarget;
+    }
+
+    public boolean isPowerNeedEnemyTarget() {
+        return powerNeedEnemyTarget;
+    }
+
+    public void setPowerNeedEnemyTarget(boolean powerNeedEnemyTarget) {
+        this.powerNeedEnemyTarget = powerNeedEnemyTarget;
     }
 
     @Override
@@ -167,6 +186,14 @@ public class Hero implements Character {
     public void setLife(int i) {
         setHealth(i);
     }
+
+    @Override
+    public int getMaxLife() {
+        return getMaxHealth();
+    }
+
+    public abstract void accept(PowerVisitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed);
+
 }
 
 

@@ -1,9 +1,12 @@
 package Model.Heros;
 
+import Controller.Actions.SPVisitor.PowerVisitor;
+import Model.Cards.Card;
 import Model.HeroPowers.HeroPower;
 import Model.Enums.*;
 import Model.HeroPowers.PriestPower;
 import Model.HeroPowers.RoguePower;
+import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonTypeName;
 
@@ -19,6 +22,11 @@ public class Rogue extends Hero {
         this.setMaxHealth(30);
         this.setHeroPowerManaCost(3);
         this.setHeroPower(new RoguePower());
+    }
+
+    @Override
+    public void accept(PowerVisitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed) {
+        visitor.visitRogue(this, target, myDeck, myHand, myPlayed, targetDeck, targetHand, targetPlayed);
     }
 
     public static ArrayList<Carts> Spcards() {

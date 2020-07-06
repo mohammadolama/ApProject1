@@ -25,10 +25,11 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
         @JsonSubTypes.Type(value = StrengthInNumbers.class, name = "strengthinnumbers"),
         @JsonSubTypes.Type(value = SwarmOfCats.class, name = "swarmofcats"),
 })
-public class Spell extends Card {
+public abstract class Spell extends Card {
 
-    int usageTimes;
-    int manaSpendOnSth;
+    private int usageTimes;
+    private int manaSpendOnSth;
+    private int maxManaSpendOnSth;
 
     public int getUsageTimes() {
         return usageTimes;
@@ -46,23 +47,36 @@ public class Spell extends Card {
         this.manaSpendOnSth = manaSpendOnSth;
     }
 
+    public int getMaxManaSpendOnSth() {
+        return maxManaSpendOnSth;
+    }
+
+    public void setMaxManaSpendOnSth(int maxManaSpendOnSth) {
+        this.maxManaSpendOnSth = maxManaSpendOnSth;
+    }
+
     @Override
     public int getAttack() {
-        return super.getAttack();
+        return this.getAttack();
     }
 
     @Override
     public void setAttack(int i) {
-        super.setAttack(i);
+        this.setAttack(i);
     }
 
     @Override
     public int getLife() {
-        return super.getLife();
+        return this.getLife();
     }
 
     @Override
     public void setLife(int i) {
-        super.setLife(i);
+        this.setLife(i);
+    }
+
+    @Override
+    public int getMaxLife() {
+        return getMaxLife();
     }
 }

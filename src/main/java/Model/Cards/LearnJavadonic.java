@@ -27,7 +27,7 @@ public class LearnJavadonic extends Spell {
         setHealthRestore(0);
         setAttackRestore(0);
         setUsageTimes(1);
-        setManaSpendOnSth(8);
+        setMaxManaSpendOnSth(8);
     }
 
     @Override

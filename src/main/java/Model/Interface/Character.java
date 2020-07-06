@@ -8,4 +8,6 @@ public interface Character {
     public int getLife();
 
     public void setLife(int i);
+
+    public int getMaxLife();
 }

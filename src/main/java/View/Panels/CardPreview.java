@@ -32,7 +32,6 @@ public class CardPreview extends JPanel implements ActionListener {
         super.paintComponent(gx);
         Graphics2D g=(Graphics2D) gx;
         g.setFont(fantasy.deriveFont(50.0f));
-        g.setColor(Color.white);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING , RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         if (cardModelView!=null) {
             g.drawImage(cardModelView.getImage(), 5, 5, cardwidth, cardheight, null);
@@ -42,8 +41,10 @@ public class CardPreview extends JPanel implements ActionListener {
 
 
     private void drawCardInfo(Graphics2D g) {
+        g.setColor(Color.white);
+        if (cardModelView.getType() == null) {
 
-        if (cardModelView.getType().equals(Type.Minion)) {
+        } else if (cardModelView.getType().equals(Type.Minion)) {
             String  mana=cardModelView.getManaCost()+"";
             String  damage=cardModelView.getDamage()+"";
             String  hp=cardModelView.getHp()+"";

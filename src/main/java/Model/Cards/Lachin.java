@@ -13,23 +13,7 @@ import java.util.ArrayList;
 public class Lachin extends Minion {
 
     public Lachin() {
-        setName("Lachin");
-        setManaCost(6);
-        setDamage(2);
-        setHealth(6);
-        setMaxHealth(6);
-        setHealthRestore(0);
-        setPrice(20);
-        setType(Type.Minion);
-        setHeroClass("Neutral");
-        setRarity(Rarity.Rare);
-        setDescription("Alternative for \"Security Rover\"");
-        setContiniousAction(false);
-        setAttackRestore(0);
-        setTitle("Mech");
-        setSleep(true);
-        setCanBeAttacked(false);
-        setAttributes(new ArrayList<>());
+
     }
 
     @Override

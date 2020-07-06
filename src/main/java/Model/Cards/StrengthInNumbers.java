@@ -27,7 +27,7 @@ public class StrengthInNumbers extends Spell {
         setHealthRestore(0);
         setAttackRestore(0);
         setUsageTimes(1);
-        setManaSpendOnSth(10);
+        setMaxManaSpendOnSth(10);
     }
 
     @Override

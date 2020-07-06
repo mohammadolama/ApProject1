@@ -63,7 +63,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitBookOfSpecters(BookOFSpecters bookOFSpecters, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        drawCard(3, myDeck, myHand);
+        Admin.getInstance().drawCard(3, "extra");
     }
 
     @Override
@@ -74,15 +74,9 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitCookie(Cookie cookie, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         for (Card card : myPlayed) {
-            ((Minion) card).setHealth(((Minion) card).getHealth() + cookie.getHealthRestore());
-            if (((Minion) card).getHealth() > ((Minion) card).getMaxHealth()) {
-                ((Minion) card).setHealth(((Minion) card).getMaxHealth());
-            }
+            Admin.getInstance().restoreHealth((Minion) card, cookie.getHealthRestore());
         }
-        friendly.setHealth(friendly.getHealth() + cookie.getHealthRestore());
-        if (friendly.getHealth() > friendly.getMaxHealth()) {
-            friendly.setHealth(friendly.getMaxHealth());
-        }
+        Admin.getInstance().restoreHealth(friendly, cookie.getHealthRestore());
     }
 
     @Override
@@ -90,6 +84,7 @@ public class ActionVisitor implements Visitor {
         Random random = new Random();
         int i = random.nextInt(targetPlayed.size());
         ((Minion) targetPlayed.get(i)).setHealth(((Minion) targetPlayed.get(i)).getHealth() + darkSkies.getHealthRestore());
+        Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, 0, -2);
     }
 
     @Override
@@ -121,10 +116,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitHolyLight(HolyLight holyLight, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        ((Minion) target).setHealth(((Minion) target).getHealth() + holyLight.getHealthRestore());
-        if (((Minion) target).getHealth() > ((Minion) target).getMaxHealth()) {
-            ((Minion) target).setHealth(((Minion) target).getMaxHealth());
-        }
+        Admin.getInstance().restoreHealth((Minion) target, holyLight.getHealthRestore());
     }
 
     @Override
@@ -159,11 +151,11 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitLearnJavadonic(LearnJavadonic learnJavadonic, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        if (learnJavadonic.getManaSpendOnSth() >= 8) {
-            if (myPlayed.size() < 7) {
-                Javad javad = (Javad) JsonReaders.MinionsReader("javad");
-                myPlayed.add(javad);
-            }
+        if (learnJavadonic.getManaSpendOnSth() >= learnJavadonic.getMaxManaSpendOnSth()) {
+            Javad javad = (Javad) JsonReaders.MinionsReader("javad");
+            Admin.getInstance().summonMinion(javad, -1);
+            Admin.getInstance().summonedMinion(javad, 0, 0, 0);
+            Admin.getInstance().finishAction(learnJavadonic);
         }
     }
 
@@ -179,6 +171,7 @@ public class ActionVisitor implements Visitor {
     public void visitMatin(Matin matin, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         matin.setHealth(matin.getHealth() + matin.getHealthRestore());
         matin.setDamage(matin.getDamage() + matin.getAttackRestore());
+        Admin.getInstance().summonedMinion(matin, 1, 1, 1);
     }
 
     @Override
@@ -193,8 +186,10 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitPolymorph(Polymorph polymorph, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
+        Admin.getInstance().summonedMinion((Minion) target, 1, -target.getAttack() + 1, -target.getLife() + 1);
         target.setLife(1);
         target.setAttack(1);
+
 
     }
 
@@ -204,14 +199,15 @@ public class ActionVisitor implements Visitor {
         if (targetPlayed.size() != 0) {
             int i = random.nextInt(targetPlayed.size());
             ((Minion) targetPlayed.get(i)).setHealth(((Minion) targetPlayed.get(i)).getHealth() + quiz.getHealthRestore());
+            Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, 0, -1 * (targetPlayed.get(i).getLife()));
         }
-
     }
 
     @Override
     public void visitSandBreath(SandBreath sandBreath, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         ((Minion) target).setHealth(((Minion) target).getHealth() + sandBreath.getHealthRestore());
         ((Minion) target).setDamage(((Minion) target).getDamage() + sandBreath.getAttackRestore());
+        Admin.getInstance().summonedMinion((Minion) target, 1, 2, 1);
         if (((Minion) target).getAttributes() != null && !((Minion) target).getAttributes().contains(Attribute.DivineShield)) {
             ((Minion) target).getAttributes().add(Attribute.DivineShield);
         }
@@ -220,6 +216,7 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitShahryar(Shahryar shahryar, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         shahryar.setHealth(target.getLife());
+        Admin.getInstance().summonedMinion(shahryar, 1, 0, target.getLife());
     }
 
     @Override
@@ -229,9 +226,9 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitSoroush(Soroush soroush, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        System.out.println(ThreadColor.ANSI_BLUE + target + ThreadColor.ANSI_RESET);
         ((Minion) target).setHealth(((Minion) target).getHealth() + soroush.getHealthRestore());
         ((Minion) target).setDamage(((Minion) target).getDamage() + soroush.getAttackRestore());
+        Admin.getInstance().summonedMinion((Minion) target, 1, 4, 4);
         if (((Minion) target).getAttributes() != null && !((Minion) target).getAttributes().contains(Attribute.DivineShield)) {
             ((Minion) target).getAttributes().add(Attribute.DivineShield);
         }
@@ -242,29 +239,34 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitSprint(Sprint sprint, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        drawCard(4, myDeck, myHand);
+        Admin.getInstance().drawCard(4, null);
     }
 
     @Override
     public void visitStrengthInNumbers(StrengthInNumbers strengthInNumbers, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         if (strengthInNumbers.getManaSpendOnSth() >= 10) {
-            if (myPlayed.size() < 7) {
-                for (Card card : myDeck) {
-                    if (card instanceof Minion) {
-                        myPlayed.add(card);
-                        myDeck.remove(card);
-                        break;
-                    }
+            for (Card card : myDeck) {
+                if (card instanceof Minion) {
+                    Admin.getInstance().summonMinion((Minion) card, -1);
+                    Admin.getInstance().summonedMinion(card, 0, 0, 0);
+                    break;
                 }
             }
+            Admin.getInstance().finishAction(strengthInNumbers);
         }
     }
 
     @Override
     public void visitSwarmOfCats(SwarmOfCats swarmOfCats, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
+        boolean flag = false;
         while (myPlayed.size() < 7) {
             Cat cat = (Cat) JsonReaders.MinionsReader("cat");
-            myPlayed.add(cat);
+            Admin.getInstance().summonMinion(cat, -1);
+            flag = true;
+        }
+        if (flag) {
+            Cat cat = (Cat) JsonReaders.MinionsReader("cat");
+            Admin.getInstance().summonedMinion(cat, 0, 0, 0);
         }
 
     }
@@ -279,18 +281,5 @@ public class ActionVisitor implements Visitor {
 
     }
 
-
-    private void drawCard(int i, ArrayList<Card> deck, ArrayList<Card> hand) {
-        if (deck.size() < i) {
-            i = deck.size();
-        }
-        for (int j = 0; j < i; j++) {
-            Card cards = deck.get(0);
-            if (hand.size() < 12) {
-                hand.add(cards);
-            }
-            deck.remove(cards);
-        }
-    }
 
 }

@@ -12,7 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import java.util.ArrayList;
 
 @JsonIgnoreProperties({"rarityI", "typeI", "life", "attack"})
-public class Card implements Character {
+public abstract class Card implements Character {
     private String name;
     private String description;
     private int manaCost;
@@ -232,5 +232,10 @@ public class Card implements Character {
     @Override
     public void setLife(int i) {
 
+    }
+
+    @Override
+    public int getMaxLife() {
+        return 0;
     }
 }

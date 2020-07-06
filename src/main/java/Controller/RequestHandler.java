@@ -13,18 +13,20 @@ public class RequestHandler {
     public enum SendRequest {
 
         /* Common Requests */
-        FrameRender, Player,FriendlyHeroName, EnemyHeroName, PlaySound,LogOut , LogIn , SignUp,
+        FrameRender, Player, FriendlyHeroName, EnemyHeroName, PlaySound, LogOut, LogIn, SignUp,
 
         /* InfoPassive Requests */
         PassiveList,
 
         /* Play Requests*/
         FriendlyName, EnemyName,
-        DeckAnimationPicture, DownPowerUsage, UpPowerUsage, DownPowerMana, UpPowerMana , CanDoAction,SetSleep,
-        GameLog, GameLogSize, DownDeckSize, UpDeckSize, EndTurn, Log, VisiblePanel, Exit, PureModelView, ModelView, DownHp, UpHp,
-        FriendlyPlayedCard, EnemyPlayedCard, FriendlyHandCard, FrinedlyHandSize, EnemyHandSize, FriendlyPlayedSize, EnemyPlayedSize,
-        FriendlyPlayedCardName, EnemyPlayedCardName, FriendlyHandCradName, EnemyHandCardName, CanBePlayed, CheckMana, PlayCard, PlayHeroPower,
-        DownHasWeapon, UpHasWeapon, DownWeapon, UpWeapon, FriendlyTotalMana, FriendlyNotUsedMana, DeckHasNext, DownDefence, UpDefence,
+        DeckAnimationPicture, DownPowerUsage, UpPowerUsage, DownPowerMana, UpPowerMana, CanDoAction, SetSleep,
+        GameLog, GameLogSize, DownDeckSize, UpDeckSize, EndTurn, Log, VisiblePanel, Exit, PureModelView, ModelView,
+        DownHp, UpHp, FriendlyPlayedCard, EnemyPlayedCard, FriendlyHandCard, FrinedlyHandSize, EnemyHandSize,
+        FriendlyPlayedSize, EnemyPlayedSize, FriendlyPlayedCardName, EnemyPlayedCardName, FriendlyHandCradName,
+        EnemyHandCardName, CanBePlayed, CheckMana, PlayCard, PlayHeroPower, DownHasWeapon, UpHasWeapon,
+        DownWeapon, UpWeapon, FriendlyTotalMana, FriendlyNotUsedMana, DeckHasNext, DownDefence, UpDefence,
+        HeroPoerModelView, FriendlyActionModel, EnemyActionModel, HeroPowerCanBePlayed,
 
         /* Status */
         BestDecks, DeleteAccount, CloneDeck, SaveAndUpdate,
@@ -33,7 +35,7 @@ public class RequestHandler {
         ProperCards, Wallet, Price, SellCard, BuyCard,
 
         /* Setting */
-        IncreaseSound , DecreaseSound , MuteSound;
+        IncreaseSound, DecreaseSound, MuteSound;
 
         @SuppressWarnings("unchecked")
         public <T> T response(String value) {
@@ -101,13 +103,16 @@ public class RequestHandler {
                 case PlaySound:
                     admin.playSound(value);
                     return null;
-                case PlayHeroPower:
-                    admin.playHeroPower(admin.friendlyHero());
-                    return null;
+                case HeroPowerCanBePlayed:
+                    return (T) Integer.valueOf(admin.heroPowerCanBePlayed());
                 case BestDecks:
                     return (T) admin.bestDecks();
                 case PureModelView:
                     return (T) admin.getPureViewModelOf(value);
+                case FriendlyActionModel:
+                    return (T) admin.friendlyActionModels();
+                case EnemyActionModel:
+                    return (T) admin.enemyActionModels();
                 case SellCard:
                     admin.sellCard(value);
                     return null;
@@ -161,6 +166,9 @@ public class RequestHandler {
                     return (T) (admin.friendlyHandCards().get(i).getName());
                 case EnemyHandCardName:
                     return null;
+                case PlayHeroPower:
+                    admin.playHeroPower(i);
+                    return null;
                 case SetSleep:
                     admin.setSleep(i);
                     return null;
@@ -168,6 +176,8 @@ public class RequestHandler {
                     return (T) admin.pictureOf(admin.friendlyHandCards().get(i).getName().toLowerCase());
                 case ModelView:
                     return (T) admin.getViewModelOf(value, i);
+                case HeroPoerModelView:
+                    return (T) admin.getHeroPowerViewModelOf(i);
                 case IncreaseSound:
                     SoundAdmin.increaseSound();
                     return null;
@@ -194,13 +204,13 @@ public class RequestHandler {
             }
         }
 
-        public <T> T response(String value1 , String value2){
-            switch (this){
+        public <T> T response(String value1, String value2) {
+            switch (this) {
                 case LogIn:
-                    admin.logIn(value1,value2);
+                    admin.logIn(value1, value2);
                     return null;
                 case SignUp:
-                    admin.signUp(value1,value2);
+                    admin.signUp(value1, value2);
                     return null;
                 default:
                     return null;

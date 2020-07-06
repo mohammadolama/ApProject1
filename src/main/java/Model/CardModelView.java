@@ -43,6 +43,9 @@ public class CardModelView {
         this.needEnemyTarget = needEnemyTarget;
     }
 
+    public CardModelView(BufferedImage image) {
+        this.image = image;
+    }
 
     public boolean isSleep() {
         return sleep;

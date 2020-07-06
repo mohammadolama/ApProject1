@@ -162,7 +162,6 @@ public class Deck {
         for (Carts cartss : arrayList) {
             for (MinionCarts minionCarts : MinionCarts.values()) {
                 if (cartss.toString().equals(minionCarts.toString())) {
-//                    System.out.println(minionCarts.toString());
                     ar.add(JsonReaders.MinionsReader(cartss.name()));
                 }
             }
