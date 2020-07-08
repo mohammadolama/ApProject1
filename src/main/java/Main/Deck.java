@@ -1,5 +1,6 @@
 package Main;
 
+import Controller.ThreadColor;
 import Model.Cards.Card;
 import Model.Enums.Carts;
 import Model.Enums.MinionCarts;
@@ -50,22 +51,6 @@ public class Deck {
         this.hero = hero;
     }
 
-    public void addCard(Carts cart) {
-        if (deck == null) {
-            deck = new ArrayList<>();
-        }
-        ArrayList<Carts> ar = deck;
-        ar.add(cart);
-        this.setDeck(ar);
-    }
-
-    public void removeCard(Carts cart) {
-        ArrayList<Carts> ar = deck;
-        ar.remove(cart);
-        this.setDeck(ar);
-    }
-
-
     public double avarageMana() {
         ArrayList<Card> ar = Deck.UpdateDeck(getDeck());
         double i = 0;
@@ -78,11 +63,10 @@ public class Deck {
         return bd.doubleValue();
     }
 
-    public double winRate() {
-        if (totalPlays == 0) {
-            return 0;
-        }
-        return totalWins / totalPlays;
+    static Deck DefaultDeck() {
+        Deck deck = new Deck(0, 0, "Default Deck");
+//        deck.setMostUsedCard(mostUsedCard(deck));
+        return deck;
     }
 
 
@@ -105,19 +89,51 @@ public class Deck {
         return ar;
     }
 
-    static Deck DefaultDeck() {
-        Deck deck = new Deck(0, 0, "Default Deck");
-        deck.setMostUsedCard(mostUsedCard(deck));
-        return deck;
+    public static Deck cloneDeck(Deck deck) {
+        Deck deck1 = new Deck();
+        deck1.setDeck(deck.getDeck());
+        deck1.setHero(deck.getHero());
+        deck1.setUsedTimes(deck.getUsedTimes());
+        deck1.setMostUsedCard(deck.getMostUsedCard());
+        deck1.setName(deck.getName());
+        deck1.setTotalPlays(deck.getTotalPlays());
+        deck1.setTotalWins(deck.getTotalWins());
+        return deck1;
     }
 
+    public static ArrayList<String> bestDeck(Player player) {
+        ArrayList<Deck> ar = new ArrayList<>();
+        for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
+            ar.add(entry.getValue());
+        }
+        ar.sort(Comparator.comparing(Deck::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(Deck::avarageMana));
 
-    public Carts getMostUsedCard() {
-        return mostUsedCard;
+        ArrayList<String> arrayList = new ArrayList<>();
+        if (ar.size() <= 10) {
+            for (Deck deck : ar) {
+                arrayList.add(deck.getName());
+            }
+            return arrayList;
+        } else {
+            for (int i = 0; i < 10; i++) {
+                arrayList.add(ar.get(i).getName());
+            }
+            return arrayList;
+        }
     }
 
     public void setMostUsedCard(Carts mostUsedCard) {
         this.mostUsedCard = mostUsedCard;
+    }
+
+    static ArrayList<Carts> UpdateSellCards() {
+        ArrayList<Carts> ar = new ArrayList<>();
+        for (Map.Entry<String, Deck> entry : Gamestate.getPlayer().getAllDecks().entrySet()) {
+            Deck deck = entry.getValue();
+            ar.addAll(deck.getDeck());
+        }
+        return ar;
+
     }
 
     public int getTotalPlays() {
@@ -145,15 +161,14 @@ public class Deck {
         this.name = name;
     }
 
-    public static Deck cloneDeck(Deck deck) {
-        Deck deck1 = new Deck();
-        deck1.setDeck(deck.getDeck());
-        deck1.setHero(deck.getHero());
-        deck1.setMostUsedCard(deck.getMostUsedCard());
-        deck1.setName(deck.getName());
-        deck1.setTotalPlays(deck.getTotalPlays());
-        deck1.setTotalWins(deck.getTotalWins());
-        return deck1;
+    public static HashMap<String, Integer> resetUsedTimes(ArrayList<Carts> carts, Deck deck) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        for (Carts cart : carts) {
+            if (!hashMap.containsKey(cart.toString())) {
+                hashMap.put(cart.toString().toLowerCase(), 0);
+            }
+        }
+        return hashMap;
     }
 
     public static ArrayList<Card> UpdateDeck(ArrayList<Carts> arrayList) { // biuld card objects from json using enum
@@ -185,64 +200,27 @@ public class Deck {
         }
     }
 
-
-    public static Carts mostUsedCard(Deck deck) {
-        int i = 0;
-        int j = 0;
-        ArrayList<Carts> ar = new ArrayList<>();
-        for (Map.Entry<String, Integer> Entry : deck.usedTimes.entrySet()) {
-            i = Entry.getValue();
-            if (j < i) {
-                j = i;
-            }
+    public double winRate() {
+        if (totalPlays == 0) {
+            return 0;
         }
-        for (Map.Entry<String, Integer> Entry : deck.usedTimes.entrySet()) {
-            if (Entry.getValue() == j) {
-                ar.add(Carts.valueOf(Entry.getKey().toLowerCase()));
-            }
-        }
-        if (ar.size() == 1) {
-            return ar.get(0);
-        } else {
-            ArrayList<Card> ar2 = Deck.UpdateDeck(ar);
-            ArrayList<Card> ar3 = new ArrayList<>();
-            Collections.sort(ar2, Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
-            return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
-        }
+        double i = totalWins;
+        double j = totalPlays;
+        return i / j;
     }
 
-    public static ArrayList<String> bestDeck(Player player) {
-        ArrayList<Deck> ar = new ArrayList<>();
-        for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
-            ar.add(entry.getValue());
-        }
-        Collections.sort(ar, Comparator.comparing(Deck::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(Deck::avarageMana));
-
-        ArrayList<String> arrayList = new ArrayList<>();
-        if (ar.size() <= 10) {
-            for (Deck deck : ar) {
-                arrayList.add(deck.getName());
-            }
-            return arrayList;
-        } else {
-            for (int i = 0; i < 10; i++) {
-                arrayList.add(ar.get(i).getName());
-            }
-            return arrayList;
-        }
+    public Carts getMostUsedCard() {
+//        System.out.println(ThreadColor.ANSI_PURPLE + this.usedTimes.toString()+ThreadColor.ANSI_RESET);
+        mostUsedCard = mostUsedCard();
+//        System.out.println(ThreadColor.ANSI_PURPLE + this.usedTimes.toString()+ThreadColor.ANSI_RESET);
+//        System.out.println();
+        System.out.println();
+//        System.out.println();
+        return mostUsedCard;
     }
 
-
-    static ArrayList<Carts> UpdateSellCards() {
-        ArrayList<Carts> ar = new ArrayList<>();
-        for (Map.Entry<String, Deck> entry : Gamestate.getPlayer().getAllDecks().entrySet()) {
-            Deck deck = entry.getValue();
-            for (Carts carts : deck.getDeck()) {
-                ar.add(carts);
-            }
-        }
-        return ar;
-
+    public void updateMost() {
+//        this.mostUsedCard=mostUsedCard();
     }
 
     public HashMap<String, Integer> getUsedTimes() {
@@ -253,11 +231,47 @@ public class Deck {
         this.usedTimes = usedTimes;
     }
 
-    public static HashMap<String, Integer> resetUsedTimes(ArrayList<Carts> carts, Deck deck) {
-        HashMap<String, Integer> hashMap = new HashMap<>();
-        for (Carts cart : carts) {
-            hashMap.put(cart.toString().toLowerCase(), 0);
+    public Carts mostUsedCard() {
+        System.out.println(this.toString());
+        int i;
+        int j = 0;
+        ArrayList<Carts> ar = new ArrayList<>();
+        for (Map.Entry<String, Integer> Entry : this.usedTimes.entrySet()) {
+            i = Entry.getValue();
+            if (j < i) {
+                j = i;
+            }
         }
-        return hashMap;
+        System.out.println(ThreadColor.ANSI_CYAN + j + ThreadColor.ANSI_RESET);
+        for (Map.Entry<String, Integer> Entry : this.usedTimes.entrySet()) {
+            System.out.print(ThreadColor.ANSI_GREEN + Entry.getValue() + ThreadColor.ANSI_RESET + "\t");
+            if (Entry.getValue() == j) {
+                ar.add(Carts.valueOf(Entry.getKey().toLowerCase()));
+            }
+        }
+        System.out.println();
+        System.out.println(ThreadColor.ANSI_RED + ar.size() + ThreadColor.ANSI_RESET);
+        if (ar.size() == 1) {
+            return ar.get(0);
+        } else {
+            System.out.println(ar.size());
+            ArrayList<Card> ar2 = Deck.UpdateDeck(ar);
+            System.out.println(ar2);
+            ar2.sort(Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
+            System.out.println(ar2);
+            System.out.println();
+//            System.out.println(ThreadColor.ANSI_PURPLE + this.usedTimes.toString()+ThreadColor.ANSI_RESET);
+            return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
+        }
     }
+
+    @Override
+    public String toString() {
+        return "Deck{" +
+                "usedTimes=" + usedTimes +
+                '}';
+    }
+
+
+
 }

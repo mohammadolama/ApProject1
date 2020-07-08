@@ -1,18 +1,13 @@
 package Controller.Actions;
 
 import Controller.Admin;
-import Controller.ThreadColor;
 import Main.JsonReaders;
 import Model.Cards.*;
-import Model.Enums.Attribute;
-import Model.Enums.WeaponCarts;
+import Model.Enums.*;
 import Model.Heros.Hero;
 import Model.Interface.Character;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class ActionVisitor implements Visitor {
 
@@ -41,10 +36,12 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitBenyamin(Benyamin benyamin, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         for (Card card : myPlayed) {
-            ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
+            if (!card.equals(benyamin))
+                ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
         }
         for (Card card : targetPlayed) {
-            ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
+            if (!card.equals(benyamin))
+                ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
         }
     }
 
@@ -74,7 +71,7 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitCookie(Cookie cookie, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         for (Card card : myPlayed) {
-            Admin.getInstance().restoreHealth((Minion) card, cookie.getHealthRestore());
+            Admin.getInstance().restoreHealth(card, cookie.getHealthRestore());
         }
         Admin.getInstance().restoreHealth(friendly, cookie.getHealthRestore());
     }
@@ -116,7 +113,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitHolyLight(HolyLight holyLight, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        Admin.getInstance().restoreHealth((Minion) target, holyLight.getHealthRestore());
+        Admin.getInstance().restoreHealth(target, holyLight.getHealthRestore());
     }
 
     @Override
@@ -215,8 +212,10 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitShahryar(Shahryar shahryar, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        shahryar.setHealth(target.getLife());
-        Admin.getInstance().summonedMinion(shahryar, 1, 0, target.getLife());
+        if (target != null) {
+            shahryar.setHealth(target.getLife());
+            Admin.getInstance().summonedMinion(shahryar, 1, 0, target.getLife());
+        }
     }
 
     @Override
@@ -253,6 +252,16 @@ public class ActionVisitor implements Visitor {
                 }
             }
             Admin.getInstance().finishAction(strengthInNumbers);
+        }
+    }
+
+    @Override
+    public void visitStrengthInNumbersDR(StrengthInNumbersDR strengthInNumbersDR, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
+        if (strengthInNumbersDR.getManaSpendOnSth() >= 10) {
+            Minion st = JsonReaders.MinionsReader("lachin");
+            Admin.getInstance().summonMinion(st, -1);
+            Admin.getInstance().summonedMinion(st, 0, 0, 0);
+            Admin.getInstance().finishAction(strengthInNumbersDR);
         }
     }
 

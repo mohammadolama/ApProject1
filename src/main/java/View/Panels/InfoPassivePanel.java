@@ -1,8 +1,8 @@
 package View.Panels;
 
 import Controller.RequestHandler;
-import View.Configs.ConfigsLoader;
-import View.Configs.InfoConfig;
+import Configs.ConfigsLoader;
+import Configs.InfoConfig;
 import Main.Gamestate;
 import Main.InfoPassive;
 import Controller.Admin;
@@ -20,7 +20,8 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
     private JButton passive2;
     private JButton passive3;
     private JButton backButton;
-    private JButton start;
+    private JButton normal;
+    private JButton deckReader;
     private InfoPassive infoPassive;
 
     private InfoConfig config;
@@ -36,10 +37,18 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         setLayout(null);
         admin = Admin.getInstance();
 
-        start = new JButton("Start");
-        start.setBounds(800, 800, 200, 60);
-        start.addActionListener(this);
-        add(start);
+        normal = new JButton("Normal Mode");
+        normal.setFont(Constants.fantasy.deriveFont(30.0f));
+        normal.setBounds(500, 850, 200, 60);
+        normal.addActionListener(this);
+        add(normal);
+
+        deckReader = new JButton("Deck Reader");
+        deckReader.setFont(Constants.fantasy.deriveFont(23.0f));
+        deckReader.setBounds(900, 850, 200, 60);
+        deckReader.addActionListener(this);
+        add(deckReader);
+
 
         backButton = new JButton();
         backButton.addActionListener(this);
@@ -85,7 +94,8 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         add(passive1);
         add(passive2);
         add(passive3);
-        add(start);
+        add(normal);
+        add(deckReader);
         add(backButton);
     }
 
@@ -110,14 +120,19 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
-        if (src == start) {
+        if (src == normal) {
             if (infoPassive != null) {
                 admin.threeCardChoose(infoPassive);
 //                admin.createPlayBoard(infoPassive);
                 RequestHandler.SendRequest.Log.response("Click_Button : Start Button");
                 RequestHandler.SendRequest.Log.response("Start the Battle");
             }
+        } else if (src == deckReader) {
+            if (infoPassive != null) {
+                Admin.getInstance().createDeckReaderMode(infoPassive);
+            }
         }
+
         passive1.setBackground(Color.white);
         passive2.setBackground(Color.white);
         passive3.setBackground(Color.white);

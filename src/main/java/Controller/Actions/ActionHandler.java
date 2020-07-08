@@ -1,9 +1,8 @@
 package Controller.Actions;
 
-import Model.Cards.Card;
-import Model.Cards.Minion;
+import Model.Cards.*;
 import Model.Enums.Attribute;
-import Model.Heros.Hero;
+import Model.Heros.*;
 import Model.Interface.Character;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class ActionHandler {
         return false;
     }
 
-    public boolean attackMinion2(Character attacker, Character target) {
+    public void attackMinion2(Character attacker, Character target) {
         int attackerdamage = attacker.getAttack();
         int targetdamage = target.getAttack();
         if (((Minion) target).getAttributes().contains(Attribute.DivineShield)) {
@@ -53,7 +52,6 @@ public class ActionHandler {
         } else {
             attacker.setLife(attacker.getLife() - targetdamage);
         }
-        return true;
     }
 
 
@@ -74,10 +72,9 @@ public class ActionHandler {
     }
 
     private int tauntCheckerForMinion(Minion target, ArrayList<Card> enemyHand) {
-        boolean flag = false;
         ArrayList<Card> ar = new ArrayList<>();
         for (Card card : enemyHand) {
-            if (((Minion) card).getAttributes().contains(Attribute.Taunt)) {
+            if (card.getAttributes().contains(Attribute.Taunt)) {
                 ar.add(card);
             }
         }
@@ -95,7 +92,7 @@ public class ActionHandler {
 
     private boolean tauntCheckerForHero(ArrayList<Card> enemyHand) {
         for (Card card : enemyHand) {
-            if (((Minion) card).getAttributes().contains(Attribute.Taunt)) {
+            if (card.getAttributes().contains(Attribute.Taunt)) {
                 return true;
             }
         }

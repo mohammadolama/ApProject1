@@ -1,13 +1,11 @@
 package Controller.Actions.SPVisitor;
 
 import Controller.Admin;
-import Model.Cards.Card;
-import Model.Cards.Minion;
+import Model.Cards.*;
 import Model.Heros.*;
 import Model.Interface.Character;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class HeroPowerVisitor implements PowerVisitor {
     @Override
@@ -51,6 +49,7 @@ public class HeroPowerVisitor implements PowerVisitor {
                 int j = random.nextInt(myPlayed.size());
                 ((Minion) myPlayed.get(j)).setHealth(((Minion) myPlayed.get(j)).getHealth() + 1);
                 ((Minion) myPlayed.get(j)).setDamage(((Minion) myPlayed.get(j)).getDamage() + 1);
+                Admin.getInstance().summonedMinion(myPlayed.get(j), 1, +1, +1);
             } else if (rand == 1) {
                 Admin.getInstance().drawCard(1, null);
             }

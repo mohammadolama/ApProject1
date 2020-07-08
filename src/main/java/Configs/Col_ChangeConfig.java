@@ -1,4 +1,4 @@
-package View.Configs;
+package Configs;
 
 public class Col_ChangeConfig {
     private int deckX;
@@ -22,6 +22,7 @@ public class Col_ChangeConfig {
     private int addButtonY;
     private int addButtonWidth;
     private int addButtonHeight;
+    private int selectedY;
 
     public Col_ChangeConfig() {
     }
@@ -168,5 +169,13 @@ public class Col_ChangeConfig {
 
     public void setAddButtonHeight(int addButtonHeight) {
         this.addButtonHeight = addButtonHeight;
+    }
+
+    public int getSelectedY() {
+        return selectedY;
+    }
+
+    public void setSelectedY(int selectedY) {
+        this.selectedY = selectedY;
     }
 }

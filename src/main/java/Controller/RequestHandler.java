@@ -24,7 +24,7 @@ public class RequestHandler {
         GameLog, GameLogSize, DownDeckSize, UpDeckSize, EndTurn, Log, VisiblePanel, Exit, PureModelView, ModelView,
         DownHp, UpHp, FriendlyPlayedCard, EnemyPlayedCard, FriendlyHandCard, FrinedlyHandSize, EnemyHandSize,
         FriendlyPlayedSize, EnemyPlayedSize, FriendlyPlayedCardName, EnemyPlayedCardName, FriendlyHandCradName,
-        EnemyHandCardName, CanBePlayed, CheckMana, PlayCard, PlayHeroPower, DownHasWeapon, UpHasWeapon,
+        CanBePlayed, CheckMana, PlayCard, PlayHeroPower, DownHasWeapon, UpHasWeapon,
         DownWeapon, UpWeapon, FriendlyTotalMana, FriendlyNotUsedMana, DeckHasNext, DownDefence, UpDefence,
         HeroPoerModelView, FriendlyActionModel, EnemyActionModel, HeroPowerCanBePlayed,
 
@@ -164,8 +164,6 @@ public class RequestHandler {
                     return (T) (admin.enemyPlayedCards().get(i).getName());
                 case FriendlyHandCradName:
                     return (T) (admin.friendlyHandCards().get(i).getName());
-                case EnemyHandCardName:
-                    return null;
                 case PlayHeroPower:
                     admin.playHeroPower(i);
                     return null;
@@ -195,13 +193,11 @@ public class RequestHandler {
         }
 
         public <T> T response(String value, int i, int target) {
-            switch (this) {
-                case PlayCard:
-                    admin.playCard(value, i, target);
-                    return null;
-                default:
-                    return null;
+            if (this == SendRequest.PlayCard) {
+                admin.playCard(value, i, target);
+                return null;
             }
+            return null;
         }
 
         public <T> T response(String value1, String value2) {

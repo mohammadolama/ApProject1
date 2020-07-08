@@ -4,8 +4,8 @@ package View.Panels;
 import Model.Enums.Type;
 import Model.CardModelView;
 import Controller.RequestHandler;
-import View.Configs.ConfigsLoader;
-import View.Configs.FirstHeroConfig;
+import Configs.ConfigsLoader;
+import Configs.FirstHeroConfig;
 import Controller.Admin;
 
 import javax.swing.*;

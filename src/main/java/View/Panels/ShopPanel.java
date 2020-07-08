@@ -5,8 +5,8 @@ import Model.Enums.Type;
 import Model.CardModelView;
 import Model.Images;
 import Controller.RequestHandler;
-import View.Configs.ConfigsLoader;
-import View.Configs.ShopConfig;
+import Configs.ConfigsLoader;
+import Configs.ShopConfig;
 
 import Controller.Admin;
 

@@ -43,17 +43,6 @@ public class CustomScrollBarUI extends BasicScrollBarUI {
     protected void paintThumb(Graphics g, JComponent c, Rectangle r) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Color color = null;
-        JScrollBar sb = (JScrollBar) c;
-        if (!sb.isEnabled() || r.width > r.height) {
-            return;
-        } else if (isDragging) {
-            color = Color.BLUE; // change color
-        } else if (isThumbRollover()) {
-            color = Color.LIGHT_GRAY; // change color
-        } else {
-            color = Color.GRAY; // change color
-        }
         g2.setPaint(new Color(0, 17, 93));
         g2.fillRoundRect(r.x, r.y, r.width, r.height, 10, 10);
         g2.setPaint(Color.WHITE);

@@ -57,7 +57,7 @@ public class Player implements Serializable {
         PlayerHeroes = playerHeroes;
     }
 
-    public String getId() {
+    String getId() {
         return id;
     }
 

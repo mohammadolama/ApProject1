@@ -23,6 +23,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
         @JsonSubTypes.Type(value = Soroush.class, name = "soroush"),
         @JsonSubTypes.Type(value = Sprint.class, name = "sprint"),
         @JsonSubTypes.Type(value = StrengthInNumbers.class, name = "strengthinnumbers"),
+        @JsonSubTypes.Type(value = StrengthInNumbersDR.class, name = "strengthinnumbersdr"),
         @JsonSubTypes.Type(value = SwarmOfCats.class, name = "swarmofcats"),
 })
 public abstract class Spell extends Card {
@@ -77,6 +78,6 @@ public abstract class Spell extends Card {
 
     @Override
     public int getMaxLife() {
-        return getMaxLife();
+        return 0;
     }
 }

@@ -1,30 +1,13 @@
-package View.Configs;
+package Configs;
 
-public class FirstHeroConfig {
-    private int size;
-    private int spacing;
+public class StatusConfig {
     private int startX;
     private int startY;
     private int width;
     private int height;
 
-    public FirstHeroConfig() {
-    }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getSpacing() {
-        return spacing;
-    }
-
-    public void setSpacing(int spacing) {
-        this.spacing = spacing;
+    public StatusConfig() {
     }
 
     public int getStartX() {

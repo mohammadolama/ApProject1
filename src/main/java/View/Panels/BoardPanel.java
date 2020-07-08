@@ -6,8 +6,8 @@ import Model.Enums.Type;
 import Model.CardModelView;
 import Model.Images;
 import Controller.RequestHandler;
-import View.Configs.ConfigsLoader;
-import View.Configs.BoardConfig;
+import Configs.ConfigsLoader;
+import Configs.BoardConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -1112,6 +1112,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
         }
     }
+
 
 }
 

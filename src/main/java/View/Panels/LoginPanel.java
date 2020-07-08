@@ -1,8 +1,8 @@
 package View.Panels;
 
 import Controller.RequestHandler;
-import View.Configs.ConfigsLoader;
-import View.Configs.LoginConfig;
+import Configs.ConfigsLoader;
+import Configs.LoginConfig;
 
 import javax.swing.*;
 import java.awt.*;

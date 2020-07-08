@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static View.Panels.Constants.cardPics;
+import static View.Panels.Constants.fantasy;
 import static View.Panels.Constants.gamePics;
 
-public class ThreeCardChooseMenu extends JPanel implements ActionListener {
+public class AlternativePanel extends JPanel implements ActionListener {
 
     private static final Object object = new Object();
 
@@ -29,11 +29,13 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
     private CardModelView model2;
     private CardModelView model3;
     private InfoPassive infoPassive;
+    private BufferedImage winner;
     private String selectedWeaponName;
     private boolean enabled;
     private boolean discoverMode;
+    private boolean winningMode;
 
-    public ThreeCardChooseMenu(boolean discoverMode) {
+    public AlternativePanel(boolean discoverMode) {
         this.discoverMode = discoverMode;
         setSize(new Dimension(1600, 1000));
         setPreferredSize(new Dimension(1600, 1000));
@@ -67,7 +69,7 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
 
 
         ok = new JButton("Start");
-        ok.setBounds(720, 850, 150, 80);
+        ok.setBounds(720, 880, 150, 80);
         ok.setFocusable(false);
         ok.addActionListener(this);
         add(ok);
@@ -122,16 +124,24 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
         BufferedImage temp2 = gamePics.get("playboard");
         g.drawImage(temp1, 0, 0, 1600, 1000, null);
         g.drawImage(temp2, 0, 0, 1600, 1000, null);
-
-        if (enabled) {
-            g.setColor(new Color(122, 122, 122, 180));
+        if (!winningMode) {
+            if (enabled) {
+                g.setColor(new Color(122, 122, 122, 180));
+                g.fillRect(0, 0, 1600, 1000);
+                g.drawRect(200, 150, 300, 400);
+                g.drawImage(model1.getImage(), 200, 150, 300, 400, null);
+                g.drawRect(650, 150, 300, 400);
+                g.drawImage(model2.getImage(), 650, 150, 300, 400, null);
+                g.drawRect(1100, 150, 300, 400);
+                g.drawImage(model3.getImage(), 1100, 150, 300, 400, null);
+            }
+        } else {
+            g.setColor(new Color(53, 53, 53, 229));
+            g.setFont(fantasy.deriveFont(70.0f));
             g.fillRect(0, 0, 1600, 1000);
-            g.drawRect(200, 150, 300, 400);
-            g.drawImage(model1.getImage(), 200, 150, 300, 400, null);
-            g.drawRect(650, 150, 300, 400);
-            g.drawImage(model2.getImage(), 650, 150, 300, 400, null);
-            g.drawRect(1100, 150, 300, 400);
-            g.drawImage(model3.getImage(), 1100, 150, 300, 400, null);
+            g.drawImage(winner, 600, 300, 400, 400, null);
+            g.setColor(new Color(255, 255, 0));
+            g.drawString("Winner", 700, 800);
         }
     }
 
@@ -170,6 +180,17 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
         this.model3 = model3;
     }
 
+    public boolean isWinningMode() {
+        return winningMode;
+    }
+
+    public void setWinningMode(boolean winningMode) {
+        this.winningMode = winningMode;
+        remove(card1);
+        remove(card2);
+        remove(card3);
+    }
+
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -196,11 +217,24 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
         this.infoPassive = infoPassive;
     }
 
+    public BufferedImage getWinner() {
+        return winner;
+    }
+
+    public void setWinner(BufferedImage winner) {
+        this.winner = winner;
+        ok.setText("Finish");
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
         if (src.equals(ok)) {
-            Admin.getInstance().create(infoPassive, model1.getName(), model2.getName(), model3.getName());
+            if (winningMode) {
+                Admin.getInstance().finishGame();
+            } else {
+                Admin.getInstance().create(infoPassive, model1.getName(), model2.getName(), model3.getName());
+            }
         } else if (src.equals(card1)) {
             button1Action();
         } else if (src.equals(card2)) {
@@ -212,7 +246,7 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
 
     private void button1Action() {
         if (!discoverMode) {
-            Admin.getInstance().changeCard(1, ThreeCardChooseMenu.this);
+            Admin.getInstance().changeCard(1, AlternativePanel.this);
             revalidate();
             repaint();
             card1.setEnabled(false);
@@ -223,7 +257,7 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
 
     private void button2Action() {
         if (!discoverMode) {
-            Admin.getInstance().changeCard(2, ThreeCardChooseMenu.this);
+            Admin.getInstance().changeCard(2, AlternativePanel.this);
             revalidate();
             repaint();
             card2.setEnabled(false);
@@ -234,7 +268,7 @@ public class ThreeCardChooseMenu extends JPanel implements ActionListener {
 
     private void button3Action() {
         if (!discoverMode) {
-            Admin.getInstance().changeCard(3, ThreeCardChooseMenu.this);
+            Admin.getInstance().changeCard(3, AlternativePanel.this);
             revalidate();
             repaint();
             card3.setEnabled(false);

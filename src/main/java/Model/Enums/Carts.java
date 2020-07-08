@@ -37,6 +37,7 @@ public enum Carts {
     soroush,
     sprint,
     strengthinnumbers,
+    strengthinnumbersdr,
     swarmofcats,
     truesilverchampion,
     yasaman,

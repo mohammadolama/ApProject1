@@ -1,27 +1,41 @@
 package View;
 
+import Configs.ConfigsLoader;
+import Configs.DeckReader;
 import Main.JsonBuilders;
-import Model.Cards.LearnJavadonic;
-import Model.Cards.StrengthInNumbers;
-import Model.Heros.*;
-import View.Configs.ConfigsLoader;
+import Model.Cards.StrengthInNumbersDR;
+import Model.Heros.Hero;
+import Model.Heros.Mage;
+import Model.Heros.Rogue;
 import View.Panels.Constants;
 import View.Panels.MyFrame;
 import Main.Fundamentals;
 import View.Sounds.SoundAdmin;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.sound.sampled.Clip;
-import java.util.Random;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class test {
     static Clip clip;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ConfigsLoader configsLoader=ConfigsLoader.getInstance();
         Fundamentals.MkDirs();
         Constants.pictureLoader();
         SoundAdmin.play1("resources\\Sounds\\login.wav");
         MyFrame.getInstance();
+
+
+//        ObjectMapper objectMapper=new ObjectMapper();
+//        File file;
+//        FileWriter fileWriter=new FileWriter(new File("deckreader.json"));
+//        DeckReader deckReader=new DeckReader();
+//        objectMapper.writeValue(fileWriter , deckReader);
 
 
 //        JsonBuilders.HeroBuildeeer(new Rogue());
@@ -50,6 +64,7 @@ public class test {
 //
 //        JsonBuilders.SpellBuilder(new SwarmOfCats());
 //        JsonBuilders.SpellBuilder(new StrengthInNumbers());
+//        JsonBuilders.SpellBuilder(new StrengthInNumbersDR());
 //        JsonBuilders.SpellBuilder(new Sprint());
 //        JsonBuilders.SpellBuilder(new Soroush());
 //        JsonBuilders.SpellBuilder(new SandBreath());

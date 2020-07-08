@@ -27,8 +27,8 @@ import java.util.ArrayList;
         @JsonSubTypes.Type(value = Rogue.class, name = "rogue"),
         @JsonSubTypes.Type(value = Priest.class, name = "priest"),
 })
-@JsonIgnoreProperties({"specialPower", "heroPower", "maxLife"})
-public abstract class Hero implements Character {
+@JsonIgnoreProperties({"specialPower", "heroPower", "maxLife", "weapon", "damage"})
+public abstract class Hero implements Character, Cloneable {
     private String name;
     private int health;
     private int maxHealth;
@@ -194,6 +194,10 @@ public abstract class Hero implements Character {
 
     public abstract void accept(PowerVisitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed);
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
 
 

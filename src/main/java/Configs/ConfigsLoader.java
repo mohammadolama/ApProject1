@@ -1,4 +1,4 @@
-package View.Configs;
+package Configs;
 
 import org.codehaus.jackson.map.ObjectMapper;
 

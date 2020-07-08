@@ -2,15 +2,10 @@ package Controller.Actions;
 
 import Controller.Admin;
 import Model.Cards.*;
-import Model.Enums.Carts;
-import Model.Enums.WeaponCarts;
 import Model.Heros.Hero;
 import Model.Interface.Character;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 public class BattlecryVisitor implements Visitor {
 
@@ -99,7 +94,7 @@ public class BattlecryVisitor implements Visitor {
             ((Minion) card).setHealth(((Minion) card).getHealth() + highMasterSaman.getHealthRestore());
         }
         for (Card card : myPlayed) {
-            if (!((Minion) card).equals(highMasterSaman)) {
+            if (!card.equals(highMasterSaman)) {
                 ((Minion) card).setHealth(((Minion) card).getHealth() + highMasterSaman.getHealthRestore());
             }
         }
@@ -207,6 +202,11 @@ public class BattlecryVisitor implements Visitor {
 
     @Override
     public void visitStrengthInNumbers(StrengthInNumbers strengthInNumbers, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
+
+    }
+
+    @Override
+    public void visitStrengthInNumbersDR(StrengthInNumbersDR strengthInNumbersDR, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
 
     }
 

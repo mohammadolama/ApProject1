@@ -10,6 +10,7 @@ import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @JsonIgnoreProperties({"rarityI", "typeI", "life", "attack"})
 public abstract class Card implements Character {
@@ -147,18 +148,12 @@ public abstract class Card implements Character {
 
     public static ArrayList<Card> allCards() {
         ArrayList<Carts> ar = new ArrayList<>();
-        for (Carts carts : Carts.values()) {
-            ar.add(carts);
-        }
-
+        Collections.addAll(ar, Carts.values());
         return Deck.UpdateDeck(ar);
     }
 
     public static ArrayList<Card> purchasedCards() {
-        ArrayList<Carts> ar = new ArrayList<>();
-        for (Carts cart : Gamestate.getPlayer().getPlayerCarts()) {
-            ar.add(cart);
-        }
+        ArrayList<Carts> ar = new ArrayList<>(Gamestate.getPlayer().getPlayerCarts());
         return Deck.UpdateDeck(ar);
     }
 
@@ -192,8 +187,7 @@ public abstract class Card implements Character {
         return Deck.UpdateDeck(ar);
     }
 
-    public  static Card getCardOf(String name) {
-        outer:
+    public static Card getCardOf(String name) {
         for (int i = 0; i < 1; i++) {
             for (MinionCarts value : MinionCarts.values()) {
                 if (value.toString().equalsIgnoreCase(name)) {
@@ -231,7 +225,6 @@ public abstract class Card implements Character {
 
     @Override
     public void setLife(int i) {
-
     }
 
     @Override

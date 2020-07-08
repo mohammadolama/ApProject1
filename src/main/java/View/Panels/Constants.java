@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -98,6 +99,7 @@ public class Constants {
     private static BufferedImage shahryar;
     private static BufferedImage sprint;
     private static BufferedImage strengthinnumbers;
+    private static BufferedImage strengthinnumbersdr;
     private static BufferedImage soroush;
     private static BufferedImage truesilverchampion;
     private static BufferedImage swarmofcats;
@@ -175,6 +177,7 @@ public class Constants {
             soroush = ImageIO.read(new File(cardPicsPath + "soroush.png"));
             sprint = ImageIO.read(new File(cardPicsPath + "sprint.png"));
             strengthinnumbers = ImageIO.read(new File(cardPicsPath + "strengthinnumbers.png"));
+            strengthinnumbersdr = ImageIO.read(new File(cardPicsPath + "strengthinnumbersdr.png"));
             swarmofcats = ImageIO.read(new File(cardPicsPath + "swarmofcats.png"));
             truesilverchampion = ImageIO.read(new File(cardPicsPath + "truesilverchampion.png"));
             yasaman = ImageIO.read(new File(cardPicsPath + "yasaman.png"));
@@ -214,6 +217,7 @@ public class Constants {
             cardPics.put("soroush", soroush);
             cardPics.put("sprint", sprint);
             cardPics.put("strengthinnumbers", strengthinnumbers);
+            cardPics.put("strengthinnumbersdr", strengthinnumbersdr);
             cardPics.put("swarmofcats", swarmofcats);
             cardPics.put("truesilverchampion", truesilverchampion);
             cardPics.put("yasaman", yasaman);

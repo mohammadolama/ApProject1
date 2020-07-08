@@ -5,5 +5,6 @@ public enum ContiniousActionCarts {
     benyamin,
     shahryar,
     learnjavadonic,
-    strengthinnumbers
+    strengthinnumbers,
+    strengthinnumbersdr,
 }

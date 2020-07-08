@@ -5,13 +5,13 @@ import Model.Enums.Carts;
 import Model.Enums.Heroes;
 import Model.Enums.NeutralCarts;
 import Model.Images;
-import View.Configs.ConfigsLoader;
+import Configs.ConfigsLoader;
 import View.Update.Update;
 import Model.Heros.*;
 import Main.Deck;
 import Main.Gamestate;
 import Controller.Admin;
-import View.Configs.Col_ChangeConfig;
+import Configs.Col_ChangeConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -367,19 +367,23 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
             config.setCardsY(90);
 
             if (selectedBuferredImages != null) {
-
                 i = 0;
                 while (i < selectedBuferredImages.size()) {
-                    g2d.drawImage(selectedBuferredImages.get(i), config.getCardsX(), 700, config.getCardWidth() / 3 * 2, config.getCardHeight() / 3 * 2, null);
+                    g2d.drawImage(selectedBuferredImages.get(i), config.getCardsX(), config.getSelectedY(), config.getCardWidth() / 2, config.getCardHeight() / 2, null);
                     if (i < selectedBuferredImages.size() - 1 && selectedCards.get(i).toString().equalsIgnoreCase(selectedCards.get(i + 1).toString())) {
                         g2d.setFont(f2.deriveFont(20.0f));
                         g2d.setColor(Color.yellow);
-                        g2d.drawString("X2", (config.getCardsX() + 30), (700 + config.getCardHeight() / 3 * 2));
+                        g2d.drawString("X2", (config.getCardsX() + 30), (700 + config.getCardHeight() / 2));
                         i++;
                     }
-                    config.setCardsX(config.getCardsX() + config.getCardWidth() / 3 * 2);
+                    config.setCardsX(config.getCardsX() + config.getCardWidth() / 2);
+                    if (config.getCardsX() >= 1400) {
+                        config.setCardsX(15);
+                        config.setSelectedY(config.getSelectedY() + (config.getCardHeight() / 2));
+                    }
                     i++;
                 }
+                config.setSelectedY(680);
                 config.setCardsX(15);
                 config.setCardsY(90);
             }

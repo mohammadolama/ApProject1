@@ -41,7 +41,7 @@ public class Update {
                 Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("polymorph", 0);
                 Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("polymorph", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Gamestate.getPlayer().getSelectedDeck().mostUsedCard());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "mage"));
                 Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 break;
@@ -54,7 +54,7 @@ public class Update {
                 Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("aylar", 0);
                 Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("aylar", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Gamestate.getPlayer().getSelectedDeck().mostUsedCard());
                 Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "rogue"));
                 break;
@@ -67,7 +67,7 @@ public class Update {
                 Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("benyamin", 0);
                 Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("benyamin", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Gamestate.getPlayer().getSelectedDeck().mostUsedCard());
                 Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "warlock"));
                 break;
@@ -80,7 +80,7 @@ public class Update {
                 Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("shahryar", 0);
                 Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("shahryar", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Gamestate.getPlayer().getSelectedDeck().mostUsedCard());
                 Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "priest"));
                 break;
@@ -93,12 +93,12 @@ public class Update {
                 Gamestate.getPlayer().getAllDecks().get("Default Deck").getUsedTimes().put("faeze", 0);
                 Gamestate.getPlayer().getSelectedDeck().getUsedTimes().put("faeze", 0);
                 Gamestate.getPlayer().getSelectedDeck().setDeck(ar);
-                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+                Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Gamestate.getPlayer().getSelectedDeck().mostUsedCard());
                 Gamestate.getPlayer().getAllDecks().replace(Gamestate.getPlayer().getSelectedDeck().getName(), Gamestate.getPlayer().getSelectedDeck());
                 Gamestate.getPlayer().getSelectedDeck().setHero(JsonReaders.HeroJsonReader(Gamestate.getPlayer(), "hunter"));
                 break;
         }
-        Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
-        Gamestate.getPlayer().getAllDecks().get(Gamestate.getPlayer().getSelectedDeck().getName()).setMostUsedCard(Deck.mostUsedCard(Gamestate.getPlayer().getSelectedDeck()));
+        Gamestate.getPlayer().getSelectedDeck().setMostUsedCard(Gamestate.getPlayer().getSelectedDeck().mostUsedCard());
+        Gamestate.getPlayer().getAllDecks().get(Gamestate.getPlayer().getSelectedDeck().getName()).setMostUsedCard(Gamestate.getPlayer().getAllDecks().get(Gamestate.getPlayer().getSelectedDeck().getName()).mostUsedCard());
     }
 }

@@ -23,14 +23,14 @@ public class Shop {
 
     public static ArrayList<Card> Buyable() {
         ArrayList<Carts> ar = BuyableCards();
-        ArrayList<Card> ar2 = null;
+        ArrayList<Card> ar2;
         ar2 = Deck.UpdateDeck(ar);
         return ar2;
     }
 
     public static ArrayList<Card> Sellable() {
         ArrayList<Carts> ar = Gamestate.getPlayer().getPlayerCarts();
-        ArrayList<Card> ar2 = null;
+        ArrayList<Card> ar2;
         ar2 = Deck.UpdateDeck(ar);
         return ar2;
     }

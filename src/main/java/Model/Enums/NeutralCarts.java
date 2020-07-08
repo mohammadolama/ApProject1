@@ -28,6 +28,7 @@ public enum NeutralCarts {
     soroush,
     sprint,
     strengthinnumbers,
+    strengthinnumbersdr,
     swarmofcats,
     truesilverchampion,
 

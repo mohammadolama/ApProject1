@@ -5,8 +5,8 @@ import Model.Enums.Type;
 import Main.Player;
 import Model.CardModelView;
 import Controller.RequestHandler;
-import View.Configs.ConfigsLoader;
-import View.Configs.StatusConfig;
+import Configs.ConfigsLoader;
+import Configs.StatusConfig;
 import Main.Deck;
 import Main.Gamestate;
 
@@ -141,8 +141,8 @@ public class StatusPanel extends JPanel implements ActionListener {
                 drawCardInfo(g2d, card.get(i).toString().toLowerCase(), config.getStartX(), config.getStartY());
                 if (i < ar1.size() - 1 && selectedDeck.getDeck().get(i).toString().equalsIgnoreCase(selectedDeck.getDeck().get(i + 1).toString())) {
                     g2d.setFont(f2.deriveFont(30.f));
-                    g2d.setColor(Color.CYAN);
-                    g2d.drawString("X2", (config.getStartX() + 70), (config.getStartY() + config.getHeight() - 5));
+                    g2d.setColor(Color.YELLOW);
+                    g2d.drawString("X2", (config.getStartX() + config.getWidth() / 2), (config.getStartY() + config.getHeight() - 5));
                     i++;
                 }
                 config.setStartX(config.getStartX() + config.getWidth());

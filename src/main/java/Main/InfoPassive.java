@@ -29,7 +29,7 @@ public class InfoPassive {
         return ar;
     }
 
-    public static InfoPassive sample(){
+    public static InfoPassive sample() {
         return infoPassiveCreator().get(2);
     }
 

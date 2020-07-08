@@ -1,5 +1,6 @@
 package Main;
 
+import Configs.DeckReader;
 import Model.Cards.*;
 import Model.Heros.Hero;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -49,6 +50,7 @@ public class JsonReaders {
         classes.put("soroush", Soroush.class);
         classes.put("sprint", Sprint.class);
         classes.put("strengthinnumbers", StrengthInNumbers.class);
+        classes.put("strengthinnumbersdr", StrengthInNumbersDR.class);
         classes.put("swarmofcats", SwarmOfCats.class);
         classes.put("truesilverchampion", TrueSilverChampion.class);
         classes.put("yasaman", Yasaman.class);
@@ -134,5 +136,31 @@ public class JsonReaders {
             e.printStackTrace();
         }
         return weapon1;
+    }
+
+    public static DeckReader deckReader() {
+        String path = "resources/Properties/deckreader.json";
+        DeckReader deckReader = null;
+        try {
+            FileReader fileReader = new FileReader(path);
+            deckReader = objectMapper.readValue(fileReader, DeckReader.class);
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return deckReader;
+    }
+
+    public static Player deckReaderPlayer(String name) {
+        String path = String.format("resources/Properties/%s.json", name);
+        Player player = null;
+        try {
+            FileReader fileReader = new FileReader(path);
+            player = objectMapper.readValue(fileReader, Player.class);
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return player;
     }
 }

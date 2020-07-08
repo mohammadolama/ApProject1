@@ -1,8 +1,8 @@
 package View.Panels;
 
 import Controller.RequestHandler;
-import View.Configs.ConfigsLoader;
-import View.Configs.MenuConfig;
+import Configs.ConfigsLoader;
+import Configs.MenuConfig;
 import Controller.Admin;
 
 import javax.swing.*;

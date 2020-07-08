@@ -1,12 +1,9 @@
 package Controller.Actions.SPVisitor;
 
-import Model.Cards.Card;
-import Model.Cards.Minion;
-import Model.Cards.Spell;
+import Model.Cards.*;
 import Model.Enums.Attribute;
 import Model.Heros.*;
 import Model.Interface.Character;
-
 import java.util.ArrayList;
 
 public class SpecialPowerVisitor implements PowerVisitor {
@@ -14,8 +11,8 @@ public class SpecialPowerVisitor implements PowerVisitor {
     public void visitHunter(Hunter hunter, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
         for (Card card : myDeck) {
             if (card instanceof Minion) {
-                if (!((Minion) card).getAttributes().contains(Attribute.Rush)) {
-                    ((Minion) card).getAttributes().add(Attribute.Rush);
+                if (!card.getAttributes().contains(Attribute.Rush)) {
+                    card.getAttributes().add(Attribute.Rush);
                 }
             }
         }
@@ -54,7 +51,7 @@ public class SpecialPowerVisitor implements PowerVisitor {
     public void visitPriest(Priest priest, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
         for (Card card : myDeck) {
             if (card.getName().equalsIgnoreCase("cookie") && card.getName().equalsIgnoreCase("holylight")) {
-                ((Spell) card).setHealthRestore(((Spell) card).getHealthRestore() * 2);
+                card.setHealthRestore(card.getHealthRestore() * 2);
             }
         }
     }

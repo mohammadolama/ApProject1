@@ -5,11 +5,11 @@ import Model.Cards.Minion;
 import Model.Cards.Spell;
 import Model.Cards.Weapon;
 import Model.Images;
-import View.Configs.ConfigsLoader;
+import Configs.ConfigsLoader;
 import Main.Gamestate;
 import Main.Shop;
 import Controller.Admin;
-import View.Configs.CollectionDrawingConfig;
+import Configs.CollectionDrawingConfig;
 
 import javax.swing.*;
 import java.awt.*;

@@ -2,7 +2,6 @@ package Controller.Actions.SPVisitor;
 
 import Model.Cards.Card;
 import Model.Heros.*;
-import Model.Heros.Mage;
 import Model.Interface.Character;
 
 import java.util.ArrayList;

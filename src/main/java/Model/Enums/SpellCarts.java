@@ -16,5 +16,6 @@ public enum SpellCarts {
     soroush,
     sprint,
     strengthinnumbers,
+    strengthinnumbersdr,
     swarmofcats,
 }

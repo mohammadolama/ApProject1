@@ -1,4 +1,4 @@
-package View.Configs;
+package Configs;
 
 public class CollectionDrawingConfig {
 
