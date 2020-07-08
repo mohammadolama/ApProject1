@@ -45,7 +45,7 @@ public class StatusPanel extends JPanel implements ActionListener {
         back.setIcon(gameIcon.get("back"));
         back.setFocusable(false);
         back.addActionListener(this);
-        back.setBounds(1430, 890, 60, 60);
+        back.setBounds(config.getBackX(), config.getBackY(), config.getBackSize(), config.getBackSize());
         back.setContentAreaFilled(false);
         back.setRolloverEnabled(false);
         back.setBorderPainted(false);
@@ -54,14 +54,14 @@ public class StatusPanel extends JPanel implements ActionListener {
 
         deleteAccount = new JButton();
         deleteAccount.setIcon(gameIcon.get("delete"));
-        deleteAccount.setBounds(1370, 890, 50, 50);
+        deleteAccount.setBounds(config.getDeleteX(), config.getBackY(), config.getBackSize(), config.getBackSize());
         deleteAccount.setFocusable(false);
         deleteAccount.addActionListener(this);
         add(deleteAccount);
 
         exit.addActionListener(this);
         exit.setIcon(gameIcon.get("exit"));
-        exit.setBounds(1500, 890, 60, 60);
+        exit.setBounds(config.getExitX(), config.getBackY(), config.getBackSize(), config.getBackSize());
         exit.setFocusable(false);
         exit.setContentAreaFilled(false);
         exit.setRolloverEnabled(false);
@@ -90,11 +90,11 @@ public class StatusPanel extends JPanel implements ActionListener {
         g2d.drawString("My Decks", 1330, 40);
         g2d.setFont(f2);
         Player player=RequestHandler.SendRequest.Player.response(null);
-        g2d.drawString("Username: " + player.getUsername(), 50, 200);
-        g2d.drawString("Level   : " + player.getLevel(), 50, 300);
-        g2d.drawString("EXP     : " + player.getExp(), 50, 400);
-        g2d.drawString("Wallet: " + player.getMoney(), 50, 500);
-        g2d.drawString("Deck: " + player.getSelectedDeck().getName(), 50, 600);
+        g2d.drawString("Username: " + player.getUsername(), config.getInfoX(), config.getInfoY());
+        g2d.drawString("Level   : " + player.getLevel(), config.getInfoX(), config.getInfoY() + 100);
+        g2d.drawString("EXP     : " + player.getExp(), config.getInfoX(), config.getInfoY() + 200);
+        g2d.drawString("Wallet: " + player.getMoney(), config.getInfoX(), config.getInfoY() + 300);
+        g2d.drawString("Deck: " + player.getSelectedDeck().getName(), config.getInfoX(), config.getInfoY() + 400);
         g2d.drawLine(300, config.getStartY() - 10, 1250, config.getStartY() - 10);
         g2d.setFont(f2.deriveFont(18.0f));
         if (selectedDeck != null) {
@@ -173,10 +173,9 @@ public class StatusPanel extends JPanel implements ActionListener {
             buttons = new ArrayList<>();
             ArrayList<String> ar = RequestHandler.SendRequest.BestDecks.response(null);
             for (String string : ar) {
-                String s = string;
-                JButton button = new JButton(s);
-                button.setName(s);
-                button.setBounds(1265, 65 + (i * 70), 280, 60);
+                JButton button = new JButton(string);
+                button.setName(string);
+                button.setBounds(config.getDeckX(), 65 + (i * 70), 280, 60);
                 button.setFont(f2);
                 button.setFocusable(false);
                 button.addActionListener(this);
@@ -208,7 +207,6 @@ public class StatusPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
         if (src == back) {
-            ShopPanel.getInstance().grabFocus();
             RequestHandler.SendRequest.Log.response("Click_Button : Exit Button");
             RequestHandler.SendRequest.SaveAndUpdate.response(null);
             ar1 = null;

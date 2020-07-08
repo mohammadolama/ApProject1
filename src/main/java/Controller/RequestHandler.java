@@ -13,7 +13,11 @@ public class RequestHandler {
     public enum SendRequest {
 
         /* Common Requests */
-        FrameRender, Player, FriendlyHeroName, EnemyHeroName, PlaySound, LogOut, LogIn, SignUp,
+        FrameRender, Player, FriendlyHeroName, EnemyHeroName, PlaySound, LogOut, LogIn, SignUp, LvlUp, UnlockHeros,
+        FinishGame,
+
+        /* Collection Panel */
+        UpdateDrawingPanel, CreateNewDeck, GetCardOf,
 
         /* InfoPassive Requests */
         PassiveList,
@@ -26,7 +30,7 @@ public class RequestHandler {
         FriendlyPlayedSize, EnemyPlayedSize, FriendlyPlayedCardName, EnemyPlayedCardName, FriendlyHandCradName,
         CanBePlayed, CheckMana, PlayCard, PlayHeroPower, DownHasWeapon, UpHasWeapon,
         DownWeapon, UpWeapon, FriendlyTotalMana, FriendlyNotUsedMana, DeckHasNext, DownDefence, UpDefence,
-        HeroPoerModelView, FriendlyActionModel, EnemyActionModel, HeroPowerCanBePlayed,
+        HeroPoerModelView, FriendlyActionModel, EnemyActionModel, HeroPowerCanBePlayed, AylarAction,
 
         /* Status */
         BestDecks, DeleteAccount, CloneDeck, SaveAndUpdate,
@@ -45,11 +49,15 @@ public class RequestHandler {
                 case EnemyHeroName:
                     return (T) admin.enemyHeroName();
                 case FriendlyName:
-                    return (T) Admin.getInstance().friendlyPlayer().getUsername();
+                    return (T) Admin.getInstance().friendlyPlayerName();
                 case EnemyName:
-                    return (T) Admin.getInstance().enemyPlayer().getUsername();
+                    return (T) Admin.getInstance().enemyPlayerName();
+
+                /**/
                 case DeckAnimationPicture:
                     return (T) Admin.getInstance().deckAnimationCard();
+
+
                 case DownPowerUsage:
                     return (T) Integer.valueOf(admin.friendlyHeroPowerusedTimes());
                 case UpPowerUsage:
@@ -100,6 +108,8 @@ public class RequestHandler {
                     return (T) admin.CloneDeck(value);
                 case PassiveList:
                     return (T) admin.generatePassive();
+                case GetCardOf:
+                    return (T) admin.getCardOf(value);
                 case PlaySound:
                     admin.playSound(value);
                     return null;
@@ -113,6 +123,24 @@ public class RequestHandler {
                     return (T) admin.friendlyActionModels();
                 case EnemyActionModel:
                     return (T) admin.enemyActionModels();
+                case AylarAction:
+                    admin.aylarAction(value);
+                    return null;
+                case UpdateDrawingPanel:
+                    admin.updateDrawingPanel(value);
+                    return null;
+                case FinishGame:
+                    admin.finishGame();
+                    return null;
+                case CreateNewDeck:
+                    admin.createNewDeck();
+                    return null;
+                case LvlUp:
+                    admin.levelUp();
+                    return null;
+                case UnlockHeros:
+                    admin.unlockHero();
+                    return null;
                 case SellCard:
                     admin.sellCard(value);
                     return null;

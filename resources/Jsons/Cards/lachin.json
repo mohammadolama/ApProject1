@@ -1,0 +1,22 @@
+{
+  "model": "lachin",
+  "name": "Lachin",
+  "description": "Alternative for \"Security Rover\"",
+  "manaCost": 6,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Rare",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 2,
+  "health": 6,
+  "maxHealth": 6,
+  "title": "Mech",
+  "sleep": true,
+  "canBeAttacked": false
+}

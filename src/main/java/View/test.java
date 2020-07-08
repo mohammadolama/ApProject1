@@ -2,6 +2,7 @@ package View;
 
 import Configs.ConfigsLoader;
 import Configs.DeckReader;
+import Configs.SummonedConfig;
 import Main.JsonBuilders;
 import Model.Cards.StrengthInNumbersDR;
 import Model.Heros.Hero;
@@ -33,9 +34,9 @@ public class test {
 
 //        ObjectMapper objectMapper=new ObjectMapper();
 //        File file;
-//        FileWriter fileWriter=new FileWriter(new File("deckreader.json"));
-//        DeckReader deckReader=new DeckReader();
-//        objectMapper.writeValue(fileWriter , deckReader);
+//        FileWriter fileWriter=new FileWriter(new File("summonedconfig.json"));
+//        SummonedConfig summonedConfig=new SummonedConfig();
+//        objectMapper.writeValue(fileWriter , summonedConfig);
 
 
 //        JsonBuilders.HeroBuildeeer(new Rogue());

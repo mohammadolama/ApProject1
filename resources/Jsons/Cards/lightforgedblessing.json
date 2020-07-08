@@ -1,11 +1,18 @@
 {
+  "model": "lightforgedblessing",
   "name": "LightforgedBlessing",
-  "description": "Give a friendly minion, Lifesteal.",
+  "description": "Restore 2Hp to friendly Minions.",
+  "manaCost": 2,
   "type": "Spell",
   "heroClass": "Neutral",
   "rarity": "Rare",
   "price": 20,
-  "usageTimes": 2,
-  "title": "Twinspell",
-  "manaCost": 2
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 2,
+  "attackRestore": 0,
+  "usageTimes": 1,
+  "manaSpendOnSth": 0
 }

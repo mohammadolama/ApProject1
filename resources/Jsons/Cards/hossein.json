@@ -1,0 +1,24 @@
+{
+  "model": "hossein",
+  "name": "Hossein",
+  "description": "Divine shield",
+  "manaCost": 2,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [
+    "DivineShield"
+  ],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 3,
+  "health": 3,
+  "maxHealth": 3,
+  "title": null,
+  "sleep": true,
+  "canBeAttacked": false
+}

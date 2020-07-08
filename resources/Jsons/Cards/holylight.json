@@ -1,11 +1,18 @@
 {
+  "model": "holylight",
   "name": "HolyLight",
-  "description": "add 5Hp to all your minions and hero",
+  "description": "Restore 2Hp to all friendly minions.",
+  "manaCost": 7,
   "type": "Spell",
   "heroClass": "Neutral",
   "rarity": "Epic",
   "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 2,
+  "attackRestore": 0,
   "usageTimes": 1,
-  "title": null,
-  "manaCost": 2
+  "manaSpendOnSth": 0
 }

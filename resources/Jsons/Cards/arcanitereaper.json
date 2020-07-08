@@ -1,11 +1,18 @@
 {
+  "model": "arcanitereaper",
   "name": "ArcaniteReaper",
-  "description": "No Special description",
+  "description": null,
+  "manaCost": 5,
   "type": "Weapon",
-  "price": 20,
   "heroClass": "Neutral",
   "rarity": "Common",
-  "durability": 2,
-  "att": 4,
-  "manaCost": 5
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 4,
+  "durability": 2
 }

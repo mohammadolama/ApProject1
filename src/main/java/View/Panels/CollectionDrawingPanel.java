@@ -1,22 +1,17 @@
 package View.Panels;
 
+import Controller.RequestHandler;
+import Model.CardModelView;
 import Model.Cards.Card;
-import Model.Cards.Minion;
-import Model.Cards.Spell;
-import Model.Cards.Weapon;
+import Model.Enums.Type;
 import Model.Images;
 import Configs.ConfigsLoader;
-import Main.Gamestate;
-import Main.Shop;
-import Controller.Admin;
+import Main.*;
 import Configs.CollectionDrawingConfig;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -35,7 +30,6 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
 
     private JButton buyButton;
     private CollectionDrawingConfig config;
-    private Admin admin;
     private int panelHeight = 1000;
     private String name;
     private boolean clicked;
@@ -50,11 +44,10 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
 
     private CollectionDrawingPanel() {
         initConfig();
-        admin = Admin.getInstance();
         cards = new ArrayList<>();
         images = new ArrayList<>();
         bufferedImages = new ArrayList<>();
-        cards = admin.properCards(3);
+        cards = RequestHandler.SendRequest.ProperCards.response(null, 3);
         pictures(cards);
         addMouseListener(this);
 
@@ -218,7 +211,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
                 g2d.setColor(Color.red);
                 g2d.drawString("Price : " + Shop.Price(name.toLowerCase()), 720, panelHeight / 2);
                 if (Shop.Price((name.toLowerCase())) > Gamestate.getPlayer().getMoney()) {
-                    admin.playSound("gold");
+                    RequestHandler.SendRequest.PlaySound.response("gold");
                     buyButton.setEnabled(false);
                     buyButton.setBackground(Color.LIGHT_GRAY);
                 }
@@ -239,22 +232,23 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     private void drawCardInfo(Graphics2D g, String cards, int xe, int ye) {
         g.setFont(fantasy.deriveFont(60.0f));
         g.setColor(Color.white);
-        if (admin.getCardOf(cards) instanceof Minion) {
+        CardModelView view = RequestHandler.SendRequest.PureModelView.response(cards);
+        if (view.getType().equals(Type.Minion)) {
             int x = xe + 40;
             int y = ye + 95;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardMAttack((Minion) admin.getCardOf(cards)) + ""), x, y + 445);
-            g.drawString((admin.cardHp((Minion) admin.getCardOf(cards)) + ""), x + 300, y + 440);
-        } else if (admin.getCardOf(cards) instanceof Weapon) {
+            g.drawString(view.getManaCost() + "", x, y);
+            g.drawString((view.getDamage() + ""), x, y + 445);
+            g.drawString((view.getHp() + ""), x + 300, y + 440);
+        } else if (view.getType().equals(Type.Weapon)) {
             int x = xe + 45;
             int y = ye + 65;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
-            g.drawString((admin.cardWAttack((Weapon) admin.getCardOf(cards)) + ""), x, y + 445);
-            g.drawString((admin.cardDurability((Weapon) admin.getCardOf(cards)) + ""), x + 300, y + 440);
-        } else if (admin.getCardOf(cards) instanceof Spell) {
+            g.drawString(view.getManaCost() + "", x, y);
+            g.drawString((view.getDamage() + ""), x, y + 445);
+            g.drawString((view.getHp() + ""), x + 300, y + 440);
+        } else if (view.getType().equals(Type.Spell)) {
             int x = xe + 45;
             int y = ye + 60;
-            g.drawString(admin.defaultCardMana(admin.getCardOf(cards)) + "", x, y);
+            g.drawString(view.getManaCost() + "", x, y);
         }
     }
 
@@ -308,8 +302,8 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
         if (src == buyButton) {
-            admin.buyCard(name);
-            cards = admin.properCards(3);
+            RequestHandler.SendRequest.BuyCard.response(name);
+            cards = RequestHandler.SendRequest.ProperCards.response(null, 3);
             pictures(cards);
             images.clear();
             update();

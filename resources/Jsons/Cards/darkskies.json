@@ -1,11 +1,18 @@
 {
+  "model": "darkskies",
   "name": "DarkSkies",
-  "description": "Deal 1 damage to a random minion . Repeat for each card in your hand.",
+  "description": "Deal 2 damage to a random minion .",
+  "manaCost": 3,
   "type": "Spell",
   "heroClass": "Warlock",
-  "price": 20,
   "rarity": "Epic",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": -2,
+  "attackRestore": 0,
   "usageTimes": 1,
-  "title": null,
-  "manaCost": 3
+  "manaSpendOnSth": 0
 }

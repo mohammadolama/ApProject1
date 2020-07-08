@@ -1,9 +1,8 @@
 package View.Panels;
 
+import Controller.RequestHandler;
 import Model.Cards.Card;
-import Model.Enums.Carts;
-import Model.Enums.Heroes;
-import Model.Enums.NeutralCarts;
+import Model.Enums.*;
 import Model.Images;
 import Configs.ConfigsLoader;
 import View.Update.Update;
@@ -15,13 +14,9 @@ import Configs.Col_ChangeConfig;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 import static View.Panels.Constants.*;
 
@@ -425,35 +420,35 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
         if (src == backButton) {
-            Admin.getInstance().Log("Click_Button : back Button");
-            Admin.getInstance().Log("Cancle the process of creating new/changing  deck.");
+            RequestHandler.SendRequest.Log.response("Click_Button : back Button");
+            RequestHandler.SendRequest.Log.response("Cancle the process of creating new/changing  deck.");
             clear();
             MyFrame.getInstance().changePanel("collection");
         } else if (src == addButton) {
             addSelectedCard(name.toLowerCase());
-            Admin.getInstance().Log(String.format("Add : %s is added to deck.", name));
+            RequestHandler.SendRequest.Log.response(String.format("Add : %s is added to deck.", name));
             clicked = false;
             repaint();
         } else if (src == removeButton) {
             removeSelectedCard(name.toLowerCase());
-            Admin.getInstance().Log(String.format("Remove : %s is removed from deck.", name));
+            RequestHandler.SendRequest.Log.response(String.format("Remove : %s is removed from deck.", name));
             clicked = false;
             repaint();
         } else if (src == deckRemoveButton) {
             if (selectedDeck != null) {
-                Admin.getInstance().Log("Click_Button : Deck_Remove Button");
+                RequestHandler.SendRequest.Log.response("Click_Button : Deck_Remove Button");
                 Admin.getInstance().removeDeck(selectedDeck);
                 clear();
             }
         } else if (src == createButton) {
-            Admin.getInstance().Log("Click_Button : Create_Deck Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : Create_Deck Button");
             if (deckCanBeCreated(false)) {
                 createDeck();
                 Update.refresh();
                 backButton.doClick();
             }
         } else if (src == changeButton) {
-            Admin.getInstance().Log("Click_Button : Change_Deck Button");
+            RequestHandler.SendRequest.Log.response("Click_Button : Change_Deck Button");
             if (deckCanBeCreated(true)) {
                 changeDeck();
                 Update.refresh();

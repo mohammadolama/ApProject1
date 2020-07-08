@@ -1,0 +1,22 @@
+{
+  "model": "faeze",
+  "name": "Faeze",
+  "description": "Alternative for \"Swamp King Dred\" ",
+  "manaCost": 7,
+  "type": "Minion",
+  "heroClass": "Hunter",
+  "rarity": "Legendary",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 9,
+  "health": 9,
+  "maxHealth": 9,
+  "title": "Beast",
+  "sleep": true,
+  "canBeAttacked": false
+}

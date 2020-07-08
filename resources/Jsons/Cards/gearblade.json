@@ -1,1 +1,18 @@
-{"name":"Gearblade","description":null,"type":"Weapon","heroClass":"Neutral","rarity":"Common","price":20,"durability":3,"att":2,"manaCost":2}
+{
+  "model": "gearblade",
+  "name": "Gearblade",
+  "description": null,
+  "manaCost": 2,
+  "type": "Weapon",
+  "heroClass": "Neutral",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 2,
+  "durability": 3
+}

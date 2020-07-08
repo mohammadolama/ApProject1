@@ -1,0 +1,22 @@
+{
+  "model": "nima",
+  "name": "Nima",
+  "description": "Do Absolutely Nothing . ",
+  "manaCost": 4,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Epic",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 9,
+  "health": 9,
+  "maxHealth": 9,
+  "title": "Pirate",
+  "sleep": true,
+  "canBeAttacked": false
+}

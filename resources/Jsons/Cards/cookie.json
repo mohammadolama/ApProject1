@@ -1,0 +1,18 @@
+{
+  "model": "cookie",
+  "name": "Cookie",
+  "description": "Restore 6 Health to all friendly characters",
+  "manaCost": 2,
+  "type": "Spell",
+  "heroClass": "Neutral",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 6,
+  "attackRestore": 0,
+  "usageTimes": 1,
+  "manaSpendOnSth": 0
+}

@@ -1,21 +1,17 @@
 package View.Panels;
 
-import Controller.Admin;
+import Controller.*;
 import Main.InfoPassive;
 import Model.CardModelView;
 import Model.Enums.Carts;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
-import static View.Panels.Constants.fantasy;
-import static View.Panels.Constants.gamePics;
+import static View.Panels.Constants.*;
 
 public class AlternativePanel extends JPanel implements ActionListener {
 
@@ -30,7 +26,6 @@ public class AlternativePanel extends JPanel implements ActionListener {
     private CardModelView model3;
     private InfoPassive infoPassive;
     private BufferedImage winner;
-    private String selectedWeaponName;
     private boolean enabled;
     private boolean discoverMode;
     private boolean winningMode;
@@ -75,7 +70,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
         add(ok);
     }
 
-    void changeName1() {
+    private void changeName1() {
         new Thread(() -> {
             if (discoverMode) {
                 while (model1 == null || model2 == null || model3 == null) {
@@ -92,7 +87,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
         }).start();
     }
 
-    void changeName2() {
+    private void changeName2() {
         new Thread(() -> {
             if (discoverMode) {
                 synchronized (object) {
@@ -145,17 +140,6 @@ public class AlternativePanel extends JPanel implements ActionListener {
         }
     }
 
-
-    private void generate() {
-        ArrayList<Carts> list = new ArrayList<>(Arrays.asList(Carts.values()));
-        Collections.shuffle(list);
-        model1 = Admin.getInstance().getPureViewModelOf(list.get(0).toString());
-        model2 = Admin.getInstance().getPureViewModelOf(list.get(1).toString());
-        model3 = Admin.getInstance().getPureViewModelOf(list.get(2).toString());
-        revalidate();
-        repaint();
-    }
-
     public CardModelView getModel1() {
         return model1;
     }
@@ -180,10 +164,6 @@ public class AlternativePanel extends JPanel implements ActionListener {
         this.model3 = model3;
     }
 
-    public boolean isWinningMode() {
-        return winningMode;
-    }
-
     public void setWinningMode(boolean winningMode) {
         this.winningMode = winningMode;
         remove(card1);
@@ -201,24 +181,8 @@ public class AlternativePanel extends JPanel implements ActionListener {
         this.enabled = enabled;
     }
 
-    public boolean isDiscoverMode() {
-        return discoverMode;
-    }
-
-    public void setDiscoverMode(boolean discoverMode) {
-        this.discoverMode = discoverMode;
-    }
-
-    public InfoPassive getInfoPassive() {
-        return infoPassive;
-    }
-
     public void setInfoPassive(InfoPassive infoPassive) {
         this.infoPassive = infoPassive;
-    }
-
-    public BufferedImage getWinner() {
-        return winner;
     }
 
     public void setWinner(BufferedImage winner) {
@@ -231,7 +195,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
         JButton src = (JButton) e.getSource();
         if (src.equals(ok)) {
             if (winningMode) {
-                Admin.getInstance().finishGame();
+                RequestHandler.SendRequest.FinishGame.response(null);
             } else {
                 Admin.getInstance().create(infoPassive, model1.getName(), model2.getName(), model3.getName());
             }
@@ -251,7 +215,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
             repaint();
             card1.setEnabled(false);
         } else {
-            Admin.getInstance().aylarAction(card1.getName());
+            RequestHandler.SendRequest.AylarAction.response(card1.getName());
         }
     }
 
@@ -262,7 +226,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
             repaint();
             card2.setEnabled(false);
         } else {
-            Admin.getInstance().aylarAction(card2.getName());
+            RequestHandler.SendRequest.AylarAction.response(card2.getName());
         }
     }
 
@@ -273,7 +237,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
             repaint();
             card3.setEnabled(false);
         } else {
-            Admin.getInstance().aylarAction(card3.getName());
+            RequestHandler.SendRequest.AylarAction.response(card3.getName());
         }
     }
 }

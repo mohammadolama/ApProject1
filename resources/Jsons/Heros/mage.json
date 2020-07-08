@@ -1,1 +1,16 @@
-{"player":null,"name":"Mage","hp":30,"canAttack":false,"att":0,"specialPower":"They use 2 less mana for using Spells .","heroPower":{"name":"FireBlast","manaCost":2},"heroPowerManaCost":2,"defence":0}
+{
+  "model": "mage",
+  "name": "Mage",
+  "health": 30,
+  "maxHealth": 30,
+  "canAttack": false,
+  "damage": 0,
+  "heroPowerManaCost": 2,
+  "powerNeedFriendlyTarget": false,
+  "powerNeedEnemyTarget": true,
+  "defence": 0,
+  "weapon": null,
+  "attack": 0,
+  "maxLife": 30,
+  "life": 30
+}

@@ -5,6 +5,14 @@ public class ShopConfig {
     private int startY1;
     private int spacing1;
 
+    private int backsize;
+
+    private int minionWidth;
+    private int mininHeight;
+    private int minionX;
+    private int minionY;
+
+
     private int startX2;
     private int startY2;
     private int width;
@@ -13,6 +21,8 @@ public class ShopConfig {
     private int priceY;
 
     public ShopConfig() {
+
+
     }
 
     public int getStartX1() {
@@ -77,5 +87,45 @@ public class ShopConfig {
 
     public void setPriceY(int priceY) {
         this.priceY = priceY;
+    }
+
+    public int getBacksize() {
+        return backsize;
+    }
+
+    public void setBacksize(int backsize) {
+        this.backsize = backsize;
+    }
+
+    public int getMinionWidth() {
+        return minionWidth;
+    }
+
+    public void setMinionWidth(int minionWidth) {
+        this.minionWidth = minionWidth;
+    }
+
+    public int getMininHeight() {
+        return mininHeight;
+    }
+
+    public void setMininHeight(int mininHeight) {
+        this.mininHeight = mininHeight;
+    }
+
+    public int getMinionX() {
+        return minionX;
+    }
+
+    public void setMinionX(int minionX) {
+        this.minionX = minionX;
+    }
+
+    public int getMinionY() {
+        return minionY;
+    }
+
+    public void setMinionY(int minionY) {
+        this.minionY = minionY;
     }
 }

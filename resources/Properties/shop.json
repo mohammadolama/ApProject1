@@ -1,1 +1,13 @@
-{"startX1":1350,"startY1":280,"spacing1":100,"startX2":20,"startY2":80,"width":130,"height":195,"priceY":480}
+{
+  "startX1": 1350,
+  "startY1": 280,
+  "spacing1": 100,
+  "startX2": 20,
+  "startY2": 80,
+  "width": 130,
+  "height": 195,
+  "priceY": 480,
+  "backsize": 60,
+  "mininHeight": 50,
+  "minionWidth": 200
+}

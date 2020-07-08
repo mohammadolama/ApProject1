@@ -1,0 +1,24 @@
+{
+  "model": "aghahaghi",
+  "name": "AghaHaghi",
+  "description": "Rush",
+  "manaCost": 5,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Rare",
+  "price": 20,
+  "attributes": [
+    "Rush"
+  ],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 6,
+  "health": 5,
+  "maxHealth": 5,
+  "title": "Dragon",
+  "sleep": true,
+  "canBeAttacked": false
+}

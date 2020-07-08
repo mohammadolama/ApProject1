@@ -42,8 +42,6 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
 
     private Deck selectedDeck;
 
-    private Admin admin;
-
     private CollectionConfig config;
 
 
@@ -53,11 +51,9 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
 
     private CollectionPanel() {
         initConfig();
-        admin = Admin.getInstance();
         setLayout(null);
 
         buttons = new ArrayList<>();
-
 
         searchField = new JTextField();
         searchField.setFont(Constants.f2.deriveFont(25.0f));
@@ -300,22 +296,22 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
             RequestHandler.SendRequest.Exit.response(null);
         } else if (src == newDeck) {
             RequestHandler.SendRequest.Log.response("Click_Button : New_Deck Button");
-            admin.createNewDeck();
+            RequestHandler.SendRequest.CreateNewDeck.response(null);
         } else if (src == allCards) {
             RequestHandler.SendRequest.Log.response("Click_Button : AllCards Button");
-            admin.updateDrawingPanel("all");
+            RequestHandler.SendRequest.UpdateDrawingPanel.response("all");
         } else if (src == lockedCards) {
             RequestHandler.SendRequest.Log.response("Click_Button : LockedCards Button");
-            admin.updateDrawingPanel("locked");
+            RequestHandler.SendRequest.UpdateDrawingPanel.response("locked");
         } else if (src == unlockedCards) {
             RequestHandler.SendRequest.Log.response("Click_Button : UnlockedCards Button");
-            admin.updateDrawingPanel("unlocked");
+            RequestHandler.SendRequest.UpdateDrawingPanel.response("unlocked");
         } else if (src == neutralCards) {
             RequestHandler.SendRequest.Log.response("Click_Button : NeutralCards Button");
-            admin.updateDrawingPanel("neutral");
+            RequestHandler.SendRequest.UpdateDrawingPanel.response("neutral");
         } else if (src == specialCards) {
             RequestHandler.SendRequest.Log.response("Click_Button : SpecialCards Button");
-            admin.updateDrawingPanel("special");
+            RequestHandler.SendRequest.UpdateDrawingPanel.response("special");
         } else if (src == changeButton) {
             RequestHandler.SendRequest.Log.response("Click_Button : Change_Deck Button");
             allCards.doClick();
@@ -329,7 +325,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
             MyFrame.getInstance().changePanel("col");
         } else if (src == selectButton) {
             if (selectedDeck != null) {
-                admin.setSelectedDeck(selectedDeck);
+                Admin.getInstance().setSelectedDeck(selectedDeck);
                 RequestHandler.SendRequest.Log.response("Click_Button : Select Button");
                 RequestHandler.SendRequest.Log.response(String.format("Deck : choose \"%s\" as selected deck.", selectedDeck.getName()));
             }
@@ -339,7 +335,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
                 CollectionDrawingPanel.getInstance().setSpecialSelected(false);
                 if (src.getName().equalsIgnoreCase(button.getName())) {
                     selectedDeck = Gamestate.getPlayer().getAllDecks().get(button.getName());
-                    admin.updateDrawingPanel(button.getName());
+                    RequestHandler.SendRequest.UpdateDrawingPanel.response(button.getName());
                     changeButton.setEnabled(true);
                 }
             }

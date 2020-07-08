@@ -1,11 +1,18 @@
 {
+  "model": "ashbringer",
   "name": "Ashbringer",
   "description": null,
+  "manaCost": 5,
   "type": "Weapon",
   "heroClass": "Neutral",
   "rarity": "Common",
   "price": 20,
-  "durability": 3,
-  "att": 5,
-  "manaCost": 5
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 5,
+  "durability": 3
 }

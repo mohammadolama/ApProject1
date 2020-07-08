@@ -35,13 +35,15 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitBenyamin(Benyamin benyamin, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        for (Card card : myPlayed) {
-            if (!card.equals(benyamin))
-                ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
-        }
-        for (Card card : targetPlayed) {
-            if (!card.equals(benyamin))
-                ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
+        if (target != null) {
+            for (Card card : myPlayed) {
+                if (!card.equals(benyamin))
+                    ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
+            }
+            for (Card card : targetPlayed) {
+                if (!card.equals(benyamin))
+                    ((Minion) card).setHealth(((Minion) card).getHealth() + benyamin.getHealthRestore());
+            }
         }
     }
 

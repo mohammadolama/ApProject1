@@ -1,0 +1,24 @@
+{
+  "model": "khashayar",
+  "name": "Khashayar",
+  "description": "Battlecry : deal 5 damage to All minions .",
+  "manaCost": 1,
+  "type": "Minion",
+  "heroClass": "Priest",
+  "rarity": "Rare",
+  "price": 20,
+  "attributes": [
+    "BattleCry"
+  ],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": -5,
+  "attackRestore": 0,
+  "damage": 2,
+  "health": 5,
+  "maxHealth": 5,
+  "title": null,
+  "sleep": true,
+  "canBeAttacked": false
+}

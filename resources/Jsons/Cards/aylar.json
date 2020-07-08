@@ -1,0 +1,18 @@
+{
+  "model": "aylar",
+  "name": "Aylar",
+  "description": "Discover a weapon from any class . Add it to your deck with +2/+2 .",
+  "manaCost": 1,
+  "type": "Spell",
+  "heroClass": "Rogue",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 2,
+  "attackRestore": 2,
+  "usageTimes": 1,
+  "manaSpendOnSth": 0
+}

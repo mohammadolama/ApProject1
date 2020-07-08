@@ -1,0 +1,22 @@
+{
+  "model": "javad",
+  "name": "Javad",
+  "description": null,
+  "manaCost": 0,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 6,
+  "health": 6,
+  "maxHealth": 6,
+  "title": null,
+  "sleep": true,
+  "canBeAttacked": false
+}

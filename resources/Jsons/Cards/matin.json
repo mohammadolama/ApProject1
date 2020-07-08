@@ -1,0 +1,22 @@
+{
+  "model": "matin",
+  "name": "Matin",
+  "description": "Whenever you draw a card gain +1/+1",
+  "manaCost": 5,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Rare",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": true,
+  "healthRestore": 1,
+  "attackRestore": 1,
+  "damage": 4,
+  "health": 4,
+  "maxHealth": 4,
+  "title": null,
+  "sleep": true,
+  "canBeAttacked": false
+}

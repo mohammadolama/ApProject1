@@ -1,1 +1,16 @@
-{"player":null,"name":"Warlock","hp":35,"canAttack":false,"att":0,"specialPower":"This hero has 35 HP at the start of the game .","heroPower":{"name":"LifeTap","manaCost":2},"heroPowerManaCost":3,"defence":0}
+{
+  "model": "warlock",
+  "name": "Warlock",
+  "health": 35,
+  "maxHealth": 35,
+  "canAttack": false,
+  "damage": 0,
+  "heroPowerManaCost": 3,
+  "powerNeedFriendlyTarget": false,
+  "powerNeedEnemyTarget": false,
+  "defence": 0,
+  "weapon": null,
+  "attack": 0,
+  "maxLife": 35,
+  "life": 35
+}

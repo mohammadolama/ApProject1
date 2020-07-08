@@ -1,0 +1,24 @@
+{
+  "model": "cat",
+  "name": "Cat",
+  "description": null,
+  "manaCost": 0,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Common",
+  "price": 0,
+  "attributes": [
+    "Rush"
+  ],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 1,
+  "health": 1,
+  "maxHealth": 1,
+  "title": null,
+  "sleep": true,
+  "canBeAttacked": false
+}

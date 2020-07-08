@@ -23,8 +23,6 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
     private JButton choose;
     private String hero;
 
-    private Admin admin;
-
     private FirstHeroConfig config;
 
     private void initConfig() {
@@ -32,7 +30,6 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
     }
 
     public FirstHeroSelector() {
-        admin = Admin.getInstance();
         initConfig();
         setFocusable(true);
         requestFocus();

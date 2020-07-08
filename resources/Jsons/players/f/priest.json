@@ -1,0 +1,13 @@
+{
+  "model": "priest",
+  "name": "Priest",
+  "health": 30,
+  "maxHealth": 30,
+  "canAttack": false,
+  "heroPowerManaCost": 2,
+  "powerNeedFriendlyTarget": true,
+  "powerNeedEnemyTarget": false,
+  "defence": 0,
+  "attack": 0,
+  "life": 30
+}

@@ -20,7 +20,6 @@ public class Admin {
     private static Admin admin;
     private static GameManager gameManager;
     private BoardPanel boardPanel;
-
     private LogInSignUp logInSignUp;
 
     private Admin() {
@@ -34,21 +33,12 @@ public class Admin {
         return admin;
     }
 
-    BufferedImage deckAnimationCard() {
-        return pictureOf(friendlyHandCards().get(friendlyHandCards().size() - 1).getName().toLowerCase());
-    }
-
-    public Card getCardOf(String name) {
-        return Card.getCardOf(name.toLowerCase());
-    }
-
-
-    public void levelUp() {
+    void levelUp() {
         player().setLevel(player().getLevel() + 1);
         frameRender();
     }
 
-    public void unlockHero() {
+    void unlockHero() {
         Hero.HeroAdder(player());
         frameRender();
         Col_Change.getInstance().update();
@@ -79,15 +69,6 @@ public class Admin {
             MyFrame.getPanel().add(col_change, "col");
         }).start();
 
-    }
-
-    void deleteAccount() {
-        int i = JOptionPane.showConfirmDialog(MyFrame.getInstance(), "You are about to delete your account.\n Are you sure?", "Delete Account", JOptionPane.YES_NO_OPTION);
-        if (i == 0) {
-            logInSignUp.DeleteAccount(player());
-            playMusic("login");
-            setVisiblePanel("login");
-        }
     }
 
     void logIn(String username, String password) {
@@ -121,6 +102,28 @@ public class Admin {
                 break;
         }
         frameRender();
+    }
+
+    void deleteAccount() {
+        int i = JOptionPane.showConfirmDialog(MyFrame.getInstance(), "You are about to delete your account.\n Are you sure?", "Delete Account", JOptionPane.YES_NO_OPTION);
+        if (i == 0) {
+            logInSignUp.DeleteAccount(player());
+            playMusic("login");
+            setVisiblePanel("login");
+        }
+    }
+
+    void logOut() {
+        Log("Sign out ");
+        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+        playMusic("login");
+        setVisiblePanel("login");
+    }
+
+    public void exit() {
+        Log("Sign out ");
+        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+        System.exit(0);
     }
 
     void signUp(String username, String password) {
@@ -168,7 +171,7 @@ public class Admin {
         MyFrame.getInstance().changePanel(panel);
     }
 
-    public void createNewDeck() {
+    void createNewDeck() {
         if (Gamestate.getPlayer().getAllDecks().size() < 12) {
             Col_Change.getInstance().setCreateMode(true);
             admin.setVisiblePanel("col");
@@ -177,7 +180,7 @@ public class Admin {
         }
     }
 
-    public void updateDrawingPanel(String name) {
+    void updateDrawingPanel(String name) {
         CollectionDrawingPanel.getInstance().setSpecialSelected(false);
         CollectionPanel.getInstance().getChangeButton().setEnabled(false);
         ArrayList<Card> cards;
@@ -207,7 +210,7 @@ public class Admin {
         gameManager.updateGameLog(log);
     }
 
-    public void buyCard(String name) {
+    void buyCard(String name) {
         Shop.Buy(name.toLowerCase());
         playSound("buy");
         Log(String.format("Buy : %s  is added to purchased cards .", name));
@@ -225,7 +228,7 @@ public class Admin {
         return player().getMoney();
     }
 
-    public ArrayList<Card> properCards(int i) {
+    ArrayList<Card> properCards(int i) {
         ArrayList<Card> ar;
         if (i == 1) {
             ar = Shop.Buyable();
@@ -244,79 +247,6 @@ public class Admin {
     public boolean canBeSold(String name) {
         return Shop.CanBeSold(name.toLowerCase());
     }
-
-    void logOut() {
-        Log("Sign out ");
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
-        playMusic("login");
-        setVisiblePanel("login");
-    }
-
-    public void exit() {
-        Log("Sign out ");
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
-        System.exit(0);
-    }
-
-    public void setSelectedDeck(Deck deck) {
-        Gamestate.getPlayer().setSelectedDeck(deck);
-        saveAndUpdate();
-    }
-
-    public void removeDeck(Deck selectedDeck) {
-        Gamestate.getPlayer().getAllDecks().remove(selectedDeck.getName());
-        if (selectedDeck.getName().equalsIgnoreCase(Gamestate.getPlayer().getSelectedDeck().getName())) {
-            Gamestate.getPlayer().setSelectedDeck(null);
-            CollectionPanel.getInstance().setSelectedDeck(null);
-        }
-        Log(String.format("Delete : deck %s is deleted.", selectedDeck.getName()));
-        saveAndUpdate();
-        setVisiblePanel("collection");
-    }
-
-    ArrayList<InfoPassive> generatePassive() {
-
-        return InfoPassive.randomGenerate(InfoPassive.infoPassiveCreator());
-    }
-
-    private void showError(String error) {
-        if (error.equalsIgnoreCase("emptyDeck")) {
-            JOptionPane.showMessageDialog(MenuPanel.getInstance(), "You must choose a deck, first");
-        } else if (error.equalsIgnoreCase("notEnoughCard.Please go to Collection.")) {
-            JOptionPane.showMessageDialog(MenuPanel.getInstance(), "notEnoughCard.Please go to Collection.");
-        }
-    }
-
-    private boolean checkNecessary() {
-        if (Gamestate.getPlayer().getSelectedDeck() == null) {
-            showError("emptyDeck");
-            return false;
-        }
-        if (Gamestate.getPlayer().getSelectedDeck().getDeck().size() < 15 || Gamestate.getPlayer().getSelectedDeck().getDeck().size() > 30) {
-            showError("notEnoughCard.Please go to Collection.");
-            return false;
-        }
-
-        return true;
-    }
-
-    public void enterGame() {
-        if (checkNecessary()) {
-            InfoPassivePanel infoPassivePanel = new InfoPassivePanel();
-
-            MyFrame.getPanel().add(infoPassivePanel, "info");
-            setVisiblePanel("info");
-        }
-    }
-
-    private void createGameManager(InfoPassive infoPassive, String card1, String card2, String card3) {
-        gameManager = new GameManager(Gamestate.getPlayer(), infoPassive, Deck.UpdateDeck(player().getSelectedDeck().getDeck()), card1, card2, card3);
-    }
-
-    private void createGameManger(InfoPassive infoPassive) {
-        gameManager = new GameManager(infoPassive);
-    }
-
 
     public void createDeck(String name, ArrayList<Carts> selectedCards, String heroName) {
         Deck deck = new Deck(0, 0, name);
@@ -339,6 +269,75 @@ public class Admin {
         JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
     }
 
+    public void setSelectedDeck(Deck deck) {
+        Gamestate.getPlayer().setSelectedDeck(deck);
+        saveAndUpdate();
+    }
+
+    public void removeDeck(Deck selectedDeck) {
+        Gamestate.getPlayer().getAllDecks().remove(selectedDeck.getName());
+        if (selectedDeck.getName().equalsIgnoreCase(Gamestate.getPlayer().getSelectedDeck().getName())) {
+            Gamestate.getPlayer().setSelectedDeck(null);
+            CollectionPanel.getInstance().setSelectedDeck(null);
+        }
+        Log(String.format("Delete : deck %s is deleted.", selectedDeck.getName()));
+        saveAndUpdate();
+        setVisiblePanel("collection");
+    }
+
+    ArrayList<String> bestDecks() {
+        return Deck.bestDeck(player());
+    }
+
+    Deck CloneDeck(String value) {
+        return Deck.cloneDeck(player().getAllDecks().get(value));
+    }
+
+    ArrayList<InfoPassive> generatePassive() {
+        return InfoPassive.randomGenerate(InfoPassive.infoPassiveCreator());
+    }
+
+    private void showError(String error) {
+        if (error.equalsIgnoreCase("emptyDeck")) {
+            JOptionPane.showMessageDialog(MenuPanel.getInstance(), "You must choose a deck, first");
+        } else if (error.equalsIgnoreCase("notEnoughCard.Please go to Collection.")) {
+            JOptionPane.showMessageDialog(MenuPanel.getInstance(), "notEnoughCard.Please go to Collection.");
+        }
+    }
+
+    private boolean checkNecessary() {
+        if (Gamestate.getPlayer().getSelectedDeck() == null) {
+            showError("emptyDeck");
+            return false;
+        }
+        if (Gamestate.getPlayer().getSelectedDeck().getDeck().size() < 15 || Gamestate.getPlayer().getSelectedDeck().getDeck().size() > 30) {
+            showError("notEnoughCard.Please go to Collection.");
+            return false;
+        }
+        return true;
+    }
+
+    public void enterGame() {
+        if (checkNecessary()) {
+            InfoPassivePanel infoPassivePanel = new InfoPassivePanel();
+            MyFrame.getPanel().add(infoPassivePanel, "info");
+            setVisiblePanel("info");
+        }
+    }
+
+    public void create(InfoPassive infoPassive, String card1, String card2, String card3) {
+        createPlayBoard(infoPassive, card1, card2, card3);
+    }
+
+    private void createGameManager(InfoPassive infoPassive, String card1, String card2, String card3) {
+        gameManager = new GameManager(Gamestate.getPlayer(), infoPassive, Deck.UpdateDeck(player().getSelectedDeck().getDeck()), card1, card2, card3);
+    }
+
+    /* Deck ReaderMode Generator  */
+    private void createGameManger(InfoPassive infoPassive, boolean practiceMode) {
+        gameManager = new GameManager(player(), infoPassive, Deck.UpdateDeck(player().getSelectedDeck().getDeck()), practiceMode);
+    }
+
     private void createPlayBoard(InfoPassive infoPassive, String card1, String card2, String card3) {
         createGameManager(infoPassive, card1, card2, card3);
         boardPanel = new BoardPanel();
@@ -348,83 +347,25 @@ public class Admin {
     }
 
     public void createDeckReaderMode(InfoPassive infoPassive) {
-        createGameManger(infoPassive);
+        createGameManger(infoPassive, false);
         boardPanel = new BoardPanel();
         boardPanel.setBounds(0, 0, 1600, 1000);
         MyFrame.getPanel().add(boardPanel, "play");
         setVisiblePanel("play");
     }
 
-
-    public Player player() {
-        return Gamestate.getPlayer();
+    public void createPracticeMode(InfoPassive infoPassive) {
+        createGameManger(infoPassive, true);
+        boardPanel = new BoardPanel();
+        boardPanel.setBounds(0, 0, 1600, 1000);
+        MyFrame.getPanel().add(boardPanel, "play");
+        setVisiblePanel("play");
     }
-
-    Player friendlyPlayer() {
-        return gameManager.getFriendlyPlayer();
-    }
-
-    Player enemyPlayer() {
-        return gameManager.getEnemyPlayer();
-    }
-
-    ArrayList<Card> friendlyDeckCards() {
-        return gameManager.getFriendlyDeckCards();
-    }
-
-    ArrayList<Card> enemyDeckCards() {
-        return gameManager.getEnemyDeckCards();
-    }
-
-    ArrayList<Card> friendlyHandCards() {
-        return gameManager.getFriendLyHandCards();
-    }
-
-    ArrayList<Card> enemyHandCards() {
-        return gameManager.getEnemyHandCards();
-    }
-
-    ArrayList<Card> friendlyPlayedCards() {
-        return gameManager.getFriendlyPlayedCards();
-    }
-
-    ArrayList<Card> enemyPlayedCards() {
-        return gameManager.getEnemyPlayedCards();
-    }
-
 
     void endTurn() {
         gameManager.endTurn();
         playSound("nextturn");
-        updateGameLog(String.format("%s  EndTurn .", enemyPlayer().getUsername()));
-    }
-
-    int friendlNotUsedmana() {
-        return gameManager.getFriendlyNotUsedMana();
-    }
-
-    int friendlyTotalMana() {
-        return gameManager.getFriendlyTotalMana();
-    }
-
-    Hero friendlyHero() {
-        return gameManager.getFriendlyPlayerHero();
-    }
-
-    Hero enemyHero() {
-        return gameManager.getEnemyPlayerHero();
-    }
-
-    String friendlyHeroName() {
-        return gameManager.getFriendlyPlayerHero().getName().toLowerCase();
-    }
-
-    String enemyHeroName() {
-        return gameManager.getEnemyPlayerHero().getName().toLowerCase();
-    }
-
-    BufferedImage pictureOf(String name) {
-        return Constants.cardPics.get(name.toLowerCase());
+        updateGameLog(String.format("%s  EndTurn .", enemyPlayerName()));
     }
 
     boolean ManaChecker(String name) {
@@ -440,7 +381,6 @@ public class Admin {
         }
         return true;
     }
-
 
     private void playMinion(Minion minions, int i, Character target) {
         if (friendlyPlayedCards().size() < 7) {
@@ -487,15 +427,6 @@ public class Admin {
         friendlyHandCards().remove(weapon);
         gameManager.setFriendlyWeapon(weapon);
         updateGameLog(String.format("%s played", weapon.getName().toLowerCase()));
-    }
-
-
-    Weapon friendlyWeapon() {
-        return gameManager.getFriendlyWeapon();
-    }
-
-    Weapon enemyWeapon() {
-        return gameManager.getEnemyWeapon();
     }
 
     int heroPowerCanBePlayed() {
@@ -557,26 +488,16 @@ public class Admin {
         }
     }
 
-
     public void drawCard(int i, String mode) {
         gameManager.drawCard(i, mode);
     }
-
 
     boolean canDoAction(int i) {
         Minion minion = (Minion) friendlyPlayedCards().get(i);
         return !minion.isSleep();
     }
 
-    ArrayList<String> bestDecks() {
-        return Deck.bestDeck(player());
-    }
-
-    Deck CloneDeck(String value) {
-        return Deck.cloneDeck(player().getAllDecks().get(value));
-    }
-
-    public CardModelView getPureViewModelOf(String string) {
+    CardModelView getPureViewModelOf(String string) {
         Card cards = getCardOf(string.toLowerCase());
         BufferedImage image = pictureOf(string.toLowerCase());
         int mana = cards.getManaCost();
@@ -599,14 +520,6 @@ public class Admin {
         ((Minion) friendlyPlayedCards().get(i)).setSleep(true);
     }
 
-    int friendlyHeroPowerusedTimes() {
-        return gameManager.getFriendlyHeroPowerUsageTime();
-    }
-
-    int enemyHeroPowerusedTimes() {
-        return gameManager.getEnemyHeroPowerUsageTime();
-    }
-
     private Character createTarget(int target) {
         if (target >= 10 && target < 20) {
             return friendlyPlayedCards().get(target - 10);
@@ -620,7 +533,6 @@ public class Admin {
             return null;
         }
     }
-
 
     void playCard(String string, int i, int target) {
         Minion targeted = (Minion) createTarget(target);
@@ -660,14 +572,6 @@ public class Admin {
         }
     }
 
-    public void aylarAction(String weapon) {
-        Weapon weapon1 = (Weapon) getCardOf(weapon);
-        weapon1.setDurability(weapon1.getDurability() + 2);
-        weapon1.setDamage(weapon1.getDamage() + 2);
-        friendlyDeckCards().add(weapon1);
-        setVisiblePanel("play");
-    }
-
 
     boolean canBePlayed(String string) {
         for (Card cards : friendlyHandCards()) {
@@ -694,39 +598,6 @@ public class Admin {
         throw new RuntimeException();
     }
 
-
-    ArrayList<String> gameLog() {
-        return gameManager.getGameLog();
-    }
-
-    int friendlyPowerMana() {
-        return (friendlyHero().getHeroPower().getManaCost() - gameManager.getFriendlyPowerManaDecrease());
-    }
-
-    int enemyPowerMana() {
-        return (enemyHero().getHeroPower().getManaCost() - gameManager.getEnemyPowerManaDecrease());
-    }
-
-    public int defaultCardMana(Card cards) {
-        return cards.getManaCost();
-    }
-
-    public int cardHp(Minion minions) {
-        return minions.getHealth();
-    }
-
-    public int cardMAttack(Minion minions) {
-        return minions.getDamage();
-    }
-
-    public int cardWAttack(Weapon weapon) {
-        return weapon.getDamage();
-    }
-
-    public int cardDurability(Weapon weapon) {
-        return weapon.getDurability();
-    }
-
     public void playSound(String name) {
         new Thread(() -> SoundAdmin.playSound(name)).start();
     }
@@ -743,24 +614,24 @@ public class Admin {
             Minion target1 = (Minion) enemyPlayedCards().get(target);
             actionHandler.Attack(attacker1, target1, enemyPlayedCards());
             setSleep(attacker);
-            panel.draw(attacker, target, attacker1.getAttack(), target1.getAttack());
-        } else if (attacker >= 0 && target < 0) {
+            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
+        } else if (attacker >= 0) {
             Minion attacker1 = (Minion) friendlyPlayedCards().get(attacker);
             Hero target1 = enemyHero();
             actionHandler.Attack(attacker1, target1, enemyPlayedCards());
             setSleep(attacker);
-            panel.draw(attacker, target, attacker1.getAttack(), target1.getAttack());
-        } else if (attacker < 0 && target >= 0) {
+            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
+        } else if (target >= 0) {
             Hero attacker1 = friendlyHero();
             Minion target1 = (Minion) enemyPlayedCards().get(target);
-            panel.draw(attacker, target, attacker1.getAttack(), target1.getAttack());
+            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
             if (actionHandler.Attack(attacker1, target1, enemyPlayedCards())) {
                 gameManager.updateWeapon();
             }
-        } else if (attacker < 0 && target < 0) {
+        } else {
             Hero attacker1 = friendlyHero();
             Hero target1 = enemyHero();
-            panel.draw(attacker, target, attacker1.getAttack(), target1.getAttack());
+            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
             if (actionHandler.Attack(attacker1, target1, enemyPlayedCards())) {
                 gameManager.updateWeapon();
             }
@@ -828,11 +699,6 @@ public class Admin {
         MyFrame.getInstance().changePanel("three");
     }
 
-
-    public void create(InfoPassive infoPassive, String card1, String card2, String card3) {
-        createPlayBoard(infoPassive, card1, card2, card3);
-    }
-
     public void listOfTargets(BoardPanel boardPanel) {
         ArrayList<Integer> targets = new ArrayList<>();
         int i = 0;
@@ -885,7 +751,6 @@ public class Admin {
             summonedMinion((Minion) target, 1, target.getAttack(), target.getLife());
         }
     }
-
 
     private void checkForWinner() {
         int i = gameManager.checkForWinner();
@@ -942,7 +807,7 @@ public class Admin {
         }
     }
 
-    public void finishGame() {
+    void finishGame() {
         saveAndUpdate();
         setVisiblePanel("menu");
     }
@@ -958,6 +823,115 @@ public class Admin {
         if (usedTimes1.containsKey(name.toLowerCase())) {
             usedTimes1.replace(name, usedTimes1.get(name) + 1);
         }
+    }
+
+    void aylarAction(String weapon) {
+        Weapon weapon1 = (Weapon) getCardOf(weapon);
+        weapon1.setDurability(weapon1.getDurability() + 2);
+        weapon1.setDamage(weapon1.getDamage() + 2);
+        friendlyDeckCards().add(weapon1);
+        setVisiblePanel("play");
+    }
+
+    BufferedImage deckAnimationCard() {
+        return pictureOf(friendlyHandCards().get(friendlyHandCards().size() - 1).getName().toLowerCase());
+    }
+
+    Card getCardOf(String name) {
+        return Card.getCardOf(name.toLowerCase());
+    }
+
+    public Player player() {
+        return Gamestate.getPlayer();
+    }
+
+
+    String friendlyPlayerName() {
+        return gameManager.getFriendlyPlayer().getUsername();
+    }
+
+    String enemyPlayerName() {
+        return gameManager.getEnemyPlayer().getUsername();
+    }
+
+    ArrayList<Card> friendlyDeckCards() {
+        return gameManager.getFriendlyDeckCards();
+    }
+
+    ArrayList<Card> enemyDeckCards() {
+        return gameManager.getEnemyDeckCards();
+    }
+
+    ArrayList<Card> friendlyHandCards() {
+        return gameManager.getFriendLyHandCards();
+    }
+
+    ArrayList<Card> enemyHandCards() {
+        return gameManager.getEnemyHandCards();
+    }
+
+    ArrayList<Card> friendlyPlayedCards() {
+        return gameManager.getFriendlyPlayedCards();
+    }
+
+    ArrayList<Card> enemyPlayedCards() {
+        return gameManager.getEnemyPlayedCards();
+    }
+
+    int friendlNotUsedmana() {
+        return gameManager.getFriendlyNotUsedMana();
+    }
+
+    int friendlyTotalMana() {
+        return gameManager.getFriendlyTotalMana();
+    }
+
+    Hero friendlyHero() {
+        return gameManager.getFriendlyPlayerHero();
+    }
+
+    Hero enemyHero() {
+        return gameManager.getEnemyPlayerHero();
+    }
+
+    String friendlyHeroName() {
+        return gameManager.getFriendlyPlayerHero().getName().toLowerCase();
+    }
+
+    String enemyHeroName() {
+        return gameManager.getEnemyPlayerHero().getName().toLowerCase();
+    }
+
+    BufferedImage pictureOf(String name) {
+        return Constants.cardPics.get(name.toLowerCase());
+    }
+
+    Weapon friendlyWeapon() {
+        return gameManager.getFriendlyWeapon();
+    }
+
+    Weapon enemyWeapon() {
+        return gameManager.getEnemyWeapon();
+    }
+
+    int friendlyHeroPowerusedTimes() {
+        return gameManager.getFriendlyHeroPowerUsageTime();
+    }
+
+    int enemyHeroPowerusedTimes() {
+        return gameManager.getEnemyHeroPowerUsageTime();
+    }
+
+    ArrayList<String> gameLog() {
+        return gameManager.getGameLog();
+    }
+
+    int friendlyPowerMana() {
+        return (friendlyHero().getHeroPower().getManaCost() - gameManager.getFriendlyPowerManaDecrease());
+    }
+
+    int enemyPowerMana() {
+        return (enemyHero().getHeroPower().getManaCost() - gameManager.getEnemyPowerManaDecrease());
     }
 }
 

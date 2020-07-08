@@ -1,1 +1,14 @@
-{"startX":300,"startY":190,"width":180,"height":250}
+{
+  "startX": 300,
+  "startY": 190,
+  "width": 120,
+  "height": 180,
+  "backX": 1430,
+  "deleteX": 1370,
+  "exitX": 1500,
+  "backY": 890,
+  "backSize": 60,
+  "infoX": 50,
+  "infoY": 200,
+  "deckX": 1265
+}

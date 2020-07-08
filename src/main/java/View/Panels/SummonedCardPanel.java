@@ -1,5 +1,7 @@
 package View.Panels;
 
+import Configs.ConfigsLoader;
+import Configs.SummonedConfig;
 import Model.CardModelView;
 
 import javax.swing.*;
@@ -9,14 +11,17 @@ import static View.Panels.Constants.f2;
 
 public class SummonedCardPanel extends JPanel {
 
+    private SummonedConfig config;
+
     private CardModelView view;
     private int damage;
     private int HP;
     private int mode;
 
-    public SummonedCardPanel() {
-        setSize(new Dimension(350, 400));
-        setPreferredSize(new Dimension(350, 400));
+    SummonedCardPanel() {
+        config = ConfigsLoader.getInstance().getSummonedConfig();
+        setSize(new Dimension(config.getWidth(), config.getHeight()));
+        setPreferredSize(new Dimension(config.getWidth(), config.getHeight()));
     }
 
     public CardModelView getView() {
@@ -35,19 +40,11 @@ public class SummonedCardPanel extends JPanel {
         this.damage = damage;
     }
 
-    public int getHP() {
-        return HP;
-    }
-
-    public void setHP(int HP) {
+    void setHP(int HP) {
         this.HP = HP;
     }
 
-    public int getMode() {
-        return mode;
-    }
-
-    public void setMode(int mode) {
+    void setMode(int mode) {
         this.mode = mode;
     }
 
@@ -58,11 +55,11 @@ public class SummonedCardPanel extends JPanel {
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g.setFont(f2.deriveFont(50.0f));
         if (view != null) {
-            g.drawImage(view.getImage(), 0, 0, 350, 400, null);
+            g.drawImage(view.getImage(), 0, 0, config.getWidth(), config.getHeight(), null);
             if (mode != 0) {
                 g.setColor(Color.green);
-                g.drawString(damage + "", 40, 380);
-                g.drawString(HP + "", 290, 380);
+                g.drawString(damage + "", config.getDamageX(), config.getDamageYl());
+                g.drawString(HP + "", config.getHpX(), config.getDamageYl());
             }
         }
     }

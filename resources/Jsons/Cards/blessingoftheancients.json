@@ -1,11 +1,18 @@
 {
+  "model": "blessingoftheancients",
   "name": "BlessingOfTheAncients",
   "description": "Give your minions +1/+1 .",
+  "manaCost": 3,
   "type": "Spell",
-  "price": 20,
   "heroClass": "Neutral",
   "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 1,
+  "attackRestore": 1,
   "usageTimes": 1,
-  "title": null,
-  "manaCost": 3
+  "manaSpendOnSth": 0
 }

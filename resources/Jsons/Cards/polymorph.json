@@ -1,11 +1,18 @@
 {
+  "model": "polymorph",
   "name": "Polymorph",
   "description": "Transform a minion into a 1/1 sheep .",
+  "manaCost": 4,
   "type": "Spell",
   "heroClass": "Mage",
   "rarity": "Rare",
   "price": 20,
-  "manaCost": 4,
+  "attributes": [],
+  "needFriendlyTarget": true,
+  "needEnemyTarget": true,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
   "usageTimes": 1,
-  "title": null
+  "manaSpendOnSth": 0
 }

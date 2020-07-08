@@ -17,15 +17,12 @@ public class SettingPanel extends JPanel implements ActionListener {
     private JButton muteSound;
     private JButton back;
     private JButton exit;
-    private Admin admin;
 
     private int i = 0;
 
     private static SettingPanel settingPanel = new SettingPanel();
 
     private SettingPanel() {
-        admin = Admin.getInstance();
-
         setLayout(null);
         setFocusable(true);
         back = new JButton();

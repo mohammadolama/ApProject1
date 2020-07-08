@@ -1,0 +1,18 @@
+{
+  "model": "soroush",
+  "name": "Soroush",
+  "description": "Give a minion +4/+4, Divine Shield, and Taunt",
+  "manaCost": 6,
+  "type": "Spell",
+  "heroClass": "Neutral",
+  "rarity": "Rare",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": true,
+  "needEnemyTarget": true,
+  "continiousAction": false,
+  "healthRestore": 4,
+  "attackRestore": 4,
+  "usageTimes": 1,
+  "manaSpendOnSth": 0
+}

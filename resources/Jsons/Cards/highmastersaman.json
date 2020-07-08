@@ -1,0 +1,24 @@
+{
+  "model": "highmastersaman",
+  "name": "HighMasterSaman",
+  "description": "Battlecry: Destroy all other minions",
+  "manaCost": 8,
+  "type": "Minion",
+  "heroClass": "Neutral",
+  "rarity": "Legendary",
+  "price": 20,
+  "attributes": [
+    "BattleCry"
+  ],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": -200,
+  "attackRestore": 0,
+  "damage": 12,
+  "health": 12,
+  "maxHealth": 12,
+  "title": "Dragon",
+  "sleep": true,
+  "canBeAttacked": false
+}

@@ -1,1 +1,18 @@
-{"name":"SandBreath","description":"Give a minion +1/+2. Give it Divine Shield if you're holding a Dragon","type":"Spell","heroClass":"Priest","rarity":"Common","price":20,"usageTimes":1,"title":null,"manaCost":1}
+{
+  "model": "sandbreath",
+  "name": "SandBreath",
+  "description": "Give a minion +1/+2. Give it Divine Shield .",
+  "manaCost": 2,
+  "type": "Spell",
+  "heroClass": "Priest",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": true,
+  "needEnemyTarget": true,
+  "continiousAction": false,
+  "healthRestore": 1,
+  "attackRestore": 2,
+  "usageTimes": 1,
+  "manaSpendOnSth": 0
+}

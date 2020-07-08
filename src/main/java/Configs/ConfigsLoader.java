@@ -17,6 +17,7 @@ public class ConfigsLoader {
     private FirstHeroConfig firstHeroConfig;
     private MenuConfig menuConfig;
     private LoginConfig loginConfig;
+    private SummonedConfig summonedConfig;
     private String path = String.format("resources/Properties/");
 
 
@@ -53,6 +54,8 @@ public class ConfigsLoader {
             statusConfig = objectMapper.readValue(fileReader, StatusConfig.class);
             fileReader = new FileReader(path + "firsthero.json");
             firstHeroConfig = objectMapper.readValue(fileReader, FirstHeroConfig.class);
+            fileReader = new FileReader(path + "summonedconfig.json");
+            summonedConfig = objectMapper.readValue(fileReader, SummonedConfig.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,5 +99,9 @@ public class ConfigsLoader {
 
     public LoginConfig getLoginConfig() {
         return loginConfig;
+    }
+
+    public SummonedConfig getSummonedConfig() {
+        return summonedConfig;
     }
 }

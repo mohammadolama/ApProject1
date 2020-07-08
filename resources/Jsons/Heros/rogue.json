@@ -1,1 +1,16 @@
-{"player":null,"name":"Rogue","hp":30,"canAttack":false,"att":0,"specialPower":"A card which is not in your class or not neutral, costs 2 less mana .","heroPower":{"name":"Rubbery","manaCost":3},"heroPowerManaCost":3,"defence":0}
+{
+  "model": "rogue",
+  "name": "Rogue",
+  "health": 30,
+  "maxHealth": 30,
+  "canAttack": false,
+  "damage": 0,
+  "heroPowerManaCost": 3,
+  "powerNeedFriendlyTarget": false,
+  "powerNeedEnemyTarget": false,
+  "defence": 0,
+  "weapon": null,
+  "attack": 0,
+  "maxLife": 30,
+  "life": 30
+}

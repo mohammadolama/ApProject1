@@ -69,34 +69,34 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
         allbutton.addActionListener(this);
         allbutton.addMouseListener(this);
-        allbutton.setBounds(config.getStartX1(), config.getStartY1(), 200, 50);
+        allbutton.setBounds(config.getStartX1(), config.getStartY1(), config.getMinionWidth(), config.getMininHeight());
         allbutton.setFont(f2);
         allbutton.setFocusable(false);
 
         minionButton.addActionListener(this);
         minionButton.addMouseListener(this);
-        minionButton.setBounds(config.getStartX1(), config.getStartY1() + config.getSpacing1(), 200, 50);
+        minionButton.setBounds(config.getStartX1(), config.getStartY1() + config.getSpacing1(), config.getMinionWidth(), config.getMininHeight());
         minionButton.setFont(f2);
         minionButton.setFocusable(false);
 
 
         spellButton.addActionListener(this);
         spellButton.addMouseListener(this);
-        spellButton.setBounds(config.getStartX1(), config.getStartY1() + 2 * config.getSpacing1(), 200, 50);
+        spellButton.setBounds(config.getStartX1(), config.getStartY1() + 2 * config.getSpacing1(), config.getMinionWidth(), config.getMininHeight());
         spellButton.setFocusable(false);
         spellButton.setFont(f2);
 
 
         weaponButton.addActionListener(this);
         weaponButton.addMouseListener(this);
-        weaponButton.setBounds(config.getStartX1(), config.getStartY1() + 3 * config.getSpacing1(), 200, 50);
+        weaponButton.setBounds(config.getStartX1(), config.getStartY1() + 3 * config.getSpacing1(), config.getMinionWidth(), config.getMininHeight());
         weaponButton.setFocusable(false);
         weaponButton.setFont(f2);
 
 
         backButton.setIcon(gameIcon.get("back"));
         backButton.addActionListener(this);
-        backButton.setBounds(config.getStartX1() + 75, config.getStartY1() + 6 * config.getSpacing1(), 60, 60);
+        backButton.setBounds(config.getStartX1() + 75, config.getStartY1() + 6 * config.getSpacing1(), config.getBacksize(), config.getBacksize());
         backButton.setFocusable(false);
         backButton.setContentAreaFilled(false);
         backButton.setRolloverEnabled(false);
@@ -104,7 +104,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
         exit.addActionListener(this);
         exit.setIcon(gameIcon.get("exit"));
-        exit.setBounds(config.getStartX1() + 150, config.getStartY1() + 6 * config.getSpacing1(), 60, 60);
+        exit.setBounds(config.getStartX1() + 150, config.getStartY1() + 6 * config.getSpacing1(), config.getBacksize(), config.getBacksize());
         exit.setFocusable(false);
         exit.setContentAreaFilled(false);
         exit.setRolloverEnabled(false);
@@ -113,7 +113,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
         buyActivatedButton.addActionListener(this);
         buyActivatedButton.addMouseListener(this);
-        buyActivatedButton.setBounds(700, 880, 200, 50);
+        buyActivatedButton.setBounds(700, 880, config.getMinionWidth(), config.getMininHeight());
         buyActivatedButton.setFocusable(false);
         buyActivatedButton.setBackground(Color.YELLOW);
         buyActivatedButton.setFont(f2);
@@ -121,7 +121,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
         sellActivatedButton.addActionListener(this);
         sellActivatedButton.addMouseListener(this);
-        sellActivatedButton.setBounds(950, 880, 200, 50);
+        sellActivatedButton.setBounds(950, 880, config.getMinionWidth(), config.getMininHeight());
         sellActivatedButton.setFocusable(false);
         sellActivatedButton.setFont(f2);
 
@@ -421,7 +421,6 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         } else if (src == sellActivatedButton) {
             buyActivatedButton.setBackground(Color.white);
             sellActivatedButton.setBackground(Color.yellow);
-
             buyActivated = false;
             BuySellChanger();
         } else if (src == buyButton) {

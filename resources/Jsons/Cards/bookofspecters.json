@@ -1,1 +1,18 @@
-{"name":"BookOfSpecters","description":"Draw 3 cards,Discard any spells drawn.","type":"Spell","heroClass":"Neutral","rarity":"Epic","price":20,"usageTimes":1,"title":null,"manaCost":2}
+{
+  "model": "bookofspecters",
+  "name": "BookOfSpecters",
+  "description": "Draw 3 cards.",
+  "manaCost": 2,
+  "type": "Spell",
+  "heroClass": "Neutral",
+  "rarity": "Epic",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "usageTimes": 1,
+  "manaSpendOnSth": 0
+}

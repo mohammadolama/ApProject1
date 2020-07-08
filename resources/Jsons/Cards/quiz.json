@@ -1,0 +1,18 @@
+{
+  "model": "quiz",
+  "name": "Quiz",
+  "description": "Destroy a random enemy minion",
+  "manaCost": 3,
+  "type": "Spell",
+  "heroClass": "Hunter",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": -200,
+  "attackRestore": 0,
+  "usageTimes": 1,
+  "manaSpendOnSth": 0
+}

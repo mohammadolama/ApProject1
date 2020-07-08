@@ -1,11 +1,21 @@
 {
+  "model": "strengthinnumbers",
   "name": "StrengthInNumbers",
   "description": "Sidequest: Spend 10 Mana on minions.\nReward: Summon a minion from your deck.",
+  "manaCost": 1,
   "type": "Spell",
   "heroClass": "Neutral",
   "rarity": "Common",
   "price": 20,
+  "attributes": [
+    "Reward"
+  ],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": true,
+  "healthRestore": 0,
+  "attackRestore": 0,
   "usageTimes": 1,
-  "title": "Quest",
-  "manaCost": 1
+  "manaSpendOnSth": 0,
+  "maxManaSpendOnSth": 10
 }

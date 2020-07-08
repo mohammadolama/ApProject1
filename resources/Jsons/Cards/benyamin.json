@@ -1,0 +1,22 @@
+{
+  "model": "benyamin",
+  "name": "Benyamin",
+  "description": "At the end of your turn , deal 1 damage to all other minions .",
+  "manaCost": 3,
+  "type": "Minion",
+  "heroClass": "Warlock",
+  "rarity": "Legendary",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": true,
+  "healthRestore": -1,
+  "attackRestore": 0,
+  "damage": 4,
+  "health": 2,
+  "maxHealth": 2,
+  "title": "Beast",
+  "sleep": true,
+  "canBeAttacked": false
+}

@@ -1,1 +1,18 @@
-{"name":"BloodFury","description":null,"type":"Weapon","heroClass":"Neutral","rarity":"Common","price":20,"durability":8,"att":3,"manaCost":3}
+{
+  "model": "bloodfury",
+  "name": "BloodFury",
+  "description": null,
+  "manaCost": 3,
+  "type": "Weapon",
+  "heroClass": "Neutral",
+  "rarity": "Common",
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 3,
+  "durability": 8
+}

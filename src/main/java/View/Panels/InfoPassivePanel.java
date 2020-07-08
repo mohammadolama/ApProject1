@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 public class InfoPassivePanel extends JPanel implements ActionListener {
 
-    private Admin admin;
     private JButton passive1;
     private JButton passive2;
     private JButton passive3;
@@ -35,7 +34,6 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
     public InfoPassivePanel() {
         initConfig();
         setLayout(null);
-        admin = Admin.getInstance();
 
         normal = new JButton("Normal Mode");
         normal.setFont(Constants.fantasy.deriveFont(30.0f));
@@ -122,8 +120,7 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         JButton src = (JButton) e.getSource();
         if (src == normal) {
             if (infoPassive != null) {
-                admin.threeCardChoose(infoPassive);
-//                admin.createPlayBoard(infoPassive);
+                Admin.getInstance().threeCardChoose(infoPassive);
                 RequestHandler.SendRequest.Log.response("Click_Button : Start Button");
                 RequestHandler.SendRequest.Log.response("Start the Battle");
             }
@@ -146,9 +143,6 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
             RequestHandler.SendRequest.Log.response("Click_Button : Back Button");
             RequestHandler.SendRequest.Log.response("Navigate : Main Menu");
             RequestHandler.SendRequest.VisiblePanel.response("menu");
-            return;
         }
-
-
     }
 }

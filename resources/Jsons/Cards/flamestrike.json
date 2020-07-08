@@ -1,11 +1,18 @@
 {
-  "name": "FlameStrike",
-  "description": "Deal 5 Damage to all enemy minions and 2 Damage to enemy Hero .",
+  "model": "flamestrike",
+  "name": "Flamestrike",
+  "description": "Deal 4 Damage to all enemy minions.",
+  "manaCost": 7,
   "type": "Spell",
   "heroClass": "Mage",
   "rarity": "Legendary",
   "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": -4,
+  "attackRestore": 0,
   "usageTimes": 1,
-  "title": null,
-  "manaCost": 7
+  "manaSpendOnSth": 0
 }

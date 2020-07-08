@@ -16,9 +16,6 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener, 
         config = ConfigsLoader.getInstance().getMenuConfig();
     }
 
-    private Admin admin;
-
-
     private static JButton play = new JButton("Play");
     private static JButton collection = new JButton("Collection");
     private static JButton store = new JButton("Store");
@@ -35,7 +32,6 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener, 
         initConfig();
         setLayout(null);
         setFocusable(true);
-        admin = Admin.getInstance();
         play.addActionListener(this);
         play.addMouseListener(this);
         play.setBounds(config.getStartX(), config.getStartY(), 200, 50);
@@ -134,10 +130,10 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener, 
         } else if (button == cheat) {
             String st = JOptionPane.showInputDialog(this, "Don't Cheat!!");
             if (st.equalsIgnoreCase("lvlup")) {
-                admin.levelUp();
+                RequestHandler.SendRequest.LvlUp.response(null);
                 JOptionPane.showMessageDialog(this, "Level up!");
             } else if (st.equalsIgnoreCase("hesoyam")) {
-                admin.unlockHero();
+                RequestHandler.SendRequest.UnlockHeros.response(null);
                 JOptionPane.showMessageDialog(this, "All heroes unlocked!");
             }
         } else if (button == exit) {

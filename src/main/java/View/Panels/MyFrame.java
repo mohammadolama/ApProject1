@@ -32,12 +32,9 @@ public class MyFrame extends JFrame {
 
         panel.setLayout(cardLayout);
 
-//        ActionChartPanel ac=new ActionChartPanel();
-//        panel.add(ac);
-
         LoginPanel loginPanel = LoginPanel.getInstance();
         MenuPanel menuPanel = MenuPanel.getInstance();
-//
+
         panel.add(loginPanel, "login");
         panel.add(menuPanel, "menu");
 

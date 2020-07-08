@@ -1,0 +1,24 @@
+{
+  "model": "yasaman",
+  "name": "Yasaman",
+  "description": "Battlecry : Destroy a minion and gain its health .",
+  "manaCost": 8,
+  "type": "Minion",
+  "heroClass": "Rogue",
+  "rarity": "Legendary",
+  "price": 20,
+  "attributes": [
+    "BattleCry"
+  ],
+  "needFriendlyTarget": true,
+  "needEnemyTarget": true,
+  "continiousAction": false,
+  "healthRestore": -200,
+  "attackRestore": 0,
+  "damage": 8,
+  "health": 1,
+  "maxHealth": 12,
+  "title": null,
+  "sleep": true,
+  "canBeAttacked": false
+}

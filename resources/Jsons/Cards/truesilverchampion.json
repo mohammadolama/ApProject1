@@ -1,11 +1,18 @@
 {
+  "model": "truesilverchampion",
   "name": "TrueSilverChampion",
-  "description": "Whenever your hero attacks,restore 2 HP to it .",
+  "description": null,
+  "manaCost": 4,
   "type": "Weapon",
   "heroClass": "Neutral",
-  "price": 20,
   "rarity": "Rare",
-  "durability": 2,
-  "att": 4,
-  "manaCost": 4
+  "price": 20,
+  "attributes": [],
+  "needFriendlyTarget": false,
+  "needEnemyTarget": false,
+  "continiousAction": false,
+  "healthRestore": 0,
+  "attackRestore": 0,
+  "damage": 4,
+  "durability": 2
 }
