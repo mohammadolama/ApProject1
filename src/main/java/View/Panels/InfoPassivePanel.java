@@ -21,7 +21,9 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
     private JButton backButton;
     private JButton normal;
     private JButton deckReader;
+    private JButton practice;
     private InfoPassive infoPassive;
+
 
     private InfoConfig config;
 
@@ -37,16 +39,21 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
 
         normal = new JButton("Normal Mode");
         normal.setFont(Constants.fantasy.deriveFont(30.0f));
-        normal.setBounds(500, 850, 200, 60);
+        normal.setBounds(400, 850, 200, 60);
         normal.addActionListener(this);
         add(normal);
 
         deckReader = new JButton("Deck Reader");
         deckReader.setFont(Constants.fantasy.deriveFont(23.0f));
-        deckReader.setBounds(900, 850, 200, 60);
+        deckReader.setBounds(700, 850, 200, 60);
         deckReader.addActionListener(this);
         add(deckReader);
 
+        practice = new JButton("Practice");
+        practice.setFont(Constants.fantasy.deriveFont(23.0f));
+        practice.setBounds(1000, 850, 200, 60);
+        practice.addActionListener(this);
+        add(practice);
 
         backButton = new JButton();
         backButton.addActionListener(this);
@@ -94,6 +101,7 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         add(passive3);
         add(normal);
         add(deckReader);
+        add(practice);
         add(backButton);
     }
 
@@ -127,6 +135,10 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         } else if (src == deckReader) {
             if (infoPassive != null) {
                 Admin.getInstance().createDeckReaderMode(infoPassive);
+            }
+        } else if (src == practice) {
+            if (infoPassive != null) {
+                Admin.getInstance().createPracticeMode(infoPassive);
             }
         }
 

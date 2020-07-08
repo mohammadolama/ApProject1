@@ -18,7 +18,7 @@ public class BattlecryVisitor implements Visitor {
         myHand.add(minion2);
         Minion minion3 = ((Minion) target).cloneMinion((Minion) target);
         Admin.getInstance().summonMinion(minion3, -1);
-        Admin.getInstance().summonedMinion(minion3, 0, 0, 0);
+        Admin.getInstance().summonedMinion(minion3, 0, minion3.getDamage(), minion3.getHealth());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class BattlecryVisitor implements Visitor {
         if (myPlayed.size() < 7) {
             Mobin mobin1 = mobin.cloneMinion(mobin);
             Admin.getInstance().summonMinion(mobin1, -1);
-            Admin.getInstance().summonedMinion(mobin, 0, 0, 0);
+            Admin.getInstance().summonedMinion(mobin, 0, mobin.getDamage(), mobin.getHealth());
 
         }
     }
@@ -226,7 +226,7 @@ public class BattlecryVisitor implements Visitor {
         yasaman.setHealth(i);
         yasaman.setMaxHealth(j);
         target.setLife(target.getLife() + yasaman.getHealthRestore());
-        Admin.getInstance().summonedMinion(yasaman, 1, 0, i);
+        Admin.getInstance().summonedMinion(yasaman, 1, yasaman.getDamage(), yasaman.getHealth());
     }
 
 }

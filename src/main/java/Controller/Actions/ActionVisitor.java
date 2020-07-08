@@ -62,7 +62,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitBookOfSpecters(BookOFSpecters bookOFSpecters, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        Admin.getInstance().drawCard(3, "extra");
+        Admin.getInstance().drawCard(3, "extra", myDeck, myHand);
     }
 
     @Override
@@ -80,10 +80,12 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitDarkSkies(DarkSkies darkSkies, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        Random random = new Random();
-        int i = random.nextInt(targetPlayed.size());
-        ((Minion) targetPlayed.get(i)).setHealth(((Minion) targetPlayed.get(i)).getHealth() + darkSkies.getHealthRestore());
-        Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, 0, -2);
+        if (targetPlayed.size() > 0) {
+            Random random = new Random();
+            int i = random.nextInt(targetPlayed.size());
+            ((Minion) targetPlayed.get(i)).setHealth(((Minion) targetPlayed.get(i)).getHealth() + darkSkies.getHealthRestore());
+            Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, target.getAttack(), target.getLife());
+        }
     }
 
     @Override
@@ -153,7 +155,7 @@ public class ActionVisitor implements Visitor {
         if (learnJavadonic.getManaSpendOnSth() >= learnJavadonic.getMaxManaSpendOnSth()) {
             Javad javad = (Javad) JsonReaders.MinionsReader("javad");
             Admin.getInstance().summonMinion(javad, -1);
-            Admin.getInstance().summonedMinion(javad, 0, 0, 0);
+            Admin.getInstance().summonedMinion(javad, 0, 6, 6);
             Admin.getInstance().finishAction(learnJavadonic);
         }
     }
@@ -170,7 +172,7 @@ public class ActionVisitor implements Visitor {
     public void visitMatin(Matin matin, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         matin.setHealth(matin.getHealth() + matin.getHealthRestore());
         matin.setDamage(matin.getDamage() + matin.getAttackRestore());
-        Admin.getInstance().summonedMinion(matin, 1, 1, 1);
+        Admin.getInstance().summonedMinion(matin, 1, matin.getDamage(), matin.getHealth());
     }
 
     @Override
@@ -185,10 +187,13 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitPolymorph(Polymorph polymorph, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        Admin.getInstance().summonedMinion((Minion) target, 1, -target.getAttack() + 1, -target.getLife() + 1);
         target.setLife(1);
         target.setAttack(1);
-
+        if (((Minion) target).getAttributes() != null) {
+            ((Minion) target).getAttributes().remove(Attribute.DivineShield);
+            ((Minion) target).getAttributes().remove(Attribute.Taunt);
+        }
+        Admin.getInstance().summonedMinion((Minion) target, 1, 1, 1);
 
     }
 
@@ -198,7 +203,7 @@ public class ActionVisitor implements Visitor {
         if (targetPlayed.size() != 0) {
             int i = random.nextInt(targetPlayed.size());
             ((Minion) targetPlayed.get(i)).setHealth(((Minion) targetPlayed.get(i)).getHealth() + quiz.getHealthRestore());
-            Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, 0, -1 * (targetPlayed.get(i).getLife()));
+            Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, 0, 0);
         }
     }
 
@@ -206,7 +211,7 @@ public class ActionVisitor implements Visitor {
     public void visitSandBreath(SandBreath sandBreath, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         ((Minion) target).setHealth(((Minion) target).getHealth() + sandBreath.getHealthRestore());
         ((Minion) target).setDamage(((Minion) target).getDamage() + sandBreath.getAttackRestore());
-        Admin.getInstance().summonedMinion((Minion) target, 1, 2, 1);
+        Admin.getInstance().summonedMinion((Minion) target, 1, target.getAttack(), target.getLife());
         if (((Minion) target).getAttributes() != null && !((Minion) target).getAttributes().contains(Attribute.DivineShield)) {
             ((Minion) target).getAttributes().add(Attribute.DivineShield);
         }
@@ -216,7 +221,7 @@ public class ActionVisitor implements Visitor {
     public void visitShahryar(Shahryar shahryar, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         if (target != null) {
             shahryar.setHealth(target.getLife());
-            Admin.getInstance().summonedMinion(shahryar, 1, 0, target.getLife());
+            Admin.getInstance().summonedMinion(shahryar, 1, shahryar.getDamage(), shahryar.getHealth());
         }
     }
 
@@ -229,7 +234,7 @@ public class ActionVisitor implements Visitor {
     public void visitSoroush(Soroush soroush, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         ((Minion) target).setHealth(((Minion) target).getHealth() + soroush.getHealthRestore());
         ((Minion) target).setDamage(((Minion) target).getDamage() + soroush.getAttackRestore());
-        Admin.getInstance().summonedMinion((Minion) target, 1, 4, 4);
+        Admin.getInstance().summonedMinion((Minion) target, 1, target.getAttack(), target.getLife());
         if (((Minion) target).getAttributes() != null && !((Minion) target).getAttributes().contains(Attribute.DivineShield)) {
             ((Minion) target).getAttributes().add(Attribute.DivineShield);
         }
@@ -240,7 +245,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitSprint(Sprint sprint, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        Admin.getInstance().drawCard(4, null);
+        Admin.getInstance().drawCard(4, null, myDeck, myHand);
     }
 
     @Override
@@ -249,7 +254,7 @@ public class ActionVisitor implements Visitor {
             for (Card card : myDeck) {
                 if (card instanceof Minion) {
                     Admin.getInstance().summonMinion((Minion) card, -1);
-                    Admin.getInstance().summonedMinion(card, 0, 0, 0);
+                    Admin.getInstance().summonedMinion(card, 0, ((Minion) card).getDamage(), ((Minion) card).getDamage());
                     break;
                 }
             }
@@ -262,7 +267,7 @@ public class ActionVisitor implements Visitor {
         if (strengthInNumbersDR.getManaSpendOnSth() >= 10) {
             Minion st = JsonReaders.MinionsReader("lachin");
             Admin.getInstance().summonMinion(st, -1);
-            Admin.getInstance().summonedMinion(st, 0, 0, 0);
+            Admin.getInstance().summonedMinion(st, 0, st.getDamage(), st.getHealth());
             Admin.getInstance().finishAction(strengthInNumbersDR);
         }
     }
@@ -277,7 +282,7 @@ public class ActionVisitor implements Visitor {
         }
         if (flag) {
             Cat cat = (Cat) JsonReaders.MinionsReader("cat");
-            Admin.getInstance().summonedMinion(cat, 0, 0, 0);
+            Admin.getInstance().summonedMinion(cat, 0, 1, 1);
         }
 
     }

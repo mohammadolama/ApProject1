@@ -28,7 +28,7 @@ public class test {
         ConfigsLoader configsLoader=ConfigsLoader.getInstance();
         Fundamentals.MkDirs();
         Constants.pictureLoader();
-        SoundAdmin.play1("resources\\Sounds\\login.wav");
+        SoundAdmin.play1("resources/Sounds/login.wav");
         MyFrame.getInstance();
 
 

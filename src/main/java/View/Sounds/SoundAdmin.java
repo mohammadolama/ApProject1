@@ -11,7 +11,7 @@ public class SoundAdmin {
 
     private static float soundVolume = 0.2f;
     private static boolean muteSound = false;
-    private static String path = "resources\\Sounds\\";
+    private static String path = "resources/Sounds/";
 
     public static void play1(String string) {
         try {

@@ -693,12 +693,12 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             g.drawString(attack2 + "", x1 + 50, y1 + 80);
             g.drawImage(gamePics.get("damage"), x2, y2, null);
             g.drawString(attack1 + "", x2 + 50, y2 + 80);
-        } else if (i >= 0 && j < 0) {
+        } else if (i >= 0) {
             x2 = 750;
             y2 = 100;
             g.drawImage(gamePics.get("damage"), x2, y2, null);
             g.drawString(attack1 + "", x2 + 50, y2 + 80);
-        } else if (i < 0 && j >= 0) {
+        } else if (j >= 0) {
             x1 = 750;
             y1 = 700;
             x2 = enemyPlayedImages.get(j).getX();
@@ -707,9 +707,36 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             g.drawString(attack2 + "", x1 + 50, y1 + 80);
             g.drawImage(gamePics.get("damage"), x2, y2, null);
             g.drawString(attack1 + "", x2 + 50, y2 + 80);
-        } else if (i < 0 && j < 0) {
+        } else {
             x2 = 750;
             y2 = 100;
+            g.drawImage(gamePics.get("damage"), x2, y2, null);
+            g.drawString(attack1 + "", x2 + 50, y2 + 80);
+        }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void drawPracticeDamage(int i, int j, int attack1, int attack2) {
+        Graphics2D g = (Graphics2D) getGraphics();
+        g.setFont(fantasy.deriveFont(40.0f));
+        g.setColor(Color.white);
+        int x1, y1, x2, y2;
+        if (i >= 0 && j >= 0) {
+            x1 = enemyPlayedImages.get(i).getX();
+            y1 = enemyPlayedImages.get(i).getY();
+            x2 = friendlyPlayedImages.get(j).getX();
+            y2 = friendlyPlayedImages.get(j).getY();
+            g.drawImage(gamePics.get("damage"), x1, y1, null);
+            g.drawString(attack2 + "", x1 + 50, y1 + 80);
+            g.drawImage(gamePics.get("damage"), x2, y2, null);
+            g.drawString(attack1 + "", x2 + 50, y2 + 80);
+        } else if (i >= 0) {
+            x2 = 750;
+            y2 = 700;
             g.drawImage(gamePics.get("damage"), x2, y2, null);
             g.drawString(attack1 + "", x2 + 50, y2 + 80);
         }
@@ -1064,9 +1091,8 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     }
 
-    public void changeTurn() {
-        ourTurn = !ourTurn;
-        if (!ourTurn) {
+    public void AiTurn(boolean aiTurn) {
+        if (aiTurn) {
             disabled = true;
             nextTurnButton.setEnabled(false);
         } else {
