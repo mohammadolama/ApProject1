@@ -282,7 +282,7 @@ public class ActionVisitor implements Visitor {
         }
         if (flag) {
             Cat cat = (Cat) JsonReaders.MinionsReader("cat");
-            Admin.getInstance().summonedMinion(cat, 0, 1, 1);
+//            Admin.getInstance().summonedMinion(cat, 0, 1, 1);
         }
 
     }

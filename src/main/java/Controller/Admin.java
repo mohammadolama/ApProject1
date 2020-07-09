@@ -340,7 +340,7 @@ public class Admin {
 
     private void createPlayBoard(InfoPassive infoPassive, String card1, String card2, String card3) {
         createGameManager(infoPassive, card1, card2, card3);
-        boardPanel = new BoardPanel();
+        boardPanel = new BoardPanel(false);
         boardPanel.setBounds(0, 0, 1600, 1000);
         MyFrame.getPanel().add(boardPanel, "play");
         setVisiblePanel("play");
@@ -348,7 +348,7 @@ public class Admin {
 
     public void createDeckReaderMode(InfoPassive infoPassive) {
         createGameManger(infoPassive, false);
-        boardPanel = new BoardPanel();
+        boardPanel = new BoardPanel(false);
         boardPanel.setBounds(0, 0, 1600, 1000);
         MyFrame.getPanel().add(boardPanel, "play");
         setVisiblePanel("play");
@@ -356,7 +356,7 @@ public class Admin {
 
     public void createPracticeMode(InfoPassive infoPassive) {
         createGameManger(infoPassive, true);
-        boardPanel = new BoardPanel();
+        boardPanel = new BoardPanel(true);
         boardPanel.setBounds(0, 0, 1600, 1000);
         MyFrame.getPanel().add(boardPanel, "play");
         setVisiblePanel("play");
@@ -539,16 +539,20 @@ public class Admin {
     }
 
     public void summonMinion(Minion minions, int i) {
-        if (friendlyPlayedCards().size() < 7) {
-            if (minions.getAttributes() != null && (minions.getAttributes().contains(Attribute.Charge) || minions.getAttributes().contains(Attribute.Rush))) {
-                minions.setSleep(false);
+        if (gameManager.isAiTurn()) {
+            gameManager.practiceSummonMinion(minions);
+        } else {
+            if (friendlyPlayedCards().size() < 7) {
+                if (minions.getAttributes() != null && (minions.getAttributes().contains(Attribute.Charge) || minions.getAttributes().contains(Attribute.Rush))) {
+                    minions.setSleep(false);
+                }
+                if (i < 0) {
+                    friendlyPlayedCards().add(minions);
+                } else {
+                    friendlyPlayedCards().add(i, minions);
+                }
+                friendlyHandCards().remove(minions);
             }
-            if (i < 0) {
-                friendlyPlayedCards().add(minions);
-            } else {
-                friendlyPlayedCards().add(i, minions);
-            }
-            friendlyHandCards().remove(minions);
         }
     }
 
@@ -856,8 +860,12 @@ public class Admin {
         setVisiblePanel("play");
     }
 
-    BufferedImage deckAnimationCard() {
-        return pictureOf(friendlyHandCards().get(friendlyHandCards().size() - 1).getName().toLowerCase());
+    BufferedImage deckAnimationCard(String value) {
+        if (value.equalsIgnoreCase("ai")) {
+            return Constants.gamePics.get("enemycard");
+        } else {
+            return pictureOf(friendlyHandCards().get(friendlyHandCards().size() - 1).getName().toLowerCase());
+        }
     }
 
     Card getCardOf(String name) {
@@ -959,6 +967,10 @@ public class Admin {
 
     public void AiTurn(boolean AiTurn) {
         boardPanel.AiTurn(AiTurn);
+    }
+
+    public void RequestAct(Object object) {
+        boardPanel.request(object);
     }
 }
 

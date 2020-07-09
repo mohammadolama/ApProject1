@@ -462,21 +462,37 @@ class GameManager {
     }
 
     void AiActions() {
-        try {
-            Admin.getInstance().AiTurn(true);
-            Thread.sleep(300);
-            checkDestroyMinion();
-            drawCard(enemyDrawCardNum, null, enemyDeckCards, enemyHandCards);
-            Thread.sleep(1000);
-            wakeUp(true);
-            refillMana(true);
-            practicePlayCard();
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        PlayerTurn();
-        Admin.getInstance().AiTurn(false);
+        new Thread(() -> {
+            AiTurn = true;
+            try {
+                Admin.getInstance().AiTurn(true);
+                Thread.sleep(300);
+                checkDestroyMinion();
+                final Object object = new Object();
+                Admin.getInstance().RequestAct(object);
+//                synchronized (object){
+//                    System.out.println("wait");
+//                    object.wait();
+//                }
+                System.out.println("draw card");
+                drawCard(enemyDrawCardNum, null, enemyDeckCards, enemyHandCards);
+                Thread.sleep(2000);
+                wakeUp(true);
+                refillMana(true);
+                practicePlayCard();
+                Thread.sleep(2000);
+                Admin.getInstance().frameRender();
+                Thread.sleep(2000);
+                practiceAttack();
+                Thread.sleep(2000);
+                Admin.getInstance().AiTurn(false);
+                PlayerTurn();
+                AiTurn = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
 
     void practiceModeEndTurn() {
@@ -489,7 +505,6 @@ class GameManager {
     }
 
     void checkDestroyMinion() {
-        System.out.println(ThreadColor.ANSI_BLUE + enemyDefenceAdd + "\t" + friendlyDefenceAdd + ThreadColor.ANSI_RESET);
         ListIterator<Card> iterator = this.enemyPlayedCards.listIterator();
         while (iterator.hasNext()) {
             if (((Minion) iterator.next()).getHealth() <= 0) {
@@ -831,7 +846,8 @@ class GameManager {
 
 
     private void practiceAttack() {
-        if (enemyPlayedCards.size() >= 0) {
+        System.out.println("start attacking");
+        if (enemyPlayedCards.size() > 0) {
             Random random = new Random();
             int index = random.nextInt(enemyPlayedCards.size());
             Minion minion = (Minion) enemyPlayedCards.get(index);
@@ -839,6 +855,7 @@ class GameManager {
             for (Card card : friendlyPlayedCards) {
                 if (card.getAttributes() != null && card.getAttributes().contains(Attribute.Taunt)) {
                     Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
+                    System.out.println(card);
                     return;
                 }
                 j++;
@@ -847,18 +864,22 @@ class GameManager {
             for (Card card : enemyPlayedCards) {
                 if (((Minion) card).getDamage() >= friendlyPlayerHero.getHealth()) {
                     Admin.getInstance().practiceAttack((Minion) card, friendlyPlayerHero, j, -1);
+                    System.out.println("hero");
                     return;
                 }
                 j++;
             }
-            int chance = random.nextInt(10);
-            if (friendlyPlayedCards.size() == 0 || chance % 2 == 0) {
+            int chance = random.nextInt(20);
+            if (friendlyPlayedCards.size() == 0 || chance % 3 == 0) {
                 Admin.getInstance().practiceAttack(minion, friendlyPlayerHero, index, -1);
+                System.out.println("herooooooo");
                 return;
             } else {
                 j = 0;
                 for (Card card : friendlyPlayedCards) {
                     Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
+                    System.out.println("***" + card);
+                    break;
                 }
             }
         }
@@ -949,6 +970,7 @@ class GameManager {
         enemyHandCards.remove(spell);
         spell.accept(new ActionVisitor(), target, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyPlayerHero, friendlyPlayerHero);
         updateGameLog(String.format("%s played", spell.getName().toLowerCase()));
+        System.out.println("here");
     }
 
     private void practicePlayWeapon(Weapon weapon) {
@@ -976,6 +998,11 @@ class GameManager {
                 ((Minion) card).setSleep(true);
             }
         }
+    }
+
+
+    public boolean isAiTurn() {
+        return AiTurn;
     }
 }
 

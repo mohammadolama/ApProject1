@@ -29,6 +29,10 @@ public class BoardConfig {
 
     private int deckX;
     private int deckY;
+
+    private int AiDeckX;
+    private int AiDeckY;
+
     private int middleX;
     private int middleY;
     private int blur;
@@ -337,5 +341,21 @@ public class BoardConfig {
 
     public void setOpponentPlayedCardY(int opponentPlayedCardY) {
         this.opponentPlayedCardY = opponentPlayedCardY;
+    }
+
+    public int getAiDeckX() {
+        return AiDeckX;
+    }
+
+    public void setAiDeckX(int aiDeckX) {
+        AiDeckX = aiDeckX;
+    }
+
+    public int getAiDeckY() {
+        return AiDeckY;
+    }
+
+    public void setAiDeckY(int aiDeckY) {
+        AiDeckY = aiDeckY;
     }
 }

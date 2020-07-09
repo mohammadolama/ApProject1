@@ -55,7 +55,7 @@ public class RequestHandler {
 
                 /**/
                 case DeckAnimationPicture:
-                    return (T) Admin.getInstance().deckAnimationCard();
+                    return (T) Admin.getInstance().deckAnimationCard(value);
 
 
                 case DownPowerUsage:
