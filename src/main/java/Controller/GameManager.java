@@ -134,9 +134,10 @@ class GameManager {
     }
 
     private void practiceEnemyInit() {
-        Player player = JsonReaders.PlayerJsonReader("practice");
+        Player player = JsonReaders.deckReaderPlayer("practice");
         this.enemyPlayer = player;
-        enemyInfoPassive = InfoPassive.sample();
+        enemyInfoPassive = InfoPassive.practiceRandomChoice();
+        System.out.println(enemyInfoPassive.toString());
         enemyInfoInitilize(enemyInfoPassive);
         ArrayList<Card> ar1 = Deck.UpdateDeck(player.getSelectedDeck().getDeck());
         ThreePrimitiveRandom(ar1, "enemy", true);
@@ -173,7 +174,7 @@ class GameManager {
 
 
     private void enemyInit() {
-        Player player = JsonReaders.PlayerJsonReader("enemy");
+        Player player = JsonReaders.deckReaderPlayer("enemy");
         this.enemyPlayer = player;
         enemyInfoPassive = InfoPassive.sample();
         enemyInfoInitilize(enemyInfoPassive);
@@ -292,9 +293,9 @@ class GameManager {
     }
 
     private void enemyInfoInitilize(InfoPassive infoPassive) {
-        enemyStartingMana = 1;
-        enemyTotalMana = 1;
-        enemyNotUsedMana = 1;
+        enemyStartingMana = 0;
+        enemyTotalMana = 0;
+        enemyNotUsedMana = 0;
         enemyDrawCardNum = 1;
         enemyHeroPowerUsageTime = 1;
         eHPMAXUT = 1;
@@ -330,7 +331,6 @@ class GameManager {
             for (int i = 0; i < j; i++) {
                 Card cards = randomCardDraw(deck);
                 if (hand.size() < 12) {
-                    System.out.println(cards);
                     if (mode == null || (mode.equalsIgnoreCase("extra") && !(cards instanceof Spell))) {
                         addCard(hand, cards);
                         matinAction(false);
@@ -881,43 +881,47 @@ class GameManager {
 
 
     private void practiceAttack() {
-        if (enemyPlayedCards.size() > 0) {
+        ArrayList<Card> list = new ArrayList<>();
+        for (Card card : enemyPlayedCards) {
+            if (!((Minion) card).isSleep()) {
+                list.add(card);
+            }
+        }
+        if (list.size() > 0) {
             Random random = new Random();
-            int i = random.nextInt(100);
-            if (i % 2 == 0) {
-                int index = random.nextInt(enemyPlayedCards.size());
-                Minion minion = (Minion) enemyPlayedCards.get(index);
-                int j = 0;
-                for (Card card : friendlyPlayedCards) {
-                    if (card.getAttributes() != null && card.getAttributes().contains(Attribute.Taunt)) {
-                        Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
-                        updateGameLog(String.format("%s Attacked %s", minion.getName(), card.getName()));
-                        return;
-                    }
-                    j++;
+            int index = random.nextInt(list.size());
+            Minion minion = (Minion) list.get(index);
+            int j = 0;
+            for (Card card : friendlyPlayedCards) {
+                if (card.getAttributes() != null && card.getAttributes().contains(Attribute.Taunt)) {
+                    Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
+                    updateGameLog(String.format("%s Attacked %s", minion.getName(), card.getName()));
+                    return;
                 }
-                j = 0;
-                for (Card card : enemyPlayedCards) {
-                    if (((Minion) card).getDamage() >= friendlyPlayerHero.getHealth()) {
-                        Admin.getInstance().practiceAttack((Minion) card, friendlyPlayerHero, j, -1);
-                        updateGameLog(String.format("%s Attacked %s", minion.getName(), friendlyPlayerHero.getName()));
-                        return;
-                    }
-                    j++;
-                }
-                int chance = random.nextInt(20);
-                if (friendlyPlayedCards.size() == 0 || chance % 3 == 0) {
-                    Admin.getInstance().practiceAttack(minion, friendlyPlayerHero, index, -1);
+                j++;
+            }
+            j = 0;
+            for (Card card : list) {
+                if (((Minion) card).getDamage() >= friendlyPlayerHero.getHealth()) {
+                    Admin.getInstance().practiceAttack((Minion) card, friendlyPlayerHero, j, -1);
                     updateGameLog(String.format("%s Attacked %s", minion.getName(), friendlyPlayerHero.getName()));
-                } else {
-                    j = 0;
-                    for (Card card : friendlyPlayedCards) {
-                        Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
-                        updateGameLog(String.format("%s Attacked %s", minion.getName(), card.getName()));
-                        break;
-                    }
+                    return;
+                }
+                j++;
+            }
+            int chance = random.nextInt(20);
+            if (friendlyPlayedCards.size() == 0 || chance % 3 == 0) {
+                Admin.getInstance().practiceAttack(minion, friendlyPlayerHero, index, -1);
+                updateGameLog(String.format("%s Attacked %s", minion.getName(), friendlyPlayerHero.getName()));
+            } else {
+                j = 0;
+                for (Card card : friendlyPlayedCards) {
+                    Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
+                    updateGameLog(String.format("%s Attacked %s", minion.getName(), card.getName()));
+                    break;
                 }
             }
+
         }
     }
 

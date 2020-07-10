@@ -824,10 +824,8 @@ public class Admin {
     }
 
     private void updateDeckStates(int i) {
-        player().getSelectedDeck().setTotalPlays(player().getSelectedDeck().getTotalPlays() + 1);
         player().getAllDecks().get(player().getSelectedDeck().getName()).setTotalPlays(player().getSelectedDeck().getTotalPlays() + 1);
         if (i == 1) {
-            player().getSelectedDeck().setTotalWins(player().getSelectedDeck().getTotalWins() + 1);
             player().getAllDecks().get(player().getSelectedDeck().getName()).setTotalWins(player().getSelectedDeck().getTotalWins() + 1);
         }
     }

@@ -237,7 +237,6 @@ public class Deck {
             }
         }
         for (Map.Entry<String, Integer> Entry : this.usedTimes.entrySet()) {
-            System.out.print(ThreadColor.ANSI_GREEN + Entry.getValue() + ThreadColor.ANSI_RESET + "\t");
             if (Entry.getValue() == j) {
                 ar.add(Carts.valueOf(Entry.getKey().toLowerCase()));
             }

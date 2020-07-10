@@ -12,7 +12,7 @@ import static Main.Deck.DefultAvailableCardsManager;
 public class Player implements Serializable {
     private String username;
     private String password;
-    private String id;
+    private String playerID;
     private int level;
     private int exp;
     private long money = 1000;
@@ -37,8 +37,9 @@ public class Player implements Serializable {
             this.setSelectedDeck(DefaultDeck());
             allDecks = new HashMap<String, Deck>();
             allDecks.put(getSelectedDeck().getName(), getSelectedDeck());
-            this.setId(System.nanoTime() + "");
-            String st = String.format("resources/players/%s-%s.log", username, this.getId());
+            this.playerID = System.nanoTime() + "";
+            String st = String.format("resources/players/%s-%s.log", username, this.getPlayerID());
+            System.out.println(this.playerID);
             PrintWriter vm = new PrintWriter(st);
             Date date = new Date();
             vm.write("Created in : " + date.toString() + "\n" + "Password : " + password + "\n" + "User : " + username + "\n" + "**********************" + "\n");
@@ -57,12 +58,12 @@ public class Player implements Serializable {
         PlayerHeroes = playerHeroes;
     }
 
-    String getId() {
-        return id;
+    public String getPlayerID() {
+        return playerID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPlayerID(String playerID) {
+        this.playerID = playerID;
     }
 
     public void setUsername(String username) {
@@ -147,4 +148,10 @@ public class Player implements Serializable {
         this.allDecks = allDecks;
     }
 
+    @Override
+    public String toString() {
+        return "Player{" +
+                "playerID='" + playerID + '\'' +
+                '}';
+    }
 }

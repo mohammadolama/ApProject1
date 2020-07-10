@@ -2,6 +2,7 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class InfoPassive {
 
@@ -33,6 +34,11 @@ public class InfoPassive {
         return infoPassiveCreator().get(2);
     }
 
+    public static InfoPassive practiceRandomChoice() {
+        Random random = new Random();
+        int index = random.nextInt(5);
+        return infoPassiveCreator().get(index);
+    }
 
     public static ArrayList<InfoPassive> randomGenerate(ArrayList<InfoPassive> passives) {
         ArrayList<InfoPassive> ar = new ArrayList<>();
@@ -61,5 +67,13 @@ public class InfoPassive {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "InfoPassive{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

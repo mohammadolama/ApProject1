@@ -4,6 +4,7 @@ import Configs.ConfigsLoader;
 import Configs.DeckReader;
 import Configs.SummonedConfig;
 import Main.JsonBuilders;
+import Main.Player;
 import Model.Cards.StrengthInNumbersDR;
 import Model.Heros.Hero;
 import Model.Heros.Mage;
@@ -32,11 +33,12 @@ public class test {
         MyFrame.getInstance();
 
 
-//        ObjectMapper objectMapper=new ObjectMapper();
-//        File file;
-//        FileWriter fileWriter=new FileWriter(new File("summonedconfig.json"));
-//        SummonedConfig summonedConfig=new SummonedConfig();
-//        objectMapper.writeValue(fileWriter , summonedConfig);
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file;
+        FileWriter fileWriter = new FileWriter(new File("summonedconfig.json"));
+        Player player = new Player("as", "as");
+        System.out.println(player.getPlayerID());
+        objectMapper.writeValue(fileWriter, player);
 
 
 //        JsonBuilders.HeroBuildeeer(new Rogue());

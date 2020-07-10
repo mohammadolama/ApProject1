@@ -25,7 +25,6 @@ public class JsonBuilders {
             FileWriter fileWriter = new FileWriter(path);
             objectMapper.writeValue(fileWriter, player);
             fileWriter.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

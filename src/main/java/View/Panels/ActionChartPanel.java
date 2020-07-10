@@ -59,8 +59,6 @@ public class ActionChartPanel extends JPanel {
             g.setColor(Color.yellow);
             g.drawRect(260, 100 + 70 * i, 160, 60);
             g.setPaint(new GradientPaint(5, 5, Color.cyan, 10, 10, Color.yellow, true));
-            System.out.println(friendlyModel.toString());
-            System.out.println(friendlyModel.get(i));
             int fac = factor.get(friendlyModel.get(i).getName().toLowerCase());
             g.fillRect(260, 100 + 70 * i, fac * friendlyModel.get(i).getManaSpendOnSth(), 60);
             g.setColor(Color.RED);

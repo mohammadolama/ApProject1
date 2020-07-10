@@ -29,7 +29,7 @@ public class LogInSignUp {
                 pw1.write(st56 + "\n");
             }
             pw1.close();
-            String st = String.format("resources/players/%s-%s.log", player.getUsername(), player.getId());
+            String st = String.format("resources/players/%s-%s.log", player.getUsername(), player.getPlayerID());
             temp = new File("resources/players/temp.log");
             file = new File(st);
             FileReader fileReader = new FileReader(file);
@@ -130,6 +130,7 @@ public class LogInSignUp {
                 pw.write("Password : " + pass + "\n");
                 pw.write("**********************" + "\n");
                 Player player = new Player(user, pass);
+                System.out.println(player.toString());
                 JsonBuilders.PlayerJsonBuilder(user, player);
                 JsonBuilders.NewPlayerHeroBuilder(player);
                 pw.close();
@@ -145,6 +146,7 @@ public class LogInSignUp {
         if (UserFinder(user)) {
             if (PassChecker(user, password)) {
                 Player player = JsonReaders.PlayerJsonReader(user);
+                System.out.println(player.toString());
                 Gamestate.setPlayer(player);
                 LOGGER.playerlog(player, "Sign_in");
                 return "ok";
@@ -155,4 +157,6 @@ public class LogInSignUp {
             return "user not found";
         }
     }
+
+
 }
