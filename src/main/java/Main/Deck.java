@@ -210,12 +210,7 @@ public class Deck {
     }
 
     public Carts getMostUsedCard() {
-//        System.out.println(ThreadColor.ANSI_PURPLE + this.usedTimes.toString()+ThreadColor.ANSI_RESET);
         mostUsedCard = mostUsedCard();
-//        System.out.println(ThreadColor.ANSI_PURPLE + this.usedTimes.toString()+ThreadColor.ANSI_RESET);
-//        System.out.println();
-        System.out.println();
-//        System.out.println();
         return mostUsedCard;
     }
 
@@ -232,7 +227,6 @@ public class Deck {
     }
 
     public Carts mostUsedCard() {
-        System.out.println(this.toString());
         int i;
         int j = 0;
         ArrayList<Carts> ar = new ArrayList<>();
@@ -242,25 +236,17 @@ public class Deck {
                 j = i;
             }
         }
-        System.out.println(ThreadColor.ANSI_CYAN + j + ThreadColor.ANSI_RESET);
         for (Map.Entry<String, Integer> Entry : this.usedTimes.entrySet()) {
             System.out.print(ThreadColor.ANSI_GREEN + Entry.getValue() + ThreadColor.ANSI_RESET + "\t");
             if (Entry.getValue() == j) {
                 ar.add(Carts.valueOf(Entry.getKey().toLowerCase()));
             }
         }
-        System.out.println();
-        System.out.println(ThreadColor.ANSI_RED + ar.size() + ThreadColor.ANSI_RESET);
         if (ar.size() == 1) {
             return ar.get(0);
         } else {
-            System.out.println(ar.size());
             ArrayList<Card> ar2 = Deck.UpdateDeck(ar);
-            System.out.println(ar2);
             ar2.sort(Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
-            System.out.println(ar2);
-            System.out.println();
-//            System.out.println(ThreadColor.ANSI_PURPLE + this.usedTimes.toString()+ThreadColor.ANSI_RESET);
             return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
         }
     }

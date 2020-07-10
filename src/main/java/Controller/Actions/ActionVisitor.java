@@ -278,13 +278,7 @@ public class ActionVisitor implements Visitor {
         while (myPlayed.size() < 7) {
             Cat cat = (Cat) JsonReaders.MinionsReader("cat");
             Admin.getInstance().summonMinion(cat, -1);
-            flag = true;
         }
-        if (flag) {
-            Cat cat = (Cat) JsonReaders.MinionsReader("cat");
-//            Admin.getInstance().summonedMinion(cat, 0, 1, 1);
-        }
-
     }
 
     @Override

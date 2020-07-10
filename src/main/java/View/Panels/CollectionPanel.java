@@ -328,6 +328,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
                 Admin.getInstance().setSelectedDeck(selectedDeck);
                 RequestHandler.SendRequest.Log.response("Click_Button : Select Button");
                 RequestHandler.SendRequest.Log.response(String.format("Deck : choose \"%s\" as selected deck.", selectedDeck.getName()));
+                JOptionPane.showMessageDialog(this, String.format("%s is your selected deck now.", selectedDeck.getName()));
             }
         } else {
             changeButton.setEnabled(true);

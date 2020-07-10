@@ -102,7 +102,7 @@ class GameManager {
     }
 
     private void deckReader(InfoPassive infoPassive) {
-        Player player = JsonReaders.deckReaderPlayer("hunter");
+        Player player = JsonReaders.deckReaderPlayer("player");
         this.friendlyPlayer = player;
         this.friendlyPlayerHero = player.getSelectedDeck().getHero();
         friendlyInfoInitilize(infoPassive);
@@ -110,8 +110,8 @@ class GameManager {
         DeckReader deckReader = JsonReaders.deckReader();
         ArrayList<Card> friend = Deck.UpdateDeck(deckReader.getFriend());
         ArrayList<Card> enemy = Deck.UpdateDeck(deckReader.getEnemy());
-        ThreePrimitiveRandom(friend, "friendly");
-        ThreePrimitiveRandom(enemy, "enemy");
+        ThreePrimitiveRandom(friend, "friendly", false);
+        ThreePrimitiveRandom(enemy, "enemy", false);
         friendlyPlayerHero.accept(new SpecialPowerVisitor(), null, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards);
         enemyPlayerHero.accept(new SpecialPowerVisitor(), null, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards);
     }
@@ -122,7 +122,7 @@ class GameManager {
             this.friendlyPlayerHero = (Hero) player.getSelectedDeck().getHero().clone();
             this.playerHero = friendlyPlayerHero;
             this.friendlyCardsOfPlayer = list;
-            ThreePrimitiveRandom(this.friendlyCardsOfPlayer, "friendly");
+            ThreePrimitiveRandom(this.friendlyCardsOfPlayer, "friendly", true);
             this.friendlyInfoPassive = infoPassive;
             friendlyInfoInitilize(infoPassive);
             practiceEnemyInit();
@@ -139,7 +139,7 @@ class GameManager {
         enemyInfoPassive = InfoPassive.sample();
         enemyInfoInitilize(enemyInfoPassive);
         ArrayList<Card> ar1 = Deck.UpdateDeck(player.getSelectedDeck().getDeck());
-        ThreePrimitiveRandom(ar1, "enemy");
+        ThreePrimitiveRandom(ar1, "enemy", true);
         this.enemyPlayedCards = new ArrayList<>();
         this.enemyPlayerHero = player.getSelectedDeck().getHero();
     }
@@ -178,13 +178,13 @@ class GameManager {
         enemyInfoPassive = InfoPassive.sample();
         enemyInfoInitilize(enemyInfoPassive);
         ArrayList<Card> ar1 = Deck.UpdateDeck(player.getSelectedDeck().getDeck());
-        ThreePrimitiveRandom(ar1, "enemy");
+        ThreePrimitiveRandom(ar1, "enemy", true);
         this.enemyPlayedCards = new ArrayList<>();
         this.enemyPlayerHero = player.getSelectedDeck().getHero();
     }
 
     private void deckReaderEnemy() {
-        Player player = JsonReaders.deckReaderPlayer("mage");
+        Player player = JsonReaders.deckReaderPlayer("AI");
         this.enemyPlayer = player;
         enemyInfoPassive = InfoPassive.sample();
         enemyInfoInitilize(enemyInfoPassive);
@@ -264,9 +264,9 @@ class GameManager {
     }
 
     private void friendlyInfoInitilize(InfoPassive infoPassive) {
-        friendlyStartingMana = 8;
-        friendlyTotalMana = 8;
-        friendlyNotUsedMana = 8;
+        friendlyStartingMana = 1;
+        friendlyTotalMana = 1;
+        friendlyNotUsedMana = 1;
         friendlyDrawCardNum = 1;
         friendlyHeroPowerUsageTime = 1;
         fHPMAXUT = 1;
@@ -292,9 +292,9 @@ class GameManager {
     }
 
     private void enemyInfoInitilize(InfoPassive infoPassive) {
-        enemyStartingMana = 8;
-        enemyTotalMana = 8;
-        enemyNotUsedMana = 8;
+        enemyStartingMana = 1;
+        enemyTotalMana = 1;
+        enemyNotUsedMana = 1;
         enemyDrawCardNum = 1;
         enemyHeroPowerUsageTime = 1;
         eHPMAXUT = 1;
@@ -320,22 +320,27 @@ class GameManager {
     }
 
 
-    void drawCard(int j, String mode, ArrayList<Card> deck, ArrayList<Card> hand) {
-        if (deck.size() < j) {
-            j = deck.size();
-        }
-        for (int i = 0; i < j; i++) {
-            Card cards = randomCardDraw(deck);
-            if (hand.size() < 12) {
-                if (mode == null || (mode.equalsIgnoreCase("extra") && !(cards instanceof Spell))) {
-                    addCard(hand, cards);
-                    matinAction(false);
-                }
+    boolean drawCard(int j, String mode, ArrayList<Card> deck, ArrayList<Card> hand) {
+        if (deck.size() == 0) {
+            return false;
+        } else {
+            if (deck.size() < j) {
+                j = deck.size();
             }
-            removeCard(deck, cards);
+            for (int i = 0; i < j; i++) {
+                Card cards = randomCardDraw(deck);
+                if (hand.size() < 12) {
+                    System.out.println(cards);
+                    if (mode == null || (mode.equalsIgnoreCase("extra") && !(cards instanceof Spell))) {
+                        addCard(hand, cards);
+                        matinAction(false);
+                    }
+                }
+                removeCard(deck, cards);
+            }
+            return true;
         }
     }
-
 
 
     void updateGameLog(String string) {
@@ -345,7 +350,10 @@ class GameManager {
         }
     }
 
-    private void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value) {
+    private void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value, boolean practiceMode) {
+        if (practiceMode) {
+            Collections.shuffle(arrayList);
+        }
         ListIterator<Card> iterator = arrayList.listIterator();
         ArrayList<Card> ar = new ArrayList<>();
         while (iterator.hasNext()) {
@@ -403,6 +411,12 @@ class GameManager {
         }
     }
 
+    private void chargeWeapon(boolean AI) {
+        if (friendlyPlayerHero.getWeapon() != null) {
+            friendlyPlayerHero.setCanAttack(true);
+        }
+    }
+
     private void wakeUp(boolean AI) {
         if (AI) {
             for (Card card : enemyPlayedCards) {
@@ -440,6 +454,7 @@ class GameManager {
 
     void endTurn() {
         if (practiceMode) {
+            updateGameLog(String.format("%s  EndTurn .", friendlyPlayer.getUsername()));
             benyaminAction(false);
             AiActions();
         } else {
@@ -449,7 +464,11 @@ class GameManager {
             canBeAttackedUpdater();
             wakeUp(false);
             refillMana(false);
-            drawCard(friendlyDrawCardNum, null, friendlyDeckCards, friendLyHandCards);
+            chargeWeapon(false);
+            if (!drawCard(friendlyDrawCardNum, null, friendlyDeckCards, friendLyHandCards))
+                heroTakeDamage(friendlyPlayerHero, 1);
+            updateGameLog(String.format("%s  EndTurn .", enemyPlayer.getUsername()));
+
         }
     }
 
@@ -458,7 +477,9 @@ class GameManager {
         canBeAttackedUpdater();
         wakeUp(false);
         refillMana(false);
-        drawCard(friendlyDrawCardNum, null, friendlyDeckCards, friendLyHandCards);
+        chargeWeapon(false);
+        if (!drawCard(friendlyDrawCardNum, null, friendlyDeckCards, friendLyHandCards))
+            heroTakeDamage(friendlyPlayerHero, 1);
     }
 
     void AiActions() {
@@ -470,12 +491,8 @@ class GameManager {
                 checkDestroyMinion();
                 final Object object = new Object();
                 Admin.getInstance().RequestAct(object);
-//                synchronized (object){
-//                    System.out.println("wait");
-//                    object.wait();
-//                }
-                System.out.println("draw card");
-                drawCard(enemyDrawCardNum, null, enemyDeckCards, enemyHandCards);
+                if (!drawCard(enemyDrawCardNum, null, enemyDeckCards, enemyHandCards))
+                    heroTakeDamage(enemyPlayerHero, 1);
                 Thread.sleep(2000);
                 wakeUp(true);
                 refillMana(true);
@@ -485,7 +502,9 @@ class GameManager {
                 Thread.sleep(2000);
                 practiceAttack();
                 Thread.sleep(2000);
+                practiceHeroPower();
                 Admin.getInstance().AiTurn(false);
+                updateGameLog(String.format("%s  EndTurn .", enemyPlayer.getUsername()));
                 PlayerTurn();
                 AiTurn = false;
             } catch (InterruptedException e) {
@@ -495,27 +514,26 @@ class GameManager {
 
     }
 
-    void practiceModeEndTurn() {
-        benyaminAction(true);
-        checkDestroyMinion();
-        canBeAttackedUpdater();
-        wakeUp(true);
-        refillMana(true);
-
+    void heroTakeDamage(Hero hero, int i) {
+        hero.setHealth(hero.getHealth() - i);
     }
 
     void checkDestroyMinion() {
         ListIterator<Card> iterator = this.enemyPlayedCards.listIterator();
         while (iterator.hasNext()) {
-            if (((Minion) iterator.next()).getHealth() <= 0) {
+            Minion minion = (Minion) iterator.next();
+            if (minion.getHealth() <= 0) {
                 enemyPlayerHero.setDefence(enemyPlayerHero.getDefence() + enemyDefenceAdd);
+                updateGameLog(String.format("Minion %s defeated .", minion.getName()));
                 iterator.remove();
             }
         }
         ListIterator<Card> iterator1 = this.friendlyPlayedCards.listIterator();
         while (iterator1.hasNext()) {
-            if (((Minion) iterator1.next()).getHealth() <= 0) {
+            Minion minion = (Minion) iterator1.next();
+            if (minion.getHealth() <= 0) {
                 friendlyPlayerHero.setDefence(friendlyPlayerHero.getDefence() + friendlyDefenceAdd);
+                updateGameLog(String.format("Minion %s defeated .", minion.getName()));
                 iterator1.remove();
             }
         }
@@ -532,7 +550,9 @@ class GameManager {
     void updateWeapon() {
         Weapon weapon = this.friendlyWeapon;
         weapon.setDurability(weapon.getDurability() - 1);
+        updateGameLog(String.format("%s use Weapon.", friendlyPlayer.getUsername()));
         setFriendlyWeapon(weapon);
+        friendlyPlayerHero.setCanAttack(false);
         checkDestroyedWeapon();
     }
 
@@ -583,6 +603,7 @@ class GameManager {
     void setFriendlyWeapon(Weapon friendlyWeapon) {
         this.friendlyWeapon = friendlyWeapon;
         this.friendlyPlayerHero.setWeapon(friendlyWeapon);
+        this.friendlyPlayerHero.setCanAttack(true);
     }
 
     void setEnemyWeapon(Weapon enemyWeapon) {
@@ -655,6 +676,9 @@ class GameManager {
             } else if (card.getName().equalsIgnoreCase("strengthinnumbers")) {
                 ActionModel model = new ActionModel(card.getName().toLowerCase(), ((Spell) card).getManaSpendOnSth(), 10);
                 models.add(model);
+            } else if (card.getName().equalsIgnoreCase("strengthinnumbersdr")) {
+                ActionModel model = new ActionModel(card.getName().toLowerCase(), ((Spell) card).getManaSpendOnSth(), 10);
+                models.add(model);
             }
 
         }
@@ -664,7 +688,7 @@ class GameManager {
     void spendManaOnMinion(int i, boolean AI) {
         if (AI) {
             for (Card card : enemyContiniousActionCard) {
-                if (card.getName().equalsIgnoreCase("strengthinnumbers")) {
+                if (card.getName().equalsIgnoreCase("strengthinnumbers") || card.getName().equalsIgnoreCase("strengthinnumbersdr")) {
                     ((Spell) card).setManaSpendOnSth(((Spell) card).getManaSpendOnSth() + i);
                     card.accept(new ActionVisitor(), null, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyPlayerHero, friendlyPlayerHero);
                     break;
@@ -672,7 +696,7 @@ class GameManager {
             }
         } else {
             for (Card card : friendlyContiniousActionCard) {
-                if (card.getName().equalsIgnoreCase("strengthinnumbers")) {
+                if (card.getName().equalsIgnoreCase("strengthinnumbers") || card.getName().equalsIgnoreCase("strengthinnumbersdr")) {
                     ((Spell) card).setManaSpendOnSth(((Spell) card).getManaSpendOnSth() + i);
                     card.accept(new ActionVisitor(), null, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyPlayerHero, enemyPlayerHero);
                     break;
@@ -724,6 +748,8 @@ class GameManager {
             friendlyPlayerHero.accept(new HeroPowerVisitor(), target, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards);
             friendlyNotUsedMana -= (friendlyPlayerHero.getHeroPowerManaCost() - friendlyPowerManaDecrease);
             friendlyHeroPowerUsageTime -= 1;
+            updateGameLog(friendlyPlayer.getUsername() + " Use HeroPower");
+            checkForWinner();
             return true;
         }
         return false;
@@ -846,40 +872,41 @@ class GameManager {
 
 
     private void practiceAttack() {
-        System.out.println("start attacking");
         if (enemyPlayedCards.size() > 0) {
             Random random = new Random();
-            int index = random.nextInt(enemyPlayedCards.size());
-            Minion minion = (Minion) enemyPlayedCards.get(index);
-            int j = 0;
-            for (Card card : friendlyPlayedCards) {
-                if (card.getAttributes() != null && card.getAttributes().contains(Attribute.Taunt)) {
-                    Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
-                    System.out.println(card);
-                    return;
-                }
-                j++;
-            }
-            j = 0;
-            for (Card card : enemyPlayedCards) {
-                if (((Minion) card).getDamage() >= friendlyPlayerHero.getHealth()) {
-                    Admin.getInstance().practiceAttack((Minion) card, friendlyPlayerHero, j, -1);
-                    System.out.println("hero");
-                    return;
-                }
-                j++;
-            }
-            int chance = random.nextInt(20);
-            if (friendlyPlayedCards.size() == 0 || chance % 3 == 0) {
-                Admin.getInstance().practiceAttack(minion, friendlyPlayerHero, index, -1);
-                System.out.println("herooooooo");
-                return;
-            } else {
-                j = 0;
+            int i = random.nextInt(100);
+            if (i % 2 == 0) {
+                int index = random.nextInt(enemyPlayedCards.size());
+                Minion minion = (Minion) enemyPlayedCards.get(index);
+                int j = 0;
                 for (Card card : friendlyPlayedCards) {
-                    Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
-                    System.out.println("***" + card);
-                    break;
+                    if (card.getAttributes() != null && card.getAttributes().contains(Attribute.Taunt)) {
+                        Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
+                        updateGameLog(String.format("%s Attacked %s", minion.getName(), card.getName()));
+                        return;
+                    }
+                    j++;
+                }
+                j = 0;
+                for (Card card : enemyPlayedCards) {
+                    if (((Minion) card).getDamage() >= friendlyPlayerHero.getHealth()) {
+                        Admin.getInstance().practiceAttack((Minion) card, friendlyPlayerHero, j, -1);
+                        updateGameLog(String.format("%s Attacked %s", minion.getName(), friendlyPlayerHero.getName()));
+                        return;
+                    }
+                    j++;
+                }
+                int chance = random.nextInt(20);
+                if (friendlyPlayedCards.size() == 0 || chance % 3 == 0) {
+                    Admin.getInstance().practiceAttack(minion, friendlyPlayerHero, index, -1);
+                    updateGameLog(String.format("%s Attacked %s", minion.getName(), friendlyPlayerHero.getName()));
+                } else {
+                    j = 0;
+                    for (Card card : friendlyPlayedCards) {
+                        Admin.getInstance().practiceAttack(minion, (Minion) card, index, j);
+                        updateGameLog(String.format("%s Attacked %s", minion.getName(), card.getName()));
+                        break;
+                    }
                 }
             }
         }
@@ -887,14 +914,10 @@ class GameManager {
 
     private void practicePlayCard() {
         if (enemyHandCards.size() >= 0) {
-            System.out.println("first");
             Collections.shuffle(enemyHandCards);
             for (Card card : enemyHandCards) {
-                System.out.println("second");
                 if (enemyNotUsedMana >= card.getManaCost() - enemyManaDecrease) {
-                    System.out.println("third");
-                    if (!card.isNeedEnemyTarget() && !card.isNeedFriendlyTarget()) {
-                        System.out.println("forth");
+                    if ((card instanceof Weapon) || (!card.isNeedEnemyTarget() && !card.isNeedFriendlyTarget())) {
                         playCard(card);
                         break;
                     }
@@ -905,28 +928,21 @@ class GameManager {
 
 
     void playCard(Card card) {
-        System.out.println(card.getName());
         for (Card cards : enemyHandCards) {
             if (card.equals(cards)) {
-                System.out.println("Start playing");
                 if (enemyNotUsedMana >= cards.getManaCost() - enemyManaDecrease) {
-                    System.out.println("close enogh");
                     Admin.getInstance().checkContiniousAction(cards, true);
                     cards.accept(new BattlecryVisitor(), null, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyPlayerHero, friendlyPlayerHero);
                     if (cards instanceof Minion) {
-                        System.out.println("play minion");
                         practicePlayMinion((Minion) cards, null);
                         spendManaOnMinion(cards.getManaCost() - enemyManaDecrease, true);
                     } else if (cards instanceof Spell) {
-                        System.out.println("play spell");
                         practicePlaySpell((Spell) cards, null);
                         spendManaOnSpell(cards.getManaCost() - enemyManaDecrease, true);
                     } else if (cards instanceof Weapon) {
-                        System.out.println("play weapon");
                         practicePlayWeapon((Weapon) cards);
                     }
                     Admin.getInstance().summonedMinion(card, 0, 0, 0);
-                    String log = String.format("Play : played card \"%s\"", cards.getName());
                     break;
                 } else {
                     Admin.getInstance().playSound("mana");
@@ -947,7 +963,7 @@ class GameManager {
             hunterPowerAction(minions, true);
             faezeAction(minions, true);
             shahryarAction(minions, true);
-            updateGameLog(String.format("%s played", minions.getName().toLowerCase()));
+            updateGameLog(String.format("%s Played %s", enemyPlayer.getUsername(), minions.getName().toLowerCase()));
         } else {
             Admin.getInstance().playSound("error");
             Admin.getInstance().frameRender();
@@ -969,8 +985,7 @@ class GameManager {
         enemyNotUsedMana -= spell.getManaCost() - enemyManaDecrease;
         enemyHandCards.remove(spell);
         spell.accept(new ActionVisitor(), target, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyPlayerHero, friendlyPlayerHero);
-        updateGameLog(String.format("%s played", spell.getName().toLowerCase()));
-        System.out.println("here");
+        updateGameLog(String.format("%s Played %s", enemyPlayer.getUsername(), spell.getName().toLowerCase()));
     }
 
     private void practicePlayWeapon(Weapon weapon) {
@@ -978,7 +993,7 @@ class GameManager {
         enemyNotUsedMana -= weapon.getManaCost() - enemyManaDecrease;
         enemyHandCards.remove(weapon);
         setEnemyWeapon(weapon);
-        updateGameLog(String.format("%s played", weapon.getName().toLowerCase()));
+        updateGameLog(String.format("%s played %s", enemyPlayer.getUsername(), weapon.getName()));
     }
 
 
@@ -987,7 +1002,9 @@ class GameManager {
             Random random = new Random();
             int chance = random.nextInt(1000);
             if (chance % 5 == 0) {
-
+                Admin.getInstance().playSound("heropower");
+                enemyPlayerHero.accept(new HeroPowerVisitor(), null, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards);
+                updateGameLog(String.format("%s Use HeroPower .", enemyPlayer.getUsername()));
             }
         }
     }

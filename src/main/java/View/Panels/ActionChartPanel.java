@@ -27,6 +27,7 @@ public class ActionChartPanel extends JPanel {
         factor = new HashMap<>();
         factor.put("learnjavadonic", 20);
         factor.put("strengthinnumbers", 16);
+        factor.put("strengthinnumbersdr", 16);
 
         background = Constants.gamePics.get("playbackground");
         setSize(new Dimension(500, 400));
@@ -58,6 +59,8 @@ public class ActionChartPanel extends JPanel {
             g.setColor(Color.yellow);
             g.drawRect(260, 100 + 70 * i, 160, 60);
             g.setPaint(new GradientPaint(5, 5, Color.cyan, 10, 10, Color.yellow, true));
+            System.out.println(friendlyModel.toString());
+            System.out.println(friendlyModel.get(i));
             int fac = factor.get(friendlyModel.get(i).getName().toLowerCase());
             g.fillRect(260, 100 + 70 * i, fac * friendlyModel.get(i).getManaSpendOnSth(), 60);
             g.setColor(Color.RED);
@@ -70,6 +73,8 @@ public class ActionChartPanel extends JPanel {
             g.setColor(Color.yellow);
             g.drawRect(10, 100 + 70 * i, 160, 60);
             g.setPaint(new GradientPaint(5, 5, Color.cyan, 10, 10, Color.yellow, true));
+//            System.out.println(enemyModel.toString());
+//            System.out.println(enemyModel.get(i).toString());
             int fac = factor.get(enemyModel.get(i).getName().toLowerCase());
             g.fillRect(10, 100 + 70 * i, fac * enemyModel.get(i).getManaSpendOnSth(), 60);
             g.setColor(Color.RED);
