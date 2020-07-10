@@ -744,15 +744,24 @@ class GameManager {
     }
 
     boolean playHeroPower(Character target) {
-        if (friendlyNotUsedMana >= (friendlyPlayerHero.getHeroPowerManaCost() - friendlyPowerManaDecrease)) {
+        if (friendlyPlayerHero instanceof Warlock) {
             friendlyPlayerHero.accept(new HeroPowerVisitor(), target, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards);
-            friendlyNotUsedMana -= (friendlyPlayerHero.getHeroPowerManaCost() - friendlyPowerManaDecrease);
+            heroTakeDamage(friendlyPlayerHero, 2);
             friendlyHeroPowerUsageTime -= 1;
             updateGameLog(friendlyPlayer.getUsername() + " Use HeroPower");
             checkForWinner();
             return true;
+        } else {
+            if (friendlyNotUsedMana >= (friendlyPlayerHero.getHeroPowerManaCost() - friendlyPowerManaDecrease)) {
+                friendlyPlayerHero.accept(new HeroPowerVisitor(), target, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards);
+                friendlyNotUsedMana -= (friendlyPlayerHero.getHeroPowerManaCost() - friendlyPowerManaDecrease);
+                friendlyHeroPowerUsageTime -= 1;
+                updateGameLog(friendlyPlayer.getUsername() + " Use HeroPower");
+                checkForWinner();
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     private void benyaminAction(boolean AI) {
@@ -998,15 +1007,15 @@ class GameManager {
 
 
     private void practiceHeroPower() {
-        if (enemyNotUsedMana >= enemyPlayerHero.getHeroPowerManaCost() - enemyPowerManaDecrease) {
-            Random random = new Random();
-            int chance = random.nextInt(1000);
-            if (chance % 5 == 0) {
-                Admin.getInstance().playSound("heropower");
-                enemyPlayerHero.accept(new HeroPowerVisitor(), null, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards);
-                updateGameLog(String.format("%s Use HeroPower .", enemyPlayer.getUsername()));
-            }
+        Random random = new Random();
+        int chance = random.nextInt(1000);
+        if (chance % 5 == 0) {
+            Admin.getInstance().playSound("heropower");
+            enemyPlayerHero.accept(new HeroPowerVisitor(), null, enemyDeckCards, enemyHandCards, enemyPlayedCards, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards);
+            updateGameLog(String.format("%s Use HeroPower .", enemyPlayer.getUsername()));
+            heroTakeDamage(enemyPlayerHero, 2);
         }
+
     }
 
     public void setSleep(Minion minion) {
