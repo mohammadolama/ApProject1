@@ -344,6 +344,7 @@ class GameManager {
 
 
     void updateGameLog(String string) {
+        Admin.getInstance().Log(string);
         gameLog.add(string);
         if (gameLog.size() > 25) {
             gameLog.remove(0);
@@ -1006,7 +1007,7 @@ class GameManager {
         enemyNotUsedMana -= weapon.getManaCost() - enemyManaDecrease;
         enemyHandCards.remove(weapon);
         setEnemyWeapon(weapon);
-        updateGameLog(String.format("%s played %s", enemyPlayer.getUsername(), weapon.getName()));
+        updateGameLog(String.format("%s Equiped %s", enemyPlayer.getUsername(), weapon.getName()));
     }
 
 

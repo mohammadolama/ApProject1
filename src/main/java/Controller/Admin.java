@@ -208,6 +208,7 @@ public class Admin {
 
     private void updateGameLog(String log) {
         gameManager.updateGameLog(log);
+        Log(log);
     }
 
     void buyCard(String name) {
@@ -396,7 +397,6 @@ public class Admin {
                     return 3;
                 }
             } else {
-                playSound("mana");
                 return 0;
             }
         }
@@ -405,8 +405,10 @@ public class Admin {
 
     public void playHeroPower(int target) {
         Character target1 = createTarget(target);
-        gameManager.playHeroPower(target1);
-        playSound("heropower");
+        if (gameManager.playHeroPower(target1))
+            playSound("heropower");
+        else
+            playSound("mana");
     }
 
     CardModelView getWeaponViewModel(String string) {
@@ -507,8 +509,6 @@ public class Admin {
                     } else if (cards instanceof Weapon) {
                         playWeapon((Weapon) cards);
                     }
-                    String log = String.format("%s Played1 %s", friendlyPlayerName(), cards.getName());
-                    Log(log);
                     updateCardUsageTime(cards.getName().toLowerCase());
                     break;
                 } else {
@@ -568,7 +568,7 @@ public class Admin {
         gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (weapon.getManaCost() - gameManager.getFriendlyManaDecrease()));
         friendlyHandCards().remove(weapon);
         gameManager.setFriendlyWeapon(weapon);
-        updateGameLog(String.format("%s Played %s", friendlyPlayerName(), weapon.getName()));
+        updateGameLog(String.format("%s Equiped %s", friendlyPlayerName(), weapon.getName()));
     }
 
 
