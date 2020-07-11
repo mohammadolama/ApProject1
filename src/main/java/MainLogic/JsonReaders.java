@@ -1,8 +1,9 @@
-package Main;
+package MainLogic;
 
 import Configs.DeckReader;
 import Model.Cards.*;
 import Model.Heros.Hero;
+import Model.Player;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
@@ -57,7 +58,7 @@ public class JsonReaders {
     }
 
 
-    public static Player PlayerJsonReader(String username) {
+    static Player PlayerJsonReader(String username) {
         String path = String.format("resources/Jsons/Players/%s/player.json", username);
         Player player = null;
         try {

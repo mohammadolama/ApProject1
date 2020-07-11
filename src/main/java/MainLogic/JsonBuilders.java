@@ -1,9 +1,8 @@
-package Main;
+package MainLogic;
 
 import Model.Cards.*;
 import Model.Heros.Hero;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
+import Model.Player;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 
@@ -19,9 +18,10 @@ public class JsonBuilders {
     public static void PlayerJsonBuilder(String username, Player player) {
         try {
             String path = String.format("resources/Jsons/Players/%s", username);
-            File file = new File(path);
-            file.mkdir();
             path = path + "/player.json";
+            File file = new File(path);
+            file.getParentFile().mkdir();
+            file.createNewFile();
             FileWriter fileWriter = new FileWriter(path);
             objectMapper.writeValue(fileWriter, player);
             fileWriter.close();

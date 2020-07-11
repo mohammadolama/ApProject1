@@ -1,6 +1,6 @@
 package Model.Cards;
 
-import Controller.Actions.Visitor;
+import Controller.Actions.CardVisitors.Visitor;
 import Model.Enums.Rarity;
 import Model.Enums.Type;
 import Model.Heros.Hero;

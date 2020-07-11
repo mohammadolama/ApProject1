@@ -2,7 +2,6 @@ package Model.Heros;
 
 import Controller.Actions.SPVisitor.PowerVisitor;
 import Model.Cards.Card;
-import Model.HeroPowers.HeroPower;
 import Model.Enums.Carts;
 import Model.HeroPowers.HunterPower;
 import Model.Interface.Character;

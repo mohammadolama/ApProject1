@@ -1,7 +1,6 @@
 package View.Panels;
 
 import Controller.Admin;
-import Controller.ThreadColor;
 import Model.Enums.Attribute;
 import Model.Enums.Type;
 import Model.CardModelView;
@@ -63,26 +62,22 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private float size = 20;
     private Font font = new Font("Serif", Font.PLAIN, 20);
     private ArrayList<JButton> actionTargetButton;
+    private ArrayList<JButton> attackTargetButton;
     private SummonedCardPanel summonedCardPanel;
 
     private boolean disabled;
     private boolean practiceMode;
-
-    private ArrayList<JButton> attackTargetButton;
-    private ActionListener sleepTimerListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            size += 10;
-            if (size >= 45) {
-                size = 20;
-            }
-            index++;
-            if (index == 3) {
-                index = 0;
-            }
-            repaint();
-
+    private ActionListener sleepTimerListener = e -> {
+        size += 10;
+        if (size >= 45) {
+            size = 20;
         }
+        index++;
+        if (index == 3) {
+            index = 0;
+        }
+        repaint();
+
     };
     private ActionListener middleTimerListener = new ActionListener() {
         @Override
@@ -126,6 +121,61 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             repaint();
         }
     };
+    private ActionListener AiHandTimerListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            repaint();
+            AiY -= 20;
+            if (AiY < -100) {
+                config.setDeckAnimationFinished(true);
+                config.setAnimated(false);
+                disabled = false;
+                toHandTimer.stop();
+            }
+            repaint();
+        }
+    };
+    private ActionListener AiMiddleTimerListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            disabled = true;
+            config.setDeckAnimationFinished(false);
+            config.setAnimated(true);
+            repaint();
+            AiX += XA;
+            AiX -= YA;
+            if (AiX < 700) {
+                config.setToMiddle(false);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+                config.setBlur(0);
+                toHandTimer.start();
+                toMiddleTimer.stop();
+            }
+            repaint();
+        }
+    };
+    private ActionListener playTimerListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            disabled = true;
+            int desX = (mouseDesX - mouseStartX) / 30;
+            int desY = (mouseDesY - mouseStartY) / 30;
+            X += desX;
+            Y += desY;
+            repaint();
+            if (Y < mouseDesY) {
+                config.setPlayAnimation(false);
+                RequestHandler.SendRequest.PlayCard.response(handCardSelectedName, deckIndex, selectedTargetIndex);
+                disabled = false;
+                selectedTargetIndex = -1;
+                playTimer.stop();
+            }
+        }
+    };
 
     private void drawUserInfo(Graphics2D g) {
         String down = RequestHandler.SendRequest.FriendlyName.response(null);
@@ -161,21 +211,6 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             g.drawString(mana, config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, (config.getOpponentHeroPowerY()) + 25);
         }
     }
-
-    private ActionListener AiHandTimerListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            repaint();
-            AiY -= 20;
-            if (AiY < -100) {
-                config.setDeckAnimationFinished(true);
-                config.setAnimated(false);
-                disabled = false;
-                toHandTimer.stop();
-            }
-            repaint();
-        }
-    };
 
     private void drawWeaponInfo(Graphics2D g) {
         g.setFont(fantasy.deriveFont(28.0f));
@@ -372,36 +407,6 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     }
 
-    private ActionListener AiPlayTimerListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-        }
-    };
-    private ActionListener AiMiddleTimerListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            disabled = true;
-            config.setDeckAnimationFinished(false);
-            config.setAnimated(true);
-            repaint();
-            AiX += XA;
-            AiX -= YA;
-            if (AiX < 700) {
-                config.setToMiddle(false);
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-                config.setBlur(0);
-                toHandTimer.start();
-                toMiddleTimer.stop();
-            }
-            repaint();
-        }
-    };
-
     private void drawSelectionStatus(Graphics2D g) {
         g.setColor(new Color(255, 255, 255, 120));
         g.fillRoundRect(1405, 650, 170, 240, 20, 20);
@@ -493,52 +498,91 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     }
 
-    private ActionListener playTimerListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            disabled = true;
-            int desX = (mouseDesX - mouseStartX) / 30;
-            int desY = (mouseDesY - mouseStartY) / 30;
-            X += desX;
-            Y += desY;
-            repaint();
-            if (Y < mouseDesY) {
-                config.setPlayAnimation(false);
-                RequestHandler.SendRequest.PlayCard.response(handCardSelectedName, deckIndex, selectedTargetIndex);
-                disabled = false;
-                selectedTargetIndex = -1;
-                playTimer.stop();
-            }
-        }
-    };
+    public BoardPanel(boolean practiceMode) {
+        this.practiceMode = practiceMode;
+        initConfig();
+        setLayout(null);
+        addMouseMotionListener(this);
+        addMouseListener(this);
+        handImages = new ArrayList<>();
+        friendlyPlayedImages = new ArrayList<>();
+        enemyPlayedImages = new ArrayList<>();
+        actionTargetButton = new ArrayList<>();
+        attackTargetButton = new ArrayList<>();
 
-    private void selectEnemyTargetForCardActions() {
-        int i = 0;
-        synchronized (enemyPlayedImages) {
-            for (Images image : enemyPlayedImages) {
-                JButton button = new JButton();
-                button.setIcon(gameIcon.get("redtarget"));
-                button.setName("2" + i);
-                button.setBorderPainted(false);
-                button.setRolloverEnabled(false);
-                button.setContentAreaFilled(false);
-                button.setBounds(image.getX() + 50, image.getY(), 75, 75);
-                button.addMouseListener(BoardPanel.this);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        selectedTargetIndex = Integer.parseInt(button.getName());
-                        synchronized (config) {
-                            config.notify();
-                        }
-                        removeButton();
-                    }
-                });
-                actionTargetButton.add(button);
-                add(button);
-                i++;
-            }
+        toMiddleTimer = new Timer(1000 / 60, middleTimerListener);
+        toHandTimer = new Timer(1000 / 60, handTimerListener);
+        if (practiceMode) {
+            toMiddleTimer = new Timer(1000 / 60, AiMiddleTimerListener);
+            toHandTimer = new Timer(1000 / 60, AiHandTimerListener);
         }
+        playTimer = new Timer(1000 / 60, playTimerListener);
+        sleepTimer = new Timer(300, sleepTimerListener);
+        sleepTimer.start();
+
+
+        cardPreview = CardPreview.getInstance();
+        cardPreview.setBounds(0, 0, 600, 600);
+        cardPreview.setLayout(null);
+        cardPreview.setVisible(false);
+        cardPreview.setOpaque(false);
+        add(cardPreview);
+
+        actionChartPanel = new ActionChartPanel();
+        actionChartPanel.setBounds(1000, 50, 500, 400);
+        actionChartPanel.setLayout(null);
+        actionChartPanel.setVisible(false);
+        actionChartPanel.setOpaque(false);
+        add(actionChartPanel);
+
+        summonedCardPanel = new SummonedCardPanel();
+        summonedCardPanel.setBounds(100, 250, 350, 400);
+        summonedCardPanel.setLayout(null);
+        summonedCardPanel.setVisible(false);
+        summonedCardPanel.setOpaque(false);
+        add(summonedCardPanel);
+
+        nextTurnButton = new JButton();
+        nextTurnButton.setBounds(1250, 435, 130, 50);
+        nextTurnButton.setIcon(gameIcon.get("next"));
+        nextTurnButton.setContentAreaFilled(false);
+        nextTurnButton.setRolloverEnabled(false);
+        nextTurnButton.setFocusable(false);
+        nextTurnButton.setBorderPainted(false);
+        nextTurnButton.addActionListener(this);
+        add(nextTurnButton);
+
+        back = new JButton();
+        back.setIcon(gameIcon.get("back"));
+        back.setFocusable(false);
+        back.addActionListener(this);
+        back.setBounds(1430, 890, 60, 60);
+        back.setContentAreaFilled(false);
+        back.setRolloverEnabled(false);
+        back.setBorderPainted(false);
+        add(back);
+
+        exit = new JButton();
+        exit.addActionListener(this);
+        exit.setIcon(gameIcon.get("exit"));
+        exit.setBounds(1500, 890, 60, 60);
+        exit.setFocusable(false);
+        exit.setContentAreaFilled(false);
+        exit.setRolloverEnabled(false);
+        exit.setBorderPainted(false);
+        add(exit);
+
+        JLabel label = new JLabel();
+        label.setSize(new Dimension(150, 60));
+        label.setBounds(1400, 10, 150, 60);
+        label.setFont(f2.deriveFont(30.0f));
+        label.setForeground(Color.RED);
+        label.setBackground(Color.ORANGE);
+        add(label);
+
+        myTimer = new MyTimer(label);
+        myTimer.start();
+
     }
 
     public void drawPracticeDamage(int i, int j, int attack1, int attack2) {
@@ -702,126 +746,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     }
 
-    private void clear() {
-        handImages = new ArrayList<>();
-        synchronized (enemyPlayedImages) {
-            friendlyPlayedImages = new ArrayList<>();
-            enemyPlayedImages = new ArrayList<>();
-        }
-    }
-
-    public BoardPanel(boolean practiceMode) {
-        this.practiceMode = practiceMode;
-        initConfig();
-        setLayout(null);
-        addMouseMotionListener(this);
-        addMouseListener(this);
-        handImages = new ArrayList<>();
-        friendlyPlayedImages = new ArrayList<>();
-        enemyPlayedImages = new ArrayList<>();
-        actionTargetButton = new ArrayList<>();
-        attackTargetButton = new ArrayList<>();
-
-        toMiddleTimer = new Timer(1000 / 60, middleTimerListener);
-        toHandTimer = new Timer(1000 / 60, handTimerListener);
-        if (practiceMode) {
-            toMiddleTimer = new Timer(1000 / 60, AiMiddleTimerListener);
-            toHandTimer = new Timer(1000 / 60, AiHandTimerListener);
-        }
-        playTimer = new Timer(1000 / 60, playTimerListener);
-        sleepTimer = new Timer(300, sleepTimerListener);
-        sleepTimer.start();
-
-
-        cardPreview = CardPreview.getInstance();
-        cardPreview.setBounds(0, 0, 600, 600);
-        cardPreview.setLayout(null);
-        cardPreview.setVisible(false);
-        cardPreview.setOpaque(false);
-        add(cardPreview);
-
-        actionChartPanel = new ActionChartPanel();
-        actionChartPanel.setBounds(1000, 50, 500, 400);
-        actionChartPanel.setLayout(null);
-        actionChartPanel.setVisible(false);
-        actionChartPanel.setOpaque(false);
-        add(actionChartPanel);
-
-        summonedCardPanel = new SummonedCardPanel();
-        summonedCardPanel.setBounds(100, 250, 350, 400);
-        summonedCardPanel.setLayout(null);
-        summonedCardPanel.setVisible(false);
-        summonedCardPanel.setOpaque(false);
-        add(summonedCardPanel);
-
-        nextTurnButton = new JButton();
-        nextTurnButton.setBounds(1250, 435, 130, 50);
-        nextTurnButton.setIcon(gameIcon.get("next"));
-        nextTurnButton.setContentAreaFilled(false);
-        nextTurnButton.setRolloverEnabled(false);
-        nextTurnButton.setFocusable(false);
-        nextTurnButton.setBorderPainted(false);
-        nextTurnButton.addActionListener(this);
-        add(nextTurnButton);
-
-        back = new JButton();
-        back.setIcon(gameIcon.get("back"));
-        back.setFocusable(false);
-        back.addActionListener(this);
-        back.setBounds(1430, 890, 60, 60);
-        back.setContentAreaFilled(false);
-        back.setRolloverEnabled(false);
-        back.setBorderPainted(false);
-        add(back);
-
-        exit = new JButton();
-        exit.addActionListener(this);
-        exit.setIcon(gameIcon.get("exit"));
-        exit.setBounds(1500, 890, 60, 60);
-        exit.setFocusable(false);
-        exit.setContentAreaFilled(false);
-        exit.setRolloverEnabled(false);
-        exit.setBorderPainted(false);
-        add(exit);
-
-        JLabel label = new JLabel();
-        label.setSize(new Dimension(150, 60));
-        label.setBounds(1400, 10, 150, 60);
-        label.setFont(f2.deriveFont(30.0f));
-        label.setForeground(Color.RED);
-        label.setBackground(Color.ORANGE);
-        add(label);
-
-        myTimer = new MyTimer(label);
-        myTimer.start();
-
-    }
-
-    private void selectFriendlyTarget() {
-        int i = 0;
-        for (Images image : friendlyPlayedImages) {
-            JButton button = new JButton();
-            button.setIcon(gameIcon.get("greentarget"));
-            button.setName("1" + i);
-            button.setBorderPainted(false);
-            button.setRolloverEnabled(false);
-            button.setContentAreaFilled(false);
-            button.addMouseListener(BoardPanel.this);
-            button.setBounds(image.getX() + 50, image.getY(), 75, 75);
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    selectedTargetIndex = Integer.parseInt(button.getName());
-                    synchronized (config) {
-                        config.notify();
-                    }
-                    removeButton();
-                }
-            });
-            actionTargetButton.add(button);
-            add(button);
-            i++;
-        }
+    private void initConfig() {
+        config = ConfigsLoader.getInstance().getBoardConfig();
+        X = config.getDeckX();
+        Y = config.getDeckY();
+        AiX = config.getAiDeckX();
+        AiY = config.getDeckY();
+        XA = (config.getMiddleX() - config.getDeckX()) / config.getFps();
+        YA = (config.getMiddleY() - config.getDeckY()) / config.getFps();
     }
 
     private void playHeroPower() {
@@ -838,155 +770,6 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
                 break;
             case 0:
                 break;
-        }
-    }
-
-    private void initConfig() {
-        config = ConfigsLoader.getInstance().getBoardConfig();
-        X = config.getDeckX();
-        Y = config.getDeckY();
-        AiX = config.getAiDeckX();
-        AiY = config.getDeckY();
-        XA = (config.getMiddleX() - config.getDeckX()) / config.getFps();
-        YA = (config.getMiddleY() - config.getDeckY()) / config.getFps();
-    }
-
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (disabled) {
-            return;
-        }
-        cardPreview.setVisible(false);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        if (disabled) {
-            return;
-        }
-        cardPreview.setVisible(false);
-        int x = e.getX();
-        int y = e.getY();
-        if (x >= 1500 && y >= 50 && y <= 150) {
-            actionChartPanel.setVisible(true);
-        } else {
-            actionChartPanel.setVisible(false);
-            if (y >= config.getPlayerHandY()) {
-                friendlyHandView(x, y);
-            } else if (y < config.getPlayerHandY()) {
-                if (y > config.getMiddleLineY()) {
-                    friendlyPlayedView(x, y);
-                } else {
-                    enemyPlayedView(x, y);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (disabled) {
-            return;
-        }
-        int x = e.getX();
-        int y = e.getY();
-        if (y >= config.getPlayerHeroPowerY()) {
-            if (!cardSelected) {
-                mouseStartX = x;
-                mouseStartY = y;
-            }
-            if (x >= 750 && x <= 850 && y >= 700 && y <= 850) {
-                if (Admin.getInstance().heroCanAttack()) {
-                    playedIndex = -1;
-                    Admin.getInstance().listOfTargets(this);
-                }
-            } else if (x >= config.getPlayerHeroPowerX() && x <= (config.getPlayerHeroPowerX() + config.getHeroPoerWidth()) && y >= config.getPlayerHeroPowerY() && y <= (config.getPlayerHeroPowerY() + config.getHeroPowerHeight())) {
-                playHeroPower();
-            } else if (y >= config.getPlayerHandY()) {
-                selectCard(x, y);
-            }
-        } else if (y >= config.getMiddleLineY() && y < config.getPlayerHeroPowerY()) {
-            if (cardSelected) {
-                mouseDesX = x;
-                mouseDesY = y;
-                if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getMiddleLineY() && y <= config.getPlayAreaY()) {
-                    cardSelectedAction(x, y);
-                }
-                cardSelected = false;
-                return;
-            } else {
-                for (Images image : friendlyPlayedImages) {
-                    if (x >= image.getX() && x <= image.getX() + image.getWidth() && y >= image.getY() && y <= image.getY() + image.getHeigth()) {
-                        boolean flag = RequestHandler.SendRequest.CanDoAction.response(image.getIndex(), null);
-                        if (flag) {
-                            playedCardSelected = true;
-                            Admin.getInstance().listOfTargets(this);
-                            playedCardSelectedName = image.getName();
-                            playedIndex = image.getIndex();
-                            return;
-                        }
-                    }
-                }
-                removeButton();
-                playedCardSelected = false;
-            }
-
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        if (disabled) {
-            return;
-        }
-        revalidate();
-        repaint();
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        if (disabled) {
-            return;
-        }
-        cardPreview.setVisible(false);
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        if (disabled) {
-            return;
-        }
-        if (e.getSource() instanceof JButton) {
-            flag = true;
-        }
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        if (disabled) {
-            return;
-        }
-        if (e.getSource() instanceof JButton) {
-            flag = false;
-        }
-    }
-
-
-    private void change() {
-        AiTurn = !AiTurn;
-        if (practiceMode && AiTurn) {
-            toMiddleTimer.removeActionListener(middleTimerListener);
-            toMiddleTimer.addActionListener(AiMiddleTimerListener);
-            toHandTimer.removeActionListener(handTimerListener);
-            toHandTimer.addActionListener(AiHandTimerListener);
-        } else {
-            if (practiceMode) {
-                toMiddleTimer.removeActionListener(AiMiddleTimerListener);
-                toMiddleTimer.addActionListener(middleTimerListener);
-                toHandTimer.removeActionListener(AiHandTimerListener);
-                toHandTimer.addActionListener(handTimerListener);
-            }
         }
     }
 
@@ -1031,17 +814,6 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
         drawSelectionStatus(g);
 
-    }
-
-    public void request(Object object) {
-        toMiddleTimer.start();
-        while (toMiddleTimer.isRunning() || toHandTimer.isRunning()) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void drawWeapon(Graphics2D g) {
@@ -1140,6 +912,212 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void selectEnemyTargetForCardActions() {
+        int i = 0;
+        synchronized (enemyPlayedImages) {
+            for (Images image : enemyPlayedImages) {
+                JButton button = new JButton();
+                button.setIcon(gameIcon.get("redtarget"));
+                button.setName("2" + i);
+                button.setBorderPainted(false);
+                button.setRolloverEnabled(false);
+                button.setContentAreaFilled(false);
+                button.setBounds(image.getX() + 50, image.getY(), 75, 75);
+                button.addMouseListener(BoardPanel.this);
+                button.addActionListener(e -> {
+                    selectedTargetIndex = Integer.parseInt(button.getName());
+                    synchronized (config) {
+                        config.notify();
+                    }
+                    removeButton();
+                });
+                actionTargetButton.add(button);
+                add(button);
+                i++;
+            }
+        }
+    }
+
+    private void selectFriendlyTarget() {
+        int i = 0;
+        for (Images image : friendlyPlayedImages) {
+            JButton button = new JButton();
+            button.setIcon(gameIcon.get("greentarget"));
+            button.setName("1" + i);
+            button.setBorderPainted(false);
+            button.setRolloverEnabled(false);
+            button.setContentAreaFilled(false);
+            button.addMouseListener(BoardPanel.this);
+            button.setBounds(image.getX() + 50, image.getY(), 75, 75);
+            button.addActionListener(e -> {
+                selectedTargetIndex = Integer.parseInt(button.getName());
+                synchronized (config) {
+                    config.notify();
+                }
+                removeButton();
+            });
+            actionTargetButton.add(button);
+            add(button);
+            i++;
+        }
+    }
+
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        cardPreview.setVisible(false);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        cardPreview.setVisible(false);
+        int x = e.getX();
+        int y = e.getY();
+        if (x >= 1500 && y >= 50 && y <= 150) {
+            actionChartPanel.setVisible(true);
+        } else {
+            actionChartPanel.setVisible(false);
+            if (y >= config.getPlayerHandY()) {
+                friendlyHandView(x, y);
+            } else if (y < config.getPlayerHandY()) {
+                if (y > config.getMiddleLineY()) {
+                    friendlyPlayedView(x, y);
+                } else {
+                    enemyPlayedView(x, y);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        int x = e.getX();
+        int y = e.getY();
+        if (y >= config.getPlayerHeroPowerY()) {
+            if (!cardSelected) {
+                mouseStartX = x;
+                mouseStartY = y;
+            }
+            if (x >= 750 && x <= 850 && y >= 700 && y <= 850) {
+                if (Admin.getInstance().heroCanAttack()) {
+                    playedIndex = -1;
+                    Admin.getInstance().listOfTargets(this);
+                }
+            } else if (x >= config.getPlayerHeroPowerX() && x <= (config.getPlayerHeroPowerX() + config.getHeroPoerWidth()) && y >= config.getPlayerHeroPowerY() && y <= (config.getPlayerHeroPowerY() + config.getHeroPowerHeight())) {
+                playHeroPower();
+            } else if (y >= config.getPlayerHandY()) {
+                selectCard(x, y);
+            }
+        } else if (y >= config.getMiddleLineY() && y < config.getPlayerHeroPowerY()) {
+            if (cardSelected) {
+                mouseDesX = x;
+                mouseDesY = y;
+                if (x >= config.getLeftLineX() && x <= config.getRightLineX() && y >= config.getMiddleLineY() && y <= config.getPlayAreaY()) {
+                    cardSelectedAction(x, y);
+                }
+                cardSelected = false;
+            } else {
+                for (Images image : friendlyPlayedImages) {
+                    if (x >= image.getX() && x <= image.getX() + image.getWidth() && y >= image.getY() && y <= image.getY() + image.getHeigth()) {
+                        boolean flag = RequestHandler.SendRequest.CanDoAction.response(image.getIndex(), null);
+                        if (flag) {
+                            playedCardSelected = true;
+                            Admin.getInstance().listOfTargets(this);
+                            playedCardSelectedName = image.getName();
+                            playedIndex = image.getIndex();
+                            return;
+                        }
+                    }
+                }
+                removeButton();
+                playedCardSelected = false;
+            }
+
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        cardPreview.setVisible(false);
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        if (e.getSource() instanceof JButton) {
+            flag = true;
+        }
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        if (disabled) {
+            return;
+        }
+        if (e.getSource() instanceof JButton) {
+            flag = false;
+        }
+    }
+
+    private void clear() {
+        handImages = new ArrayList<>();
+        synchronized (enemyPlayedImages) {
+            friendlyPlayedImages = new ArrayList<>();
+            enemyPlayedImages = new ArrayList<>();
+        }
+    }
+
+    private void change() {
+        AiTurn = !AiTurn;
+        if (practiceMode && AiTurn) {
+            toMiddleTimer.removeActionListener(middleTimerListener);
+            toMiddleTimer.addActionListener(AiMiddleTimerListener);
+            toHandTimer.removeActionListener(handTimerListener);
+            toHandTimer.addActionListener(AiHandTimerListener);
+        } else {
+            if (practiceMode) {
+                toMiddleTimer.removeActionListener(AiMiddleTimerListener);
+                toMiddleTimer.addActionListener(middleTimerListener);
+                toHandTimer.removeActionListener(AiHandTimerListener);
+                toHandTimer.addActionListener(handTimerListener);
+            }
+        }
+    }
+
+    public void request(Object object) {
+        toMiddleTimer.start();
+        while (toMiddleTimer.isRunning() || toHandTimer.isRunning()) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

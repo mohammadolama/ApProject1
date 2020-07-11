@@ -1,6 +1,6 @@
 package Model.Cards;
 
-import Controller.Actions.Visitor;
+import Controller.Actions.CardVisitors.Visitor;
 import Model.Enums.Attribute;
 import Model.Enums.Rarity;
 import Model.Enums.Type;
@@ -9,7 +9,7 @@ import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonTypeName;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 @JsonTypeName("strengthinnumbers")
 public class StrengthInNumbers extends Spell {
@@ -22,7 +22,7 @@ public class StrengthInNumbers extends Spell {
         setHeroClass("Neutral");
         setRarity(Rarity.Common);
         setPrice(20);
-        setAttributes(new ArrayList<Attribute>(Arrays.asList(Attribute.Reward)));
+        setAttributes(new ArrayList<>(Collections.singletonList(Attribute.Reward)));
         setContiniousAction(true);
         setHealthRestore(0);
         setAttackRestore(0);

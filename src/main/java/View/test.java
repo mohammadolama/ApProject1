@@ -1,26 +1,13 @@
 package View;
 
 import Configs.ConfigsLoader;
-import Configs.DeckReader;
-import Configs.SummonedConfig;
-import Main.JsonBuilders;
-import Main.Player;
-import Model.Cards.StrengthInNumbersDR;
-import Model.Heros.Hero;
-import Model.Heros.Mage;
-import Model.Heros.Rogue;
 import View.Panels.Constants;
 import View.Panels.MyFrame;
-import Main.Fundamentals;
+import MainLogic.Fundamentals;
 import View.Sounds.SoundAdmin;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.sound.sampled.Clip;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class test {
     static Clip clip;
@@ -33,12 +20,11 @@ public class test {
         MyFrame.getInstance();
 
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        File file;
-        FileWriter fileWriter = new FileWriter(new File("summonedconfig.json"));
-        Player player = new Player("as", "as");
-        System.out.println(player.getPlayerID());
-        objectMapper.writeValue(fileWriter, player);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        File file;
+//        FileWriter fileWriter = new FileWriter(new File("summonedconfig.json"));
+//        Player player = new Player("as", "as");
+//        objectMapper.writeValue(fileWriter, player);
 
 
 //        JsonBuilders.HeroBuildeeer(new Rogue());
@@ -90,10 +76,6 @@ public class test {
 //        JsonBuilders.WeaponBuilder(new Gearblade());
 //        JsonBuilders.WeaponBuilder(new SilverSword());
 //        JsonBuilders.WeaponBuilder(new TrueSilverChampion());
-//        String path = "resources/pics/cards/";
-//        for (Carts value : Carts.values()) {
-//            System.out.println(String.format("cardPics.put(\"%s\", %s);" , value,value));
-//        }
 
     }
 }

@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 import Controller.RequestHandler;
 import Model.ActionModel;
-import View.Panels.Constants.*;
 
 import static View.Panels.Constants.*;
 
@@ -71,8 +70,6 @@ public class ActionChartPanel extends JPanel {
             g.setColor(Color.yellow);
             g.drawRect(10, 100 + 70 * i, 160, 60);
             g.setPaint(new GradientPaint(5, 5, Color.cyan, 10, 10, Color.yellow, true));
-//            System.out.println(enemyModel.toString());
-//            System.out.println(enemyModel.get(i).toString());
             int fac = factor.get(enemyModel.get(i).getName().toLowerCase());
             g.fillRect(10, 100 + 70 * i, fac * enemyModel.get(i).getManaSpendOnSth(), 60);
             g.setColor(Color.RED);

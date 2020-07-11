@@ -1,6 +1,6 @@
 package Model.Cards;
 
-import Controller.Actions.Visitor;
+import Controller.Actions.CardVisitors.Visitor;
 import Model.Enums.Attribute;
 import Model.Enums.Rarity;
 import Model.Enums.Type;
@@ -8,9 +8,8 @@ import Model.Heros.Hero;
 import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonTypeName;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 @JsonTypeName("ali")
 public class Ali extends Minion {
@@ -33,7 +32,7 @@ public class Ali extends Minion {
         setTitle("Demon");
         setSleep(true);
         setCanBeAttacked(false);
-        setAttributes(new ArrayList<Attribute>(Arrays.asList(Attribute.BattleCry)));
+        setAttributes(new ArrayList<>(Collections.singletonList(Attribute.BattleCry)));
     }
 
 

@@ -1,4 +1,4 @@
-package Main;
+package MainLogic;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,9 +11,9 @@ public class Fundamentals {
             if (!file.isDirectory()) file.mkdir();
             file = new File("resources/Jsons/players");
             if (!file.isDirectory()) file.mkdir();
-            file = new File("resources/Main.Player.txt");
+            file = new File("resources/Model.Player.txt");
             if (!file.exists()) {
-                FileWriter fileWriter = new FileWriter("resources/Main.Player.txt");
+                FileWriter fileWriter = new FileWriter("resources/Model.Player.txt");
                 fileWriter.close();
             }
             file = new File("resources/user");

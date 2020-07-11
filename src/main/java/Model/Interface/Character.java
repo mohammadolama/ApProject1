@@ -1,13 +1,13 @@
 package Model.Interface;
 
 public interface Character {
-    public int getAttack();
+    int getAttack();
 
-    public void setAttack(int i);
+    void setAttack(int i);
 
-    public int getLife();
+    int getLife();
 
-    public void setLife(int i);
+    void setLife(int i);
 
-    public int getMaxLife();
+    int getMaxLife();
 }

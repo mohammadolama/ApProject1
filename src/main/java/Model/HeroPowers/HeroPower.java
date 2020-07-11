@@ -1,7 +1,5 @@
 package Model.HeroPowers;
 
-import Model.Interface.Character;
-
 public abstract class HeroPower {
     private String name;
     private int manaCost;

@@ -1,7 +1,7 @@
-package Controller.Actions;
+package Controller.Actions.CardVisitors;
 
 import Controller.Admin;
-import Main.JsonReaders;
+import MainLogic.JsonReaders;
 import Model.Cards.*;
 import Model.Enums.*;
 import Model.Heros.Hero;

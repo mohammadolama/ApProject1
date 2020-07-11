@@ -1,7 +1,6 @@
 package Model.Cards;
 
-import Controller.Actions.Visitor;
-import Model.Enums.Attribute;
+import Controller.Actions.CardVisitors.Visitor;
 import Model.Enums.Rarity;
 import Model.Enums.Type;
 import Model.Heros.Hero;
@@ -9,7 +8,6 @@ import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonTypeName;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @JsonTypeName("aylar")
 public class Aylar extends Spell {

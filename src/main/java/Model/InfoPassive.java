@@ -1,4 +1,4 @@
-package Main;
+package Model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,11 +69,4 @@ public class InfoPassive {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "InfoPassive{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

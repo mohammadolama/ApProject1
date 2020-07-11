@@ -1,6 +1,6 @@
-package Main;
+package MainLogic;
 
-import java.io.IOException;
+import Model.Player;
 
 public class Gamestate {
     private static Player player;

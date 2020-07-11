@@ -18,7 +18,6 @@ public class ConfigsLoader {
     private MenuConfig menuConfig;
     private LoginConfig loginConfig;
     private SummonedConfig summonedConfig;
-    private String path = String.format("resources/Properties/");
 
 
     private static ConfigsLoader configsLoader = new ConfigsLoader();
@@ -34,6 +33,7 @@ public class ConfigsLoader {
     private void LoadConfigs() {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
+            String path = "resources/Properties/";
             FileReader fileReader = new FileReader(path + "col_change.json");
             col_changeConfig = objectMapper.readValue(fileReader, Col_ChangeConfig.class);
             fileReader = new FileReader(path + "board.json");

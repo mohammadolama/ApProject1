@@ -1,4 +1,4 @@
-package Main;
+package MainLogic;
 
 import Model.Cards.Card;
 import Model.Enums.*;
@@ -24,19 +24,19 @@ public class Shop {
     public static ArrayList<Card> Buyable() {
         ArrayList<Carts> ar = BuyableCards();
         ArrayList<Card> ar2;
-        ar2 = Deck.UpdateDeck(ar);
+        ar2 = DeckLogic.UpdateDeck(ar);
         return ar2;
     }
 
     public static ArrayList<Card> Sellable() {
         ArrayList<Carts> ar = Gamestate.getPlayer().getPlayerCarts();
         ArrayList<Card> ar2;
-        ar2 = Deck.UpdateDeck(ar);
+        ar2 = DeckLogic.UpdateDeck(ar);
         return ar2;
     }
 
     public static boolean CanBeSold(String st) {
-        ArrayList<Carts> ar = Deck.UpdateSellCards();
+        ArrayList<Carts> ar = DeckLogic.UpdateSellCards(Gamestate.getPlayer());
         return !ar.contains(Carts.valueOf(st.toLowerCase()));
     }
 

@@ -2,13 +2,13 @@ package View.Panels;
 
 import Model.Enums.Carts;
 import Model.Enums.Type;
-import Main.Player;
+import Model.Player;
 import Model.CardModelView;
 import Controller.RequestHandler;
 import Configs.ConfigsLoader;
 import Configs.StatusConfig;
-import Main.Deck;
-import Main.Gamestate;
+import Model.Deck;
+import MainLogic.Gamestate;
 
 import javax.swing.*;
 import java.awt.*;

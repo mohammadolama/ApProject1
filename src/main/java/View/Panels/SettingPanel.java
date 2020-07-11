@@ -1,7 +1,6 @@
 package View.Panels;
 
 import Controller.RequestHandler;
-import Controller.Admin;
 
 import javax.swing.*;
 import java.awt.*;

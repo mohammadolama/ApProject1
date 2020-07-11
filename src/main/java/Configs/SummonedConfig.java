@@ -2,12 +2,12 @@ package Configs;
 
 public class SummonedConfig {
 
-    private int width = 350;
-    private int height = 400;
+    private int width;
+    private int height;
 
-    private int damageX = 40;
-    private int hpX = 290;
-    private int damageYl = 380;
+    private int damageX;
+    private int hpX;
+    private int damageYl;
 
     public SummonedConfig() {
     }

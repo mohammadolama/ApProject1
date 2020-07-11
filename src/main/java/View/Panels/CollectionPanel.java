@@ -1,12 +1,12 @@
 package View.Panels;
 
 import Model.Cards.Card;
-import Main.Player;
+import Model.Player;
 import Controller.RequestHandler;
 import Configs.CollectionConfig;
 import Configs.ConfigsLoader;
-import Main.Deck;
-import Main.Gamestate;
+import Model.Deck;
+import MainLogic.Gamestate;
 import Controller.Admin;
 import Controller.CustomScrollBarUI;
 

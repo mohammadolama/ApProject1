@@ -2,12 +2,11 @@ package Model.Heros;
 
 
 import Controller.Actions.SPVisitor.PowerVisitor;
-import Controller.ThreadColor;
 import Model.Cards.*;
 import Model.HeroPowers.HeroPower;
 import Model.Enums.Carts;
 import Model.Enums.Heroes;
-import Main.Player;
+import Model.Player;
 import Model.Interface.Character;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;

@@ -1,11 +1,8 @@
-package Main;
+package Model;
 
-import Controller.ThreadColor;
+import MainLogic.DeckLogic;
 import Model.Cards.Card;
 import Model.Enums.Carts;
-import Model.Enums.MinionCarts;
-import Model.Enums.SpellCarts;
-import Model.Enums.WeaponCarts;
 import Model.Heros.Hero;
 
 import java.math.BigDecimal;
@@ -27,7 +24,7 @@ public class Deck {
 
     public Deck(int totalPlays, int totalWins, String name) {
         this();
-        ArrayList<Carts> ar = DefultAvailableCardsManager();
+        ArrayList<Carts> ar = DeckLogic.DefultAvailableCardsManager();
         setDeck(ar);
         usedTimeUpdater();
         this.totalPlays = totalPlays;
@@ -51,8 +48,13 @@ public class Deck {
         this.hero = hero;
     }
 
+    static Deck DefaultDeck() {
+        //        deck.setMostUsedCard(mostUsedCard(deck));
+        return new Deck(0, 0, "Default Deck");
+    }
+
     public double avarageMana() {
-        ArrayList<Card> ar = Deck.UpdateDeck(getDeck());
+        ArrayList<Card> ar = DeckLogic.UpdateDeck(getDeck());
         double i = 0;
         for (Card card : ar) {
             i = i + card.getManaCost();
@@ -63,31 +65,6 @@ public class Deck {
         return bd.doubleValue();
     }
 
-    static Deck DefaultDeck() {
-        Deck deck = new Deck(0, 0, "Default Deck");
-//        deck.setMostUsedCard(mostUsedCard(deck));
-        return deck;
-    }
-
-
-    static ArrayList<Carts> DefultAvailableCardsManager() {
-        ArrayList<Carts> ar = new ArrayList<>();
-        ar.add(Carts.fierywaraxe);
-        ar.add(Carts.gearblade);
-        ar.add(Carts.blessingoftheancients);
-        ar.add(Carts.cookie);
-        ar.add(Carts.lightforgedblessing);
-        ar.add(Carts.swarmofcats);
-        ar.add(Carts.sprint);
-        ar.add(Carts.arcanitereaper);
-        ar.add(Carts.aghahaghi);
-        ar.add(Carts.hossein);
-        ar.add(Carts.hosseinhima);
-        ar.add(Carts.khashayar);
-        ar.add(Carts.lachin);
-        ar.add(Carts.mobin);
-        return ar;
-    }
 
     public static Deck cloneDeck(Deck deck) {
         Deck deck1 = new Deck();
@@ -101,40 +78,11 @@ public class Deck {
         return deck1;
     }
 
-    public static ArrayList<String> bestDeck(Player player) {
-        ArrayList<Deck> ar = new ArrayList<>();
-        for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
-            ar.add(entry.getValue());
-        }
-        ar.sort(Comparator.comparing(Deck::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(Deck::avarageMana));
-
-        ArrayList<String> arrayList = new ArrayList<>();
-        if (ar.size() <= 10) {
-            for (Deck deck : ar) {
-                arrayList.add(deck.getName());
-            }
-            return arrayList;
-        } else {
-            for (int i = 0; i < 10; i++) {
-                arrayList.add(ar.get(i).getName());
-            }
-            return arrayList;
-        }
-    }
 
     public void setMostUsedCard(Carts mostUsedCard) {
         this.mostUsedCard = mostUsedCard;
     }
 
-    static ArrayList<Carts> UpdateSellCards() {
-        ArrayList<Carts> ar = new ArrayList<>();
-        for (Map.Entry<String, Deck> entry : Gamestate.getPlayer().getAllDecks().entrySet()) {
-            Deck deck = entry.getValue();
-            ar.addAll(deck.getDeck());
-        }
-        return ar;
-
-    }
 
     public int getTotalPlays() {
         return totalPlays;
@@ -171,28 +119,6 @@ public class Deck {
         return hashMap;
     }
 
-    public static ArrayList<Card> UpdateDeck(ArrayList<Carts> arrayList) { // biuld card objects from json using enum
-        ArrayList<Card> ar = new ArrayList<>();
-
-        for (Carts cartss : arrayList) {
-            for (MinionCarts minionCarts : MinionCarts.values()) {
-                if (cartss.toString().equals(minionCarts.toString())) {
-                    ar.add(JsonReaders.MinionsReader(cartss.name()));
-                }
-            }
-            for (SpellCarts spellCarts : SpellCarts.values()) {
-                if (cartss.toString().equals(spellCarts.toString())) {
-                    ar.add(JsonReaders.SpellReader(cartss.name()));
-                }
-            }
-            for (WeaponCarts weaponCarts : WeaponCarts.values()) {
-                if (cartss.toString().equals(weaponCarts.toString())) {
-                    ar.add(JsonReaders.WeaponReader(cartss.name()));
-                }
-            }
-        }
-        return ar;
-    }
 
     private void usedTimeUpdater() {
         for (Carts carts : deck) {
@@ -212,10 +138,6 @@ public class Deck {
     public Carts getMostUsedCard() {
         mostUsedCard = mostUsedCard();
         return mostUsedCard;
-    }
-
-    public void updateMost() {
-//        this.mostUsedCard=mostUsedCard();
     }
 
     public HashMap<String, Integer> getUsedTimes() {
@@ -244,19 +166,10 @@ public class Deck {
         if (ar.size() == 1) {
             return ar.get(0);
         } else {
-            ArrayList<Card> ar2 = Deck.UpdateDeck(ar);
+            ArrayList<Card> ar2 = DeckLogic.UpdateDeck(ar);
             ar2.sort(Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
             return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
         }
     }
-
-    @Override
-    public String toString() {
-        return "Deck{" +
-                "usedTimes=" + usedTimes +
-                '}';
-    }
-
-
 
 }

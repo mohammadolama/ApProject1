@@ -1,10 +1,10 @@
 package Model.Cards;
 
-import Controller.Actions.Visitor;
+import Controller.Actions.CardVisitors.Visitor;
+import MainLogic.DeckLogic;
 import Model.Enums.*;
-import Main.Deck;
-import Main.Gamestate;
-import Main.JsonReaders;
+import MainLogic.Gamestate;
+import MainLogic.JsonReaders;
 import Model.Heros.Hero;
 import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -149,12 +149,12 @@ public abstract class Card implements Character {
     public static ArrayList<Card> allCards() {
         ArrayList<Carts> ar = new ArrayList<>();
         Collections.addAll(ar, Carts.values());
-        return Deck.UpdateDeck(ar);
+        return DeckLogic.UpdateDeck(ar);
     }
 
     public static ArrayList<Card> purchasedCards() {
         ArrayList<Carts> ar = new ArrayList<>(Gamestate.getPlayer().getPlayerCarts());
-        return Deck.UpdateDeck(ar);
+        return DeckLogic.UpdateDeck(ar);
     }
 
     public static ArrayList<Card> lockedCards() {
@@ -168,7 +168,7 @@ public abstract class Card implements Character {
             }
             ar.add(carts);
         }
-        return Deck.UpdateDeck(ar);
+        return DeckLogic.UpdateDeck(ar);
     }
 
     public static ArrayList<Card> neutralCardsFilter() {
@@ -176,7 +176,7 @@ public abstract class Card implements Character {
         for (NeutralCarts value : NeutralCarts.values()) {
             ar.add(Carts.valueOf(value.toString()));
         }
-        return Deck.UpdateDeck(ar);
+        return DeckLogic.UpdateDeck(ar);
     }
 
     public static ArrayList<Card> specialCardsFilter() {
@@ -184,7 +184,7 @@ public abstract class Card implements Character {
         for (SpecialCarts value : SpecialCarts.values()) {
             ar.add(Carts.valueOf(value.toString()));
         }
-        return Deck.UpdateDeck(ar);
+        return DeckLogic.UpdateDeck(ar);
     }
 
     public static Card getCardOf(String name) {

@@ -1,14 +1,15 @@
 package View.Panels;
 
 import Controller.RequestHandler;
+import MainLogic.DeckLogic;
 import Model.Cards.Card;
 import Model.Enums.*;
 import Model.Images;
 import Configs.ConfigsLoader;
 import View.Update.Update;
 import Model.Heros.*;
-import Main.Deck;
-import Main.Gamestate;
+import Model.Deck;
+import MainLogic.Gamestate;
 import Controller.Admin;
 import Configs.Col_ChangeConfig;
 
@@ -295,7 +296,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
                 }
             }
 
-            cards = Deck.UpdateDeck(ar2);
+            cards = DeckLogic.UpdateDeck(ar2);
             allBufferedImages = new ArrayList<>();
             for (Carts carts : ar2) {
                 BufferedImage bf = cardPics.get(carts.toString());

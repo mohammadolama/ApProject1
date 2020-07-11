@@ -1,12 +1,13 @@
 package View.Panels;
 
 import Controller.RequestHandler;
+import MainLogic.Gamestate;
+import MainLogic.Shop;
 import Model.CardModelView;
 import Model.Cards.Card;
 import Model.Enums.Type;
 import Model.Images;
 import Configs.ConfigsLoader;
-import Main.*;
 import Configs.CollectionDrawingConfig;
 
 import javax.swing.*;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 
 import static View.Panels.CollectionPanel.calculateHeight;
 import static View.Panels.Constants.*;
-import static View.Panels.Constants.heroPics;
 
 public class CollectionDrawingPanel extends JPanel implements MouseListener, ActionListener {
 

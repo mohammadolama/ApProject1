@@ -1,6 +1,6 @@
 package Model.Cards;
 
-import Controller.Actions.Visitor;
+import Controller.Actions.CardVisitors.Visitor;
 import Model.Enums.Attribute;
 import Model.Enums.Rarity;
 import Model.Enums.Type;
@@ -31,7 +31,7 @@ public class Mobin extends Minion {
         setTitle("Mech");
         setSleep(true);
         setCanBeAttacked(false);
-        setAttributes(new ArrayList<Attribute>(Arrays.asList(Attribute.Taunt, Attribute.BattleCry)));
+        setAttributes(new ArrayList<>(Arrays.asList(Attribute.Taunt, Attribute.BattleCry)));
     }
 
     @Override

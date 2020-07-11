@@ -2,12 +2,9 @@ package Model.Heros;
 
 import Controller.Actions.SPVisitor.PowerVisitor;
 import Model.Cards.Card;
-import Model.HeroPowers.HeroPower;
 import Model.Enums.*;
-import Model.HeroPowers.PriestPower;
 import Model.HeroPowers.WarlockPower;
 import Model.Interface.Character;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonTypeName;
 
 import java.util.ArrayList;

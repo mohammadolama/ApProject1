@@ -1,4 +1,4 @@
-package Controller.Actions;
+package Controller.Actions.CardVisitors;
 
 import Model.Cards.*;
 import Model.Heros.Hero;

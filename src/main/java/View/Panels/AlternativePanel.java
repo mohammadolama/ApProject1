@@ -1,15 +1,13 @@
 package View.Panels;
 
 import Controller.*;
-import Main.InfoPassive;
+import Model.InfoPassive;
 import Model.CardModelView;
-import Model.Enums.Carts;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
 
 import static View.Panels.Constants.*;
 

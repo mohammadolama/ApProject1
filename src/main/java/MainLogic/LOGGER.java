@@ -1,4 +1,6 @@
-package Main;
+package MainLogic;
+
+import Model.Player;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -7,7 +9,6 @@ import java.util.Locale;
 
 public class LOGGER {
     public static void playerlog(Player player, String string) {
-        System.out.println(player.toString() + "\t" + player.getPlayerID());
         String st = String.format("resources/players/%s-%s.log", player.getUsername(), player.getPlayerID());
         Calendar calendar = Calendar.getInstance();
         try {

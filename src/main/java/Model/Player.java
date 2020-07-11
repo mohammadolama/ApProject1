@@ -1,13 +1,13 @@
-package Main;
+package Model;
 
 
+import MainLogic.DeckLogic;
 import Model.Enums.*;
 
 import java.io.*;
 import java.util.*;
 
-import static Main.Deck.DefaultDeck;
-import static Main.Deck.DefultAvailableCardsManager;
+import static Model.Deck.DefaultDeck;
 
 public class Player implements Serializable {
     private String username;
@@ -33,13 +33,12 @@ public class Player implements Serializable {
             this.password = password;
             this.level = 0;
             this.exp = 0;
-            this.setPlayerCarts(DefultAvailableCardsManager());
+            this.setPlayerCarts(DeckLogic.DefultAvailableCardsManager());
             this.setSelectedDeck(DefaultDeck());
-            allDecks = new HashMap<String, Deck>();
+            allDecks = new HashMap<>();
             allDecks.put(getSelectedDeck().getName(), getSelectedDeck());
             this.playerID = System.nanoTime() + "";
             String st = String.format("resources/players/%s-%s.log", username, this.getPlayerID());
-            System.out.println(this.playerID);
             PrintWriter vm = new PrintWriter(st);
             Date date = new Date();
             vm.write("Created in : " + date.toString() + "\n" + "Password : " + password + "\n" + "User : " + username + "\n" + "**********************" + "\n");
@@ -148,10 +147,4 @@ public class Player implements Serializable {
         this.allDecks = allDecks;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "playerID='" + playerID + '\'' +
-                '}';
-    }
 }

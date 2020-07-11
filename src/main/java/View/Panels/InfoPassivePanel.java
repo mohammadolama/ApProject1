@@ -3,8 +3,8 @@ package View.Panels;
 import Controller.RequestHandler;
 import Configs.ConfigsLoader;
 import Configs.InfoConfig;
-import Main.Gamestate;
-import Main.InfoPassive;
+import MainLogic.Gamestate;
+import Model.InfoPassive;
 import Controller.Admin;
 
 import javax.swing.*;

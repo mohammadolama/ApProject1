@@ -1,15 +1,16 @@
 package Controller;
 
 import Controller.Actions.*;
-import Model.ActionModel;
+import Controller.Actions.CardVisitors.ActionVisitor;
+import Controller.Actions.CardVisitors.BattlecryVisitor;
+import Model.*;
 import Model.Cards.*;
 import Model.Enums.*;
-import Model.CardModelView;
 import Model.Heros.*;
 import Model.Interface.Character;
 import View.Panels.*;
 import View.Update.Update;
-import Main.*;
+import MainLogic.*;
 import View.Sounds.SoundAdmin;
 
 import javax.swing.*;
@@ -115,14 +116,14 @@ public class Admin {
 
     void logOut() {
         Log("Sign out ");
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+        saveAndUpdate();
         playMusic("login");
         setVisiblePanel("login");
     }
 
     public void exit() {
         Log("Sign out ");
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+        saveAndUpdate();
         System.exit(0);
     }
 
@@ -138,7 +139,6 @@ public class Admin {
         }
         frameRender();
     }
-
 
     public void selectFirstHero(String string) {
         Update.updateFirstHero(string);
@@ -197,7 +197,7 @@ public class Admin {
             CollectionDrawingPanel.getInstance().setSpecialSelected(true);
         } else {
             Deck selectedDeck = Deck.cloneDeck(Gamestate.getPlayer().getAllDecks().get(name));
-            cards = Deck.UpdateDeck(selectedDeck.getDeck());
+            cards = DeckLogic.UpdateDeck(selectedDeck.getDeck());
         }
         CollectionDrawingPanel.getInstance().updateContent(cards);
     }
@@ -287,7 +287,7 @@ public class Admin {
     }
 
     ArrayList<String> bestDecks() {
-        return Deck.bestDeck(player());
+        return DeckLogic.bestDeck(player());
     }
 
     Deck CloneDeck(String value) {
@@ -331,12 +331,12 @@ public class Admin {
     }
 
     private void createGameManager(InfoPassive infoPassive, String card1, String card2, String card3) {
-        gameManager = new GameManager(Gamestate.getPlayer(), infoPassive, Deck.UpdateDeck(player().getSelectedDeck().getDeck()), card1, card2, card3);
+        gameManager = new GameManager(Gamestate.getPlayer(), infoPassive, DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck()), card1, card2, card3);
     }
 
     /* Deck ReaderMode Generator  */
     private void createGameManger(InfoPassive infoPassive, boolean practiceMode) {
-        gameManager = new GameManager(player(), infoPassive, Deck.UpdateDeck(player().getSelectedDeck().getDeck()), practiceMode);
+        gameManager = new GameManager(player(), infoPassive, DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck()), practiceMode);
     }
 
     private void createPlayBoard(InfoPassive infoPassive, String card1, String card2, String card3) {
@@ -653,7 +653,7 @@ public class Admin {
         checkForWinner();
     }
 
-    public void practiceAttack(Minion attacker, Character target, int i, int j) {
+    void practiceAttack(Minion attacker, Character target, int i, int j) {
         ActionHandler actionHandler = new ActionHandler();
         new Thread(() -> playSound("attack")).start();
         if (j >= 0) {
@@ -680,7 +680,7 @@ public class Admin {
     }
 
     public void threeCardChoose(InfoPassive infoPassive) {
-        ArrayList<Card> list = Deck.UpdateDeck(player().getSelectedDeck().getDeck());
+        ArrayList<Card> list = DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck());
         Collections.shuffle(list);
         AlternativePanel th = new AlternativePanel(false);
         th.setModel1(getPureViewModelOf(list.get(0).getName().toLowerCase()));
@@ -693,7 +693,7 @@ public class Admin {
     }
 
     public void changeCard(int i, AlternativePanel th) {
-        ArrayList<Card> list = Deck.UpdateDeck(player().getSelectedDeck().getDeck());
+        ArrayList<Card> list = DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck());
         Collections.shuffle(list);
         for (Card card : list) {
             if (i == 1) {
@@ -962,11 +962,11 @@ public class Admin {
         return (enemyHero().getHeroPower().getManaCost() - gameManager.getEnemyPowerManaDecrease());
     }
 
-    public void AiTurn(boolean AiTurn) {
+    void AiTurn(boolean AiTurn) {
         boardPanel.AiTurn(AiTurn);
     }
 
-    public void RequestAct(Object object) {
+    void RequestAct(Object object) {
         boardPanel.request(object);
     }
 }

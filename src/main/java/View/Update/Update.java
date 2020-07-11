@@ -4,10 +4,9 @@ import Model.Enums.Carts;
 import View.Panels.CollectionPanel;
 import View.Panels.MyFrame;
 import View.Panels.StatusPanel;
-import Main.Deck;
-import Main.Gamestate;
-import Main.JsonBuilders;
-import Main.JsonReaders;
+import MainLogic.Gamestate;
+import MainLogic.JsonBuilders;
+import MainLogic.JsonReaders;
 
 import java.util.ArrayList;
 

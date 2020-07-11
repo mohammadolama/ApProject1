@@ -1,12 +1,14 @@
-package Main;
+package MainLogic;
 
+
+import Model.Player;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class LogInSignUp {
-    private static File file = new File("resources/Main.Player.txt");
+    private static File file = new File("resources/Model.Player.txt");
 
     public void DeleteAccount(Player player) {
         try {
@@ -17,8 +19,6 @@ public class LogInSignUp {
                 String st56 = sc2.nextLine();
                 if (!st56.equals("User : " + player.getUsername())) {
                     pw1.write(st56 + "\n");
-                } else if (st56.equals("User : " + player.getUsername())) {
-                    continue;
                 }
             }
             pw1.close();
@@ -81,7 +81,7 @@ public class LogInSignUp {
 
 
     private boolean UserFinder(String user) {
-        file = new File("resources/Main.Player.txt");
+        file = new File("resources/Model.Player.txt");
         Scanner sc2;
         try {
             sc2 = new Scanner(file);
@@ -124,13 +124,12 @@ public class LogInSignUp {
     public String create(String user, String pass) {
         try {
             if (DuplicateUserChecker(user)) {
-                FileWriter fileWriter = new FileWriter("resources/Main.Player.txt", true);
+                FileWriter fileWriter = new FileWriter("resources/Model.Player.txt", true);
                 PrintWriter pw = new PrintWriter(fileWriter);
                 pw.write("User : " + user + "\n");
                 pw.write("Password : " + pass + "\n");
                 pw.write("**********************" + "\n");
                 Player player = new Player(user, pass);
-                System.out.println(player.toString());
                 JsonBuilders.PlayerJsonBuilder(user, player);
                 JsonBuilders.NewPlayerHeroBuilder(player);
                 pw.close();
@@ -146,7 +145,6 @@ public class LogInSignUp {
         if (UserFinder(user)) {
             if (PassChecker(user, password)) {
                 Player player = JsonReaders.PlayerJsonReader(user);
-                System.out.println(player.toString());
                 Gamestate.setPlayer(player);
                 LOGGER.playerlog(player, "Sign_in");
                 return "ok";

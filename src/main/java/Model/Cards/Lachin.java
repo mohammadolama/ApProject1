@@ -1,8 +1,6 @@
 package Model.Cards;
 
-import Controller.Actions.Visitor;
-import Model.Enums.Rarity;
-import Model.Enums.Type;
+import Controller.Actions.CardVisitors.Visitor;
 import Model.Heros.Hero;
 import Model.Interface.Character;
 import org.codehaus.jackson.annotate.JsonTypeName;
