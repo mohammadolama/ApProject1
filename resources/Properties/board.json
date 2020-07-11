@@ -32,6 +32,8 @@
   "maxWidth": 0,
   "maxHeigth": 0,
   "fps": 60,
+  "aiDeckX": 1400,
+  "aiDeckY": 300,
   "animated": false,
   "deckAnimationFinished": false,
   "playAnimation": false,

@@ -1,6 +1,7 @@
 {
-  "username": "f",
-  "password": "f",
+  "username": "as",
+  "password": "as",
+  "playerID": "146698788886000",
   "level": 0,
   "exp": 0,
   "money": 1000,
@@ -19,22 +20,9 @@
       "hosseinhima",
       "khashayar",
       "lachin",
-      "mobin",
-      "polymorph"
+      "mobin"
     ],
-    "hero": {
-      "model": "mage",
-      "name": "Mage",
-      "health": 30,
-      "maxHealth": 30,
-      "canAttack": false,
-      "heroPowerManaCost": 2,
-      "powerNeedFriendlyTarget": false,
-      "powerNeedEnemyTarget": true,
-      "defence": 0,
-      "attack": 0,
-      "life": 30
-    },
+    "hero": null,
     "mostUsedCard": "mobin",
     "totalPlays": 0,
     "totalWins": 0,
@@ -53,7 +41,6 @@
       "swarmofcats": 0,
       "blessingoftheancients": 0,
       "hosseinhima": 0,
-      "polymorph": 0,
       "hossein": 0
     }
   },
@@ -74,22 +61,9 @@
         "hosseinhima",
         "khashayar",
         "lachin",
-        "mobin",
-        "polymorph"
+        "mobin"
       ],
-      "hero": {
-        "model": "mage",
-        "name": "Mage",
-        "health": 30,
-        "maxHealth": 30,
-        "canAttack": false,
-        "heroPowerManaCost": 2,
-        "powerNeedFriendlyTarget": false,
-        "powerNeedEnemyTarget": true,
-        "defence": 0,
-        "attack": 0,
-        "life": 30
-      },
+      "hero": null,
       "mostUsedCard": "mobin",
       "totalPlays": 0,
       "totalWins": 0,
@@ -108,11 +82,11 @@
         "swarmofcats": 0,
         "blessingoftheancients": 0,
         "hosseinhima": 0,
-        "polymorph": 0,
         "hossein": 0
       }
     }
   },
+  "newToGame": true,
   "playerCarts": [
     "fierywaraxe",
     "gearblade",
@@ -127,11 +101,7 @@
     "hosseinhima",
     "khashayar",
     "lachin",
-    "mobin",
-    "polymorph"
+    "mobin"
   ],
-  "newToGame": false,
-  "playerHeroes": [
-    "mage"
-  ]
+  "playerHeroes": null
 }

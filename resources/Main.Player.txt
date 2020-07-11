@@ -1,6 +1,0 @@
-User : enemy
-Password : enemy
-**********************
-User : f
-Password : f
-**********************
