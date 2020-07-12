@@ -224,8 +224,7 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitShahryar(Shahryar shahryar, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         if (target != null) {
-            shahryar.setHealth(target.getLife());
-            Admin.getInstance().summonedMinion(shahryar, 1, shahryar.getDamage(), shahryar.getHealth());
+            target.setLife(shahryar.getLife());
         }
     }
 

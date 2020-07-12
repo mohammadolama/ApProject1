@@ -173,7 +173,6 @@ public class ActionHandler {
             gameManager.checkDestroyMinion();
             gameManager.hunterPowerAction(minions, false);
             gameManager.faezeAction(minions, false);
-            gameManager.shahryarAction(minions, false);
             Admin.getInstance().updateGameLog(String.format("%s Played %s", gameManager.getFriendlyPlayer().getUsername(), minions.getName()));
         } else {
             playSound("error");
@@ -186,6 +185,7 @@ public class ActionHandler {
             ((PracticeManager) gameManager).practiceSummonMinion(minions);
         } else {
             if (gameManager.getFriendlyPlayedCards().size() < 7) {
+                gameManager.shahryarAction(minions, false);
                 if (minions.getAttributes() != null && (minions.getAttributes().contains(Attribute.Charge) || minions.getAttributes().contains(Attribute.Rush))) {
                     minions.setSleep(false);
                 }
