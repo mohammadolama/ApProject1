@@ -1,5 +1,6 @@
 package Controller.Actions.CardVisitors;
 
+import Controller.Actions.ActionHandler;
 import Controller.Admin;
 import MainLogic.JsonReaders;
 import Model.Cards.*;
@@ -73,9 +74,11 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitCookie(Cookie cookie, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         for (Card card : myPlayed) {
-            Admin.getInstance().restoreHealth(card, cookie.getHealthRestore());
+            ActionHandler actionHandler = new ActionHandler();
+            actionHandler.restoreHealth(card, cookie.getHealthRestore());
         }
-        Admin.getInstance().restoreHealth(friendly, cookie.getHealthRestore());
+        ActionHandler actionHandler = new ActionHandler();
+        actionHandler.restoreHealth(friendly, cookie.getHealthRestore());
     }
 
     @Override
@@ -84,7 +87,7 @@ public class ActionVisitor implements Visitor {
             Random random = new Random();
             int i = random.nextInt(targetPlayed.size());
             ((Minion) targetPlayed.get(i)).setHealth(((Minion) targetPlayed.get(i)).getHealth() + darkSkies.getHealthRestore());
-            Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, target.getAttack(), target.getLife());
+            Admin.getInstance().summonedMinion(targetPlayed.get(i), 1, targetPlayed.get(i).getAttack(), targetPlayed.get(i).getLife());
         }
     }
 
@@ -117,7 +120,8 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitHolyLight(HolyLight holyLight, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        Admin.getInstance().restoreHealth(target, holyLight.getHealthRestore());
+        ActionHandler actionHandler = new ActionHandler();
+        actionHandler.restoreHealth(target, holyLight.getHealthRestore());
     }
 
     @Override
@@ -265,10 +269,15 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitStrengthInNumbersDR(StrengthInNumbersDR strengthInNumbersDR, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         if (strengthInNumbersDR.getManaSpendOnSth() >= 10) {
-            Minion st = JsonReaders.MinionsReader("lachin");
-            Admin.getInstance().summonMinion(st, -1);
-            Admin.getInstance().summonedMinion(st, 0, st.getDamage(), st.getHealth());
-            Admin.getInstance().finishAction(strengthInNumbersDR);
+            for (Card card : myDeck) {
+                if (card.getName().equalsIgnoreCase("lachin")) {
+                    Admin.getInstance().summonMinion((Minion) card, -1);
+                    Admin.getInstance().summonedMinion(card, 0, ((Minion) card).getDamage(), ((Minion) card).getHealth());
+                    Admin.getInstance().finishAction(strengthInNumbersDR);
+                    myDeck.remove(card);
+                    break;
+                }
+            }
         }
     }
 

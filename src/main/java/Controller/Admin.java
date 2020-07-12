@@ -3,6 +3,10 @@ package Controller;
 import Controller.Actions.*;
 import Controller.Actions.CardVisitors.ActionVisitor;
 import Controller.Actions.CardVisitors.BattlecryVisitor;
+import Controller.Manager.DeckReaderManager;
+import Controller.Manager.Managers;
+import Controller.Manager.NormalModeManager;
+import Controller.Manager.PracticeManager;
 import Model.*;
 import Model.Cards.*;
 import Model.Enums.*;
@@ -19,7 +23,7 @@ import java.util.*;
 
 public class Admin {
     private static Admin admin;
-    private static GameManager gameManager;
+    private static Managers gameManager;
     private BoardPanel boardPanel;
     private LogInSignUp logInSignUp;
 
@@ -45,7 +49,7 @@ public class Admin {
         Col_Change.getInstance().update();
     }
 
-    void frameRender() {
+    public void frameRender() {
         MyFrame.getInstance().revalidate();
         MyFrame.getInstance().repaint();
     }
@@ -206,7 +210,7 @@ public class Admin {
         Update.saveAndUpdate();
     }
 
-    private void updateGameLog(String log) {
+    public void updateGameLog(String log) {
         gameManager.updateGameLog(log);
         Log(log);
     }
@@ -331,12 +335,7 @@ public class Admin {
     }
 
     private void createGameManager(InfoPassive infoPassive, String card1, String card2, String card3) {
-        gameManager = new GameManager(Gamestate.getPlayer(), infoPassive, DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck()), card1, card2, card3);
-    }
-
-    /* Deck ReaderMode Generator  */
-    private void createGameManger(InfoPassive infoPassive, boolean practiceMode) {
-        gameManager = new GameManager(player(), infoPassive, DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck()), practiceMode);
+        gameManager = new NormalModeManager(Gamestate.getPlayer(), infoPassive, DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck()), card1, card2, card3);
     }
 
     private void createPlayBoard(InfoPassive infoPassive, String card1, String card2, String card3) {
@@ -348,7 +347,7 @@ public class Admin {
     }
 
     public void createDeckReaderMode(InfoPassive infoPassive) {
-        createGameManger(infoPassive, false);
+        gameManager = new DeckReaderManager(infoPassive);
         boardPanel = new BoardPanel(false);
         boardPanel.setBounds(0, 0, 1600, 1000);
         MyFrame.getPanel().add(boardPanel, "play");
@@ -356,7 +355,8 @@ public class Admin {
     }
 
     public void createPracticeMode(InfoPassive infoPassive) {
-        createGameManger(infoPassive, true);
+//        createGameManger(infoPassive, true);
+        gameManager = new PracticeManager(player(), infoPassive, DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck()));
         boardPanel = new BoardPanel(true);
         boardPanel.setBounds(0, 0, 1600, 1000);
         MyFrame.getPanel().add(boardPanel, "play");
@@ -384,23 +384,7 @@ public class Admin {
 
 
     int heroPowerCanBePlayed() {
-        if (!(friendlyHero() instanceof Hunter)) {
-            if (gameManager.getFriendlyHeroPowerUsageTime() > 0) {
-                if (gameManager.heroPowerTargetNeeded() > 0) {
-                    if (gameManager.heroPowerTargetNeeded() == 1) {
-                        return 1;
-                    } else if (gameManager.heroPowerTargetNeeded() == 2) {
-                        return 2;
-                    }
-                    return 0;
-                } else {
-                    return 3;
-                }
-            } else {
-                return 0;
-            }
-        }
-        return 0;
+        return gameManager.heroPowerCanBePlayed();
     }
 
     public void playHeroPower(int target) {
@@ -412,35 +396,13 @@ public class Admin {
     }
 
     CardModelView getWeaponViewModel(String string) {
-        if (string.equalsIgnoreCase("friendly")) {
-            Weapon weapon = friendlyWeapon();
-            return new CardModelView(pictureOf(weapon.getName().toLowerCase()), weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false, false, false);
-        } else {
-            Weapon weapon = enemyWeapon();
-            return new CardModelView(pictureOf(weapon.getName().toLowerCase()), weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false, false, false);
-        }
+        CardModelViewGetter cd = new CardModelViewGetter();
+        return cd.getWeaponViewModel(string, gameManager);
     }
 
     CardModelView getViewModelOf(String list, int index) {
-        if (list.equalsIgnoreCase("friendly")) {
-            Card cards = gameManager.getFriendlyPlayedCards().get(index);
-            String string = cards.getName().toLowerCase();
-            BufferedImage image = pictureOf(string);
-            if (cards instanceof Minion) {
-                Minion minions = (Minion) cards;
-                return new CardModelView(image, string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
-            }
-            return null;
-        } else {
-            Card cards = gameManager.getEnemyPlayedCards().get(index);
-            String string = cards.getName().toLowerCase();
-            BufferedImage image = pictureOf(string);
-            if (cards instanceof Minion) {
-                Minion minions = (Minion) cards;
-                return new CardModelView(image, string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
-            }
-            return null;
-        }
+        CardModelViewGetter cd = new CardModelViewGetter();
+        return cd.getViewModelOf(list, index, gameManager);
     }
 
     public void drawCard(int i, String mode, ArrayList<Card> deck, ArrayList<Card> hand) {
@@ -453,22 +415,9 @@ public class Admin {
     }
 
     CardModelView getPureViewModelOf(String string) {
+        CardModelViewGetter cd = new CardModelViewGetter();
         Card cards = getCardOf(string.toLowerCase());
-        BufferedImage image = pictureOf(string.toLowerCase());
-        int mana = cards.getManaCost();
-        if (gameManager != null) {
-            mana -= gameManager.getFriendlyManaDecrease();
-        }
-        if (cards instanceof Minion) {
-            Minion minions = (Minion) cards;
-            return new CardModelView(image, string, mana, minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
-        } else if (cards instanceof Weapon) {
-            Weapon weapon = (Weapon) cards;
-            return new CardModelView(image, string, mana, weapon.getDamage(), weapon.getDurability(), weapon.getType(), null, false, false, false, false);
-        } else {
-            Spell spell = (Spell) cards;
-            return new CardModelView(image, string, mana, spell.getType(), spell.isNeedFriendlyTarget(), spell.isNeedEnemyTarget());
-        }
+        return cd.getPureViewModelOf(string, cards, pictureOf(string.toLowerCase()), gameManager);
     }
 
     public void setSleep(int i) {
@@ -494,91 +443,14 @@ public class Admin {
     }
 
     void playCard(String string, int i, int target) {
-        Minion targeted = (Minion) createTarget(target);
-        for (Card cards : friendlyHandCards()) {
-            if (cards.getName().equalsIgnoreCase(string)) {
-                if (gameManager.getFriendlyNotUsedMana() >= cards.getManaCost() - gameManager.getFriendlyManaDecrease()) {
-                    checkContiniousAction(cards, false);
-                    cards.accept(new BattlecryVisitor(), targeted, friendlyDeckCards(), friendlyHandCards(), friendlyPlayedCards(), enemyDeckCards(), enemyHandCards(), enemyPlayedCards(), friendlyHero(), enemyHero());
-                    if (cards instanceof Minion) {
-                        playMinion((Minion) cards, i, targeted);
-                        gameManager.spendManaOnMinion(cards.getManaCost() - gameManager.getFriendlyManaDecrease(), false);
-                    } else if (cards instanceof Spell) {
-                        playSpell((Spell) cards, targeted);
-                        gameManager.spendManaOnSpell(cards.getManaCost() - gameManager.getFriendlyManaDecrease(), false);
-                    } else if (cards instanceof Weapon) {
-                        playWeapon((Weapon) cards);
-                    }
-                    updateCardUsageTime(cards.getName().toLowerCase());
-                    break;
-                } else {
-                    playSound("mana");
-                }
-            }
-        }
-        gameManager.checkDestroyMinion();
-        checkForWinner();
+        ActionHandler actionHandler = new ActionHandler();
+        actionHandler.playCard(string, i, target, gameManager);
     }
 
-    private void playMinion(Minion minions, int i, Character target) {
-        if (friendlyPlayedCards().size() < 7) {
-            playSound("minion");
-            gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (minions.getManaCost() - gameManager.getFriendlyManaDecrease()));
-            minions.accept(new ActionVisitor(), target, friendlyDeckCards(), friendlyHandCards(), friendlyPlayedCards(), enemyDeckCards(), enemyHandCards(), enemyPlayedCards(), friendlyHero(), enemyHero());
-            summonMinion(minions, i);
-            gameManager.checkDestroyMinion();
-            gameManager.hunterPowerAction(minions, false);
-            gameManager.faezeAction(minions, false);
-            gameManager.shahryarAction(minions, false);
-            updateGameLog(String.format("%s Played %s", friendlyPlayerName(), minions.getName()));
-        } else {
-            playSound("error");
-            frameRender();
-        }
-    }
 
     public void summonMinion(Minion minions, int i) {
-        if (gameManager.isAiTurn()) {
-            gameManager.practiceSummonMinion(minions);
-        } else {
-            if (friendlyPlayedCards().size() < 7) {
-                if (minions.getAttributes() != null && (minions.getAttributes().contains(Attribute.Charge) || minions.getAttributes().contains(Attribute.Rush))) {
-                    minions.setSleep(false);
-                }
-                if (i < 0) {
-                    friendlyPlayedCards().add(minions);
-                } else {
-                    friendlyPlayedCards().add(i, minions);
-                }
-                friendlyHandCards().remove(minions);
-            }
-        }
-    }
-
-    private void playSpell(Spell spell, Character target) {
-        playSound("spell");
-        gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (spell.getManaCost() - gameManager.getFriendlyManaDecrease()));
-        friendlyHandCards().remove(spell);
-        spell.accept(new ActionVisitor(), target, friendlyDeckCards(), friendlyHandCards(), friendlyPlayedCards(), enemyDeckCards(), enemyHandCards(), enemyPlayedCards(), friendlyHero(), enemyHero());
-        updateGameLog(String.format("%s Cast %s", friendlyPlayerName(), spell.getName()));
-    }
-
-    private void playWeapon(Weapon weapon) {
-        playSound("weapon");
-        gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (weapon.getManaCost() - gameManager.getFriendlyManaDecrease()));
-        friendlyHandCards().remove(weapon);
-        gameManager.setFriendlyWeapon(weapon);
-        updateGameLog(String.format("%s Equiped %s", friendlyPlayerName(), weapon.getName()));
-    }
-
-
-    void checkContiniousAction(Card cards, boolean AI) {
-        for (ContiniousActionCarts value : ContiniousActionCarts.values()) {
-            if (cards.getName().equalsIgnoreCase(value.toString())) {
-                gameManager.addContiniousActionCard(cards, AI);
-                break;
-            }
-        }
+        ActionHandler actionHandler = new ActionHandler();
+        actionHandler.summonMinion(minions, i, gameManager);
     }
 
 
@@ -616,68 +488,13 @@ public class Admin {
     }
 
     public void Attack(int attacker, int target, BoardPanel panel) {
-        ActionHandler actionHandler = new ActionHandler();
-        new Thread(() -> playSound("attack")).start();
-        if (attacker >= 0 && target >= 0) {
-            Minion attacker1 = (Minion) friendlyPlayedCards().get(attacker);
-            Minion target1 = (Minion) enemyPlayedCards().get(target);
-            actionHandler.Attack(attacker1, target1, enemyPlayedCards());
-            setSleep(attacker);
-            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
-            updateGameLog(String.format("%s Attacked %s", attacker1.getName(), target1.getName()));
-        } else if (attacker >= 0) {
-            Minion attacker1 = (Minion) friendlyPlayedCards().get(attacker);
-            Hero target1 = enemyHero();
-            actionHandler.Attack(attacker1, target1, enemyPlayedCards());
-            setSleep(attacker);
-            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
-            updateGameLog(String.format("%s Attacked %s", attacker1.getName(), target1.getName()));
-        } else if (target >= 0) {
-            Hero attacker1 = friendlyHero();
-            Minion target1 = (Minion) enemyPlayedCards().get(target);
-            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
-            if (actionHandler.Attack(attacker1, target1, enemyPlayedCards())) {
-                updateGameLog(String.format("%s Attacked %s", attacker1.getName(), target1.getName()));
-                gameManager.updateWeapon();
-            }
-        } else {
-            Hero attacker1 = friendlyHero();
-            Hero target1 = enemyHero();
-            panel.drawDamages(attacker, target, attacker1.getAttack(), target1.getAttack());
-            if (actionHandler.Attack(attacker1, target1, enemyPlayedCards())) {
-                updateGameLog(String.format("%s Attacked %s", attacker1.getName(), target1.getName()));
-                gameManager.updateWeapon();
-            }
-        }
-        gameManager.checkDestroyMinion();
-        checkForWinner();
+        gameManager.Attack(attacker, target, panel);
     }
 
-    void practiceAttack(Minion attacker, Character target, int i, int j) {
-        ActionHandler actionHandler = new ActionHandler();
-        new Thread(() -> playSound("attack")).start();
-        if (j >= 0) {
-            Minion target1 = (Minion) target;
-            actionHandler.Attack(attacker, target1, friendlyPlayedCards());
-            setSleep(attacker);
-            boardPanel.drawPracticeDamage(i, j, attacker.getDamage(), target.getAttack());
-        } else {
-            Hero target1 = friendlyHero();
-            actionHandler.Attack(attacker, target1, friendlyPlayedCards());
-            setSleep(attacker);
-            boardPanel.drawPracticeDamage(i, j, attacker.getDamage(), target.getAttack());
-        }
+    public void drawPracticeAttack(int i, int j, int attack1, int attack2) {
+        boardPanel.drawPracticeDamage(i, j, attack1, attack2);
     }
 
-
-    void Attack2(Minion attacker, Minion target) {
-        if (friendlyPlayedCards().contains(target)) {
-            ActionHandler actionHandler = new ActionHandler();
-            actionHandler.attackMinion2(attacker, target);
-            updateGameLog(String.format("%s Attacked %s", attacker.getName(), target.getName()));
-            gameManager.checkDestroyMinion();
-        }
-    }
 
     public void threeCardChoose(InfoPassive infoPassive) {
         ArrayList<Card> list = DeckLogic.UpdateDeck(player().getSelectedDeck().getDeck());
@@ -767,54 +584,7 @@ public class Admin {
         boardPanel.summonedMinion(view, mode, damage, hp);
     }
 
-    public void restoreHealth(Character target, int i) {
-        target.setLife(target.getLife() + i);
-        if (target.getLife() > target.getMaxLife()) {
-            target.setLife(target.getMaxLife());
-        }
-        if (target instanceof Minion) {
-            summonedMinion((Minion) target, 1, target.getAttack(), target.getLife());
-        }
-    }
-
-    private void checkForWinner() {
-        int i = gameManager.checkForWinner();
-        switch (i) {
-            case 1:
-                winGame(friendlyHeroName().toLowerCase());
-                boolean flag = gameManager.normalMode();
-                if (flag) {
-                    updateDeckStates(1);
-                }
-                break;
-            case 2:
-                winGame(enemyHeroName().toLowerCase());
-                flag = gameManager.normalMode();
-                if (flag) {
-                    updateDeckStates(1);
-                }
-                break;
-            case 3:
-                winGame(friendlyHeroName().toLowerCase());
-                flag = gameManager.normalMode();
-                if (flag) {
-                    updateDeckStates(0);
-                }
-                break;
-
-            case 4:
-                winGame(enemyHeroName().toLowerCase());
-                flag = gameManager.normalMode();
-                if (flag) {
-                    updateDeckStates(0);
-                }
-                break;
-            case 0:
-                break;
-        }
-    }
-
-    private void winGame(String name) {
+    public void winGame(String name) {
         AlternativePanel alternativePanel = new AlternativePanel(false);
         alternativePanel.setEnabled(true);
         alternativePanel.setWinner(Constants.heroPortraits.get(name));
@@ -823,7 +593,7 @@ public class Admin {
         MyFrame.getInstance().changePanel("three");
     }
 
-    private void updateDeckStates(int i) {
+    public void updateDeckStates(int i) {
         player().getAllDecks().get(player().getSelectedDeck().getName()).setTotalPlays(player().getSelectedDeck().getTotalPlays() + 1);
         if (i == 1) {
             player().getAllDecks().get(player().getSelectedDeck().getName()).setTotalWins(player().getSelectedDeck().getTotalWins() + 1);
@@ -835,7 +605,7 @@ public class Admin {
         setVisiblePanel("menu");
     }
 
-    private void updateCardUsageTime(String name) {
+    public void updateCardUsageTime(String name) {
         HashMap<String, Integer> usedTimes = player().getSelectedDeck().getUsedTimes();
         if (usedTimes.containsKey(name.toLowerCase())) {
             usedTimes.replace(name, usedTimes.get(name) + 1);
@@ -962,11 +732,11 @@ public class Admin {
         return (enemyHero().getHeroPower().getManaCost() - gameManager.getEnemyPowerManaDecrease());
     }
 
-    void AiTurn(boolean AiTurn) {
+    public void AiTurn(boolean AiTurn) {
         boardPanel.AiTurn(AiTurn);
     }
 
-    void RequestAct(Object object) {
+    public void RequestAct(Object object) {
         boardPanel.request(object);
     }
 }

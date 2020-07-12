@@ -1,5 +1,6 @@
 package Controller.Actions.SPVisitor;
 
+import Controller.Actions.ActionHandler;
 import Controller.Admin;
 import Model.Cards.*;
 import Model.Heros.*;
@@ -64,6 +65,7 @@ public class HeroPowerVisitor implements PowerVisitor {
 
     @Override
     public void visitPriest(Priest priest, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
-        Admin.getInstance().restoreHealth(target, 4);
+        ActionHandler actionHandler = new ActionHandler();
+        actionHandler.restoreHealth(target, 4);
     }
 }
