@@ -2,6 +2,7 @@ package Server.Controller.MainLogic;
 
 import Server.Model.Cards.Card;
 import Server.Model.Enums.*;
+import Server.Model.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
@@ -11,16 +12,16 @@ import java.util.*;
 public class Shop {
 
 
-    public static void Buy(String st) {
-        Gamestate.getPlayer().setMoney(Gamestate.getPlayer().getMoney() - Price(st));
-        List<Carts> ar = Gamestate.getPlayer().getPlayerCarts();
+    public static void Buy(String st, Player player) {
+        player.setMoney(player.getMoney() - Price(st));
+        List<Carts> ar = player.getPlayerCarts();
         ar.add(Carts.valueOf(st));
-        Gamestate.getPlayer().setPlayerCarts(ar);
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+        player.setPlayerCarts(ar);
+        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
     }
 
-    public static ArrayList<Card> Buyable() {
-        ArrayList<Carts> ar = BuyableCards();
+    public static ArrayList<Card> Buyable(Player player) {
+        ArrayList<Carts> ar = BuyableCards(player);
         System.out.println(ar);
         ArrayList<Card> ar2;
         ar2 = DeckLogic.UpdateDeck(ar);
@@ -28,32 +29,32 @@ public class Shop {
         return ar2;
     }
 
-    public static ArrayList<Card> Sellable() {
-        List<Carts> ar = Gamestate.getPlayer().getPlayerCarts();
+    public static ArrayList<Card> Sellable(Player player) {
+        List<Carts> ar = player.getPlayerCarts();
         ArrayList<Card> ar2;
         ar2 = DeckLogic.UpdateDeck(ar);
         return ar2;
     }
 
-    public static boolean CanBeSold(String st) {
-        ArrayList<Carts> ar = DeckLogic.UpdateSellCards(Gamestate.getPlayer());
+    public static boolean CanBeSold(String st, Player player) {
+        ArrayList<Carts> ar = DeckLogic.UpdateSellCards(player);
         return !ar.contains(Carts.valueOf(st.toLowerCase()));
     }
 
 
-    public static void Sell(String string) {
+    public static void Sell(String string, Player player) {
         String st = string.toLowerCase();
-        Gamestate.getPlayer().setMoney(Gamestate.getPlayer().getMoney() + (Price(st) / 2));
-        List<Carts> ar2 = Gamestate.getPlayer().getPlayerCarts();
+        player.setMoney(player.getMoney() + (Price(st) / 2));
+        List<Carts> ar2 = player.getPlayerCarts();
         ar2.remove(Carts.valueOf(st));
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
     }
 
-    private static ArrayList<Carts> BuyableCards() {
+    private static ArrayList<Carts> BuyableCards(Player player) {
         ArrayList<Carts> ar = new ArrayList<>();
         for (NeutralCarts cartss : NeutralCarts.values()) {
             int i = 0;
-            for (Carts cartsss : Gamestate.getPlayer().getPlayerCarts()) {
+            for (Carts cartsss : player.getPlayerCarts()) {
                 if (cartss.toString().equalsIgnoreCase(cartsss.toString())) {
                     i++;
                 }
@@ -64,7 +65,7 @@ public class Shop {
         }
         for (SpecialCarts cartss : SpecialCarts.values()) {
             int i = 0;
-            for (Carts cartsss : Gamestate.getPlayer().getPlayerCarts()) {
+            for (Carts cartsss : player.getPlayerCarts()) {
                 if (cartss.toString().equalsIgnoreCase(cartsss.toString())) {
                     i++;
                 }

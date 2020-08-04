@@ -77,21 +77,21 @@ public class Admin {
         String st = logInSignUp.check(username, password);
         switch (st) {
             case "ok":
-                if (Gamestate.getPlayer().getNewToGame()) {
-                    frameRender();
-                    FirstHeroSelector firstHeroSelector = new FirstHeroSelector();
-                    MyFrame.getPanel().add(firstHeroSelector, "hero");
-                    MyFrame.getInstance().changePanel("hero");
-                } else {
-                    new Thread(this::addPanels).start();
-                    frameRender();
-                    SoundAdmin.clip.stop();
-                    SoundAdmin.play1("resources/Sounds/menu.wav");
-                    playSound("welcome");
-                    MyFrame.getInstance().changePanel("menu");
-                    MenuPanel.getInstance().setFocusable(true);
-                    MenuPanel.getInstance().grabFocus();
-                }
+//                if (Gamestate.getPlayer().getNewToGame()) {
+//                    frameRender();
+//                    FirstHeroSelector firstHeroSelector = new FirstHeroSelector();
+//                    MyFrame.getPanel().add(firstHeroSelector, "hero");
+//                    MyFrame.getInstance().changePanel("hero");
+//                } else {
+//                    new Thread(this::addPanels).start();
+//                    frameRender();
+//                    SoundAdmin.clip.stop();
+//                    SoundAdmin.play1("resources/Sounds/menu.wav");
+//                    playSound("welcome");
+//                    MyFrame.getInstance().changePanel("menu");
+//                    MenuPanel.getInstance().setFocusable(true);
+//                    MenuPanel.getInstance().grabFocus();
+//                }
                 LoginPanel.getInstance().getUserField().setText("");
                 LoginPanel.getInstance().getPassField().setText("");
                 LoginPanel.getInstance().getError().setText("");
@@ -115,16 +115,16 @@ public class Admin {
         }
     }
 
-    void logOut() {
+    void logOut(Player player) {
         Log("Sign out ");
-        saveAndUpdate();
+        saveAndUpdate(player);
         playMusic("login");
         setVisiblePanel("login");
     }
 
-    public void exit() {
+    public void exit(Player player) {
         Log("Sign out ");
-        saveAndUpdate();
+        saveAndUpdate(player);
         System.exit(0);
     }
 
@@ -141,23 +141,23 @@ public class Admin {
         frameRender();
     }
 
-    public void selectFirstHero(String string) {
-        Update.updateFirstHero(string);
-        playerFirstUpdate(string);
+    public void selectFirstHero(String string, Player player) {
+        updateFirstHero(string, player);
+        playerFirstUpdate(string, player);
         playMusic("menu");
         addPanels();
         playSound("welcome");
         MyFrame.getInstance().changePanel("menu");
     }
 
-    private void playerFirstUpdate(String string) {
-        LOGGER.playerlog(Gamestate.getPlayer(), String.format("Select : %s as first selected hero", string.toUpperCase()));
-        Gamestate.getPlayer().setNewToGame(false);
-        List<Heroes> ar1 = Gamestate.getPlayer().getPlayerHeroes();
-        if (Gamestate.getPlayer().getPlayerHeroes() == null) ar1 = new ArrayList<>();
+    private void playerFirstUpdate(String string, Player player) {
+        LOGGER.playerlog(player, String.format("Select : %s as first selected hero", string.toUpperCase()));
+        player.setNewToGame(false);
+        List<Heroes> ar1 = player.getPlayerHeroes();
+        if (player.getPlayerHeroes() == null) ar1 = new ArrayList<>();
         ar1.add(Heroes.valueOf(string));
-        Gamestate.getPlayer().setPlayerHeroes(ar1);
-        JsonBuilders.PlayerJsonBuilder(Gamestate.getPlayer().getUsername(), Gamestate.getPlayer());
+        player.setPlayerHeroes(ar1);
+        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
     }
 
     private void playMusic(String track) {
@@ -172,8 +172,8 @@ public class Admin {
         MyFrame.getInstance().changePanel(panel);
     }
 
-    void createNewDeck() {
-        if (Gamestate.getPlayer().getAllDecks().size() < 12) {
+    void createNewDeck(Player player) {
+        if (player.getAllDecks().size() < 12) {
             Col_Change.getInstance().setCreateMode(true);
             admin.setVisiblePanel("col");
         } else {
@@ -181,26 +181,26 @@ public class Admin {
         }
     }
 
-    void updateDrawingPanel(String name) {
-        CollectionDrawingPanel.getInstance().setSpecialSelected(false);
-        CollectionPanel.getInstance().getChangeButton().setEnabled(false);
-        ArrayList<Card> cards;
-        if (name.equalsIgnoreCase("all"))
-            cards = Card.allCards();
-        else if (name.equalsIgnoreCase("locked"))
-            cards = Card.lockedCards();
-        else if (name.equalsIgnoreCase("unlocked"))
-            cards = Card.purchasedCards();
-        else if (name.equalsIgnoreCase("neutral"))
-            cards = Card.neutralCardsFilter();
-        else if (name.equalsIgnoreCase("special")) {
-            cards = Card.specialCardsFilter();
-            CollectionDrawingPanel.getInstance().setSpecialSelected(true);
-        } else {
-            Deck selectedDeck = Deck.cloneDeck(Gamestate.getPlayer().getAllDecks().get(name));
-            cards = DeckLogic.UpdateDeck(selectedDeck.getDeck());
-        }
-        CollectionDrawingPanel.getInstance().updateContent(cards);
+    void updateDrawingPanel(String name, Player player) {
+//        CollectionDrawingPanel.getInstance().setSpecialSelected(false);
+//        CollectionPanel.getInstance().getChangeButton().setEnabled(false);
+//        ArrayList<Card> cards;
+//        if (name.equalsIgnoreCase("all"))
+//            cards = Card.allCards();
+//        else if (name.equalsIgnoreCase("locked"))
+//            cards = Card.lockedCards(player);
+//        else if (name.equalsIgnoreCase("unlocked"))
+//            cards = Card.purchasedCards(player);
+//        else if (name.equalsIgnoreCase("neutral"))
+//            cards = Card.neutralCardsFilter();
+//        else if (name.equalsIgnoreCase("special")) {
+//            cards = Card.specialCardsFilter();
+//            CollectionDrawingPanel.getInstance().setSpecialSelected(true);
+//        } else {
+//            Deck selectedDeck = Deck.cloneDeck(player.getAllDecks().get(name));
+//            cards = DeckLogic.UpdateDeck(selectedDeck.getDeck());
+//        }
+//        CollectionDrawingPanel.getInstance().updateContent(cards);
     }
 
     void saveAndUpdate(Player player) {
@@ -294,14 +294,14 @@ public class Admin {
     }
 
     void buyCard(String name, Player player) {
-        Shop.Buy(name.toLowerCase());
+        Shop.Buy(name.toLowerCase(), player);
         playSound("buy");
         Log(String.format("Buy : %s  is added to purchased cards .", name));
         saveAndUpdate(player);
     }
 
     void sellCard(String name, Player player) {
-        Shop.Sell(name.toLowerCase());
+        Shop.Sell(name.toLowerCase(), player);
         playSound("sell");
         Log(String.format("Sell : %s  is removed from  purchased cards .", name));
         saveAndUpdate(player);
@@ -311,12 +311,12 @@ public class Admin {
         return player().getMoney();
     }
 
-    ArrayList<Card> properCards(int i) {
+    ArrayList<Card> properCards(int i, Player player) {
         ArrayList<Card> ar;
         if (i == 1) {
-            ar = Shop.Buyable();
+            ar = Shop.Buyable(player);
         } else if (i == 2) {
-            ar = Shop.Sellable();
+            ar = Shop.Sellable(player);
         } else {
             ar = Card.allCards();
         }
@@ -327,8 +327,8 @@ public class Admin {
         return Shop.Price((name.toLowerCase()));
     }
 
-    public boolean canBeSold(String name) {
-        return Shop.CanBeSold(name.toLowerCase());
+    public boolean canBeSold(String name, Player player) {
+        return Shop.CanBeSold(name.toLowerCase(), player);
     }
 
     public void createDeck(String name, ArrayList<Carts> selectedCards, String heroName, Player player) {

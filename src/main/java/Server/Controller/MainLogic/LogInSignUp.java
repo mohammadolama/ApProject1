@@ -145,7 +145,7 @@ public class LogInSignUp {
         if (UserFinder(user)) {
             if (PassChecker(user, password)) {
                 Player player = JsonReaders.PlayerJsonReader(user);
-                Gamestate.setPlayer(player);
+//                Gamestate.setPlayer(player);
                 LOGGER.playerlog(player, "Sign_in");
                 return "ok";
             } else {
