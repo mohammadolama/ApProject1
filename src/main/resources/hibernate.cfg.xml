@@ -1,0 +1,81 @@
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/اسم دیتابیس رو وارد کنید</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">پسورد دیتابیس رو اینجا وارد کنید</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
+
+
+        <!-- Drop and re-create the database schema on startup -->
+        <!--        <property name="hbm2ddl.auto">create</property>-->
+
+        <property name="hbm2ddl.auto">update</property>
+
+
+        <mapping class="Model.Cards.Card"/>
+        <mapping class="Model.Cards.Minion"/>
+        <mapping class="Model.Cards.Spell"/>
+        <mapping class="Model.Cards.Weapon"/>
+        <mapping class="Model.Cards.AghaHaghi"/>
+        <mapping class="Model.Cards.Ali"/>
+        <mapping class="Model.Cards.ArcaniteReaper"/>
+        <mapping class="Model.Cards.Ashbringer"/>
+        <mapping class="Model.Cards.Aylar"/>
+        <mapping class="Model.Cards.Benyamin"/>
+        <mapping class="Model.Cards.BlessingOfTheAncients"/>
+        <mapping class="Model.Cards.BloodFury"/>
+        <mapping class="Model.Cards.BookOFSpecters"/>
+        <mapping class="Model.Cards.Cat"/>
+        <mapping class="Model.Cards.Cookie"/>
+        <mapping class="Model.Cards.DarkSkies"/>
+        <mapping class="Model.Cards.Faeze"/>
+        <mapping class="Model.Cards.FieryWarAxe"/>
+        <mapping class="Model.Cards.Flamestrike"/>
+        <mapping class="Model.Cards.Gearblade"/>
+        <mapping class="Model.Cards.HighMasterSaman"/>
+        <mapping class="Model.Cards.HolyLight"/>
+        <mapping class="Model.Cards.Hossein"/>
+        <mapping class="Model.Cards.HosseinHima"/>
+        <mapping class="Model.Cards.Javad"/>
+        <mapping class="Model.Cards.Khashayar"/>
+        <mapping class="Model.Cards.Lachin"/>
+        <mapping class="Model.Cards.LearnJavadonic"/>
+        <mapping class="Model.Cards.LightforgedBlessing"/>
+        <mapping class="Model.Cards.Matin"/>
+        <mapping class="Model.Cards.Mobin"/>
+        <mapping class="Model.Cards.Nima"/>
+        <mapping class="Model.Cards.Polymorph"/>
+        <mapping class="Model.Cards.Quiz"/>
+        <mapping class="Model.Cards.SandBreath"/>
+        <mapping class="Model.Cards.Shahryar"/>
+        <mapping class="Model.Cards.SilverSword"/>
+        <mapping class="Model.Cards.Soroush"/>
+        <mapping class="Model.Cards.Sprint"/>
+        <mapping class="Model.Cards.StrengthInNumbers"/>
+        <mapping class="Model.Cards.StrengthInNumbersDR"/>
+        <mapping class="Model.Cards.SwarmOfCats"/>
+        <mapping class="Model.Cards.TrueSilverChampion"/>
+        <mapping class="Model.Cards.Yasaman"/>
+
+
+        <mapping class="Model.Enums.Attribute"/>
+        <mapping class="Model.Enums.Rarity"/>
+        <mapping class="Model.Enums.Type"/>
+
+        <mapping class="Model.Heros.Hero"/>
+        <mapping class="Model.Heros.Hunter"/>
+        <mapping class="Model.Heros.Mage"/>
+        <mapping class="Model.Heros.Priest"/>
+        <mapping class="Model.Heros.Rogue"/>
+        <mapping class="Model.Heros.Warlock"/>
+
+
+        <mapping class="Model.Player"/>
+        <mapping class="Model.Deck"/>
+
+    </session-factory>
+</hibernate-configuration>
