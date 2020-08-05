@@ -2,6 +2,7 @@ package Client.Controller.Requests;
 
 import Client.Model.DeckModel;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class GetDeckRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
 
     }
 }

@@ -121,7 +121,6 @@ public class Constants {
     public static HashMap<String, BufferedImage> cardPics;
     public static HashMap<String, BufferedImage> gamePics;
     public static HashMap<String, BufferedImage> heroPics;
-    public static HashMap<String, BufferedImage> powerPics;
     public static HashMap<String, ImageIcon> gameIcon;
 
     public static void pictureLoader() {
@@ -290,17 +289,16 @@ public class Constants {
             gameIcon.put("redtarget", redTargetIcon);
             gameIcon.put("greentarget", greenTargetIcon);
 
-            powerPics = new HashMap<>();
             magePower = ImageIO.read(new File(heroPowerPath + "mage.png"));
             roguePower = ImageIO.read(new File(heroPowerPath + "rogue.png"));
             warlockPower = ImageIO.read(new File(heroPowerPath + "warlock.png"));
             priestPower = ImageIO.read(new File(heroPowerPath + "priest.png"));
             hunterPower = ImageIO.read(new File(heroPowerPath + "hunter.png"));
-            powerPics.put("mage", magePower);
-            powerPics.put("warlock", warlockPower);
-            powerPics.put("rogue", roguePower);
-            powerPics.put("priest", priestPower);
-            powerPics.put("hunter", hunterPower);
+            cardPics.put("mage", magePower);
+            cardPics.put("warlock", warlockPower);
+            cardPics.put("rogue", roguePower);
+            cardPics.put("priest", priestPower);
+            cardPics.put("hunter", hunterPower);
 
 
             heroPortraits = new HashMap<>();

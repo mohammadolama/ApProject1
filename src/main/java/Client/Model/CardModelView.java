@@ -47,32 +47,11 @@ public class CardModelView {
         this.image = image;
     }
 
-    public boolean isSleep() {
-        return sleep;
-    }
-
-    public void setSleep(boolean sleep) {
-        this.sleep = sleep;
-    }
-
-    public boolean isNeedFriendlyTarget() {
-        return needFriendlyTarget;
-    }
-
-    public void setNeedFriendlyTarget(boolean needFriendlyTarget) {
-        this.needFriendlyTarget = needFriendlyTarget;
-    }
-
-    public boolean isNeedEnemyTarget() {
-        return needEnemyTarget;
-    }
-
-    public void setNeedEnemyTarget(boolean needEnemyTarget) {
-        this.needEnemyTarget = needEnemyTarget;
-    }
-
     public BufferedImage getImage() {
         return image;
+    }
+
+    public CardModelView() {
     }
 
     public void setImage(BufferedImage image) {
@@ -119,19 +98,11 @@ public class CardModelView {
         this.name = name;
     }
 
-    public List<Attribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(List<Attribute> attributes) {
-        this.attributes = attributes;
-    }
-
-    public Boolean getSleep() {
+    public boolean isSleep() {
         return sleep;
     }
 
-    public void setSleep(Boolean sleep) {
+    public void setSleep(boolean sleep) {
         this.sleep = sleep;
     }
 
@@ -141,5 +112,29 @@ public class CardModelView {
 
     public void setCanBeAttacked(boolean canBeAttacked) {
         this.canBeAttacked = canBeAttacked;
+    }
+
+    public boolean isNeedFriendlyTarget() {
+        return needFriendlyTarget;
+    }
+
+    public void setNeedFriendlyTarget(boolean needFriendlyTarget) {
+        this.needFriendlyTarget = needFriendlyTarget;
+    }
+
+    public boolean isNeedEnemyTarget() {
+        return needEnemyTarget;
+    }
+
+    public void setNeedEnemyTarget(boolean needEnemyTarget) {
+        this.needEnemyTarget = needEnemyTarget;
+    }
+
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 }

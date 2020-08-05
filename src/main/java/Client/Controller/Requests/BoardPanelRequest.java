@@ -2,6 +2,7 @@ package Client.Controller.Requests;
 
 import Client.Model.CardModelView;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -12,7 +13,8 @@ public class BoardPanelRequest implements Request {
 
     private String friendlyUser, enemyUser, friendlyHero, enemyHero, time;
     private int downPowerUsage, upPowerUsage, downPowerMana, upPowerMana, notUsedMana,
-            totalMana, downHP, upHP, downDefence, upDefence, downHandSize, upHandSize, downPalyedSize, upPlayedSize, downDeckSize, upDeckSize;
+            totalMana, downHP, upHP, downDefence, upDefence, downHandSize, upHandSize,
+            downPalyedSize, upPlayedSize, downDeckSize, upDeckSize;
     private boolean downHasWeapon, upHasWeapon, heroCanAttack;
     private CardModelView downWeapon, upWeapon, downHeroPower, upHeroPower;
 
@@ -20,7 +22,7 @@ public class BoardPanelRequest implements Request {
     private ArrayList<String> logs;
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
 
     }
 

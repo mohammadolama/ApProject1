@@ -212,14 +212,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         int up = res.board.getUpPowerUsage();
         if (down > 0) {
             String name = res.board.getFriendlyHero();
-            BufferedImage temp = powerPics.get(name);
+            BufferedImage temp = Constants.cardPics.get(name);
             String mana = res.board.getDownPowerMana() + "";
             g.drawImage(temp, config.getPlayerHeroPowerX(), config.getPlayerHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
             g.drawString(mana, config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, config.getPlayerHeroPowerY() + 25);
         }
         if (up > 0) {
             String name = res.board.getEnemyHero();
-            BufferedImage temp = powerPics.get(name);
+            BufferedImage temp = Constants.cardPics.get(name);
             String mana = res.board.getUpPowerMana() + "";
             g.drawImage(temp, config.getPlayerHeroPowerX(), config.getOpponentHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
             g.drawString(mana, config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, (config.getOpponentHeroPowerY()) + 25);
@@ -350,9 +350,9 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         g.drawImage(view.getImage(), config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2 - 30, null);
         if (view.getType().equals(Type.Minion))
             drawSpecialInfo(g, view);
-        if (view.getSleep())
+        if (view.isSleep())
             drawZzz(g, view, config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY());
-        friendlyPlayedImages.add(new Images(view.getName(), config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i, view.getSleep()));
+        friendlyPlayedImages.add(new Images(view.getName(), config.getPlayerPlayedCardX(), config.getPlayerPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i, view.isSleep()));
     }
 
     private void drawZzz(Graphics2D g, CardModelView view, int x, int y) {
@@ -393,7 +393,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         CardModelView view = res.board.getUpPlayedCards().get(i);
         g.drawImage(view.getImage(), config.getPlayerPlayedCardX(), config.getOpponentPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2 - 30, null);
         synchronized (enemyPlayedImages) {
-            enemyPlayedImages.add(new Images(view.getName(), config.getPlayerPlayedCardX(), config.getOpponentPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i, view.getSleep()));
+            enemyPlayedImages.add(new Images(view.getName(), config.getPlayerPlayedCardX(), config.getOpponentPlayedCardY(), config.getCardWidth() * 2, config.getCardHeight() * 2, i, view.isSleep()));
         }
         drawEnemySpecialInfo(g, view);
     }
@@ -1069,7 +1069,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             }
             CardModelView view;
             if (i == -2) {
-                view = new CardModelView(powerPics.get(Responses.getInstance().board.getFriendlyHero().toLowerCase()));
+                view = new CardModelView(Constants.cardPics.get(Responses.getInstance().board.getFriendlyHero().toLowerCase()));
             } else {
                 view = res.board.getDownPlayedCards().get(i);
             }

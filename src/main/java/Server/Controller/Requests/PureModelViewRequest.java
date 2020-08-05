@@ -1,10 +1,12 @@
 package Server.Controller.Requests;
 
+import Server.Controller.MainLogic.Admin;
+import Server.Controller.MainLogic.ClientHandler;
 import Server.Model.CardModelView;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -14,8 +16,7 @@ public class PureModelViewRequest implements Request {
     private CardModelView view;
     private String name;
 
-    public PureModelViewRequest(CardModelView view, String name) {
-        this.view = view;
+    public PureModelViewRequest(String name) {
         this.name = name;
     }
 
@@ -40,7 +41,13 @@ public class PureModelViewRequest implements Request {
 
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream) {
-
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+        CardModelView cardModelView = Admin.getInstance().getPureViewModelOf(name);
+        try {
+            String s = objectMapper.writeValueAsString(cardModelView);
+            outputStream.println(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

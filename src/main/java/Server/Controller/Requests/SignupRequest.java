@@ -1,9 +1,10 @@
 package Server.Controller.Requests;
 
+import Server.Controller.MainLogic.Admin;
+import Server.Controller.MainLogic.ClientHandler;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -37,7 +38,8 @@ public class SignupRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream) {
-
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+        String res = Admin.getInstance().signUp(this.username, this.password);
+        outputStream.println(res);
     }
 }

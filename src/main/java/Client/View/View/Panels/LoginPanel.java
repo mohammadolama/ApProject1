@@ -16,7 +16,6 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
 
     private JButton source;
 
-
     private JButton createAccount;
     private JButton enter;
     private JButton exit;
@@ -54,8 +53,8 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
         error.setFont(Constants.f2);
         error.setForeground(Color.RED);
 
-        userField = new JTextField(10);
-        passField = new JTextField(10);
+        userField = new JTextField(15);
+        passField = new JTextField(15);
 
 
         createAccount.setFont(Constants.f2.deriveFont(20.f));
@@ -165,4 +164,9 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
         return passField;
     }
 
+    public void reset() {
+        userField.setText("");
+        passField.setText("");
+        error.setText("");
+    }
 }

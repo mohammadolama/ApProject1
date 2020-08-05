@@ -1,7 +1,9 @@
 package Server.Controller.Requests;
 
 import Client.Model.InfoPassive;
+import Server.Controller.MainLogic.ClientHandler;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -57,7 +59,7 @@ public class CreateGameRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
 
     }
 }

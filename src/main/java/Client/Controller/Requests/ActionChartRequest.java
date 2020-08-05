@@ -1,6 +1,7 @@
 package Client.Controller.Requests;
 
 import Server.Model.ActionModel;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ActionChartRequest implements Request {
 
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
 
     }
 }

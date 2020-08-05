@@ -1,6 +1,8 @@
 package Client.Controller;
 
 import Client.Controller.Requests.Request;
+import Client.View.View.Panels.ConnectionPanel;
+import Client.View.View.Panels.MyFrame;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class RequestHandler {
         }
     }
 
-    public static void createInstance(Socket socket) {
+    private static void createInstance(Socket socket) {
         requestHandler = new RequestHandler(socket);
     }
 
@@ -292,13 +294,21 @@ public class RequestHandler {
         try {
             String st = objectMapper.writeValueAsString(request);
             System.out.println(request);
-            printWriter.println(st);
-            request.excute(scanner, printWriter);
+//            printWriter.println(st);
+            request.excute(scanner, printWriter, objectMapper);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-
+    public static void Connect(String ip, int port, ConnectionPanel panel) {
+        try {
+            Socket socket = new Socket(ip, port);
+            createInstance(socket);
+            MyFrame.getInstance().createLoginPanel();
+        } catch (IOException e) {
+            panel.label.setText("Connection Error");
+        }
     }
 
 }

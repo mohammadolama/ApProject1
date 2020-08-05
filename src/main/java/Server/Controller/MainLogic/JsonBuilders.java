@@ -1,5 +1,6 @@
 package Server.Controller.MainLogic;
 
+import Server.Model.Account;
 import Server.Model.Cards.*;
 import Server.Model.Heros.*;
 import Server.Model.Player;
@@ -221,13 +222,17 @@ public class JsonBuilders {
 
     }
 
-
-    public static <T> T MinionsReader(String minions) {
+    public static void saveAccount(Account account) {
         Session session = sessionFactory.openSession();
-        T t = (T) session.get(classes.get(minions), minions);
+
+        session.beginTransaction();
+
+        session.save(account);
+
+
+        session.getTransaction().commit();
+
         session.close();
-        return t;
+
     }
-
-
 }

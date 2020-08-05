@@ -14,6 +14,9 @@ public class InfoPassive {
         this.description = description;
     }
 
+    public InfoPassive() {
+    }
+
     public String getName() {
         return name;
     }

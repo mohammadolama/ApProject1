@@ -100,9 +100,9 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
         g2d.drawString("  Hero Power ", 20, config.getStartY() + 500);
         g2d.drawString("Special Cards", 20, config.getStartY() + 750);
 
-        g2d.drawImage(powerPics.get("mage"), config.getStartX() + 70, config.getStartY() + 370, 180, 250, null);
-        g2d.drawImage(powerPics.get("rogue"), (config.getStartX() + 70) + config.getSpacing() + 10, config.getStartY() + 370, 180, 250, null);
-        g2d.drawImage(powerPics.get("warlock"), (config.getStartX() + 70) + 2 * config.getSpacing() + 10, config.getStartY() + 370, 180, 250, null);
+        g2d.drawImage(cardPics.get("mage"), config.getStartX() + 70, config.getStartY() + 370, 180, 250, null);
+        g2d.drawImage(cardPics.get("rogue"), (config.getStartX() + 70) + config.getSpacing() + 10, config.getStartY() + 370, 180, 250, null);
+        g2d.drawImage(cardPics.get("warlock"), (config.getStartX() + 70) + 2 * config.getSpacing() + 10, config.getStartY() + 370, 180, 250, null);
 
         g2d.drawImage(cardPics.get("polymorph"), config.getStartX() - 50, config.getStartY() + 610, config.getWidth(), config.getHeight(), null);
         drawCardInfo(g2d, "polymorph", config.getStartX() - 50, config.getStartY() + 610);

@@ -1,9 +1,11 @@
 package Server.Controller.Requests;
 
+import Server.Controller.MainLogic.Admin;
+import Server.Controller.MainLogic.ClientHandler;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -38,7 +40,10 @@ public class LoginRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+        String res = Admin.getInstance().logIn(this.username, this.password, clientHandler);
+        System.out.println(res);
+        outputStream.println(res);
 
     }
 }

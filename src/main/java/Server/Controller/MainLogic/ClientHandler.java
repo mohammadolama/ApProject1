@@ -42,12 +42,19 @@ public class ClientHandler extends Thread {
 
     public void excuteReq(String string) {
         try {
-            System.out.println(string);
+            System.out.println(ThreadColor.ANSI_CYAN + string + ThreadColor.ANSI_RESET);
             Request request = objectMapper.readValue(string, Request.class);
-            request.excute(input, output);
+            request.excute(input, output, this, objectMapper);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

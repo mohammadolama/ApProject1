@@ -16,7 +16,7 @@ class CardModelViewGetter {
             BufferedImage image = Admin.getInstance().pictureOf(string);
             if (cards instanceof Minion) {
                 Minion minions = (Minion) cards;
-                return new CardModelView(image, string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
+                return new CardModelView(string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
             }
             return null;
         } else {
@@ -25,7 +25,7 @@ class CardModelViewGetter {
             BufferedImage image = Admin.getInstance().pictureOf(string);
             if (cards instanceof Minion) {
                 Minion minions = (Minion) cards;
-                return new CardModelView(image, string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
+                return new CardModelView(string, minions.getManaCost(), minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
             }
             return null;
         }
@@ -35,28 +35,28 @@ class CardModelViewGetter {
         if (string.equalsIgnoreCase("friendly")) {
             Weapon weapon = gameManger.getFriendlyWeapon();
             BufferedImage image = Admin.getInstance().pictureOf(weapon.getName().toLowerCase());
-            return new CardModelView(image, weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false, false, false);
+            return new CardModelView(weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false, false, false);
         } else {
             Weapon weapon = gameManger.getEnemyWeapon();
             BufferedImage image = Admin.getInstance().pictureOf(weapon.getName().toLowerCase());
-            return new CardModelView(image, weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false, false, false);
+            return new CardModelView(weapon.getName(), weapon.getManaCost(), weapon.getDamage(), weapon.getDurability(), Type.Weapon, null, false, false, false, false);
         }
     }
 
-    CardModelView getPureViewModelOf(String string, Card cards, BufferedImage image, Managers gameManager) {
+    CardModelView getPureViewModelOf(String string, Card cards, Managers gameManager) {
         int mana = cards.getManaCost();
         if (gameManager != null) {
             mana -= gameManager.getFriendlyManaDecrease();
         }
         if (cards instanceof Minion) {
             Minion minions = (Minion) cards;
-            return new CardModelView(image, string, mana, minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
+            return new CardModelView(string, mana, minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
         } else if (cards instanceof Weapon) {
             Weapon weapon = (Weapon) cards;
-            return new CardModelView(image, string, mana, weapon.getDamage(), weapon.getDurability(), weapon.getType(), null, false, false, false, false);
+            return new CardModelView(string, mana, weapon.getDamage(), weapon.getDurability(), weapon.getType(), null, false, false, false, false);
         } else {
             Spell spell = (Spell) cards;
-            return new CardModelView(image, string, mana, spell.getType(), spell.isNeedFriendlyTarget(), spell.isNeedEnemyTarget());
+            return new CardModelView(string, mana, spell.getType(), spell.isNeedFriendlyTarget(), spell.isNeedEnemyTarget());
         }
     }
 

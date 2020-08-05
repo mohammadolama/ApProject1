@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class MyFrame extends JFrame {
     private static final MyFrame frame = new MyFrame();
@@ -32,11 +35,14 @@ public class MyFrame extends JFrame {
 
         panel.setLayout(cardLayout);
 
-        LoginPanel loginPanel = LoginPanel.getInstance();
-        MenuPanel menuPanel = MenuPanel.getInstance();
+//        LoginPanel loginPanel = LoginPanel.getInstance();
+//        MenuPanel menuPanel = MenuPanel.getInstance();
+//
+//        panel.add(loginPanel, "login");
+//        panel.add(menuPanel, "menu");
 
-        panel.add(loginPanel, "login");
-        panel.add(menuPanel, "menu");
+        ConnectionPanel connectionPanel = new ConnectionPanel();
+        panel.add("connection", connectionPanel);
 
         add(panel);
         setVisible(true);
@@ -57,4 +63,28 @@ public class MyFrame extends JFrame {
         cardLayout.show(panel, string);
     }
 
+    public void createLoginPanel() {
+        LoginPanel loginPanel = LoginPanel.getInstance();
+        panel.add("login", loginPanel);
+        changePanel("login");
+        revalidate();
+        repaint();
+    }
+
+    public void addPanels() {
+//        new Thread(() -> {
+//            ShopPanel shop = ShopPanel.getInstance();
+//            CollectionPanel collection = CollectionPanel.getInstance();
+//            MyFrame.getPanel().add(collection, "collection");
+//            MyFrame.getPanel().add(shop, "shop");
+//        }).start();
+//        new Thread(() -> {
+//            Col_Change col_change = Col_Change.getInstance();
+//            StatusPanel status = StatusPanel.getInstance();
+//            SettingPanel settingPanel = SettingPanel.getInstance();
+//            MyFrame.getPanel().add(settingPanel, "setting");
+//            MyFrame.getPanel().add(status, "status");
+//            MyFrame.getPanel().add(col_change, "col");
+//        }).start();
+    }
 }

@@ -52,7 +52,7 @@ public class Admin {
     }
 
     public void Log(String log) {
-        LOGGER.playerlog(player(), log);
+//        LOGGER.playerlog(player(), log);
     }
 
     private void addPanels() {
@@ -70,14 +70,19 @@ public class Admin {
             MyFrame.getPanel().add(status, "status");
             MyFrame.getPanel().add(col_change, "col");
         }).start();
-
     }
 
-    void logIn(String username, String password) {
-        String st = logInSignUp.check(username, password);
-        switch (st) {
-            case "ok":
-//                if (Gamestate.getPlayer().getNewToGame()) {
+
+    public String signUp(String username, String password) {
+        return logInSignUp.create(username, password);
+    }
+
+
+    public String logIn(String username, String password, ClientHandler clientHandler) {
+        return logInSignUp.check(username, password, clientHandler);
+//        switch (st) {
+//            case "ok":
+//                if (clientHandler.getPlayer().getNewToGame()) {
 //                    frameRender();
 //                    FirstHeroSelector firstHeroSelector = new FirstHeroSelector();
 //                    MyFrame.getPanel().add(firstHeroSelector, "hero");
@@ -92,19 +97,19 @@ public class Admin {
 //                    MenuPanel.getInstance().setFocusable(true);
 //                    MenuPanel.getInstance().grabFocus();
 //                }
-                LoginPanel.getInstance().getUserField().setText("");
-                LoginPanel.getInstance().getPassField().setText("");
-                LoginPanel.getInstance().getError().setText("");
-                break;
-            case "wrong password":
-                LoginPanel.getInstance().getError().setText("Wrong Password");
-                break;
-            case "user not found":
-                LoginPanel.getInstance().getError().setText("Username not Found.");
-                break;
-        }
-        frameRender();
+//                LoginPanel.getInstance().getUserField().setText("");
+//                LoginPanel.getInstance().getPassField().setText("");
+//                LoginPanel.getInstance().getError().setText("");
+//                break;
+//            case "wrong password":
+//                LoginPanel.getInstance().getError().setText("Wrong Password");
+//                break;
+//            case "user not found":
+//                LoginPanel.getInstance().getError().setText("Username not Found.");
+//                break;
+//        }
     }
+
 
     void deleteAccount() {
         int i = JOptionPane.showConfirmDialog(MyFrame.getInstance(), "You are about to delete your account.\n Are you sure?", "Delete Account", JOptionPane.YES_NO_OPTION);
@@ -128,19 +133,6 @@ public class Admin {
         System.exit(0);
     }
 
-    void signUp(String username, String password) {
-        String st = logInSignUp.create(username, password);
-        switch (st) {
-            case "ok":
-                LoginPanel.getInstance().getError().setText("Account Created.");
-                break;
-            case "user already exist":
-                LoginPanel.getInstance().getError().setText("User already exists.");
-                break;
-        }
-        frameRender();
-    }
-
     public void selectFirstHero(String string, Player player) {
         updateFirstHero(string, player);
         playerFirstUpdate(string, player);
@@ -151,7 +143,7 @@ public class Admin {
     }
 
     private void playerFirstUpdate(String string, Player player) {
-        LOGGER.playerlog(player, String.format("Select : %s as first selected hero", string.toUpperCase()));
+//        LOGGER.playerlog(player, String.format("Select : %s as first selected hero", string.toUpperCase()));
         player.setNewToGame(false);
         List<Heroes> ar1 = player.getPlayerHeroes();
         if (player.getPlayerHeroes() == null) ar1 = new ArrayList<>();
@@ -492,10 +484,10 @@ public class Admin {
         return !minion.isSleep();
     }
 
-    CardModelView getPureViewModelOf(String string) {
+    public CardModelView getPureViewModelOf(String string) {
         CardModelViewGetter cd = new CardModelViewGetter();
         Card cards = getCardOf(string.toLowerCase());
-        return cd.getPureViewModelOf(string, cards, pictureOf(string.toLowerCase()), gameManager);
+        return cd.getPureViewModelOf(string, cards, gameManager);
     }
 
     public void setSleep(int i) {
@@ -639,10 +631,11 @@ public class Admin {
     }
 
     CardModelView getHeroPowerViewModelOf(int i) {
-        if (i == 1) {
-            return new CardModelView(Constants.powerPics.get(friendlyHero().getName().toLowerCase()));
-        } else
-            return new CardModelView(Constants.powerPics.get(enemyHero().getName().toLowerCase()));
+//        if (i == 1) {
+//            return new CardModelView(Constants.powerPics.get(friendlyHero().getName().toLowerCase()));
+//        } else
+//            return new CardModelView(Constants.powerPics.get(enemyHero().getName().toLowerCase()));
+        return null;
     }
 
     ArrayList<ActionModel> friendlyActionModels() {
@@ -658,7 +651,7 @@ public class Admin {
     }
 
     public synchronized void summonedMinion(Card card, int mode, int damage, int hp) {
-        CardModelView view = new CardModelView(Constants.cardPics.get(card.getName().toLowerCase()));
+//        CardModelView view = new CardModelView(Constants.cardPics.get(card.getName().toLowerCase()));
 //        boardPanel.summonedMinion(view, mode, damage, hp);
     }
 
@@ -714,7 +707,9 @@ public class Admin {
     }
 
     Card getCardOf(String name) {
-        return Card.getCardOf(name.toLowerCase());
+        Card card = Card.getCardOf(name.toLowerCase());
+        System.out.println(card);
+        return card;
     }
 
     public Player player() {

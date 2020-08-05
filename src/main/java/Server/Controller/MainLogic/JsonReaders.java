@@ -1,6 +1,7 @@
 package Server.Controller.MainLogic;
 
 import Client.View.Configs.DeckReader;
+import Server.Model.Account;
 import Server.Model.Cards.*;
 import Server.Model.Heros.Hero;
 import Server.Model.Player;
@@ -161,6 +162,14 @@ public class JsonReaders {
         session.close();
         return t;
     }
+
+    public static Account accountReader(String username) {
+        Session session = sessionFactory.openSession();
+        Account account = session.get(Account.class, username);
+        session.close();
+        return account;
+    }
+
 
     public static DeckReader deckReader() {
         String path = "resources/Properties/deckreader.json";

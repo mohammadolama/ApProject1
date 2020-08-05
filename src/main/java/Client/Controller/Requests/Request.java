@@ -2,6 +2,7 @@ package Client.Controller.Requests;
 
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -56,5 +57,5 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = CanBePlayedRequest.class, name = "canbeplayed"),
 })
 public interface Request {
-    public abstract void excute(Scanner inputStream, PrintWriter outputStream);
+    public abstract void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper);
 }

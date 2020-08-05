@@ -12,6 +12,9 @@ public class ActionModel {
         this.maxSpend = maxSpend;
     }
 
+    public ActionModel() {
+    }
+
     public String getName() {
         return name;
     }

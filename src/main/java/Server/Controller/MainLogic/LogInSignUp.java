@@ -1,6 +1,7 @@
 package Server.Controller.MainLogic;
 
 
+import Server.Model.Account;
 import Server.Model.Player;
 
 import java.io.*;
@@ -64,96 +65,103 @@ public class LogInSignUp {
         }
     }
 
-    private boolean DuplicateUserChecker(String user) {
-        try {
-            Scanner sc2 = new Scanner(file);
-            while (sc2.hasNext()) {
-                String st56 = sc2.nextLine();
-                if (st56.equals("User : " + user)) {
-                    return false;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-
-    private boolean UserFinder(String user) {
-        file = new File("resources/Model.Player.txt");
-        Scanner sc2;
-        try {
-            sc2 = new Scanner(file);
-            boolean flag = false;
-            while (sc2.hasNext()) {
-                String st56 = sc2.nextLine();
-                if (st56.equals("User : " + user)) {
-                    flag = true;
-                }
-            }
-            if (flag) {
-                return true;
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private boolean PassChecker(String username, String password) {
-        try {
-
-            Scanner sc2 = new Scanner(file);
-            boolean flag = false;
-            while (sc2.hasNext()) {
-                String st56 = sc2.nextLine();
-                if (st56.equals("User : " + username) && sc2.nextLine().equals("Password : " + password)) {
-                    flag = true;
-                }
-            }
-            if (flag) {
-                return true;
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public String create(String user, String pass) {
-        try {
-            if (DuplicateUserChecker(user)) {
-                FileWriter fileWriter = new FileWriter("resources/Model.Player.txt", true);
-                PrintWriter pw = new PrintWriter(fileWriter);
-                pw.write("User : " + user + "\n");
-                pw.write("Password : " + pass + "\n");
-                pw.write("**********************" + "\n");
-                Player player = new Player(user, pass);
-                JsonBuilders.PlayerJsonBuilder(user, player);
+        if (DuplicateUserChecker(user)) {
+//                FileWriter fileWriter = new FileWriter("resources/Model.Player.txt", true);
+//                PrintWriter pw = new PrintWriter(fileWriter);
+//                pw.write("User : " + user + "\n");
+//                pw.write("Password : " + pass + "\n");
+//                pw.write("**********************" + "\n");
+            JsonBuilders.saveAccount(new Account(user, pass));
+            Player player = new Player(user, pass);
+            JsonBuilders.PlayerJsonBuilder(user, player);
 //                JsonBuilders.NewPlayerHeroBuilder(player);
-                pw.close();
-                return "ok";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+//                pw.close();
+            return "ok";
         }
         return "user already exist";
     }
 
-    public String check(String user, String password) {
+    private boolean DuplicateUserChecker(String user) {
+        Account account = JsonReaders.accountReader(user);
+        return account == null;
+//        try {
+//            Scanner sc2 = new Scanner(file);
+//            while (sc2.hasNext()) {
+//                String st56 = sc2.nextLine();
+//                if (st56.equals("User : " + user)) {
+//                    return false;
+//                }
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return true;
+    }
+
+    public String check(String user, String password, ClientHandler clientHandler) {
         if (UserFinder(user)) {
             if (PassChecker(user, password)) {
                 Player player = JsonReaders.PlayerJsonReader(user);
+                System.out.println(player);
 //                Gamestate.setPlayer(player);
-                LOGGER.playerlog(player, "Sign_in");
-                return "ok";
+                clientHandler.setPlayer(player);
+//                LOGGER.playerlog(player, "Log_in");
+                if (player.getNewToGame()) {
+                    return "new player";
+                } else {
+                    return "welcome";
+                }
             } else {
                 return "wrong password";
             }
         } else {
             return "user not found";
         }
+    }
+
+    private boolean UserFinder(String user) {
+        Account account = JsonReaders.accountReader(user);
+        return account != null;
+//        file = new File("resources/Model.Player.txt");
+//        Scanner sc2;
+//        try {
+//            sc2 = new Scanner(file);
+//            boolean flag = false;
+//            while (sc2.hasNext()) {
+//                String st56 = sc2.nextLine();
+//                if (st56.equals("User : " + user)) {
+//                    flag = true;
+//                }
+//            }
+//            if (flag) {
+//                return true;
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+    }
+
+    private boolean PassChecker(String username, String password) {
+        Account account = JsonReaders.accountReader(username);
+        return account.getPassword().equals(password);
+//        try {
+//            Scanner sc2 = new Scanner(file);
+//            boolean flag = false;
+//            while (sc2.hasNext()) {
+//                String st56 = sc2.nextLine();
+//                if (st56.equals("User : " + username) && sc2.nextLine().equals("Password : " + password)) {
+//                    flag = true;
+//                }
+//            }
+//            if (flag) {
+//                return true;
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
     }
 
 

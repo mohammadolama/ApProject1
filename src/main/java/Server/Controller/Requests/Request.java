@@ -1,12 +1,12 @@
 package Server.Controller.Requests;
 
+import Server.Controller.MainLogic.ClientHandler;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Scanner;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -45,9 +45,18 @@ import java.util.*;
         @JsonSubTypes.Type(value = SelectedDeckRequest.class, name = "selecteddeck"),
         @JsonSubTypes.Type(value = SelectFirstHeroRequest.class, name = "selectfirsthero"),
         @JsonSubTypes.Type(value = CreateGameModeRequest.class, name = "creategamemode"),
-        @JsonSubTypes.Type(value = visiblePanelRequest.class, name = "visiblepanel"),
+        @JsonSubTypes.Type(value = VisiblePanelRequest.class, name = "visiblepanel"),
         @JsonSubTypes.Type(value = WantToPlayRequest.class, name = "wanttoplay"),
+        @JsonSubTypes.Type(value = PlayerModelRequest.class, name = "playermodel"),
+        @JsonSubTypes.Type(value = SaveRequest.class, name = "save"),
+        @JsonSubTypes.Type(value = RenderRequest.class, name = "render"),
+        @JsonSubTypes.Type(value = WalletRequest.class, name = "wallet"),
+        @JsonSubTypes.Type(value = PassiveRequest.class, name = "passive"),
+        @JsonSubTypes.Type(value = CollectionRequest.class, name = "collection"),
+        @JsonSubTypes.Type(value = BoardPanelRequest.class, name = "boardpanel"),
+        @JsonSubTypes.Type(value = TargetListRequest.class, name = "targetlist"),
+        @JsonSubTypes.Type(value = CanBePlayedRequest.class, name = "canbeplayed"),
 })
 public interface Request {
-    public abstract void excute(Scanner inputStream, PrintWriter outputStream);
+    public abstract void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper);
 }
