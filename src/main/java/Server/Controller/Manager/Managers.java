@@ -143,7 +143,7 @@ public abstract class Managers {
     }
 
     public void updateGameLog(String string) {
-        Admin.getInstance().Log(string);
+//        Admin.getInstance().Log(string);
         gameLog.add(string);
         if (gameLog.size() > 25) {
             gameLog.remove(0);

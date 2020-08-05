@@ -62,6 +62,8 @@ public class LoginRequest implements Request {
                 SoundAdmin.clip.stop();
                 SoundAdmin.play1("resources/Sounds/menu.wav");
                 new Thread(() -> SoundAdmin.playSound("welcome")).start();
+                MenuPanel menuPanel = MenuPanel.getInstance();
+                MyFrame.getPanel().add("menu", menuPanel);
                 MyFrame.getInstance().changePanel("menu");
                 MenuPanel.getInstance().setFocusable(true);
                 MenuPanel.getInstance().grabFocus();

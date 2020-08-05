@@ -169,7 +169,6 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
                 return;
             RequestHandler.getInstance().sendRequest(new FirstHeroRequest(hero));
         }
-
     }
 
 }

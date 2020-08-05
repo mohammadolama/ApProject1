@@ -43,7 +43,7 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = UpdateDrawingPanelRequest.class, name = "updatedrawingpanel"),
         @JsonSubTypes.Type(value = SelectDeckRequest.class, name = "selectdeck"),
         @JsonSubTypes.Type(value = SelectedDeckRequest.class, name = "selecteddeck"),
-        @JsonSubTypes.Type(value = SelectFirstHeroRequest.class, name = "selectfirsthero"),
+        @JsonSubTypes.Type(value = FirstHeroRequest.class, name = "firsthero"),
         @JsonSubTypes.Type(value = CreateGameModeRequest.class, name = "creategamemode"),
         @JsonSubTypes.Type(value = VisiblePanelRequest.class, name = "visiblepanel"),
         @JsonSubTypes.Type(value = WantToPlayRequest.class, name = "wanttoplay"),

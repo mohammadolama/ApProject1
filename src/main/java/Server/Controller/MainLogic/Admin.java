@@ -51,7 +51,7 @@ public class Admin {
         MyFrame.getInstance().repaint();
     }
 
-    public void Log(String log) {
+    public void Log(String log, Player player) {
 //        LOGGER.playerlog(player(), log);
     }
 
@@ -120,26 +120,20 @@ public class Admin {
         }
     }
 
-    void logOut(Player player) {
-        Log("Sign out ");
+    public void logOut(Player player) {
+        Log("Sign out ", player);
         saveAndUpdate(player);
-        playMusic("login");
-        setVisiblePanel("login");
+//
     }
 
     public void exit(Player player) {
-        Log("Sign out ");
+        Log("Sign out ", player);
         saveAndUpdate(player);
-        System.exit(0);
     }
 
     public void selectFirstHero(String string, Player player) {
         updateFirstHero(string, player);
         playerFirstUpdate(string, player);
-        playMusic("menu");
-        addPanels();
-        playSound("welcome");
-        MyFrame.getInstance().changePanel("menu");
     }
 
     private void playerFirstUpdate(String string, Player player) {
@@ -282,20 +276,20 @@ public class Admin {
 
     public void updateGameLog(String log) {
         gameManager.updateGameLog(log);
-        Log(log);
+//        Log(log);
     }
 
     void buyCard(String name, Player player) {
         Shop.Buy(name.toLowerCase(), player);
         playSound("buy");
-        Log(String.format("Buy : %s  is added to purchased cards .", name));
+        Log(String.format("Buy : %s  is added to purchased cards .", name), player);
         saveAndUpdate(player);
     }
 
     void sellCard(String name, Player player) {
         Shop.Sell(name.toLowerCase(), player);
         playSound("sell");
-        Log(String.format("Sell : %s  is removed from  purchased cards .", name));
+        Log(String.format("Sell : %s  is removed from  purchased cards .", name), player);
         saveAndUpdate(player);
     }
 
@@ -330,7 +324,7 @@ public class Admin {
         deck.setUsedTimes(Deck.resetUsedTimes(selectedCards, deck));
         deck.setMostUsedCard(deck.mostUsedCard());
         player.getAllDecks().put(deck.getName(), deck);
-        Admin.getInstance().Log(String.format("Create : deck %s is created.", deck.getName()));
+        Admin.getInstance().Log(String.format("Create : deck %s is created.", deck.getName()), player);
         JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
     }
 
@@ -340,7 +334,7 @@ public class Admin {
         selectedDeck.setUsedTimes(Deck.resetUsedTimes(selectedCards, selectedDeck));
         selectedDeck.setMostUsedCard(selectedDeck.mostUsedCard());
         player.getAllDecks().replace(selectedDeck.getName(), selectedDeck, selectedDeck);
-        Admin.getInstance().Log(String.format("Change : deck %s has been changed.", selectedDeck.getName()));
+        Admin.getInstance().Log(String.format("Change : deck %s has been changed.", selectedDeck.getName()), player);
         JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
     }
 
@@ -355,7 +349,7 @@ public class Admin {
             player.setSelectedDeck(null);
             CollectionPanel.getInstance().setSelectedDeck(null);
         }
-        Log(String.format("Delete : deck %s is deleted.", selectedDeck.getName()));
+        Log(String.format("Delete : deck %s is deleted.", selectedDeck.getName()), player);
         saveAndUpdate(player);
         setVisiblePanel("collection");
     }

@@ -1,5 +1,7 @@
 package Server.Controller.Requests;
 
+import Client.View.View.Panels.MyFrame;
+import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -29,6 +31,7 @@ public class FirstHeroRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
-
+        Admin.getInstance().selectFirstHero(hero, clientHandler.getPlayer());
+        outputStream.println("ok");
     }
 }
