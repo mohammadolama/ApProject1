@@ -62,22 +62,6 @@ public class JsonReaders {
 
     private static SessionFactory sessionFactory = HibernateCore.getInstance();
 
-    static Player PlayerJsonReader(String username) {
-//        String path = String.format("resources/Jsons/Players/%s/player.json", username);
-//        Player player = null;
-//        try {
-//            FileReader fileReader = new FileReader(path);
-//            player = objectMapper.readValue(fileReader, Player.class);
-//            fileReader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        Session session = sessionFactory.openSession();
-        Player player = session.get(Player.class, username);
-        session.close();
-        return player;
-    }
-
     static Hero NewPlayerHeroReader(String hero) {
         String path = String.format("resources/Jsons/Heros/%s.json", hero.toLowerCase());
         Hero hero1 = null;
@@ -89,85 +73,6 @@ public class JsonReaders {
             e.printStackTrace();
         }
         return hero1;
-    }
-
-    public static Hero HeroJsonReader(Player player, String hero) {
-//        String path = String.format("resources/Jsons/Players/%s/%s.json", player.getUsername(), hero.toLowerCase());
-//        Hero hero1 = null;
-//        try {
-//            FileReader fileReader = new FileReader(path);
-//            hero1 = objectMapper.readValue(fileReader, Hero.class);
-//            fileReader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return hero1;
-        Session session = sessionFactory.openSession();
-        Hero hero1 = session.get(Hero.class, hero);
-        session.close();
-        return hero1;
-
-    }
-
-    public static <T> T MinionsReader(String minions) {
-//        String path = String.format("resources/Jsons/Cards/%s.json", minions);
-//        Minion minion = null;
-//        try {
-//            FileReader fileReader = new FileReader(path);
-//            Class clas = classes.get(minions.toLowerCase());
-//            minion = (Minion) objectMapper.readValue(fileReader, clas);
-//            fileReader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return minion;
-        Session session = sessionFactory.openSession();
-        T t = (T) session.get(classes.get(minions), minions);
-        session.close();
-        return t;
-    }
-
-    public static <T> T SpellReader(String spell) {
-//        String path = String.format("resources/Jsons/Cards/%s.json", spell);
-//        Spell spells = null;
-//        try {
-//            FileReader fileReader = new FileReader(path);
-//            Class clas = classes.get(spell.toLowerCase());
-//            spells = (Spell) objectMapper.readValue(fileReader, clas);
-//            fileReader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return spells;
-        Session session = sessionFactory.openSession();
-        T t = (T) session.get(classes.get(spell), spell);
-        session.close();
-        return t;
-    }
-
-    public static <T> T WeaponReader(String weapon) {
-//        String path = String.format("resources/Jsons/Cards/%s.json", weapon);
-//        Weapon weapon1 = null;
-//        try {
-//            FileReader fileReader = new FileReader(path);
-//            Class clas = classes.get(weapon.toLowerCase());
-//            weapon1 = (Weapon) objectMapper.readValue(fileReader, clas);
-//            fileReader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return weapon1;
-        Session session = sessionFactory.openSession();
-        T t = (T) session.get(classes.get(weapon), weapon);
-        session.close();
-        return t;
-    }
-
-    public static Account accountReader(String username) {
-        Session session = sessionFactory.openSession();
-        Account account = session.get(Account.class, username);
-        session.close();
-        return account;
     }
 
 

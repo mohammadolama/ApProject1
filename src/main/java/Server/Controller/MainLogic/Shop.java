@@ -12,12 +12,16 @@ import java.util.*;
 public class Shop {
 
 
-    public static void Buy(String st, Player player) {
+    public static boolean Buy(String st, Player player) {
+        if (player.getMoney() < Price(st)) {
+            return false;
+        }
         player.setMoney(player.getMoney() - Price(st));
         List<Carts> ar = player.getPlayerCarts();
         ar.add(Carts.valueOf(st));
         player.setPlayerCarts(ar);
-        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
+        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+        return true;
     }
 
     public static ArrayList<Card> Buyable(Player player) {
@@ -47,7 +51,7 @@ public class Shop {
         player.setMoney(player.getMoney() + (Price(st) / 2));
         List<Carts> ar2 = player.getPlayerCarts();
         ar2.remove(Carts.valueOf(st));
-        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
+        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
     }
 
     private static ArrayList<Carts> BuyableCards(Player player) {

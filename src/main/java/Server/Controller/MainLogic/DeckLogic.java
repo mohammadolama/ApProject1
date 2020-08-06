@@ -69,17 +69,17 @@ public class DeckLogic {
         for (Carts cartss : List) {
             for (MinionCarts minionCarts : MinionCarts.values()) {
                 if (cartss.toString().equals(minionCarts.toString())) {
-                    ar.add(JsonReaders.MinionsReader(cartss.name()));
+                    ar.add(DataBaseManagment.MinionsReader(cartss.name()));
                 }
             }
             for (SpellCarts spellCarts : SpellCarts.values()) {
                 if (cartss.toString().equals(spellCarts.toString())) {
-                    ar.add(JsonReaders.SpellReader(cartss.name()));
+                    ar.add(DataBaseManagment.SpellReader(cartss.name()));
                 }
             }
             for (WeaponCarts weaponCarts : WeaponCarts.values()) {
                 if (cartss.toString().equals(weaponCarts.toString())) {
-                    ar.add(JsonReaders.WeaponReader(cartss.name()));
+                    ar.add(DataBaseManagment.WeaponReader(cartss.name()));
                 }
             }
         }

@@ -1,8 +1,8 @@
 package Server.Model.Cards;
 
 import Server.Controller.Actions.CardVisitors.Visitor;
+import Server.Controller.MainLogic.DataBaseManagment;
 import Server.Controller.MainLogic.DeckLogic;
-import Server.Controller.MainLogic.JsonReaders;
 import Server.Model.Enums.*;
 import Server.Model.Heros.Hero;
 import Server.Model.Interface.Character;
@@ -214,17 +214,17 @@ public abstract class Card implements Character {
         for (int i = 0; i < 1; i++) {
             for (MinionCarts value : MinionCarts.values()) {
                 if (value.toString().equalsIgnoreCase(name)) {
-                    return JsonReaders.MinionsReader(name.toLowerCase());
+                    return DataBaseManagment.MinionsReader(name.toLowerCase());
                 }
             }
             for (SpellCarts value : SpellCarts.values()) {
                 if (value.toString().equalsIgnoreCase(name)) {
-                    return JsonReaders.SpellReader(name.toLowerCase());
+                    return DataBaseManagment.SpellReader(name.toLowerCase());
                 }
             }
             for (WeaponCarts value : WeaponCarts.values()) {
                 if (value.toString().equalsIgnoreCase(name)) {
-                    return JsonReaders.WeaponReader(name.toLowerCase());
+                    return DataBaseManagment.WeaponReader(name.toLowerCase());
                 }
             }
         }

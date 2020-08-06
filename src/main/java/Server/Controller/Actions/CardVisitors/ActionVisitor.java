@@ -2,7 +2,6 @@ package Server.Controller.Actions.CardVisitors;
 
 import Server.Controller.Actions.ActionHandler;
 import Server.Controller.MainLogic.*;
-import Server.Controller.MainLogic.JsonReaders;
 import Server.Model.Cards.*;
 import Server.Model.Enums.*;
 import Server.Model.Heros.Hero;
@@ -157,7 +156,7 @@ public class ActionVisitor implements Visitor {
     @Override
     public void visitLearnJavadonic(LearnJavadonic learnJavadonic, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         if (learnJavadonic.getManaSpendOnSth() >= learnJavadonic.getMaxManaSpendOnSth()) {
-            Javad javad = (Javad) JsonReaders.MinionsReader("javad");
+            Javad javad = (Javad) DataBaseManagment.MinionsReader("javad");
             Admin.getInstance().summonMinion(javad, -1);
             Admin.getInstance().summonedMinion(javad, 0, 6, 6);
             Admin.getInstance().finishAction(learnJavadonic);
@@ -284,7 +283,7 @@ public class ActionVisitor implements Visitor {
     public void visitSwarmOfCats(SwarmOfCats swarmOfCats, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
         boolean flag = false;
         while (myPlayed.size() < 7) {
-            Cat cat = (Cat) JsonReaders.MinionsReader("cat");
+            Cat cat = (Cat) DataBaseManagment.MinionsReader("cat");
             Admin.getInstance().summonMinion(cat, -1);
         }
     }

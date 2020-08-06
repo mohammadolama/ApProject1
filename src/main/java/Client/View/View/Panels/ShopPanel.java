@@ -47,7 +47,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private boolean buyActivated = true;
     private boolean clicked;
     private boolean mate;
-    private int wallet;
+    private long wallet;
 
 
     private String name;
@@ -180,8 +180,8 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         });
         add(searchField);
         RequestHandler.getInstance().sendRequest(new WalletRequest());
-        long money = Responses.getInstance().getWallet();
-        walletLabel = new JLabel(money + "   AP");
+        wallet = Responses.getInstance().getWallet();
+        walletLabel = new JLabel(wallet + "   AP");
         walletLabel.setBackground(Color.LIGHT_GRAY);
         walletLabel.setFont(f2.deriveFont(28.0f));
         walletLabel.setForeground(Color.yellow);
@@ -211,16 +211,6 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     public static ShopPanel getInstance() {
         return shoppanel;
     }
-
-
-//    private String getClass(String string) {
-//        for (CardModelView card : cards) {
-//            if (card.getName().equalsIgnoreCase(string)) {
-//                return card.get
-//            }
-//        }
-//        return "Neutral";
-//    }
 
     private void refresh() {
         removeAll();
@@ -367,6 +357,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         pictures(cards);
         images.clear();
         RequestHandler.getInstance().sendRequest(new WalletRequest());
+        wallet = Responses.getInstance().getWallet();
         walletLabel.setText(wallet + "   AP");
         clicked = false;
         repaint();

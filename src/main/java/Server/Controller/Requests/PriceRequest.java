@@ -1,9 +1,11 @@
 package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Model.Cards.Card;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -48,6 +50,12 @@ public class PriceRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
-
+        Card card = Card.getCardOf(name);
+        try {
+            outputStream.println(objectMapper.writeValueAsString(card.getHeroClass()));
+            outputStream.println(objectMapper.writeValueAsString(card.getPrice()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

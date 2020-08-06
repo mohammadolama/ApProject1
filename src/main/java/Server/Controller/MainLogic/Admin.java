@@ -2,7 +2,6 @@ package Server.Controller.MainLogic;
 
 import Client.View.View.Panels.*;
 import Client.View.View.Sounds.SoundAdmin;
-import Client.View.View.Update.Update;
 import Server.Controller.Actions.ActionHandler;
 import Server.Controller.Manager.DeckReaderManager;
 import Server.Controller.Manager.Managers;
@@ -111,13 +110,10 @@ public class Admin {
     }
 
 
-    void deleteAccount() {
-        int i = JOptionPane.showConfirmDialog(MyFrame.getInstance(), "You are about to delete your account.\n Are you sure?", "Delete Account", JOptionPane.YES_NO_OPTION);
-        if (i == 0) {
-            logInSignUp.DeleteAccount(player());
-            playMusic("login");
-            setVisiblePanel("login");
-        }
+    public void deleteAccount(Player player) {
+        logInSignUp.DeleteAccount(player);
+//            playMusic("login");
+//            setVisiblePanel("login");
     }
 
     public void logOut(Player player) {
@@ -143,7 +139,7 @@ public class Admin {
         if (player.getPlayerHeroes() == null) ar1 = new ArrayList<>();
         ar1.add(Heroes.valueOf(string));
         player.setPlayerHeroes(ar1);
-        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
+        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
     }
 
     private void playMusic(String track) {
@@ -189,8 +185,8 @@ public class Admin {
 //        CollectionDrawingPanel.getInstance().updateContent(cards);
     }
 
-    void saveAndUpdate(Player player) {
-        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
+    public void saveAndUpdate(Player player) {
+        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
     }
 
     public static void updateFirstHero(String hero, Player player) {
@@ -213,7 +209,7 @@ public class Admin {
                 player.getSelectedDeck().getUsedTimes().put("polymorph", 0);
                 player.getSelectedDeck().setDeck(ar);
 //                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
-                player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "mage"));
+                player.getSelectedDeck().setHero(DataBaseManagment.HeroJsonReader(player, "mage"));
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
                 break;
             case "rogue":
@@ -227,7 +223,7 @@ public class Admin {
                 player.getSelectedDeck().setDeck(ar);
 //                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
-                player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "rogue"));
+                player.getSelectedDeck().setHero(DataBaseManagment.HeroJsonReader(player, "rogue"));
                 break;
             case "warlock":
                 List<Carts> ar2 = player.getPlayerCarts();
@@ -240,7 +236,7 @@ public class Admin {
                 player.getSelectedDeck().setDeck(ar);
 //                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
-                player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "warlock"));
+                player.getSelectedDeck().setHero(DataBaseManagment.HeroJsonReader(player, "warlock"));
                 break;
             case "priest":
                 List<Carts> ar3 = player.getPlayerCarts();
@@ -253,7 +249,7 @@ public class Admin {
                 player.getSelectedDeck().setDeck(ar);
 //                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
-                player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "priest"));
+                player.getSelectedDeck().setHero(DataBaseManagment.HeroJsonReader(player, "priest"));
                 break;
             case "hunter":
                 List<Carts> ar4 = player.getPlayerCarts();
@@ -266,7 +262,7 @@ public class Admin {
                 player.getSelectedDeck().setDeck(ar);
 //                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
-                player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "hunter"));
+                player.getSelectedDeck().setHero(DataBaseManagment.HeroJsonReader(player, "hunter"));
                 break;
         }
 //        player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
@@ -279,25 +275,30 @@ public class Admin {
 //        Log(log);
     }
 
-    void buyCard(String name, Player player) {
-        Shop.Buy(name.toLowerCase(), player);
-        playSound("buy");
-        Log(String.format("Buy : %s  is added to purchased cards .", name), player);
-        saveAndUpdate(player);
+    public String buyCard(String name, Player player) {
+        if (Shop.Buy(name.toLowerCase(), player)) {
+            Log(String.format("Buy : %s  is added to purchased cards .", name), player);
+            saveAndUpdate(player);
+            return "ok";
+        }
+        return "gold";
     }
 
-    void sellCard(String name, Player player) {
-        Shop.Sell(name.toLowerCase(), player);
-        playSound("sell");
-        Log(String.format("Sell : %s  is removed from  purchased cards .", name), player);
-        saveAndUpdate(player);
+    public String sellCard(String name, Player player) {
+        if (canBeSold(name, player)) {
+            Shop.Sell(name.toLowerCase(), player);
+            Log(String.format("Sell : %s  is removed from  purchased cards .", name), player);
+            saveAndUpdate(player);
+            return "ok";
+        }
+        return "reject";
     }
 
     long wallet() {
         return player().getMoney();
     }
 
-    ArrayList<Card> properCards(int i, Player player) {
+    public ArrayList<CardModelView> properCards(int i, Player player) {
         ArrayList<Card> ar;
         if (i == 1) {
             ar = Shop.Buyable(player);
@@ -306,7 +307,16 @@ public class Admin {
         } else {
             ar = Card.allCards();
         }
-        return ar;
+        return modelList(ar);
+    }
+
+    private ArrayList<CardModelView> modelList(ArrayList<Card> list) {
+        CardModelViewGetter cd = new CardModelViewGetter();
+        ArrayList<CardModelView> list1 = new ArrayList<>();
+        for (Card card : list) {
+            list1.add(cd.getPureViewModelOf(card.getName(), card));
+        }
+        return list1;
     }
 
     long price(String name) {
@@ -320,22 +330,22 @@ public class Admin {
     public void createDeck(String name, ArrayList<Carts> selectedCards, String heroName, Player player) {
         Deck deck = new Deck(0, 0, name);
         deck.setDeck(selectedCards);
-        deck.setHero(JsonReaders.HeroJsonReader(player, heroName));
+        deck.setHero(DataBaseManagment.HeroJsonReader(player, heroName));
         deck.setUsedTimes(Deck.resetUsedTimes(selectedCards, deck));
 //        deck.setMostUsedCard(deck.mostUsedCard());
         player.getAllDecks().put(deck.getName(), deck);
         Admin.getInstance().Log(String.format("Create : deck %s is created.", deck.getName()), player);
-        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
+        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
     }
 
     public void changeDeck(Deck selectedDeck, ArrayList<Carts> selectedCards, String heroName, Player player) {
         selectedDeck.setDeck(selectedCards);
-        selectedDeck.setHero(JsonReaders.HeroJsonReader(player, heroName));
+        selectedDeck.setHero(DataBaseManagment.HeroJsonReader(player, heroName));
         selectedDeck.setUsedTimes(Deck.resetUsedTimes(selectedCards, selectedDeck));
 //        selectedDeck.setMostUsedCard(selectedDeck.mostUsedCard());
         player.getAllDecks().replace(selectedDeck.getName(), selectedDeck, selectedDeck);
         Admin.getInstance().Log(String.format("Change : deck %s has been changed.", selectedDeck.getName()), player);
-        JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
+        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
     }
 
     public void setSelectedDeck(Deck deck, Player player) {

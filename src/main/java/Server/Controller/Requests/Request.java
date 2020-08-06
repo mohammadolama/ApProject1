@@ -35,7 +35,7 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = BuyCardRequest.class, name = "buycard"),
         @JsonSubTypes.Type(value = SellCardRequest.class, name = "sellcard"),
         @JsonSubTypes.Type(value = PureModelViewRequest.class, name = "puremodelview"),
-        @JsonSubTypes.Type(value = ProperCardsRequest.class, name = "propercards"),
+        @JsonSubTypes.Type(value = ProperCardsRequest.class, name = "propercard"),
         @JsonSubTypes.Type(value = PurchasedCardsRequest.class, name = "purchasedcard"),
         @JsonSubTypes.Type(value = NotPurchasedCardsRequest.class, name = "notPurchasedcard"),
         @JsonSubTypes.Type(value = PlayerDecksRequest.class, name = "playerdecks"),
@@ -57,6 +57,7 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = TargetListRequest.class, name = "targetlist"),
         @JsonSubTypes.Type(value = CanBePlayedRequest.class, name = "canbeplayed"),
         @JsonSubTypes.Type(value = DeckModelRequest.class, name = "deckmodel"),
+        @JsonSubTypes.Type(value = PriceRequest.class, name = "price"),
 })
 public interface Request {
     public abstract void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper);

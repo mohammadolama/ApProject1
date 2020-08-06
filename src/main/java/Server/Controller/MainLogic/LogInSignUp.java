@@ -30,37 +30,40 @@ public class LogInSignUp {
                 pw1.write(st56 + "\n");
             }
             pw1.close();
-            String st = String.format("resources/players/%s-%s.log", player.getUsername(), player.getPlayerID());
-            temp = new File("resources/players/temp.log");
-            file = new File(st);
-            FileReader fileReader = new FileReader(file);
-            FileWriter fileWriter = new FileWriter(temp);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            String string;
-            while ((string = bufferedReader.readLine()) != null) {
-                bufferedWriter.write(string + "\n");
-                if (string.equals("User : " + player.getUsername())) {
-                    Date date = new Date();
-                    bufferedWriter.write("Deleted at : " + date.toString() + "\n");
-                }
-            }
-            fileReader.close();
-            bufferedReader.close();
-            bufferedWriter.close();
-            fileReader = new FileReader(temp);
-            fileWriter = new FileWriter(st);
-            bufferedReader = new BufferedReader(fileReader);
-            bufferedWriter = new BufferedWriter(fileWriter);
-            while ((string = bufferedReader.readLine()) != null) {
-                bufferedWriter.write(string + "\n");
-            }
-            bufferedReader.close();
-            bufferedWriter.close();
-            fileReader.close();
-            fileWriter.close();
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException | IOException e) {
+
+            DataBaseManagment.deleteAccount(player.getUsername());
+
+//            String st = String.format("resources/players/%s-%s.log", player.getUsername(), player.getPlayerID());
+//            temp = new File("resources/players/temp.log");
+//            file = new File(st);
+//            FileReader fileReader = new FileReader(file);
+//            FileWriter fileWriter = new FileWriter(temp);
+//            BufferedReader bufferedReader = new BufferedReader(fileReader);
+//            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+//            String string;
+//            while ((string = bufferedReader.readLine()) != null) {
+//                bufferedWriter.write(string + "\n");
+//                if (string.equals("User : " + player.getUsername())) {
+//                    Date date = new Date();
+//                    bufferedWriter.write("Deleted at : " + date.toString() + "\n");
+//                }
+//            }
+//            fileReader.close();
+//            bufferedReader.close();
+//            bufferedWriter.close();
+//            fileReader = new FileReader(temp);
+//            fileWriter = new FileWriter(st);
+//            bufferedReader = new BufferedReader(fileReader);
+//            bufferedWriter = new BufferedWriter(fileWriter);
+//            while ((string = bufferedReader.readLine()) != null) {
+//                bufferedWriter.write(string + "\n");
+//            }
+//            bufferedReader.close();
+//            bufferedWriter.close();
+//            fileReader.close();
+//            fileWriter.close();
+//            TimeUnit.SECONDS.sleep(1);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -72,9 +75,9 @@ public class LogInSignUp {
 //                pw.write("User : " + user + "\n");
 //                pw.write("Password : " + pass + "\n");
 //                pw.write("**********************" + "\n");
-            JsonBuilders.saveAccount(new Account(user, pass));
+            DataBaseManagment.saveAccount(new Account(user, pass));
             Player player = new Player(user, pass);
-            JsonBuilders.PlayerJsonBuilder(user, player);
+            DataBaseManagment.PlayerJsonBuilder(user, player);
 //                JsonBuilders.NewPlayerHeroBuilder(player);
 //                pw.close();
             return "ok";
@@ -83,7 +86,7 @@ public class LogInSignUp {
     }
 
     private boolean DuplicateUserChecker(String user) {
-        Account account = JsonReaders.accountReader(user);
+        Account account = DataBaseManagment.accountReader(user);
         return account == null;
 //        try {
 //            Scanner sc2 = new Scanner(file);
@@ -102,7 +105,7 @@ public class LogInSignUp {
     public String check(String user, String password, ClientHandler clientHandler) {
         if (UserFinder(user)) {
             if (PassChecker(user, password)) {
-                Player player = JsonReaders.PlayerJsonReader(user);
+                Player player = DataBaseManagment.PlayerJsonReader(user);
                 System.out.println(player);
 //                Gamestate.setPlayer(player);
                 clientHandler.setPlayer(player);
@@ -121,7 +124,7 @@ public class LogInSignUp {
     }
 
     private boolean UserFinder(String user) {
-        Account account = JsonReaders.accountReader(user);
+        Account account = DataBaseManagment.accountReader(user);
         return account != null;
 //        file = new File("resources/Model.Player.txt");
 //        Scanner sc2;
@@ -144,7 +147,7 @@ public class LogInSignUp {
     }
 
     private boolean PassChecker(String username, String password) {
-        Account account = JsonReaders.accountReader(username);
+        Account account = DataBaseManagment.accountReader(username);
         return account.getPassword().equals(password);
 //        try {
 //            Scanner sc2 = new Scanner(file);

@@ -73,10 +73,10 @@ public class MyFrame extends JFrame {
 
     public void addPanels() {
 //        new Thread(() -> {
-//            ShopPanel shop = ShopPanel.getInstance();
+            ShopPanel shop = ShopPanel.getInstance();
 //            CollectionPanel collection = CollectionPanel.getInstance();
 //            MyFrame.getPanel().add(collection, "collection");
-//            MyFrame.getPanel().add(shop, "shop");
+        MyFrame.getPanel().add(shop, "shop");
 //        }).start();
 //        new Thread(() -> {
 //            Col_Change col_change = Col_Change.getInstance();

@@ -60,5 +60,18 @@ class CardModelViewGetter {
         }
     }
 
+    CardModelView getPureViewModelOf(String string, Card cards) {
+        int mana = cards.getManaCost();
+        if (cards instanceof Minion) {
+            Minion minions = (Minion) cards;
+            return new CardModelView(string, mana, minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());
+        } else if (cards instanceof Weapon) {
+            Weapon weapon = (Weapon) cards;
+            return new CardModelView(string, mana, weapon.getDamage(), weapon.getDurability(), weapon.getType(), null, false, false, false, false);
+        } else {
+            Spell spell = (Spell) cards;
+            return new CardModelView(string, mana, spell.getType(), spell.isNeedFriendlyTarget(), spell.isNeedEnemyTarget());
+        }
+    }
 
 }
