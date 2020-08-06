@@ -1,9 +1,12 @@
 package Server.Controller.Requests;
 
+import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Model.PlayerModel;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -28,7 +31,13 @@ public class PlayerModelRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
-
+        PlayerModel playerModel = Admin.getInstance().getPlayerModel(clientHandler.getPlayer());
+        try {
+            String s = objectMapper.writeValueAsString(playerModel);
+            outputStream.println(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName() {

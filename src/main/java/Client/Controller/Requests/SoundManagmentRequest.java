@@ -1,5 +1,6 @@
 package Client.Controller.Requests;
 
+import Client.View.View.Sounds.SoundAdmin;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.PrintWriter;
@@ -26,6 +27,12 @@ public class SoundManagmentRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
-
+        if (value == -2) {
+            SoundAdmin.decreaseSound();
+        } else if (value == -1) {
+            SoundAdmin.increaseSound();
+        } else {
+            SoundAdmin.stopStart(value);
+        }
     }
 }

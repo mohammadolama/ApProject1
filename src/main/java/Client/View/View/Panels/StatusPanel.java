@@ -85,9 +85,7 @@ public class StatusPanel extends JPanel implements ActionListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        RequestHandler.getInstance().sendRequest(new PlayerModelRequest());
-        RequestHandler.getInstance().sendRequest(new SelectDeckRequest());
-
+        requests();
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.YELLOW);
@@ -119,6 +117,13 @@ public class StatusPanel extends JPanel implements ActionListener {
             g2d.drawImage(cardPics.get(selectedDeck.getMostUsedcart().toString().toLowerCase()), config.getStartX() + 700, 0, 130, 180, null);
         }
         drawCards(g2d);
+    }
+
+    private void requests() {
+        RequestHandler.getInstance().sendRequest(new PlayerModelRequest());
+//        RequestHandler.getInstance().sendRequest(new SelectedDeckRequest());
+//        selectedDeck = Responses.getInstance().getSelectedDeck();
+        player = Responses.getInstance().getPlayer();
     }
 
     private void drawCardInfo(Graphics2D g, String cards, int xe, int ye) {
@@ -175,7 +180,6 @@ public class StatusPanel extends JPanel implements ActionListener {
         add(exit);
         add(deleteAccount);
         showDecks();
-
     }
 
 
@@ -183,6 +187,7 @@ public class StatusPanel extends JPanel implements ActionListener {
         int i = 0;
         buttons = new ArrayList<>();
         RequestHandler.getInstance().sendRequest(new BestDecksRequest());
+        deckNames = Responses.getInstance().getBestDecks();
         for (String string : deckNames) {
             JButton button = new JButton(string);
             button.setName(string);
@@ -206,7 +211,6 @@ public class StatusPanel extends JPanel implements ActionListener {
             BufferedImage bf = cardPics.get(carts.toString());
             ar1.add(bf);
         }
-
     }
 
 
@@ -230,10 +234,11 @@ public class StatusPanel extends JPanel implements ActionListener {
             for (JButton button : buttons) {
                 if (src.getName().equalsIgnoreCase(button.getName())) {
                     updateSelectedDeck(button.getName());
-                    RequestHandler.getInstance().sendRequest(new RenderRequest());
+                    break;
                 }
             }
         }
+        RequestHandler.getInstance().sendRequest(new RenderRequest());
     }
 
 }

@@ -1,10 +1,13 @@
 package Server.Controller.Requests;
 
-import Client.Model.DeckModel;
+import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Model.Deck;
+import Server.Model.DeckModel;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -22,7 +25,13 @@ public class DeckModelRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
-
+        Deck deck = clientHandler.getPlayer().getAllDecks().get(name);
+        DeckModel deckModel = Admin.getInstance().getDeckModel(deck);
+        try {
+            outputStream.println(objectMapper.writeValueAsString(deckModel));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

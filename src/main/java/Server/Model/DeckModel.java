@@ -1,6 +1,7 @@
-package Client.Model;
+package Server.Model;
 
-import Client.Model.Enums.Carts;
+
+import Server.Model.Enums.Carts;
 
 import java.util.*;
 

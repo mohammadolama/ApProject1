@@ -1,4 +1,4 @@
-package Client.Model;
+package Server.Model;
 
 public class PlayerModel {
 
@@ -48,6 +48,10 @@ public class PlayerModel {
     }
 
     public void setMoney(long money) {
+        this.money = money;
+    }
+
+    public void setMoney(int money) {
         this.money = money;
     }
 

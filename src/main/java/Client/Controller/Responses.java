@@ -6,6 +6,7 @@ import Client.Model.DeckModel;
 import Client.Model.Enums.Carts;
 import Client.Model.Enums.Heroes;
 import Client.Model.InfoPassive;
+import Client.Model.PlayerModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class Responses {
 
     private static final Responses responses = new Responses();
     private CardModelView cardModelView;
-    private DeckModel deckModel;
+    private DeckModel deckModel, selectedDeck;
     private ArrayList<CardModelView> modelviewList, purchasedCards, notPurchasedCards,
             collectionModels;
     private long price, wallet;
@@ -23,9 +24,10 @@ public class Responses {
     private HashMap<String, DeckModel> decks;
     private ArrayList<Heroes> heroesList;
     private ArrayList<Carts> collectionList;
+    private ArrayList<String> bestDecks;
     private boolean canBePlayed, heroCanAttack, canDoAction;
     private int heroPowerCanBePlayed;
-
+    private PlayerModel player;
 
     public BoardPanelRequest board;
 
@@ -47,6 +49,14 @@ public class Responses {
 
     public void setPassiveList(ArrayList<InfoPassive> passiveList) {
         this.passiveList = passiveList;
+    }
+
+    public DeckModel getSelectedDeck() {
+        return selectedDeck;
+    }
+
+    public void setSelectedDeck(DeckModel selectedDeck) {
+        this.selectedDeck = selectedDeck;
     }
 
     public DeckModel getDeckModel() {
@@ -149,6 +159,14 @@ public class Responses {
         this.heroPowerCanBePlayed = heroPowerCanBePlayed;
     }
 
+    public PlayerModel getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(PlayerModel player) {
+        this.player = player;
+    }
+
     public boolean isHeroCanAttack() {
         return heroCanAttack;
     }
@@ -167,5 +185,13 @@ public class Responses {
 
     public void setHeroesList(ArrayList<Heroes> heroesList) {
         this.heroesList = heroesList;
+    }
+
+    public ArrayList<String> getBestDecks() {
+        return bestDecks;
+    }
+
+    public void setBestDecks(ArrayList<String> bestDecks) {
+        this.bestDecks = bestDecks;
     }
 }

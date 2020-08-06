@@ -80,10 +80,10 @@ public class MyFrame extends JFrame {
 //        }).start();
 //        new Thread(() -> {
 //            Col_Change col_change = Col_Change.getInstance();
-//            StatusPanel status = StatusPanel.getInstance();
-//            SettingPanel settingPanel = SettingPanel.getInstance();
-//            MyFrame.getPanel().add(settingPanel, "setting");
-//            MyFrame.getPanel().add(status, "status");
+        StatusPanel status = StatusPanel.getInstance();
+        SettingPanel settingPanel = SettingPanel.getInstance();
+        MyFrame.getPanel().add("setting", settingPanel);
+        MyFrame.getPanel().add("status", status);
 //            MyFrame.getPanel().add(col_change, "col");
 //        }).start();
     }

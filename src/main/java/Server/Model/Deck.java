@@ -84,25 +84,13 @@ public class Deck {
         return new Deck(0, 0, "Default Deck");
     }
 
-    public double avarageMana() {
-        ArrayList<Card> ar = DeckLogic.UpdateDeck(getDeck());
-        double i = 0;
-        for (Card card : ar) {
-            i = i + card.getManaCost();
-        }
-        i = i / ar.size();
-        BigDecimal bd = new BigDecimal(Double.toString(i));
-        bd = bd.setScale(3, RoundingMode.HALF_EVEN);
-        return bd.doubleValue();
-    }
-
 
     public static Deck cloneDeck(Deck deck) {
         Deck deck1 = new Deck();
         deck1.setDeck(deck.getDeck());
         deck1.setHero(deck.getHero());
         deck1.setUsedTimes(deck.getUsedTimes());
-        deck1.setMostUsedCard(deck.getMostUsedCard());
+//        deck1.setMostUsedCard(deck.getMostUsedCard());
         deck1.setName(deck.getName());
         deck1.setTotalPlays(deck.getTotalPlays());
         deck1.setTotalWins(deck.getTotalWins());
@@ -157,17 +145,8 @@ public class Deck {
         }
     }
 
-    public double winRate() {
-        if (totalPlays == 0) {
-            return 0;
-        }
-        double i = totalWins;
-        double j = totalPlays;
-        return i / j;
-    }
-
     public Carts getMostUsedCard() {
-        mostUsedCard = mostUsedCard();
+//        mostUsedCard = mostUsedCard();
         return mostUsedCard;
     }
 
@@ -177,30 +156,6 @@ public class Deck {
 
     public void setUsedTimes(Map<String, Integer> usedTimes) {
         this.usedTimes = usedTimes;
-    }
-
-    public Carts mostUsedCard() {
-        int i;
-        int j = 0;
-        ArrayList<Carts> ar = new ArrayList<>();
-        for (Map.Entry<String, Integer> Entry : this.usedTimes.entrySet()) {
-            i = Entry.getValue();
-            if (j < i) {
-                j = i;
-            }
-        }
-        for (Map.Entry<String, Integer> Entry : this.usedTimes.entrySet()) {
-            if (Entry.getValue() == j) {
-                ar.add(Carts.valueOf(Entry.getKey().toLowerCase()));
-            }
-        }
-        if (ar.size() == 1) {
-            return ar.get(0);
-        } else {
-            ArrayList<Card> ar2 = DeckLogic.UpdateDeck(ar);
-            ar2.sort(Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
-            return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
-        }
     }
 
     @Override

@@ -212,7 +212,7 @@ public class Admin {
                 player.getAllDecks().get("Default Deck").getUsedTimes().put("polymorph", 0);
                 player.getSelectedDeck().getUsedTimes().put("polymorph", 0);
                 player.getSelectedDeck().setDeck(ar);
-                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
+//                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "mage"));
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
                 break;
@@ -225,7 +225,7 @@ public class Admin {
                 player.getAllDecks().get("Default Deck").getUsedTimes().put("aylar", 0);
                 player.getSelectedDeck().getUsedTimes().put("aylar", 0);
                 player.getSelectedDeck().setDeck(ar);
-                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
+//                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
                 player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "rogue"));
                 break;
@@ -238,7 +238,7 @@ public class Admin {
                 player.getAllDecks().get("Default Deck").getUsedTimes().put("benyamin", 0);
                 player.getSelectedDeck().getUsedTimes().put("benyamin", 0);
                 player.getSelectedDeck().setDeck(ar);
-                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
+//                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
                 player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "warlock"));
                 break;
@@ -251,7 +251,7 @@ public class Admin {
                 player.getAllDecks().get("Default Deck").getUsedTimes().put("shahryar", 0);
                 player.getSelectedDeck().getUsedTimes().put("shahryar", 0);
                 player.getSelectedDeck().setDeck(ar);
-                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
+//                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
                 player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "priest"));
                 break;
@@ -264,13 +264,13 @@ public class Admin {
                 player.getAllDecks().get("Default Deck").getUsedTimes().put("faeze", 0);
                 player.getSelectedDeck().getUsedTimes().put("faeze", 0);
                 player.getSelectedDeck().setDeck(ar);
-                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
+//                player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
                 player.getAllDecks().replace(player.getSelectedDeck().getName(), player.getSelectedDeck());
                 player.getSelectedDeck().setHero(JsonReaders.HeroJsonReader(player, "hunter"));
                 break;
         }
-        player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
-        player.getAllDecks().get(player.getSelectedDeck().getName()).setMostUsedCard(player.getAllDecks().get(player.getSelectedDeck().getName()).mostUsedCard());
+//        player.getSelectedDeck().setMostUsedCard(player.getSelectedDeck().mostUsedCard());
+//        player.getAllDecks().get(player.getSelectedDeck().getName()).setMostUsedCard(player.getAllDecks().get(player.getSelectedDeck().getName()).mostUsedCard());
     }
 
 
@@ -322,7 +322,7 @@ public class Admin {
         deck.setDeck(selectedCards);
         deck.setHero(JsonReaders.HeroJsonReader(player, heroName));
         deck.setUsedTimes(Deck.resetUsedTimes(selectedCards, deck));
-        deck.setMostUsedCard(deck.mostUsedCard());
+//        deck.setMostUsedCard(deck.mostUsedCard());
         player.getAllDecks().put(deck.getName(), deck);
         Admin.getInstance().Log(String.format("Create : deck %s is created.", deck.getName()), player);
         JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
@@ -332,7 +332,7 @@ public class Admin {
         selectedDeck.setDeck(selectedCards);
         selectedDeck.setHero(JsonReaders.HeroJsonReader(player, heroName));
         selectedDeck.setUsedTimes(Deck.resetUsedTimes(selectedCards, selectedDeck));
-        selectedDeck.setMostUsedCard(selectedDeck.mostUsedCard());
+//        selectedDeck.setMostUsedCard(selectedDeck.mostUsedCard());
         player.getAllDecks().replace(selectedDeck.getName(), selectedDeck, selectedDeck);
         Admin.getInstance().Log(String.format("Change : deck %s has been changed.", selectedDeck.getName()), player);
         JsonBuilders.PlayerJsonBuilder(player.getUsername(), player);
@@ -354,8 +354,8 @@ public class Admin {
         setVisiblePanel("collection");
     }
 
-    ArrayList<String> bestDecks() {
-        return DeckLogic.bestDeck(player());
+    public ArrayList<String> bestDecks(Player player) {
+        return DeckLogic.bestDeck(player);
     }
 
     Deck CloneDeck(String value) {
@@ -806,6 +806,20 @@ public class Admin {
 
     public void RequestAct(Object object) {
         boardPanel.request(object);
+    }
+
+    public PlayerModel getPlayerModel(Player player) {
+        return new PlayerModel(player.getUsername(), player.getExp(), player.getLevel(),
+                player.getMoney(), player.getSelectedDeck().getName());
+    }
+
+    public DeckModel getDeckModel(Deck deck) {
+        Carts mostused = DeckLogic.mostUsedCard(deck);
+        double avg = DeckLogic.avarageMana(deck);
+        double winrate = DeckLogic.winRate(deck);
+        return new DeckModel(deck.getName(), deck.getDeck(), deck.getHero().getName(), mostused,
+                deck.getTotalPlays(), deck.getTotalWins(), avg, winrate);
+
     }
 }
 

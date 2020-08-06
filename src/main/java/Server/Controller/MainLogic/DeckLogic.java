@@ -6,6 +6,8 @@ import Server.Model.Deck;
 import Server.Model.Enums.*;
 import Server.Model.Player;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.Comparator;
 import java.util.Map;
@@ -36,7 +38,7 @@ public class DeckLogic {
         for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
             ar.add(entry.getValue());
         }
-        ar.sort(Comparator.comparing(Deck::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(Deck::avarageMana));
+        ar.sort(Comparator.comparing(DeckLogic::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(DeckLogic::avarageMana));
 
         ArrayList<String> arrayList = new ArrayList<>();
         if (ar.size() <= 10) {
@@ -83,5 +85,53 @@ public class DeckLogic {
         }
         return ar;
     }
+
+    public static Carts mostUsedCard(Deck deck) {
+        int i;
+        int j = 0;
+        ArrayList<Carts> ar = new ArrayList<>();
+        for (Map.Entry<String, Integer> Entry : deck.getUsedTimes().entrySet()) {
+            i = Entry.getValue();
+            if (j < i) {
+                j = i;
+            }
+        }
+        for (Map.Entry<String, Integer> Entry : deck.getUsedTimes().entrySet()) {
+            if (Entry.getValue() == j) {
+                ar.add(Carts.valueOf(Entry.getKey().toLowerCase()));
+            }
+        }
+        if (ar.size() == 1) {
+            return ar.get(0);
+        } else {
+            ArrayList<Card> ar2 = DeckLogic.UpdateDeck(ar);
+            ar2.sort(Comparator.comparing(Card::getRarityI).thenComparing(Card::getManaCost).thenComparing(Card::getTypeI));
+            return Carts.valueOf(ar2.get(ar2.size() - 1).getName().toLowerCase());
+        }
+    }
+
+
+    public static double avarageMana(Deck deck) {
+        ArrayList<Card> ar = DeckLogic.UpdateDeck(deck.getDeck());
+        double i = 0;
+        for (Card card : ar) {
+            i = i + card.getManaCost();
+        }
+        i = i / ar.size();
+        BigDecimal bd = new BigDecimal(Double.toString(i));
+        bd = bd.setScale(3, RoundingMode.HALF_EVEN);
+        return bd.doubleValue();
+    }
+
+
+    public static double winRate(Deck deck) {
+        if (deck.getTotalPlays() == 0) {
+            return 0;
+        }
+        double i = deck.getTotalWins();
+        double j = deck.getTotalPlays();
+        return i / j;
+    }
+
 
 }
