@@ -1,9 +1,14 @@
 package Client.Controller.Requests;
 
 import Client.Model.Enums.Carts;
+import Client.View.View.Panels.Col_Change;
+import Client.View.View.Panels.MyFrame;
+import Client.View.View.Update.Update;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -50,6 +55,21 @@ public class CreateDeckRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
-
+        if (name == null || name.equals("")) {
+            JOptionPane.showMessageDialog(MyFrame.getInstance(), "Choose a name for your deck");
+            Update.render();
+        } else {
+            try {
+                outputStream.println(objectMapper.writeValueAsString(this));
+                String res = inputStream.nextLine();
+                if (!res.equalsIgnoreCase("ok")) {
+                    JOptionPane.showMessageDialog(MyFrame.getInstance(), res);
+                } else {
+                    Col_Change.getInstance().getBackButton().doClick();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

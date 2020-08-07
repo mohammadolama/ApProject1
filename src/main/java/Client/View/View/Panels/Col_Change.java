@@ -12,6 +12,7 @@ import Client.View.Configs.ConfigsLoader;
 import Client.View.View.Update.Update;
 import Client.View.Configs.Col_ChangeConfig;
 import Server.Controller.MainLogic.DeckLogic;
+import Server.Controller.MainLogic.ThreadColor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +33,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
     private ArrayList<BufferedImage> allBufferedImages;
     private ArrayList<BufferedImage> selectedBuferredImages;
     private JTextField deckName;
+    private String previousName;
 
     private boolean createMode = true;
 
@@ -203,30 +205,6 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         selectedCardPictures(selectedCards);
     }
 
-//    private boolean deckCanBeCreated(boolean change) {
-//        if (deckName.getText() == null || deckName.getText().equals("")) {
-//            JOptionPane.showMessageDialog(this, "Choose a name for your deck");
-//            revalidate();
-//            return false;
-//        }
-//        if (!change) {
-//            for (Map.Entry<String, Deck> entry : Gamestate.getPlayer().getAllDecks().entrySet()) {
-//                String st = entry.getKey();
-//                if (deckName.getText().equalsIgnoreCase(st)) {
-//                    JOptionPane.showMessageDialog(this, "Name had been taken before !");
-//                    revalidate();
-//                    return false;
-//                }
-//            }
-//        }
-//        if (selectedCards.size() > config.getMaxCardInDeck() || selectedCards.size() < config.getMinCardInDeck()) {
-//            JOptionPane.showMessageDialog(this, "Number of cards in your deck must be in range [15,30].");
-//            revalidate();
-//            return false;
-//        }
-//        return true;
-//    }
-
     private void clear() {
         selectedCards = new ArrayList<>();
         selectedBuferredImages = new ArrayList<>();
@@ -243,7 +221,12 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
     }
 
     private void changeDeck() {
-        RequestHandler.getInstance().sendRequest(new ChangeDeckRequest(selectedDeck, heroName, selectedCards));
+        System.out.println(ThreadColor.ANSI_BLUE + selectedCards.toString());
+        System.out.println(selectedDeck.toString());
+        System.out.println(heroName);
+        System.out.println(previousName);
+        System.out.println(deckName.getText() + ThreadColor.ANSI_RESET);
+        RequestHandler.getInstance().sendRequest(new ChangeDeckRequest(selectedDeck, heroName, previousName, deckName.getText(), selectedCards));
     }
 
     private void createMode() {
@@ -261,45 +244,8 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
 
     void updateSelectedDeck(String name) {
         RequestHandler.getInstance().sendRequest(new CollectionRequest(name));
-//        List<Carts> ar1 = Gamestate.getPlayer().getPlayerCarts();
         ArrayList<Carts> ar2 = Responses.getInstance().getCollectionList();
-//        ArrayList<Carts> ar3 = new ArrayList<>();
-//        for (Carts carts : ar1) {
-//            for (NeutralCarts value : NeutralCarts.values()) {
-//                if (carts.toString().equalsIgnoreCase(value.toString())) {
-//                    ar2.add(carts);
-//                }
-//            }
-//        }
-//        switch (name.toLowerCase()) {
-//            case "mage":
-//                heroName = "mage";
-//                ar3 = Mage.Spcards();
-//                break;
-//            case "rogue":
-//                heroName = "rogue";
-//                ar3 = Rogue.Spcards();
-//                break;
-//            case "warlock":
-//                heroName = "warlock";
-//                ar3 = Warlock.Spcards();
-//                break;
-//            case "priest":
-//                heroName = "priest";
-//                ar3 = Priest.Spcards();
-//                break;
-//            case "hunter":
-//                heroName = "hunter";
-//                ar3 = Hunter.Spcards();
-//                break;
-//        }
-//        for (Carts carts : ar3) {
-//            if (Gamestate.getPlayer().getPlayerCarts().contains(carts)) {
-//                ar2.add(carts);
-//            }
-//        }
-
-
+        heroName = Responses.getInstance().getHeroName();
         cards = Responses.getInstance().getCollectionModels();
         allBufferedImages = new ArrayList<>();
         for (Carts carts : ar2) {
@@ -425,7 +371,9 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         if (src == backButton) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : back Button"));
             RequestHandler.getInstance().sendRequest(new LogRequest("Cancle the process of creating new/changing  deck."));
+            RequestHandler.getInstance().sendRequest(new RenderRequest());
             clear();
+            Update.refresh();
             MyFrame.getInstance().changePanel("collection");
         } else if (src == addButton) {
             addSelectedCard(name.toLowerCase());
@@ -446,12 +394,11 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         } else if (src == createButton) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Create_Deck Button"));
             createDeck();
-                Update.refresh();
-
+            Update.refresh();
         } else if (src == changeButton) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Change_Deck Button"));
             changeDeck();
-                Update.refresh();
+            Update.refresh();
         } else {
             createButton.setEnabled(true);
             heroSelected = true;
@@ -533,5 +480,17 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
 
     public void setCreateMode(boolean createMode) {
         this.createMode = createMode;
+    }
+
+    public JButton getBackButton() {
+        return backButton;
+    }
+
+    public void setBackButton(JButton backButton) {
+        this.backButton = backButton;
+    }
+
+    public void setPreviousName(String previousName) {
+        this.previousName = previousName;
     }
 }

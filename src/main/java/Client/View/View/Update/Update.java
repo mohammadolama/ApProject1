@@ -7,9 +7,9 @@ import Client.View.View.Panels.StatusPanel;
 public class Update {
 
     public static void refresh() {
-        render();
         CollectionPanel.getInstance().refresh();
         StatusPanel.getInstance().refresh();
+        render();
     }
 
     public static  void render(){

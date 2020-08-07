@@ -290,7 +290,7 @@ public class RequestHandler {
 //        }
     }
 
-    public void sendRequest(Request request) {
+    public synchronized void sendRequest(Request request) {
         try {
             String st = objectMapper.writeValueAsString(request);
             System.out.println(request);

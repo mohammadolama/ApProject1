@@ -5,6 +5,7 @@ import Server.Model.Enums.Heroes;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -32,6 +33,11 @@ public class PlayerHerosRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
-
+        try {
+            String res = objectMapper.writeValueAsString(clientHandler.getPlayer().getPlayerHeroes());
+            outputStream.println(res);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

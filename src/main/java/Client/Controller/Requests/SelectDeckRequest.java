@@ -31,6 +31,10 @@ public class SelectDeckRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
-
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

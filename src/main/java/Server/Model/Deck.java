@@ -28,6 +28,7 @@ public class Deck {
     private List<Carts> deck;
     @ManyToOne
     private Hero hero;
+    @Transient
     @Enumerated(EnumType.STRING)
     private Carts mostUsedCard;
     @Column

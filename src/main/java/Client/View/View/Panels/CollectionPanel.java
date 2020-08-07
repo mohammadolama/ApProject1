@@ -291,7 +291,6 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
             RequestHandler.getInstance().sendRequest(new LogRequest("Navigate : Main Menu"));
             RequestHandler.getInstance().sendRequest(new SaveRequest());
             RequestHandler.getInstance().sendRequest(new VisiblePanelRequest("menu"));
-
         } else if (src == exitButton) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
             RequestHandler.getInstance().sendRequest(new ExitRequest());
@@ -318,6 +317,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
             allCards.doClick();
             Col_Change.getInstance().setCreateMode(false);
             Col_Change.getInstance().getDeckName().setText(selectedDeck.getName());
+            Col_Change.getInstance().setPreviousName(selectedDeck.getName());
             Col_Change.getInstance().updateSelectedDeck(selectedDeck.getHero());
             Col_Change.getInstance().setHeroSelected(true);
             Col_Change.getInstance().setSelectedCards(selectedDeck.getList());

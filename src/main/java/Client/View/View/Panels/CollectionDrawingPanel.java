@@ -84,7 +84,6 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
 
     public void updateContent(ArrayList<CardModelView> cards) {
         images.clear();
-        this.cards = new ArrayList<>();
         this.cards = cards;
         pictures(this.cards);
         revalidate();

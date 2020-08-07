@@ -133,4 +133,5 @@ public class CardModelView {
     public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
+
 }

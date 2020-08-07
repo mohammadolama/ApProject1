@@ -19,7 +19,7 @@ public class Responses {
     private ArrayList<CardModelView> modelviewList, purchasedCards, notPurchasedCards,
             collectionModels;
     private long price, wallet;
-    private String className;
+    private String className, heroName;
     private ArrayList<InfoPassive> passiveList;
     private HashMap<String, DeckModel> decks;
     private ArrayList<Heroes> heroesList;
@@ -193,5 +193,13 @@ public class Responses {
 
     public void setBestDecks(ArrayList<String> bestDecks) {
         this.bestDecks = bestDecks;
+    }
+
+    public String getHeroName() {
+        return heroName;
+    }
+
+    public void setHeroName(String heroName) {
+        this.heroName = heroName;
     }
 }

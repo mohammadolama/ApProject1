@@ -1,9 +1,11 @@
 package Server.Controller.Requests;
 
+import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -28,6 +30,11 @@ public class CreateNewDeckRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
-
+        response = Admin.getInstance().createNewDeck(clientHandler.getPlayer());
+        try {
+            outputStream.println(objectMapper.writeValueAsString(response));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

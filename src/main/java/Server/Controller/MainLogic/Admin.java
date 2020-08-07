@@ -7,6 +7,7 @@ import Server.Controller.Manager.DeckReaderManager;
 import Server.Controller.Manager.Managers;
 import Server.Controller.Manager.NormalModeManager;
 import Server.Controller.Manager.PracticeManager;
+import Server.Controller.Requests.DeckModelRequest;
 import Server.Model.Heros.*;
 import Server.Model.*;
 import Server.Model.Cards.*;
@@ -154,13 +155,8 @@ public class Admin {
         MyFrame.getInstance().changePanel(panel);
     }
 
-    void createNewDeck(Player player) {
-        if (player.getAllDecks().size() < 12) {
-            Col_Change.getInstance().setCreateMode(true);
-            admin.setVisiblePanel("col");
-        } else {
-            JOptionPane.showMessageDialog(CollectionPanel.getInstance(), "Can not create more than 12 decks");
-        }
+    public boolean createNewDeck(Player player) {
+        return player.getAllDecks().size() < 12;
     }
 
     void updateDrawingPanel(String name, Player player) {
@@ -327,41 +323,72 @@ public class Admin {
         return Shop.CanBeSold(name.toLowerCase(), player);
     }
 
-    public void createDeck(String name, ArrayList<Carts> selectedCards, String heroName, Player player) {
+    public String createDeck(String name, ArrayList<Carts> selectedCards, String heroName, Player player) {
+        for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
+            String st = entry.getKey();
+            if (name.equalsIgnoreCase(st)) {
+                return "Name had been taken before !";
+            }
+        }
+        if (selectedCards.size() > 30 || selectedCards.size() < 15) {
+            return "Number of cards in your deck must be in range [15,30].";
+        }
         Deck deck = new Deck(0, 0, name);
         deck.setDeck(selectedCards);
-        deck.setHero(DataBaseManagment.HeroJsonReader(player, heroName));
+        deck.setHero(DataBaseManagment.HeroJsonReader(player, heroName.toLowerCase()));
         deck.setUsedTimes(Deck.resetUsedTimes(selectedCards, deck));
 //        deck.setMostUsedCard(deck.mostUsedCard());
         player.getAllDecks().put(deck.getName(), deck);
-        Admin.getInstance().Log(String.format("Create : deck %s is created.", deck.getName()), player);
+        Log(String.format("Create : deck %s is created.", deck.getName()), player);
         DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+        return "ok";
     }
 
-    public void changeDeck(Deck selectedDeck, ArrayList<Carts> selectedCards, String heroName, Player player) {
+    public String changeDeck(DeckModel deck, ArrayList<Carts> selectedCards, String heroName, String previous, String current, Player player) {
+        if (!current.equals(previous)) {
+            for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
+                String st = entry.getKey();
+                if (current.equalsIgnoreCase(st)) {
+                    return "Name had been taken before !";
+                }
+            }
+        }
+        if (selectedCards.size() > 30 || selectedCards.size() < 15) {
+            return "Number of cards in your deck must be in range [15,30].";
+        }
+        Deck selectedDeck = player.getAllDecks().get(previous);
         selectedDeck.setDeck(selectedCards);
-        selectedDeck.setHero(DataBaseManagment.HeroJsonReader(player, heroName));
+        selectedDeck.setName(current);
+        System.out.println("heroName : " + heroName);
+        Hero hero = DataBaseManagment.HeroJsonReader(player, heroName.toLowerCase());
+        System.out.println("************" + hero);
+        selectedDeck.setHero(hero);
         selectedDeck.setUsedTimes(Deck.resetUsedTimes(selectedCards, selectedDeck));
-//        selectedDeck.setMostUsedCard(selectedDeck.mostUsedCard());
-        player.getAllDecks().replace(selectedDeck.getName(), selectedDeck, selectedDeck);
-        Admin.getInstance().Log(String.format("Change : deck %s has been changed.", selectedDeck.getName()), player);
+        player.getAllDecks().remove(previous);
+        player.getAllDecks().put(current, selectedDeck);
+        player.setSelectedDeck(null);
+        Log(String.format("Change : deck %s has been changed.", selectedDeck.getName()), player);
+        System.out.println(player.toString());
         DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+        return "ok";
     }
 
-    public void setSelectedDeck(Deck deck, Player player) {
-        player.setSelectedDeck(deck);
+    public void setSelectedDeck(DeckModel deck, Player player) {
+        Deck deck1 = player.getAllDecks().get(deck.getName());
+        player.setSelectedDeck(deck1);
         saveAndUpdate(player);
     }
 
-    public void removeDeck(Deck selectedDeck, Player player) {
+    public String removeDeck(DeckModel selectedDeck, Player player) {
         player.getAllDecks().remove(selectedDeck.getName());
-        if (selectedDeck.getName().equalsIgnoreCase(player.getSelectedDeck().getName())) {
-            player.setSelectedDeck(null);
-            CollectionPanel.getInstance().setSelectedDeck(null);
-        }
         Log(String.format("Delete : deck %s is deleted.", selectedDeck.getName()), player);
         saveAndUpdate(player);
-        setVisiblePanel("collection");
+        if (player.getSelectedDeck() != null && selectedDeck.getName().equalsIgnoreCase(player.getSelectedDeck().getName())) {
+            player.setSelectedDeck(null);
+            saveAndUpdate(player);
+            return "ok1";
+        }
+        return "ok2";
     }
 
     public ArrayList<String> bestDecks(Player player) {
@@ -819,17 +846,32 @@ public class Admin {
     }
 
     public PlayerModel getPlayerModel(Player player) {
+        String st = null;
+        if (player.getSelectedDeck() != null) {
+            st = player.getSelectedDeck().getName();
+        }
         return new PlayerModel(player.getUsername(), player.getExp(), player.getLevel(),
-                player.getMoney(), player.getSelectedDeck().getName());
+                player.getMoney(), st);
     }
 
     public DeckModel getDeckModel(Deck deck) {
+        System.out.println(deck);
         Carts mostused = DeckLogic.mostUsedCard(deck);
         double avg = DeckLogic.avarageMana(deck);
         double winrate = DeckLogic.winRate(deck);
         return new DeckModel(deck.getName(), deck.getDeck(), deck.getHero().getName(), mostused,
                 deck.getTotalPlays(), deck.getTotalWins(), avg, winrate);
 
+    }
+
+    public HashMap<String, DeckModel> playerDecks(Player player) {
+        HashMap<String, DeckModel> map = new HashMap<>();
+        for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
+            System.out.println("*******" + entry.getValue());
+            DeckModel deckModel = getDeckModel(entry.getValue());
+            map.put(entry.getKey(), deckModel);
+        }
+        return map;
     }
 }
 

@@ -51,59 +51,69 @@ public class Server extends Thread {
         HibernateCore.connectToDataBase();
         SessionFactory sessionFactory = HibernateCore.getInstance();
 
-//        JsonBuilders.HeroBuildeeer(new Rogue());
-//        JsonBuilders.HeroBuildeeer(new Warlock());
-//        JsonBuilders.HeroBuildeeer(new Mage());
-//        JsonBuilders.HeroBuildeeer(new Priest());
-//        JsonBuilders.HeroBuildeeer(new Hunter());
-////
-////
-//        JsonBuilders.minionBuilder(new AghaHaghi());
-//        JsonBuilders.minionBuilder(new Ali());
-//        JsonBuilders.minionBuilder(new Benyamin());
-//        JsonBuilders.minionBuilder(new Cat());
-//        JsonBuilders.minionBuilder(new Faeze());
-//        JsonBuilders.minionBuilder(new HighMasterSaman());
-//        JsonBuilders.minionBuilder(new Hossein());
-//        JsonBuilders.minionBuilder(new HosseinHima());
-//        JsonBuilders.minionBuilder(new Javad());
-//        JsonBuilders.minionBuilder(new Khashayar());
-//        JsonBuilders.minionBuilder(new Lachin());
-//        JsonBuilders.minionBuilder(new Matin());
-//        JsonBuilders.minionBuilder(new Mobin());
-//        JsonBuilders.minionBuilder(new Nima());
-//        JsonBuilders.minionBuilder(new Shahryar());
-//        JsonBuilders.minionBuilder(new Yasaman());
-//
-//        JsonBuilders.SpellBuilder(new SwarmOfCats());
-//        JsonBuilders.SpellBuilder(new StrengthInNumbers());
-//        JsonBuilders.SpellBuilder(new StrengthInNumbersDR());
-//        JsonBuilders.SpellBuilder(new Sprint());
-//        JsonBuilders.SpellBuilder(new Soroush());
-//        JsonBuilders.SpellBuilder(new SandBreath());
-//        JsonBuilders.SpellBuilder(new Quiz());
-//        JsonBuilders.SpellBuilder(new Polymorph());
-//        JsonBuilders.SpellBuilder(new LightforgedBlessing());
-//        JsonBuilders.SpellBuilder(new LearnJavadonic());
-//        JsonBuilders.SpellBuilder(new HolyLight());
-//        JsonBuilders.SpellBuilder(new Flamestrike());
-//        JsonBuilders.SpellBuilder(new DarkSkies());
-//        JsonBuilders.SpellBuilder(new Cookie());
-//        JsonBuilders.SpellBuilder(new BookOFSpecters());
-//        JsonBuilders.SpellBuilder(new BlessingOfTheAncients());
-//        JsonBuilders.SpellBuilder(new Aylar());
-//
-//        JsonBuilders.WeaponBuilder(new ArcaniteReaper());
-//        JsonBuilders.WeaponBuilder(new Ashbringer());
-//        JsonBuilders.WeaponBuilder(new BloodFury());
-//        JsonBuilders.WeaponBuilder(new FieryWarAxe());
-//        JsonBuilders.WeaponBuilder(new Gearblade());
-//        JsonBuilders.WeaponBuilder(new SilverSword());
-//        JsonBuilders.WeaponBuilder(new TrueSilverChampion());
 
+//        Hero hero = DataBaseManagment.HeroJsonReader(null , "mage");
+//
+//        System.out.println(hero.toString());
+//
+//            save();
 
         new Server(8000).start();
     }
 
+
+    public static void save() {
+
+        DataBaseManagment.HeroBuildeeer(new Rogue());
+        DataBaseManagment.HeroBuildeeer(new Warlock());
+        DataBaseManagment.HeroBuildeeer(new Mage());
+        DataBaseManagment.HeroBuildeeer(new Priest());
+        DataBaseManagment.HeroBuildeeer(new Hunter());
+//
+//
+        DataBaseManagment.minionBuilder(new AghaHaghi());
+        DataBaseManagment.minionBuilder(new Ali());
+        DataBaseManagment.minionBuilder(new Benyamin());
+        DataBaseManagment.minionBuilder(new Cat());
+        DataBaseManagment.minionBuilder(new Faeze());
+        DataBaseManagment.minionBuilder(new HighMasterSaman());
+        DataBaseManagment.minionBuilder(new Hossein());
+        DataBaseManagment.minionBuilder(new HosseinHima());
+        DataBaseManagment.minionBuilder(new Javad());
+        DataBaseManagment.minionBuilder(new Khashayar());
+        DataBaseManagment.minionBuilder(new Lachin());
+        DataBaseManagment.minionBuilder(new Matin());
+        DataBaseManagment.minionBuilder(new Mobin());
+        DataBaseManagment.minionBuilder(new Nima());
+        DataBaseManagment.minionBuilder(new Shahryar());
+        DataBaseManagment.minionBuilder(new Yasaman());
+
+        DataBaseManagment.SpellBuilder(new SwarmOfCats());
+        DataBaseManagment.SpellBuilder(new StrengthInNumbers());
+        DataBaseManagment.SpellBuilder(new StrengthInNumbersDR());
+        DataBaseManagment.SpellBuilder(new Sprint());
+        DataBaseManagment.SpellBuilder(new Soroush());
+        DataBaseManagment.SpellBuilder(new SandBreath());
+        DataBaseManagment.SpellBuilder(new Quiz());
+        DataBaseManagment.SpellBuilder(new Polymorph());
+        DataBaseManagment.SpellBuilder(new LightforgedBlessing());
+        DataBaseManagment.SpellBuilder(new LearnJavadonic());
+        DataBaseManagment.SpellBuilder(new HolyLight());
+        DataBaseManagment.SpellBuilder(new Flamestrike());
+        DataBaseManagment.SpellBuilder(new DarkSkies());
+        DataBaseManagment.SpellBuilder(new Cookie());
+        DataBaseManagment.SpellBuilder(new BookOFSpecters());
+        DataBaseManagment.SpellBuilder(new BlessingOfTheAncients());
+        DataBaseManagment.SpellBuilder(new Aylar());
+
+        DataBaseManagment.WeaponBuilder(new ArcaniteReaper());
+        DataBaseManagment.WeaponBuilder(new Ashbringer());
+        DataBaseManagment.WeaponBuilder(new BloodFury());
+        DataBaseManagment.WeaponBuilder(new FieryWarAxe());
+        DataBaseManagment.WeaponBuilder(new Gearblade());
+        DataBaseManagment.WeaponBuilder(new SilverSword());
+        DataBaseManagment.WeaponBuilder(new TrueSilverChampion());
+
+    }
 }
 

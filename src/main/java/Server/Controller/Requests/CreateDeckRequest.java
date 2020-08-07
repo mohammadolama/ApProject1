@@ -1,7 +1,8 @@
 package Server.Controller.Requests;
 
-import Client.Model.Enums.Carts;
+import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Model.Enums.Carts;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -51,6 +52,7 @@ public class CreateDeckRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
-
+        String res = Admin.getInstance().createDeck(name, list, heroName, clientHandler.getPlayer());
+        outputStream.println(res);
     }
 }

@@ -1,8 +1,13 @@
 package Client.Controller.Requests;
 
+import Client.View.View.Panels.Col_Change;
+import Client.View.View.Panels.CollectionPanel;
+import Client.View.View.Panels.MyFrame;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -27,6 +32,19 @@ public class CreateNewDeckRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+            String res = inputStream.nextLine();
+            response = objectMapper.readValue(res, boolean.class);
+            if (response) {
+                Col_Change.getInstance().setCreateMode(true);
+                MyFrame.getInstance().changePanel("col");
+            } else {
+                JOptionPane.showMessageDialog(MyFrame.getInstance(), "Can not create more than 12 decks");
 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
