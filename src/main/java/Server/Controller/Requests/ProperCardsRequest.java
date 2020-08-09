@@ -2,6 +2,7 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.Manager.Managers;
 import Server.Model.CardModelView;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -40,7 +41,7 @@ public class ProperCardsRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         list = Admin.getInstance().properCards(i, clientHandler.getPlayer());
         try {
             outputStream.println(objectMapper.writeValueAsString(list));

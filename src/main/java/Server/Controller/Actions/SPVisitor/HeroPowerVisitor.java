@@ -2,6 +2,7 @@ package Server.Controller.Actions.SPVisitor;
 
 import Server.Controller.Actions.ActionHandler;
 import Server.Controller.MainLogic.Admin;
+import Server.Controller.Manager.Managers;
 import Server.Model.Cards.*;
 import Server.Model.Heros.*;
 import Server.Model.Interface.Character;
@@ -10,17 +11,17 @@ import java.util.*;
 
 public class HeroPowerVisitor implements PowerVisitor {
     @Override
-    public void visitHunter(Hunter hunter, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
+    public void visitHunter(Hunter hunter, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed, Managers managers) {
         target.setLife(target.getLife() - 1);
     }
 
     @Override
-    public void visitMage(Mage mage, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
+    public void visitMage(Mage mage, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed, Managers managers) {
         target.setLife(target.getLife() - 1);
     }
 
     @Override
-    public void visitRogue(Rogue rogue, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
+    public void visitRogue(Rogue rogue, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed, Managers managers) {
         if (rogue.getWeapon() == null) {
             for (Card card : enemyHand) {
                 myHand.add(card);
@@ -42,7 +43,7 @@ public class HeroPowerVisitor implements PowerVisitor {
     }
 
     @Override
-    public void visitWarlock(Warlock warlock, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
+    public void visitWarlock(Warlock warlock, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed, Managers managers) {
         Random random = new Random();
         int rand = random.nextInt(2);
         if (myPlayed.size() > 0 && myDeck.size() > 0) {
@@ -64,7 +65,7 @@ public class HeroPowerVisitor implements PowerVisitor {
     }
 
     @Override
-    public void visitPriest(Priest priest, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed) {
+    public void visitPriest(Priest priest, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed, Managers managers) {
         ActionHandler actionHandler = new ActionHandler();
         actionHandler.restoreHealth(target, 4);
     }

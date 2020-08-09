@@ -44,10 +44,13 @@ public class ClientHandler extends Thread {
         try {
             System.out.println(ThreadColor.ANSI_CYAN + string + ThreadColor.ANSI_RESET);
             Request request = objectMapper.readValue(string, Request.class);
-            request.excute(input, output, this, objectMapper);
+            request.excute(input, output, this, objectMapper, gameManager);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void notifyAttack(int i, int j, int k, int l) {
     }
 
     public Player getPlayer() {

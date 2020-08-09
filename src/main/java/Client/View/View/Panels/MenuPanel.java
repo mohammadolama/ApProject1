@@ -129,7 +129,6 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener {
             String st = JOptionPane.showInputDialog(this, "Don't Cheat!!");
             if (st.equalsIgnoreCase("hesoyam")) {
                 RequestHandler.getInstance().sendRequest(new UnlockHeroRequest());
-                JOptionPane.showMessageDialog(this, "All heroes unlocked!");
             }
         } else if (button == exit) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));

@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.DeckLogic;
+import Server.Controller.Manager.Managers;
 import Server.Model.CardModelView;
 import Server.Model.Cards.Card;
 import Server.Model.Deck;
@@ -43,7 +44,7 @@ public class UpdateDrawingPanelRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         ArrayList<Card> cards;
         if (value.equalsIgnoreCase("all"))
             cards = Card.allCards();

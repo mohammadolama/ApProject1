@@ -1,6 +1,7 @@
 package Server.Controller.Manager;
 
 import Server.Controller.Actions.SPVisitor.SpecialPowerVisitor;
+import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.DeckLogic;
 import Server.Controller.MainLogic.JsonReaders;
 import Server.Model.Cards.Card;
@@ -11,21 +12,21 @@ import Server.Model.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class NormalModeManager extends Managers {
+public class NormalModeManager extends NormalManagers {
 
     public NormalModeManager(Player player, InfoPassive infoPassive, ArrayList<Card> arrayList,
                              String card1, String card2, String card3) {
         try {
-            friendlyCardsOfPlayer = arrayList;
-            ThreeCard(friendlyCardsOfPlayer, card1, card2, card3);
-            this.friendlyPlayer = player;
-            this.friendlyPlayerHero = (Hero) player.getSelectedDeck().getHero().clone();
-            this.playerHero = friendlyPlayerHero;
-            this.friendlyInfoPassive = infoPassive;
-            friendlyInfoInitilize(infoPassive);
+            player1CardsOfPlayer = arrayList;
+            ThreeCard(player1CardsOfPlayer, card1, card2, card3);
+            this.player1 = player;
+            this.player1Hero = (Hero) player.getSelectedDeck().getHero().clone();
+            this.currentHero = player1Hero;
+            this.player1InfoPassive = infoPassive;
+            player1InfoInitilize(infoPassive);
             enemyInit();
-            friendlyPlayerHero.accept(new SpecialPowerVisitor(), null, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards);
-            enemyPlayerHero.accept(new SpecialPowerVisitor(), null, friendlyDeckCards, friendLyHandCards, friendlyPlayedCards, enemyDeckCards, enemyHandCards, enemyPlayedCards);
+            player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
+            player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -54,28 +55,28 @@ public class NormalModeManager extends Managers {
                 break;
             }
         }
-        friendLyHandCards = ar;
-        friendlyDeckCards = arrayList;
+        player1HandCards = ar;
+        player1DeckCards = arrayList;
     }
 
     private void enemyInit() {
         Player player = JsonReaders.deckReaderPlayer("enemy");
-        this.enemyPlayer = player;
-        enemyInfoPassive = InfoPassive.sample();
-        enemyInfoInitilize(enemyInfoPassive);
+        this.player2 = player;
+        player2InfoPassive = InfoPassive.sample();
+        player2InfoInitilize(player2InfoPassive);
         ArrayList<Card> ar1 = DeckLogic.UpdateDeck(player.getSelectedDeck().getDeck());
         Collections.shuffle(ar1);
         ThreePrimitiveRandom(ar1, "enemy");
-        this.enemyPlayedCards = new ArrayList<>();
-        this.enemyPlayerHero = player.getSelectedDeck().getHero();
+        this.player2PlayedCards = new ArrayList<>();
+        this.player2Hero = player.getSelectedDeck().getHero();
     }
 
 
     @Override
-    public void endTurn() {
+    public void endTurn(ClientHandler cl) {
         benyaminAction(false);
         reversePlayers();
-        PlayerTurn();
+        PlayerTurn(cl);
     }
 
 

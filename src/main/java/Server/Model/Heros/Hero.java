@@ -2,6 +2,7 @@ package Server.Model.Heros;
 
 
 import Server.Controller.Actions.SPVisitor.PowerVisitor;
+import Server.Controller.Manager.Managers;
 import Server.Model.Cards.Card;
 import Server.Model.Cards.Weapon;
 import Server.Model.Enums.Carts;
@@ -208,7 +209,9 @@ public abstract class Hero implements Character, Cloneable {
         return getMaxHealth();
     }
 
-    public abstract void accept(PowerVisitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed);
+    public abstract void accept(PowerVisitor visitor, Character target, ArrayList<Card> myDeck,
+                                ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck,
+                                ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Managers managers);
 
     @Override
     public Object clone() throws CloneNotSupportedException {

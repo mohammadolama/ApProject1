@@ -41,6 +41,11 @@ public class CardModelView {
         this.needEnemyTarget = needEnemyTarget;
     }
 
+    public CardModelView(String name, int manaCost) {
+        this.manaCost = manaCost;
+        this.name = name;
+    }
+
 //    public CardModelView(BufferedImage image) {
 //        this.image = image;
 //    }

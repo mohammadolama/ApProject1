@@ -1,8 +1,12 @@
 package Client.Controller.Requests;
 
+import Client.View.View.Panels.MyFrame;
+import Client.View.View.Update.Update;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -13,6 +17,13 @@ public class UnlockHeroRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
-
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+            String res = inputStream.nextLine();
+            Update.refresh();
+            JOptionPane.showMessageDialog(MyFrame.getInstance(), "All Heros Unlocked!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

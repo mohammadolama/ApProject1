@@ -23,7 +23,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
     private BoardConfig config;
 
-    private MyTimer myTimer;
+//    private MyTimer myTimer;
 
     private Timer toMiddleTimer, toHandTimer, playTimer, sleepTimer;
 
@@ -135,8 +135,8 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         label.setBackground(Color.ORANGE);
         add(label);
 
-        myTimer = new MyTimer(label);
-        myTimer.start();
+//        myTimer = new MyTimer(label);
+//        myTimer.start();
 
     }
 
@@ -885,7 +885,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
                     toMiddleTimer.start();
                 }
             }
-            myTimer.flag1 = false;
+//            myTimer.flag1 = false;
             playedCardSelected = false;
             removeButton();
             revalidate();
@@ -1098,7 +1098,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             nextTurnButton.setEnabled(false);
         } else {
             change();
-            myTimer.aiTurn = false;
+//            myTimer.aiTurn = false;
             config.setBlur(0);
             toMiddleTimer.start();
             disabled = false;
@@ -1251,51 +1251,6 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             playedCardSelected = false;
             playedCardSelectedName = null;
             playedIndex = -3;
-        }
-    }
-
-    class MyTimer extends Thread {
-        private final java.text.SimpleDateFormat timerFormat = new java.text.SimpleDateFormat(" ss");
-        private JLabel label;
-        private long startTime;
-        private boolean flag1;
-        private boolean isClicked;
-        private boolean aiTurn;
-
-        public MyTimer(JLabel label) {
-            this.label = label;
-        }
-
-        public void run() {
-            while (true) {
-                isClicked = true;
-                flag1 = true;
-                aiTurn = true;
-                label.setForeground(Color.WHITE);
-                startTime = 60 * 1000 + System.currentTimeMillis();
-                while (flag1 && aiTurn && startTime - System.currentTimeMillis() > 0) {
-                    long time = startTime - System.currentTimeMillis();
-                    label.setText(timerFormat.format(time));
-                    if (time < 20 * 1000) label.setForeground(Color.RED);
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (flag1) {
-                    isClicked = false;
-                }
-                label.setText("finished");
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (!isClicked && aiTurn) {
-                    nextTurnButton.doClick();
-                }
-            }
         }
     }
 

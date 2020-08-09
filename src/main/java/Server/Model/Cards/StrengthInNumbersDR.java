@@ -1,6 +1,7 @@
 package Server.Model.Cards;
 
 import Server.Controller.Actions.CardVisitors.Visitor;
+import Server.Controller.Manager.Managers;
 import Server.Model.Enums.Attribute;
 import Server.Model.Enums.Rarity;
 import Server.Model.Enums.Type;
@@ -31,7 +32,7 @@ public class StrengthInNumbersDR extends Spell {
     }
 
     @Override
-    public void accept(Visitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-        visitor.visitStrengthInNumbersDR(this, target, myDeck, myHand, myPlayed, targetDeck, targetHand, targetPlayed, friendly, enemy);
+    public void accept(Visitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy, Managers managers) {
+        visitor.visitStrengthInNumbersDR(this, target, myDeck, myHand, myPlayed, targetDeck, targetHand, targetPlayed, friendly, enemy, managers);
     }
 }

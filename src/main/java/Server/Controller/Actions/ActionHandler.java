@@ -116,7 +116,8 @@ public class ActionHandler {
         }
     }
 
-    private Character createTarget(int target, Managers gameManager) {
+    private Character createTarget(int target, Managers gameManager, ClientHandler cl) {
+
         if (target >= 10 && target < 20) {
             return gameManager.getFriendlyPlayedCards().get(target - 10);
         } else if (target >= 20 && target < 30) {
@@ -130,31 +131,55 @@ public class ActionHandler {
         }
     }
 
-    public void playCard(String string, int i, int target, Managers gameManager) {
-        Minion targeted = (Minion) createTarget(target, gameManager);
-        for (Card cards : gameManager.getFriendLyHandCards()) {
+    String canBePlayed(String string, ArrayList<Card> hand, ArrayList<Card> played,
+                       int notUsed, int manaDecrease) {
+        for (Card cards : friendlyHandCards()) {
             if (cards.getName().equalsIgnoreCase(string)) {
                 if (gameManager.getFriendlyNotUsedMana() >= cards.getManaCost() - gameManager.getFriendlyManaDecrease()) {
-                    checkContiniousAction(cards, false, gameManager);
-
-                    cards.accept(new BattlecryVisitor(), targeted, gameManager.getFriendlyDeckCards(), gameManager.getFriendLyHandCards(),
-                            gameManager.getFriendlyPlayedCards(), gameManager.getEnemyDeckCards(), gameManager.getEnemyHandCards(),
-                            gameManager.getEnemyPlayedCards(), gameManager.getFriendlyPlayerHero(), gameManager.getEnemyPlayerHero());
-
-                    if (cards instanceof Minion) {
-                        playMinion((Minion) cards, i, targeted, gameManager);
-                        gameManager.spendManaOnMinion(cards.getManaCost() - gameManager.getFriendlyManaDecrease(), false);
-                    } else if (cards instanceof Spell) {
-                        playSpell((Spell) cards, targeted, gameManager);
-                        gameManager.spendManaOnSpell(cards.getManaCost() - gameManager.getFriendlyManaDecrease(), false);
-                    } else if (cards instanceof Weapon) {
-                        playWeapon((Weapon) cards, gameManager);
+                    if (getCardOf(string) instanceof Minion) {
+                        if (friendlyPlayedCards().size() < 7) {
+                            return "ok";
+                        } else {
+                            playSound("error");
+                            return "full";
+                        }
+                    } else if (getCardOf(string) instanceof Spell) {
+                        return "ok";
+                    } else if (getCardOf(string) instanceof Weapon) {
+                        return "ok";
                     }
-                    Admin.getInstance().updateCardUsageTime(cards.getName().toLowerCase());
                     break;
                 } else {
-                    playSound("mana");
+                    return "mana";
                 }
+            }
+        }
+        throw new RuntimeException();
+    }
+
+
+    public void playCard(String string, int i, int target, Managers gameManager,
+                         ArrayList<Card> p1deck, ArrayList<Card> p1hand, ArrayList<Card> p1played,
+                         ArrayList<Card> p2deck, ArrayList<Card> p2hand, ArrayList<Card> p2played,
+                         Hero p1hero, Hero p2hero, boolean p2Turn, ClientHandler cl1, ClientHandler cl2) {
+        Minion targeted = (Minion) createTarget(target, gameManager);
+        for (Card cards : p1hand) {
+            if (cards.getName().equalsIgnoreCase(string)) {
+                checkContiniousAction(cards, p2Turn, gameManager);
+                cards.accept(new BattlecryVisitor(), targeted, p1deck, p1hand,
+                        p1played, p2deck, p2hand,
+                        p2played, p1hero, p2hero, gameManager);
+                if (cards instanceof Minion) {
+                    playMinion((Minion) cards, i, targeted, gameManager);
+                    gameManager.spendManaOnMinion(cards.getManaCost() - gameManager.getFriendlyManaDecrease(), p2Turn);
+                } else if (cards instanceof Spell) {
+                    playSpell((Spell) cards, targeted, gameManager);
+                    gameManager.spendManaOnSpell(cards.getManaCost() - gameManager.getFriendlyManaDecrease(), p2Turn);
+                } else if (cards instanceof Weapon) {
+                    playWeapon((Weapon) cards, gameManager);
+                }
+                Admin.getInstance().updateCardUsageTime(cards.getName().toLowerCase());
+                break;
             }
         }
         gameManager.checkDestroyMinion();
@@ -162,21 +187,15 @@ public class ActionHandler {
     }
 
     private void playMinion(Minion minions, int i, Character target, Managers gameManager) {
-        if (gameManager.getFriendlyPlayedCards().size() < 7) {
-            playSound("minion");
-            gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (minions.getManaCost() - gameManager.getFriendlyManaDecrease()));
-            minions.accept(new ActionVisitor(), target, gameManager.getFriendlyDeckCards(), gameManager.getFriendLyHandCards(),
-                    gameManager.getFriendlyPlayedCards(), gameManager.getEnemyDeckCards(), gameManager.getEnemyHandCards(),
-                    gameManager.getEnemyPlayedCards(), gameManager.getFriendlyPlayerHero(), gameManager.getEnemyPlayerHero());
-            summonMinion(minions, i, gameManager);
+        gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (minions.getManaCost() - gameManager.getFriendlyManaDecrease()));
+        minions.accept(new ActionVisitor(), target, gameManager.getFriendlyDeckCards(), gameManager.getFriendLyHandCards(),
+                gameManager.getFriendlyPlayedCards(), gameManager.getEnemyDeckCards(), gameManager.getEnemyHandCards(),
+                gameManager.getEnemyPlayedCards(), gameManager.getFriendlyPlayerHero(), gameManager.getEnemyPlayerHero(), gameManager);
+        summonMinion(minions, i, gameManager);
             gameManager.checkDestroyMinion();
             gameManager.hunterPowerAction(minions, false);
             gameManager.faezeAction(minions, false);
             Admin.getInstance().updateGameLog(String.format("%s Played %s", gameManager.getFriendlyPlayer().getUsername(), minions.getName()));
-        } else {
-            playSound("error");
-            Admin.getInstance().frameRender();
-        }
     }
 
     public void summonMinion(Minion minions, int i, Managers gameManager) {
@@ -204,7 +223,7 @@ public class ActionHandler {
         gameManager.getFriendLyHandCards().remove(spell);
         spell.accept(new ActionVisitor(), target, gameManager.getFriendlyDeckCards(), gameManager.getFriendLyHandCards(),
                 gameManager.getFriendlyPlayedCards(), gameManager.getEnemyDeckCards(), gameManager.getEnemyHandCards(),
-                gameManager.getEnemyPlayedCards(), gameManager.getFriendlyPlayerHero(), gameManager.getEnemyPlayerHero());
+                gameManager.getEnemyPlayedCards(), gameManager.getFriendlyPlayerHero(), gameManager.getEnemyPlayerHero(), );
 
         Admin.getInstance().updateGameLog(String.format("%s Cast %s", gameManager.getFriendlyPlayer().getUsername(), spell.getName()));
     }
@@ -213,17 +232,57 @@ public class ActionHandler {
         playSound("weapon");
         gameManager.setFriendlyNotUsedMana(gameManager.getFriendlyNotUsedMana() - (weapon.getManaCost() - gameManager.getFriendlyManaDecrease()));
         gameManager.getFriendLyHandCards().remove(weapon);
-        gameManager.setFriendlyWeapon(weapon);
+        gameManager.setPlayer1Weapon(weapon);
         Admin.getInstance().updateGameLog(String.format("%s Equiped %s", gameManager.getFriendlyPlayer().getUsername(), weapon.getName()));
     }
 
-    private void checkContiniousAction(Card cards, boolean AI, Managers gameManager) {
+    private void checkContiniousAction(Card cards, boolean p2Turn, Managers gameManager) {
         for (ContiniousActionCarts value : ContiniousActionCarts.values()) {
             if (cards.getName().equalsIgnoreCase(value.toString())) {
-                gameManager.addContiniousActionCard(cards, AI);
+                gameManager.addContiniousActionCard(cards, p2Turn);
                 break;
             }
         }
+    }
+
+    public void Attack(int attacker, int target, ArrayList<Card> list1, ArrayList<Card> list2, Hero hero1, Hero hero2,
+                       Managers managers, ClientHandler cl1, ClientHandler cl2) {
+        ActionHandler actionHandler = new ActionHandler();
+        if (attacker >= 0 && target >= 0) {
+            Minion attacker1 = (Minion) list1.get(attacker);
+            Minion target1 = (Minion) list2.get(target);
+            actionHandler.Attack(attacker1, target1, list2);
+            setSleep(attacker, list1);
+            cl1.notifyAttack(attacker, target, attacker1.getAttack(), target1.getAttack());
+            cl2.notifyAttack(target, attacker, target1.getAttack(), attacker1.getAttack());
+            managers.updateGameLog(String.format("%s Attacked %s", attacker1.getName(), target1.getName()));
+        } else if (attacker >= 0) {
+            Minion attacker1 = (Minion) list1.get(attacker);
+            actionHandler.Attack(attacker1, hero2, list2);
+            setSleep(attacker, list1);
+            cl1.notifyAttack(attacker, target, attacker1.getAttack(), hero2.getAttack());
+            cl2.notifyAttack(target, attacker, hero2.getAttack(), attacker1.getAttack());
+            managers.updateGameLog(String.format("%s Attacked %s", attacker1.getName(), hero2.getName()));
+        } else if (target >= 0) {
+            Minion target1 = (Minion) list2.get(target);
+            cl1.notifyAttack(attacker, target, hero1.getAttack(), target1.getAttack());
+            cl2.notifyAttack(target, attacker, target1.getAttack(), hero1.getAttack());
+            if (actionHandler.Attack(hero1, target1, list2)) {
+                managers.updateGameLog(String.format("%s Attacked %s", hero1.getName(), target1.getName()));
+                managers.updateWeapon(cl1);
+            }
+        } else {
+            cl1.notifyAttack(attacker, target, hero1.getAttack(), hero2.getAttack());
+            cl2.notifyAttack(target, attacker, hero2.getAttack(), hero1.getAttack());
+            if (actionHandler.Attack(hero1, hero2, list2)) {
+                managers.updateGameLog(String.format("%s Attacked %s", hero1.getName(), hero2.getName()));
+                managers.updateWeapon(cl1);
+            }
+        }
+    }
+
+    public void setSleep(int i, ArrayList<Card> list) {
+        ((Minion) list.get(i)).setSleep(true);
     }
 
 

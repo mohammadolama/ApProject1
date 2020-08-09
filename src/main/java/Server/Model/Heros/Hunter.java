@@ -1,6 +1,7 @@
 package Server.Model.Heros;
 
 import Server.Controller.Actions.SPVisitor.PowerVisitor;
+import Server.Controller.Manager.Managers;
 import Server.Model.Cards.Card;
 import Server.Model.Enums.Carts;
 import Server.Model.HeroPowers.HunterPower;
@@ -26,8 +27,8 @@ public class Hunter extends Hero {
     }
 
     @Override
-    public void accept(PowerVisitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed) {
-        visitor.visitHunter(this, target, myDeck, myHand, myPlayed, targetDeck, targetHand, targetPlayed);
+    public void accept(PowerVisitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Managers managers) {
+        visitor.visitHunter(this, target, myDeck, myHand, myPlayed, targetDeck, targetHand, targetPlayed, managers);
     }
 
     public static ArrayList<Carts> Spcards() {

@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.ThreadColor;
+import Server.Controller.Manager.Managers;
 import Server.Model.DeckModel;
 import Server.Model.Enums.Carts;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -73,7 +74,7 @@ public class ChangeDeckRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         System.out.println(heroName);
         System.out.println("rogue");
         String res = Admin.getInstance().changeDeck(deck, list, heroName, previousName, curruntName, clientHandler.getPlayer());

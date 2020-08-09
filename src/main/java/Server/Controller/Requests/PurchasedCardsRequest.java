@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.Manager.Managers;
 import Server.Model.CardModelView;
 import Server.Model.Cards.Card;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -29,7 +30,7 @@ public class PurchasedCardsRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         purchasedCard = new ArrayList<>();
         for (Card card : Card.purchasedCards(clientHandler.getPlayer())) {
             purchasedCard.add(Admin.getInstance().getPureViewModelOf(card.getName()));

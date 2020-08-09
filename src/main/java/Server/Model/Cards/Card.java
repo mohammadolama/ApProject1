@@ -3,6 +3,7 @@ package Server.Model.Cards;
 import Server.Controller.Actions.CardVisitors.Visitor;
 import Server.Controller.MainLogic.DataBaseManagment;
 import Server.Controller.MainLogic.DeckLogic;
+import Server.Controller.Manager.Managers;
 import Server.Model.Enums.*;
 import Server.Model.Heros.Hero;
 import Server.Model.Interface.Character;
@@ -51,9 +52,7 @@ public abstract class Card implements Character {
     @Column
     private int attackRestore;
 
-    public void accept(Visitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy) {
-
-    }
+    public abstract void accept(Visitor visitor, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy, Managers managers);
 
 
     public boolean isNeedFriendlyTarget() {

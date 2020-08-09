@@ -2,14 +2,13 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.Manager.Managers;
 import Server.Model.CardModelView;
 import Server.Model.Enums.*;
 import Server.Model.Heros.*;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -63,7 +62,7 @@ public class CollectionRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         String heroName = null;
         List<Carts> ar1 = clientHandler.getPlayer().getPlayerCarts();
         ArrayList<Carts> ar2 = new ArrayList<>();

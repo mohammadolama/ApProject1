@@ -23,6 +23,7 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
     private JButton normal;
     private JButton deckReader;
     private JButton practice;
+    private JButton online;
     private InfoPassive infoPassive;
 
 
@@ -40,21 +41,28 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
 
         normal = new JButton("Normal Mode");
         normal.setFont(Constants.fantasy.deriveFont(30.0f));
-        normal.setBounds(400, 850, 200, 60);
+        normal.setBounds(300, 850, 200, 60);
         normal.addActionListener(this);
         add(normal);
 
         deckReader = new JButton("Deck Reader");
         deckReader.setFont(Constants.fantasy.deriveFont(23.0f));
-        deckReader.setBounds(700, 850, 200, 60);
+        deckReader.setBounds(600, 850, 200, 60);
         deckReader.addActionListener(this);
         add(deckReader);
 
         practice = new JButton("Practice");
         practice.setFont(Constants.fantasy.deriveFont(23.0f));
-        practice.setBounds(1000, 850, 200, 60);
+        practice.setBounds(900, 850, 200, 60);
         practice.addActionListener(this);
         add(practice);
+
+        online = new JButton("Online game");
+        online.setFont(Constants.fantasy.deriveFont(23.0f));
+        online.setBounds(1200, 850, 200, 60);
+        online.addActionListener(this);
+        add(online);
+
 
         backButton = new JButton();
         backButton.addActionListener(this);
@@ -65,6 +73,7 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         backButton.setRolloverEnabled(false);
         backButton.setBorderPainted(false);
         add(backButton);
+
         RequestHandler.getInstance().sendRequest(new PassiveRequest());
         passives = Responses.getInstance().getPassiveList();
         createButton(passives);
@@ -104,6 +113,7 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         add(deckReader);
         add(practice);
         add(backButton);
+        add(online);
     }
 
 
@@ -142,7 +152,6 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
                 RequestHandler.getInstance().sendRequest(new CreateGameModeRequest(3, infoPassive));
             }
         }
-
         passive1.setBackground(Color.white);
         passive2.setBackground(Color.white);
         passive3.setBackground(Color.white);

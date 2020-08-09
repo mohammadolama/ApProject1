@@ -33,7 +33,6 @@ public class ActionChartPanel extends JPanel {
         background = Constants.gamePics.get("playbackground");
         setSize(new Dimension(500, 400));
         setPreferredSize(new Dimension(500, 400));
-
     }
 
     @Override
@@ -86,5 +85,13 @@ public class ActionChartPanel extends JPanel {
 
     public ArrayList<ActionModel> getEnemyModel() {
         return enemyModel;
+    }
+
+    public void setFriendlyModel(ArrayList<ActionModel> friendlyModel) {
+        this.friendlyModel = friendlyModel;
+    }
+
+    public void setEnemyModel(ArrayList<ActionModel> enemyModel) {
+        this.enemyModel = enemyModel;
     }
 }

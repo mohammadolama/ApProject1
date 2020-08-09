@@ -5,7 +5,6 @@ import Client.Model.Enums.Carts;
 import Client.View.View.Panels.Col_Change;
 import Client.View.View.Panels.CollectionPanel;
 import Client.View.View.Panels.MyFrame;
-import Client.View.View.Update.Update;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 

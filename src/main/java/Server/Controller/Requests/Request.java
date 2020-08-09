@@ -1,6 +1,7 @@
 package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.Manager.Managers;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -61,5 +62,5 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = PriceRequest.class, name = "price"),
 })
 public interface Request {
-    public abstract void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper);
+    public abstract void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers);
 }

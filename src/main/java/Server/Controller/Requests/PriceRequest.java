@@ -1,6 +1,7 @@
 package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.Manager.Managers;
 import Server.Model.Cards.Card;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -49,7 +50,7 @@ public class PriceRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         Card card = Card.getCardOf(name);
         try {
             outputStream.println(objectMapper.writeValueAsString(card.getHeroClass()));

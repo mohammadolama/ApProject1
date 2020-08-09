@@ -1,6 +1,7 @@
 package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.Manager.Managers;
 import Server.Model.ActionModel;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -39,7 +40,7 @@ public class ActionChartRequest implements Request {
 
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
 
     }
 }
