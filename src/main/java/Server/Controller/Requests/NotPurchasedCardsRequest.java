@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.NotPurchasedCardsResponse;
 import Server.Model.CardModelView;
 import Server.Model.Cards.Card;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -20,14 +21,6 @@ public class NotPurchasedCardsRequest implements Request {
     public NotPurchasedCardsRequest() {
     }
 
-    public ArrayList<CardModelView> getNotPurchasedCards() {
-        return notPurchasedCards;
-    }
-
-    public void setNotPurchasedCards(ArrayList<CardModelView> notPurchasedCards) {
-        this.notPurchasedCards = notPurchasedCards;
-    }
-
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         notPurchasedCards = new ArrayList<>();
@@ -35,7 +28,7 @@ public class NotPurchasedCardsRequest implements Request {
             notPurchasedCards.add(Admin.getInstance().getPureViewModelOf(card.getName()));
         }
         try {
-            outputStream.println(objectMapper.writeValueAsString(notPurchasedCards));
+            outputStream.println(objectMapper.writeValueAsString(new NotPurchasedCardsResponse(notPurchasedCards)));
         } catch (IOException e) {
             e.printStackTrace();
         }

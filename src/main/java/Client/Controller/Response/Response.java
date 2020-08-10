@@ -24,6 +24,15 @@ import java.util.*;
         @JsonSubTypes.Type(value = PriceResponse.class, name = "price"),
         @JsonSubTypes.Type(value = BuySellResponse.class, name = "buy"),
         @JsonSubTypes.Type(value = ExitLogoutResponse.class, name = "exit"),
+        @JsonSubTypes.Type(value = PlayerDecksResponse.class, name = "decks"),
+        @JsonSubTypes.Type(value = UpdateDrawingPanelResponse.class, name = "drawing"),
+        @JsonSubTypes.Type(value = CreateNewDeckResponse.class, name = "createnewdeck"),
+        @JsonSubTypes.Type(value = PurchasedCardsResponse.class, name = "purchased"),
+        @JsonSubTypes.Type(value = NotPurchasedCardsResponse.class, name = "notpurchased"),
+        @JsonSubTypes.Type(value = PlayerHerosResponse.class, name = "heros"),
+        @JsonSubTypes.Type(value = Col_ChangeResponse.class, name = "col"),
+        @JsonSubTypes.Type(value = CollectionResponse.class, name = "collection"),
+        @JsonSubTypes.Type(value = RemoveDeckResponse.class, name = "remove"),
 })
 public interface Response {
     public void process(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object);

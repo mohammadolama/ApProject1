@@ -5,6 +5,7 @@ import Client.Model.Enums.Carts;
 import Client.View.View.Panels.Col_Change;
 import Client.View.View.Panels.CollectionPanel;
 import Client.View.View.Panels.MyFrame;
+import Client.View.View.Update.Update;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -78,16 +79,11 @@ public class ChangeDeckRequest implements Request {
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
-            System.out.println(heroName);
-            System.out.println("rogue");
-            outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            System.out.println("**" + res + "**");
-            if (!res.equalsIgnoreCase("ok")) {
-                JOptionPane.showMessageDialog(MyFrame.getInstance(), res);
+            if (curruntName == null || curruntName.equals("")) {
+                JOptionPane.showMessageDialog(MyFrame.getInstance(), "Choose a name for your deck");
+                Update.render();
             } else {
-                CollectionPanel.getInstance().refresh();
-                Col_Change.getInstance().getBackButton().doClick();
+                outputStream.println(objectMapper.writeValueAsString(this));
             }
         } catch (IOException e) {
             e.printStackTrace();

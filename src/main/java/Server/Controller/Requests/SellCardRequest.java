@@ -35,7 +35,7 @@ public class SellCardRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         String res = Admin.getInstance().sellCard(name, clientHandler.getPlayer());
         try {
-            outputStream.println(objectMapper.writeValueAsString(new BuySellResponse(1, res)));
+            outputStream.println(objectMapper.writeValueAsString(new BuySellResponse(2, res)));
         } catch (IOException e) {
             e.printStackTrace();
         }

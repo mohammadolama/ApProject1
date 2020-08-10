@@ -34,7 +34,10 @@ public class SellCardRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

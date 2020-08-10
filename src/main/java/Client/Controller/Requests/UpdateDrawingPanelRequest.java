@@ -15,8 +15,6 @@ import java.util.Scanner;
 @JsonTypeName("updatedrawingpanel")
 public class UpdateDrawingPanelRequest implements Request {
     private String value;
-    private ArrayList<CardModelView> list;
-
     public UpdateDrawingPanelRequest(String value) {
         this.value = value;
     }
@@ -32,27 +30,11 @@ public class UpdateDrawingPanelRequest implements Request {
         this.value = value;
     }
 
-    public ArrayList<CardModelView> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<CardModelView> list) {
-        this.list = list;
-    }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
-            CollectionDrawingPanel.getInstance().setSpecialSelected(false);
-            CollectionPanel.getInstance().getChangeButton().setEnabled(false);
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            list = objectMapper.readValue(res, new TypeReference<ArrayList<CardModelView>>() {
-            });
-            if (value.equalsIgnoreCase("special")) {
-                CollectionDrawingPanel.getInstance().setSpecialSelected(true);
-            }
-            CollectionDrawingPanel.getInstance().updateContent(list);
         } catch (IOException e) {
             e.printStackTrace();
         }

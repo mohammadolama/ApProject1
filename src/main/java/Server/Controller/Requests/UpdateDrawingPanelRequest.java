@@ -4,6 +4,7 @@ import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.DeckLogic;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.UpdateDrawingPanelResponse;
 import Server.Model.CardModelView;
 import Server.Model.Cards.Card;
 import Server.Model.Deck;
@@ -65,7 +66,7 @@ public class UpdateDrawingPanelRequest implements Request {
             list.add(Admin.getInstance().getPureViewModelOf(card.getName()));
         }
         try {
-            outputStream.println(objectMapper.writeValueAsString(list));
+            outputStream.println(objectMapper.writeValueAsString(new UpdateDrawingPanelResponse(value, list)));
         } catch (IOException e) {
             e.printStackTrace();
         }

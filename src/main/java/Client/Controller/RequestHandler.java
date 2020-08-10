@@ -294,11 +294,10 @@ public class RequestHandler {
 //        }
     }
 
-    public synchronized void sendRequest(Request request) {
+    public void sendRequest(Request request) {
         try {
             String st = objectMapper.writeValueAsString(request);
             System.out.println(request);
-//            printWriter.println(st);
             request.excute(scanner, printWriter, objectMapper, object);
         } catch (IOException e) {
             e.printStackTrace();

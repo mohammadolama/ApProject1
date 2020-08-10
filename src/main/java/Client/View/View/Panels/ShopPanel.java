@@ -345,14 +345,18 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
 
     private void BuySellChanger() {
         images.clear();
+        System.out.println("*0");
         RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
+        System.out.println("*3");
         cards = Responses.getInstance().getModelviewList();
         pictures(cards);
         repaint();
     }
 
     private void revalidateCards(Boolean buyActivated) {
+        System.out.println("*1");
         RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
+        System.out.println("*2");
         cards = Responses.getInstance().getModelviewList();
         pictures(cards);
         images.clear();

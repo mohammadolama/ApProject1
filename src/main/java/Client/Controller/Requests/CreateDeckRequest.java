@@ -61,12 +61,6 @@ public class CreateDeckRequest implements Request {
         } else {
             try {
                 outputStream.println(objectMapper.writeValueAsString(this));
-                String res = inputStream.nextLine();
-                if (!res.equalsIgnoreCase("ok")) {
-                    JOptionPane.showMessageDialog(MyFrame.getInstance(), res);
-                } else {
-                    Col_Change.getInstance().getBackButton().doClick();
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

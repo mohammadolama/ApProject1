@@ -284,6 +284,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        changeButton.setEnabled(false);
         JButton src = (JButton) e.getSource();
         if (src == backButton) {
             allCards.doClick();

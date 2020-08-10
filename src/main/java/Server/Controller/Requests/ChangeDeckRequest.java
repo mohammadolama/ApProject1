@@ -4,11 +4,13 @@ import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.ThreadColor;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.Col_ChangeResponse;
 import Server.Model.DeckModel;
 import Server.Model.Enums.Carts;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -75,10 +77,11 @@ public class ChangeDeckRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-        System.out.println(heroName);
-        System.out.println("rogue");
         String res = Admin.getInstance().changeDeck(deck, list, heroName, previousName, curruntName, clientHandler.getPlayer());
-        System.out.println(ThreadColor.ANSI_BLUE + res + ThreadColor.ANSI_RESET);
-        outputStream.println(res);
+        try {
+            outputStream.println(objectMapper.writeValueAsString(new Col_ChangeResponse(res)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

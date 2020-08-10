@@ -14,28 +14,20 @@ import java.util.Scanner;
 
 @JsonTypeName("purchasedcard")
 public class PurchasedCardsRequest implements Request {
-    ArrayList<CardModelView> purchasedCard;
+
 
     public PurchasedCardsRequest() {
     }
 
-    public ArrayList<CardModelView> getPurchasedCard() {
-        return purchasedCard;
-    }
-
-    public void setPurchasedCard(ArrayList<CardModelView> purchasedCard) {
-        this.purchasedCard = purchasedCard;
-    }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            purchasedCard = objectMapper.readValue(res, new TypeReference<ArrayList<CardModelView>>() {
-            });
-            Responses.getInstance().setPurchasedCards(purchasedCard);
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

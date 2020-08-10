@@ -13,32 +13,19 @@ import java.util.Scanner;
 
 @JsonTypeName("playerdecks")
 public class PlayerDecksRequest implements Request {
-    private HashMap<String, DeckModel> alldecks;
 
-    public PlayerDecksRequest(HashMap<String, DeckModel> alldecks) {
-        this.alldecks = alldecks;
-    }
 
     public PlayerDecksRequest() {
-    }
-
-    public HashMap<String, DeckModel> getAlldecks() {
-        return alldecks;
-    }
-
-    public void setAlldecks(HashMap<String, DeckModel> alldecks) {
-        this.alldecks = alldecks;
     }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            alldecks = objectMapper.readValue(res, new TypeReference<HashMap<String, DeckModel>>() {
-            });
-            Responses.getInstance().setDecks(alldecks);
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

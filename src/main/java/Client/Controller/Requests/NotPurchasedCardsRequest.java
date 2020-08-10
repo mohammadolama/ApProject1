@@ -13,28 +13,18 @@ import java.util.Scanner;
 
 @JsonTypeName("notpurchasedcard")
 public class NotPurchasedCardsRequest implements Request {
-    private ArrayList<CardModelView> notPurchasedCards;
 
     public NotPurchasedCardsRequest() {
-    }
-
-    public ArrayList<CardModelView> getNotPurchasedCards() {
-        return notPurchasedCards;
-    }
-
-    public void setNotPurchasedCards(ArrayList<CardModelView> notPurchasedCards) {
-        this.notPurchasedCards = notPurchasedCards;
     }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            notPurchasedCards = objectMapper.readValue(res, new TypeReference<ArrayList<CardModelView>>() {
-            });
-            Responses.getInstance().setNotPurchasedCards(notPurchasedCards);
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.CollectionResponse;
 import Server.Model.CardModelView;
 import Server.Model.Enums.*;
 import Server.Model.Heros.*;
@@ -18,10 +19,6 @@ import java.util.Scanner;
 public class CollectionRequest implements Request {
 
     private String name;
-    private String heroName;
-    private ArrayList<Carts> list;
-    private ArrayList<CardModelView> list2;
-
     public CollectionRequest(String name) {
         this.name = name;
     }
@@ -35,30 +32,6 @@ public class CollectionRequest implements Request {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ArrayList<Carts> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<Carts> list) {
-        this.list = list;
-    }
-
-    public ArrayList<CardModelView> getList2() {
-        return list2;
-    }
-
-    public String getHeroName() {
-        return heroName;
-    }
-
-    public void setHeroName(String heroName) {
-        this.heroName = heroName;
-    }
-
-    public void setList2(ArrayList<CardModelView> list2) {
-        this.list2 = list2;
     }
 
     @Override
@@ -109,9 +82,7 @@ public class CollectionRequest implements Request {
         }
 
         try {
-            outputStream.println(objectMapper.writeValueAsString(ar2));
-            outputStream.println(objectMapper.writeValueAsString(ar4));
-            outputStream.println(heroName);
+            outputStream.println(objectMapper.writeValueAsString(new CollectionResponse(heroName, ar2, ar4)));
         } catch (IOException e) {
             e.printStackTrace();
         }

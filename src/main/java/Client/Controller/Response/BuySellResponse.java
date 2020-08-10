@@ -3,6 +3,7 @@ package Client.Controller.Response;
 import Client.Controller.RequestHandler;
 import Client.Controller.Requests.PlayMusic;
 import Client.View.View.Panels.MyFrame;
+import Client.View.View.Update.Update;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -47,9 +48,15 @@ public class BuySellResponse implements Response {
             if (res.equalsIgnoreCase("ok")) {
                 RequestHandler.getInstance().sendRequest(new PlayMusic("sell"));
             } else {
-                JOptionPane.showMessageDialog(MyFrame.getInstance(), "Can't be sold,It's in one of your decks.");
+                new Thread(() -> {
+                    JOptionPane.showMessageDialog(MyFrame.getInstance(), "Can't be sold");
+                }).start();
+//                ,It's in one of your decks.
             }
-
         }
+        synchronized (object) {
+            object.notify();
+        }
+        Update.render();
     }
 }

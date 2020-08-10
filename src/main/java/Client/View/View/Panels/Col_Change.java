@@ -221,11 +221,6 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
     }
 
     private void changeDeck() {
-        System.out.println(ThreadColor.ANSI_BLUE + selectedCards.toString());
-        System.out.println(selectedDeck.toString());
-        System.out.println(heroName);
-        System.out.println(previousName);
-        System.out.println(deckName.getText() + ThreadColor.ANSI_RESET);
         RequestHandler.getInstance().sendRequest(new ChangeDeckRequest(selectedDeck, heroName, previousName, deckName.getText(), selectedCards));
     }
 

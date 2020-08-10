@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.PlayerDecksResponse;
 import Server.Model.DeckModel;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -16,26 +17,15 @@ import java.util.Scanner;
 public class PlayerDecksRequest implements Request {
     private HashMap<String, DeckModel> alldecks;
 
-    public PlayerDecksRequest(HashMap<String, DeckModel> alldecks) {
-        this.alldecks = alldecks;
-    }
-
     public PlayerDecksRequest() {
     }
 
-    public HashMap<String, DeckModel> getAlldecks() {
-        return alldecks;
-    }
-
-    public void setAlldecks(HashMap<String, DeckModel> alldecks) {
-        this.alldecks = alldecks;
-    }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         alldecks = Admin.getInstance().playerDecks(clientHandler.getPlayer());
         try {
-            outputStream.println(objectMapper.writeValueAsString(alldecks));
+            outputStream.println(objectMapper.writeValueAsString(new PlayerDecksResponse(alldecks)));
         } catch (IOException e) {
             e.printStackTrace();
         }
