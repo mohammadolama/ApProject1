@@ -130,8 +130,10 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
     private void drawCardInfo(Graphics2D g, String cards, int xe, int ye) {
         g.setFont(fantasy.deriveFont(50.0f));
         g.setColor(Color.WHITE);
+
         RequestHandler.getInstance().sendRequest(new PureModelViewRequest(cards));
         CardModelView view = Responses.getInstance().getCardModelView();
+
         if (view.getType().equals(Type.Minion)) {
             int x = xe + 20;
             int y = ye + 65;

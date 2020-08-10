@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static Client.View.View.Panels.Constants.cardPics;
 import static Client.View.View.Panels.Constants.fantasy;
 
 public class CardPreview extends JPanel implements ActionListener {
@@ -34,7 +35,7 @@ public class CardPreview extends JPanel implements ActionListener {
         g.setFont(fantasy.deriveFont(50.0f));
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING , RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         if (cardModelView!=null) {
-            g.drawImage(cardModelView.getImage(), 5, 5, cardwidth, cardheight, null);
+            g.drawImage(cardPics.get(cardModelView.getName().toLowerCase()), 5, 5, cardwidth, cardheight, null);
             drawCardInfo(g);
         }
     }

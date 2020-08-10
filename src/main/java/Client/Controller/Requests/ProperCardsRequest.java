@@ -14,7 +14,7 @@ import java.util.Scanner;
 @JsonTypeName("propercard")
 public class ProperCardsRequest implements Request {
     private int i;
-    private ArrayList<CardModelView> list;
+
 
     public ProperCardsRequest(int i) {
         this.i = i;
@@ -31,23 +31,15 @@ public class ProperCardsRequest implements Request {
         this.i = i;
     }
 
-    public ArrayList<CardModelView> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<CardModelView> list) {
-        this.list = list;
-    }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            list = objectMapper.readValue(res, new TypeReference<ArrayList<CardModelView>>() {
-            });
-            Responses.getInstance().setModelviewList(list);
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -1,9 +1,12 @@
 package Client.Controller.Requests;
 
+import Client.Controller.Responses;
 import Client.Model.CardModelView;
+import Client.Model.GameState;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,8 +25,49 @@ public class BoardPanelRequest implements Request {
     private ArrayList<String> logs;
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+            String res = inputStream.nextLine();
+            GameState state = objectMapper.readValue(res, GameState.class);
+            friendlyUser = state.getFriendlyUser();
+            enemyUser = state.getEnemyUser();
+            friendlyHero = state.getFriendlyHero();
+            enemyHero = state.getEnemyHero();
+            time = state.getTime();
+            downPowerUsage = state.getDownPowerUsage();
+            upPowerUsage = state.getUpPowerUsage();
+            downPowerMana = state.getDownPowerMana();
+            upPowerMana = state.getUpPowerMana();
+            notUsedMana = state.getNotUsedMana();
+            totalMana = state.getTotalMana();
+            downHP = state.getDownHP();
+            upHP = state.getUpHP();
+            downDefence = state.getDownDefence();
+            upDefence = state.getUpDefence();
+            downHandSize = state.getDownHandSize();
+            upHandSize = state.getUpHandSize();
+            downPalyedSize = state.getDownPalyedSize();
+            upPlayedSize = state.getUpPlayedSize();
+            downDeckSize = state.getDownDeckSize();
+            upDeckSize = state.getUpDeckSize();
+            downHasWeapon = state.isDownHasWeapon();
+            upHasWeapon = state.isUpHasWeapon();
+            heroCanAttack = state.isHeroCanAttack();
+            downWeapon = state.getDownWeapon();
+            upWeapon = state.getUpWeapon();
+            downHeroPower = state.getDownHeroPower();
+            upHeroPower = state.getUpHeroPower();
+            handCards = state.getHandCards();
+            downPlayedCards = state.getDownPlayedCards();
+            upPlayedCards = state.getUpPlayedCards();
+            logs = state.getLogs();
 
+            Responses.getInstance().board = state;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getFriendlyUser() {

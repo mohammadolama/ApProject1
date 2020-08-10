@@ -6,16 +6,14 @@ import Server.Controller.Actions.CardVisitors.BattlecryVisitor;
 import Server.Controller.Actions.SPVisitor.HeroPowerVisitor;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
-import Server.Model.ActionModel;
+import Server.Model.*;
 import Server.Model.Cards.*;
 import Server.Model.Enums.Attribute;
 import Server.Model.Enums.ContiniousActionCarts;
 import Server.Model.Heros.Hero;
 import Server.Model.Heros.Hunter;
 import Server.Model.Heros.Warlock;
-import Server.Model.InfoPassive;
 import Server.Model.Interface.Character;
-import Server.Model.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,18 +48,118 @@ public abstract class Managers {
     boolean practiceMode = false;
     boolean p2Turn;
     String time;
+    boolean flag1;
 
-    abstract void player1InfoInitilize(InfoPassive infoPassive);
+    void player1InfoInitilize(InfoPassive infoPassive) {
+        player1StartingMana = 1;
+        player1TotalMana = 1;
+        player1NotUsedMana = 1;
+        player1DrawCardNum = 1;
+        player1HeroPowerUsageTime = 1;
+        p1HPMAXUT = 1;
+        player1PowerManaDecrease = 0;
+        player1ManaDecrease = 0;
+        player1DefenceAdd = 0;
+        String st = infoPassive.getName();
+        if (st.equalsIgnoreCase("twiceDraw")) {
+            player1DrawCardNum = 2;
+        } else if (st.equalsIgnoreCase("offCards")) {
+            player1ManaDecrease = 1;
+        } else if (st.equalsIgnoreCase("warriors")) {
+            player1DefenceAdd = 2;
+        } else if (st.equalsIgnoreCase("manaJump")) {
+            player1StartingMana = 2;
+            player1TotalMana = 2;
+            player1NotUsedMana = 2;
+        } else if (st.equalsIgnoreCase("freePower")) {
+            player1HeroPowerUsageTime = 2;
+            p1HPMAXUT = 2;
+            player1PowerManaDecrease = 1;
+        }
+    }
 
-    abstract void player2InfoInitilize(InfoPassive infoPassive);
+    void player2InfoInitilize(InfoPassive infoPassive) {
+        player2StartingMana = 0;
+        player2TotalMana = 0;
+        player2NotUsedMana = 0;
+        player2DrawCardNum = 1;
+        player2HeroPowerUsageTime = 1;
+        p2HPMAXUT = 1;
+        player2PowerManaDecrease = 0;
+        player2ManaDecrease = 0;
+        player2DefenceAdd = 0;
+        String st = infoPassive.getName();
+        if (st.equalsIgnoreCase("twiceDraw")) {
+            player2DrawCardNum = 2;
+        } else if (st.equalsIgnoreCase("offCards")) {
+            player2ManaDecrease = 1;
+        } else if (st.equalsIgnoreCase("warriors")) {
+            player2DefenceAdd = 2;
+        } else if (st.equalsIgnoreCase("manaJump")) {
+            player2StartingMana = 2;
+            player2TotalMana = 2;
+            player2NotUsedMana = 2;
+        } else if (st.equalsIgnoreCase("freePower")) {
+            player2HeroPowerUsageTime = 2;
+            p2HPMAXUT = 2;
+            player2PowerManaDecrease = 1;
+        }
+    }
 
-    abstract void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value);
+    void refillMana(boolean p1Turn, ClientHandler cl) {
+        if (p1Turn) {
+            if (player2TotalMana < 10) {
+                player2TotalMana++;
+            }
+            player2NotUsedMana = player2TotalMana;
+            player2HeroPowerUsageTime = p2HPMAXUT;
+        } else {
+            if (player1TotalMana < 10) {
+                player1TotalMana++;
+            }
+            player1NotUsedMana = player1TotalMana;
+            player1HeroPowerUsageTime = p1HPMAXUT;
+        }
+    }
 
-    abstract void refillMana(boolean p1Turn, ClientHandler cl);
+    public abstract void endTurn(ClientHandler cl);
 
-    abstract void endTurn(ClientHandler cl);
+    void PlayerTurn(ClientHandler cl) {
+        checkDestroyMinion();
+        canBeAttackedUpdater(cl);
+        wakeUp(p2Turn, cl);
+        refillMana(p2Turn, cl);
+        chargeWeapon(p2Turn, cl);
+        if (cl.equals(cl1)) {
+            if (!drawCard(player1DrawCardNum, null, player1DeckCards, player1HandCards))
+                heroTakeDamage(player1Hero, 1);
+        } else {
+            if (!drawCard(player2DrawCardNum, null, player2DeckCards, player2HandCards))
+                heroTakeDamage(player2Hero, 1);
+        }
+    }
 
-    abstract boolean drawCard(int j, String mode, ArrayList<Card> deck, ArrayList<Card> hand, ClientHandler cl);
+
+    public boolean drawCard(int j, String mode, ArrayList<Card> deck, ArrayList<Card> hand) {
+        if (deck.size() == 0) {
+            return false;
+        } else {
+            if (deck.size() < j) {
+                j = deck.size();
+            }
+            for (int i = 0; i < j; i++) {
+                Card cards = randomCardDraw(deck);
+                if (hand.size() < 12) {
+                    if (mode == null || (mode.equalsIgnoreCase("extra") && !(cards instanceof Spell))) {
+                        addCard(hand, cards);
+                        matinAction(false);
+                    }
+                }
+                removeCard(deck, cards);
+            }
+            return true;
+        }
+    }
 
     public void updateGameLog(String string) {
         gameLog.add(string);
@@ -217,21 +315,21 @@ public abstract class Managers {
                 Admin.getInstance().winGame(player1Hero.getName().toLowerCase());
                 boolean flag = normalMode();
                 if (flag) {
-                    Admin.getInstance().updateDeckStates(1);
+//                    Admin.getInstance().updateDeckStates(1);
                 }
                 break;
             case 2:
                 Admin.getInstance().winGame(player2Hero.getName().toLowerCase());
                 flag = normalMode();
                 if (flag) {
-                    Admin.getInstance().updateDeckStates(1);
+//                    Admin.getInstance().updateDeckStates(1);
                 }
                 break;
             case 3:
                 Admin.getInstance().winGame(player1Hero.getName().toLowerCase());
                 flag = normalMode();
                 if (flag) {
-                    Admin.getInstance().updateDeckStates(0);
+//                    Admin.getInstance().updateDeckStates(0);
                 }
                 break;
 
@@ -239,7 +337,7 @@ public abstract class Managers {
                 Admin.getInstance().winGame(player2Hero.getName().toLowerCase());
                 flag = normalMode();
                 if (flag) {
-                    Admin.getInstance().updateDeckStates(0);
+//                    Admin.getInstance().updateDeckStates(0);
                 }
                 break;
             case 0:
@@ -627,7 +725,7 @@ public abstract class Managers {
             checkDestroyMinion();
             hunterPowerAction(minions, false);
             faezeAction(minions, false, cl);
-            Admin.getInstance().updateGameLog(String.format("%s Played %s", player1.getUsername(), minions.getName()));
+//            Admin.getInstance().updateGameLog(String.format("%s Played %s", player1.getUsername(), minions.getName()));
         } else {
             gameManager.spendManaOnMinion(minions.getManaCost() - player2ManaDecrease, true);
             gameManager.setPlayer1NotUsedMana(player2NotUsedMana - (minions.getManaCost() - player2ManaDecrease));
@@ -638,7 +736,7 @@ public abstract class Managers {
             gameManager.checkDestroyMinion();
             gameManager.hunterPowerAction(minions, true);
             gameManager.faezeAction(minions, true, cl);
-            Admin.getInstance().updateGameLog(String.format("%s Played %s", player2.getUsername(), minions.getName()));
+//            Admin.getInstance().updateGameLog(String.format("%s Played %s", player2.getUsername(), minions.getName()));
         }
     }
 
@@ -683,7 +781,7 @@ public abstract class Managers {
                     player1PlayedCards, player2DeckCards, player2HandCards,
                     player2PlayedCards, player1Hero, player2Hero, gameManager);
 
-            Admin.getInstance().updateGameLog(String.format("%s Cast %s", player1.getUsername(), spell.getName()));
+//            Admin.getInstance().updateGameLog(String.format("%s Cast %s", player1.getUsername(), spell.getName()));
         } else {
             gameManager.spendManaOnSpell(spell.getManaCost() - player2ManaDecrease, p2Turn);
             setPlayer2NotUsedMana(player2NotUsedMana - (spell.getManaCost() - player2ManaDecrease));
@@ -692,7 +790,7 @@ public abstract class Managers {
                     player2PlayedCards, player1DeckCards, player1HandCards,
                     player1PlayedCards, player2Hero, player1Hero, gameManager);
 
-            Admin.getInstance().updateGameLog(String.format("%s Cast %s", player2.getUsername(), spell.getName()));
+//            Admin.getInstance().updateGameLog(String.format("%s Cast %s", player2.getUsername(), spell.getName()));
         }
     }
 
@@ -702,13 +800,13 @@ public abstract class Managers {
             setPlayer1NotUsedMana(player1NotUsedMana - (weapon.getManaCost() - player1ManaDecrease));
             player1HandCards.remove(weapon);
             gameManager.setPlayer1Weapon(weapon);
-            Admin.getInstance().updateGameLog(String.format("%s Equiped %s", player1.getUsername(), weapon.getName()));
+//            Admin.getInstance().updateGameLog(String.format("%s Equiped %s", player1.getUsername(), weapon.getName()));
         } else {
             playSound("weapon");
             setPlayer2NotUsedMana(player2NotUsedMana - (weapon.getManaCost() - player2ManaDecrease));
             player2HandCards.remove(weapon);
             gameManager.setPlayer1Weapon(weapon);
-            Admin.getInstance().updateGameLog(String.format("%s Equiped %s", player2.getUsername(), weapon.getName()));
+//            Admin.getInstance().updateGameLog(String.format("%s Equiped %s", player2.getUsername(), weapon.getName()));
         }
     }
 
@@ -1086,11 +1184,47 @@ public abstract class Managers {
         this.p2Turn = p2Turn;
     }
 
+    public GameState getState(ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            ArrayList<CardModelView> hand = Admin.getInstance().modelList(player1HandCards);
+            ArrayList<CardModelView> p1Played = Admin.getInstance().modelList(player1PlayedCards);
+            ArrayList<CardModelView> p2Played = Admin.getInstance().modelList(player2PlayedCards);
+            CardModelView p1w = Admin.getInstance().getWeaponViewModel(player1Weapon);
+            CardModelView p2w = Admin.getInstance().getWeaponViewModel(player2Weapon);
+            int dpm = player1Hero.getHeroPower().getManaCost() - player1PowerManaDecrease;
+            int upm = player2Hero.getHeroPower().getManaCost() - player2PowerManaDecrease;
+
+            return new GameState(player1.getUsername(), player2.getUsername(), player1Hero.getName(),
+                    player2Hero.getName(), time, player1HeroPowerUsageTime, player2HeroPowerUsageTime,
+                    dpm, upm, player1NotUsedMana, player1TotalMana, player1Hero.getHealth(),
+                    player2Hero.getHealth(), player1Hero.getDefence(), player2Hero.getDefence(),
+                    player1HandCards.size(), player2HandCards.size(), player1PlayedCards.size(),
+                    player2PlayedCards.size(), player1DeckCards.size(), player2DeckCards.size(),
+                    player1Weapon != null, player2Weapon != null, player1Hero.getCanAttack(),
+                    p1w, p2w, null, null, hand, p1Played, p2Played, gameLog);
+        } else {
+            ArrayList<CardModelView> hand = Admin.getInstance().modelList(player2HandCards);
+            ArrayList<CardModelView> p1Played = Admin.getInstance().modelList(player2PlayedCards);
+            ArrayList<CardModelView> p2Played = Admin.getInstance().modelList(player1PlayedCards);
+            CardModelView p1w = Admin.getInstance().getWeaponViewModel(player2Weapon);
+            CardModelView p2w = Admin.getInstance().getWeaponViewModel(player1Weapon);
+            int upm = player1Hero.getHeroPower().getManaCost() - player1PowerManaDecrease;
+            int dpm = player2Hero.getHeroPower().getManaCost() - player2PowerManaDecrease;
+            return new GameState(player2.getUsername(), player1.getUsername(), player2Hero.getName(),
+                    player1Hero.getName(), time, player2HeroPowerUsageTime, player1HeroPowerUsageTime,
+                    dpm, upm, player2NotUsedMana, player2TotalMana, player2Hero.getHealth(),
+                    player1Hero.getHealth(), player2Hero.getDefence(), player1Hero.getDefence(),
+                    player2HandCards.size(), player1HandCards.size(), player2PlayedCards.size(),
+                    player1PlayedCards.size(), player2DeckCards.size(), player1DeckCards.size(),
+                    player2Weapon != null, player1Weapon != null, player2Hero.getCanAttack(),
+                    p1w, p2w, null, null, hand, p1Played, p2Played, gameLog);
+        }
+    }
+
 
     class MyTimer extends Thread {
         private final java.text.SimpleDateFormat timerFormat = new java.text.SimpleDateFormat(" ss");
         private long startTime;
-        private boolean flag1;
         private boolean isClicked;
         private boolean aiTurn;
 
@@ -1105,9 +1239,9 @@ public abstract class Managers {
                 startTime = 60 * 1000 + System.currentTimeMillis();
                 while (flag1 && aiTurn && startTime - System.currentTimeMillis() > 0) {
                     long time1 = startTime - System.currentTimeMillis();
-                    time = timerFormat.format(time);
+                    time = timerFormat.format(time1);
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

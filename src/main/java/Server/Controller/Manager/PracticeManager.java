@@ -37,8 +37,8 @@ public class PracticeManager extends NormalManagers {
             this.player1InfoPassive = infoPassive;
             player1InfoInitilize(infoPassive);
             practiceEnemyInit();
-            player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
-            player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
+            player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
+            player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -66,24 +66,24 @@ public class PracticeManager extends NormalManagers {
         new Thread(() -> {
             p2Turn = true;
             try {
-                Admin.getInstance().AiTurn(true);
+//                Admin.getInstance().AiTurn(true);
                 Thread.sleep(300);
                 checkDestroyMinion();
                 final Object object = new Object();
-                Admin.getInstance().RequestAct(object);
-                if (!drawCard(player2DrawCardNum, null, player2DeckCards, player2HandCards, cl))
-                    heroTakeDamage(player2Hero, 1);
+//                Admin.getInstance().RequestAct(object);
+//                if (!drawCard(player2DrawCardNum, null, player2DeckCards, player2HandCards, cl))
+                heroTakeDamage(player2Hero, 1);
                 Thread.sleep(2000);
                 wakeUp(true, cl);
                 refillMana(true, cl);
                 practicePlayCard(cl);
                 Thread.sleep(2000);
-                Admin.getInstance().frameRender();
+//                Admin.getInstance().frameRender();
                 Thread.sleep(2000);
                 choosePracticeAttack(cl);
                 Thread.sleep(2000);
                 practiceHeroPower();
-                Admin.getInstance().AiTurn(false);
+//                Admin.getInstance().AiTurn(false);
                 updateGameLog(String.format("%s  EndTurn .", player2.getUsername()));
                 PlayerTurn(cl);
                 p2Turn = false;
@@ -114,7 +114,7 @@ public class PracticeManager extends NormalManagers {
             if (card.equals(cards)) {
                 if (player2NotUsedMana >= cards.getManaCost() - player2ManaDecrease) {
                     checkContiniousAction(cards, true);
-                    cards.accept(new BattlecryVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, player2Hero, player1Hero, );
+                    cards.accept(new BattlecryVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, player2Hero, player1Hero, this);
                     if (cards instanceof Minion) {
                         practicePlayMinion((Minion) cards, cl);
                         spendManaOnMinion(cards.getManaCost() - player2ManaDecrease, true);
@@ -127,7 +127,7 @@ public class PracticeManager extends NormalManagers {
                     Admin.getInstance().summonedMinion(card, 0, 0, 0);
                     break;
                 } else {
-                    Admin.getInstance().playSound("mana");
+//                    Admin.getInstance().playSound("mana");
                 }
             }
         }
@@ -148,9 +148,9 @@ public class PracticeManager extends NormalManagers {
 
     private void practicePlayMinion(Minion minions, ClientHandler cl) {
         if (player2PlayedCards.size() < 7) {
-            Admin.getInstance().playSound("minion");
+//            Admin.getInstance().playSound("minion");
             player2NotUsedMana -= minions.getManaCost() - player2ManaDecrease;
-            minions.accept(new ActionVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, player2Hero, player1Hero, );
+            minions.accept(new ActionVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, player2Hero, player1Hero, this);
             practiceSummonMinion(minions);
             checkDestroyMinion();
             hunterPowerAction(minions, true);
@@ -158,8 +158,8 @@ public class PracticeManager extends NormalManagers {
             shahryarAction(minions, true);
             updateGameLog(String.format("%s Played %s", player2.getUsername(), minions.getName().toLowerCase()));
         } else {
-            Admin.getInstance().playSound("error");
-            Admin.getInstance().frameRender();
+//            Admin.getInstance().playSound("error");
+//            Admin.getInstance().frameRender();
         }
     }
 
@@ -215,25 +215,25 @@ public class PracticeManager extends NormalManagers {
             Minion target1 = (Minion) target;
             actionHandler.Attack(attacker, target1, player1PlayedCards);
             setSleep(attacker, cl);
-            Admin.getInstance().drawPracticeAttack(i, j, attacker.getDamage(), target.getAttack());
+//            Admin.getInstance().drawPracticeAttack(i, j, attacker.getDamage(), target.getAttack());
         } else {
             Hero target1 = player1Hero;
             actionHandler.Attack(attacker, target1, player1PlayedCards);
             setSleep(attacker, cl);
-            Admin.getInstance().drawPracticeAttack(i, j, attacker.getDamage(), target.getAttack());
+//            Admin.getInstance().drawPracticeAttack(i, j, attacker.getDamage(), target.getAttack());
         }
     }
 
     private void practicePlaySpell(Spell spell) {
-        Admin.getInstance().playSound("spell");
+//        Admin.getInstance().playSound("spell");
         player2NotUsedMana -= spell.getManaCost() - player2ManaDecrease;
         player2HandCards.remove(spell);
-        spell.accept(new ActionVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, player2Hero, player1Hero, );
+        spell.accept(new ActionVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, player2Hero, player1Hero, this);
         updateGameLog(String.format("%s Played %s", player2.getUsername(), spell.getName().toLowerCase()));
     }
 
     private void practicePlayWeapon(Weapon weapon) {
-        Admin.getInstance().playSound("weapon");
+//        Admin.getInstance().playSound("weapon");
         player2NotUsedMana -= weapon.getManaCost() - player2ManaDecrease;
         player2HandCards.remove(weapon);
         setEnemyWeapon(weapon);
@@ -246,8 +246,8 @@ public class PracticeManager extends NormalManagers {
         Random random = new Random();
         int chance = random.nextInt(1000);
         if (chance % 5 == 0) {
-            Admin.getInstance().playSound("heropower");
-            player2Hero.accept(new HeroPowerVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, );
+//            Admin.getInstance().playSound("heropower");
+            player2Hero.accept(new HeroPowerVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, this);
             updateGameLog(String.format("%s Use HeroPower .", player2.getUsername()));
             heroTakeDamage(player2Hero, 2);
         }

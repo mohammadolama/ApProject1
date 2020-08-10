@@ -63,7 +63,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitBookOfSpecters(BookOFSpecters bookOFSpecters, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy, Managers managers) {
-        Admin.getInstance().drawCard(3, "extra", myDeck, myHand);
+        managers.drawCard(3, "extra", myDeck, myHand);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ActionVisitor implements Visitor {
     public void visitLearnJavadonic(LearnJavadonic learnJavadonic, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy, Managers managers) {
         if (learnJavadonic.getManaSpendOnSth() >= learnJavadonic.getMaxManaSpendOnSth()) {
             Javad javad = DataBaseManagment.MinionsReader("javad");
-            Admin.getInstance().summonMinion(javad, -1);
+//            Admin.getInstance().summonMinion(javad, -1);
             Admin.getInstance().summonedMinion(javad, 0, 6, 6);
             managers.finishAction(learnJavadonic, friendly);
         }
@@ -248,7 +248,7 @@ public class ActionVisitor implements Visitor {
 
     @Override
     public void visitSprint(Sprint sprint, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy, Managers managers) {
-        Admin.getInstance().drawCard(4, null, myDeck, myHand);
+        managers.drawCard(4, null, myDeck, myHand);
     }
 
     @Override
@@ -256,7 +256,7 @@ public class ActionVisitor implements Visitor {
         if (strengthInNumbers.getManaSpendOnSth() >= 10) {
             for (Card card : myDeck) {
                 if (card instanceof Minion) {
-                    Admin.getInstance().summonMinion((Minion) card, -1);
+//                    Admin.getInstance().summonMinion((Minion) card, -1);
                     Admin.getInstance().summonedMinion(card, 0, ((Minion) card).getDamage(), ((Minion) card).getDamage());
                     break;
                 }
@@ -270,7 +270,7 @@ public class ActionVisitor implements Visitor {
         if (strengthInNumbersDR.getManaSpendOnSth() >= 10) {
             for (Card card : myDeck) {
                 if (card.getName().equalsIgnoreCase("lachin")) {
-                    Admin.getInstance().summonMinion((Minion) card, -1);
+//                    Admin.getInstance().summonMinion((Minion) card, -1);
                     Admin.getInstance().summonedMinion(card, 0, ((Minion) card).getDamage(), ((Minion) card).getHealth());
                     managers.finishAction(strengthInNumbersDR, friendly);
                     myDeck.remove(card);
@@ -284,7 +284,7 @@ public class ActionVisitor implements Visitor {
     public void visitSwarmOfCats(SwarmOfCats swarmOfCats, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy, Managers managers) {
         while (myPlayed.size() < 7) {
             Cat cat = DataBaseManagment.MinionsReader("cat");
-            Admin.getInstance().summonMinion(cat, -1);
+//            Admin.getInstance().summonMinion(cat, -1);
         }
     }
 

@@ -57,7 +57,8 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = TargetListRequest.class, name = "targetlist"),
         @JsonSubTypes.Type(value = CanBePlayedRequest.class, name = "canbeplayed"),
         @JsonSubTypes.Type(value = ProperCardsRequest.class, name = "propercard"),
+        @JsonSubTypes.Type(value = ThreeCardRequest.class, name = "threecard"),
 })
 public interface Request {
-    public abstract void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper);
+    public abstract void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object);
 }

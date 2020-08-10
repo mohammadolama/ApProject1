@@ -14,6 +14,8 @@ public class InfoPassive {
         this.description = description;
     }
 
+    public InfoPassive() {
+    }
 
     public static ArrayList<InfoPassive> infoPassiveCreator() {
         ArrayList<InfoPassive> ar = new ArrayList<>();

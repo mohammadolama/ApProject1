@@ -139,7 +139,7 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         JButton src = (JButton) e.getSource();
         if (src == normal) {
             if (infoPassive != null) {
-                RequestHandler.getInstance().sendRequest(new CreateGameModeRequest(1, infoPassive));
+                RequestHandler.getInstance().sendRequest(new ThreeCardRequest(infoPassive));
                 RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Start Button"));
                 RequestHandler.getInstance().sendRequest(new LogRequest("Start the Battle"));
             }

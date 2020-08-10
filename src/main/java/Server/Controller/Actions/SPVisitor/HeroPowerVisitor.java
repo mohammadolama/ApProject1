@@ -53,10 +53,10 @@ public class HeroPowerVisitor implements PowerVisitor {
                 ((Minion) myPlayed.get(j)).setDamage(((Minion) myPlayed.get(j)).getDamage() + 1);
                 Admin.getInstance().summonedMinion(myPlayed.get(j), 1, myPlayed.get(j).getAttack(), myPlayed.get(j).getLife());
             } else if (rand == 1) {
-                Admin.getInstance().drawCard(1, null, myDeck, myHand);
+                managers.drawCard(1, null, myDeck, myHand);
             }
         } else if (myPlayed.size() == 0 && myDeck.size() > 0) {
-            Admin.getInstance().drawCard(1, null, myDeck, myHand);
+            managers.drawCard(1, null, myDeck, myHand);
         } else if (myPlayed.size() > 0 && myDeck.size() == 0) {
             int j = random.nextInt(myPlayed.size());
             ((Minion) myPlayed.get(j)).setHealth(((Minion) myPlayed.get(j)).getHealth() + 1);

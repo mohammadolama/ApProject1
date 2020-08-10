@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.ProperCardsResponse;
 import Server.Model.CardModelView;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -32,19 +33,11 @@ public class ProperCardsRequest implements Request {
         this.i = i;
     }
 
-    public ArrayList<CardModelView> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<CardModelView> list) {
-        this.list = list;
-    }
-
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         list = Admin.getInstance().properCards(i, clientHandler.getPlayer());
         try {
-            outputStream.println(objectMapper.writeValueAsString(list));
+            outputStream.println(objectMapper.writeValueAsString(new ProperCardsResponse(list)));
         } catch (IOException e) {
             e.printStackTrace();
         }

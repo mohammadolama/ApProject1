@@ -1,9 +1,12 @@
 package Client.Controller.Requests;
 
 import Client.Model.InfoPassive;
+import Client.View.View.Panels.BoardPanel;
+import Client.View.View.Panels.MyFrame;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -58,7 +61,17 @@ public class CreateGameRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
 
+            String res = inputStream.nextLine();
+            BoardPanel boardPanel = new BoardPanel(false);
+            boardPanel.setBounds(0, 0, 1600, 1000);
+            MyFrame.getPanel().add("play", boardPanel);
+            MyFrame.getInstance().changePanel("play");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

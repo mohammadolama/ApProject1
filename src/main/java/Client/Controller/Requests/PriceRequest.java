@@ -13,26 +13,11 @@ public class PriceRequest implements Request {
 
     private String name;
 
-    private long price;
-    private String className;
-
     public PriceRequest() {
     }
 
     public PriceRequest(String name) {
         this.name = name;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public long getPrice() {
-        return price;
     }
 
     public String getName() {
@@ -43,21 +28,14 @@ public class PriceRequest implements Request {
         this.name = name;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
-    }
-
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res1 = inputStream.nextLine();
-            String res2 = inputStream.nextLine();
-            className = objectMapper.readValue(res1, String.class);
-            price = objectMapper.readValue(res2, long.class);
-            Responses.getInstance().setPrice(price);
-            Responses.getInstance().setClassName(className);
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

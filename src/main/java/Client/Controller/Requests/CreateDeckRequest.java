@@ -54,7 +54,7 @@ public class CreateDeckRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         if (name == null || name.equals("")) {
             JOptionPane.showMessageDialog(MyFrame.getInstance(), "Choose a name for your deck");
             Update.render();

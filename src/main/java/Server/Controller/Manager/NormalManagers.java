@@ -14,65 +14,7 @@ import java.util.ListIterator;
 
 public abstract class NormalManagers extends Managers {
 
-    @Override
-    void player1InfoInitilize(InfoPassive infoPassive) {
-        player1StartingMana = 1;
-        player1TotalMana = 1;
-        player1NotUsedMana = 1;
-        player1DrawCardNum = 1;
-        player1HeroPowerUsageTime = 1;
-        p1HPMAXUT = 1;
-        player1PowerManaDecrease = 0;
-        player1ManaDecrease = 0;
-        player1DefenceAdd = 0;
-        String st = infoPassive.getName();
-        if (st.equalsIgnoreCase("twiceDraw")) {
-            player1DrawCardNum = 2;
-        } else if (st.equalsIgnoreCase("offCards")) {
-            player1ManaDecrease = 1;
-        } else if (st.equalsIgnoreCase("warriors")) {
-            player1DefenceAdd = 2;
-        } else if (st.equalsIgnoreCase("manaJump")) {
-            player1StartingMana = 2;
-            player1TotalMana = 2;
-            player1NotUsedMana = 2;
-        } else if (st.equalsIgnoreCase("freePower")) {
-            player1HeroPowerUsageTime = 2;
-            p1HPMAXUT = 2;
-            player1PowerManaDecrease = 1;
-        }
-    }
 
-    @Override
-    void player2InfoInitilize(InfoPassive infoPassive) {
-        player2StartingMana = 0;
-        player2TotalMana = 0;
-        player2NotUsedMana = 0;
-        player2DrawCardNum = 1;
-        player2HeroPowerUsageTime = 1;
-        p2HPMAXUT = 1;
-        player2PowerManaDecrease = 0;
-        player2ManaDecrease = 0;
-        player2DefenceAdd = 0;
-        String st = infoPassive.getName();
-        if (st.equalsIgnoreCase("twiceDraw")) {
-            player2DrawCardNum = 2;
-        } else if (st.equalsIgnoreCase("offCards")) {
-            player2ManaDecrease = 1;
-        } else if (st.equalsIgnoreCase("warriors")) {
-            player2DefenceAdd = 2;
-        } else if (st.equalsIgnoreCase("manaJump")) {
-            player2StartingMana = 2;
-            player2TotalMana = 2;
-            player2NotUsedMana = 2;
-        } else if (st.equalsIgnoreCase("freePower")) {
-            player2HeroPowerUsageTime = 2;
-            p2HPMAXUT = 2;
-            player2PowerManaDecrease = 1;
-        }
-    }
-
-    @Override
     void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value) {
         ListIterator<Card> iterator = arrayList.listIterator();
         ArrayList<Card> ar = new ArrayList<>();
@@ -93,45 +35,6 @@ public abstract class NormalManagers extends Managers {
         } else {
             player2HandCards = ar;
             player2DeckCards = arrayList;
-        }
-    }
-
-    @Override
-    void refillMana(boolean p1Turn, ClientHandler cl) {
-        if (p1Turn) {
-            if (player2TotalMana < 10) {
-                player2TotalMana++;
-            }
-            player2NotUsedMana = player2TotalMana;
-            player2HeroPowerUsageTime = p2HPMAXUT;
-        } else {
-            if (player1TotalMana < 10) {
-                player1TotalMana++;
-            }
-            player1NotUsedMana = player1TotalMana;
-            player1HeroPowerUsageTime = p1HPMAXUT;
-        }
-    }
-
-    @Override
-    public boolean drawCard(int j, String mode, ArrayList<Card> deck, ArrayList<Card> hand, ClientHandler cl) {
-        if (deck.size() == 0) {
-            return false;
-        } else {
-            if (deck.size() < j) {
-                j = deck.size();
-            }
-            for (int i = 0; i < j; i++) {
-                Card cards = randomCardDraw(deck);
-                if (hand.size() < 12) {
-                    if (mode == null || (mode.equalsIgnoreCase("extra") && !(cards instanceof Spell))) {
-                        addCard(hand, cards);
-                        matinAction(false);
-                    }
-                }
-                removeCard(deck, cards);
-            }
-            return true;
         }
     }
 
@@ -205,15 +108,6 @@ public abstract class NormalManagers extends Managers {
         player2Hero = heroTemp;
     }
 
-    void PlayerTurn(ClientHandler cl) {
-        checkDestroyMinion();
-        canBeAttackedUpdater(cl);
-        wakeUp(false, cl);
-        refillMana(false, cl);
-        chargeWeapon(false, cl);
-        if (!drawCard(player1DrawCardNum, null, player1DeckCards, player1HandCards, cl))
-            heroTakeDamage(player1Hero, 1);
-    }
 
     void checkContiniousAction(Card cards, boolean AI) {
         for (ContiniousActionCarts value : ContiniousActionCarts.values()) {

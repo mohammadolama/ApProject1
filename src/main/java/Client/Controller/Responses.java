@@ -1,12 +1,9 @@
 package Client.Controller;
 
 import Client.Controller.Requests.BoardPanelRequest;
-import Client.Model.CardModelView;
-import Client.Model.DeckModel;
+import Client.Model.*;
 import Client.Model.Enums.Carts;
 import Client.Model.Enums.Heroes;
-import Client.Model.InfoPassive;
-import Client.Model.PlayerModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +25,9 @@ public class Responses {
     private boolean canBePlayed, heroCanAttack, canDoAction;
     private int heroPowerCanBePlayed;
     private PlayerModel player;
+    public GameState state;
 
-    public BoardPanelRequest board;
+    public GameState board;
 
     public static Responses getInstance() {
         return responses;
@@ -202,4 +200,5 @@ public class Responses {
     public void setHeroName(String heroName) {
         this.heroName = heroName;
     }
+
 }

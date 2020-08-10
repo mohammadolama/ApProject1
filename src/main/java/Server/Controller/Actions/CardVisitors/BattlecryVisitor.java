@@ -18,7 +18,7 @@ public class BattlecryVisitor implements Visitor {
         Minion minion2 = ((Minion) target).cloneMinion((Minion) target);
         myHand.add(minion2);
         Minion minion3 = ((Minion) target).cloneMinion((Minion) target);
-        Admin.getInstance().summonMinion(minion3, -1);
+//        Admin.getInstance().summonMinion(minion3, -1);
         Admin.getInstance().summonedMinion(minion3, 0, minion3.getDamage(), minion3.getHealth());
     }
 
@@ -158,7 +158,7 @@ public class BattlecryVisitor implements Visitor {
     public void visitMobin(Mobin mobin, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> targetDeck, ArrayList<Card> targetHand, ArrayList<Card> targetPlayed, Hero friendly, Hero enemy, Managers managers) {
         if (myPlayed.size() < 7) {
             Mobin mobin1 = mobin.cloneMinion(mobin);
-            Admin.getInstance().summonMinion(mobin1, -1);
+//            Admin.getInstance().summonMinion(mobin1, -1);
             Admin.getInstance().summonedMinion(mobin, 0, mobin.getDamage(), mobin.getHealth());
 
         }

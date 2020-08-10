@@ -24,8 +24,8 @@ public class DeckReaderManager extends NormalManagers {
 //        ArrayList<Card> enemy = DeckLogic.UpdateDeck(deckReader.getEnemy());
 //        ThreePrimitiveRandom(friend, "friendly");
 //        ThreePrimitiveRandom(enemy, "enemy");
-        player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
-        player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
+        player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
+        player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
 
     }
 

@@ -25,13 +25,13 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
 //    private MyTimer myTimer;
 
-    private Timer toMiddleTimer, toHandTimer, playTimer, sleepTimer;
+    private Timer toMiddleTimer, toHandTimer, playTimer, sleepTimer, requests;
 
     private int X, Y, AiX, AiY, XA, YA, playedIndex, selectedTargetIndex, deckIndex,
             mouseDesX, mouseDesY, mouseStartX = -1000, mouseStartY = -1000, index = 0;
 
     private boolean flag, disabled, practiceMode, playedCardSelected = false,
-            cardSelected = false, AiTurn = false;
+            cardSelected = false, p2Turn = false;
 
     private String handCardSelectedName, playedCardSelectedName;
 
@@ -67,6 +67,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
         toMiddleTimer = new Timer(1000 / 60, middleTimerListener);
         toHandTimer = new Timer(1000 / 60, handTimerListener);
+        requests = new Timer(300, requestsListener);
         if (practiceMode) {
             toMiddleTimer = new Timer(1000 / 60, AiMiddleTimerListener);
             toHandTimer = new Timer(1000 / 60, AiHandTimerListener);
@@ -135,6 +136,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         label.setBackground(Color.ORANGE);
         add(label);
 
+        requests.start();
 //        myTimer = new MyTimer(label);
 //        myTimer.start();
 
@@ -151,7 +153,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         g.setFont(fantasy.deriveFont(30.f));
         g.setColor(Color.yellow);
 
-        requests();
+//        requests();
 
         clear();
 
@@ -192,6 +194,9 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
 
 
     private void drawUserInfo(Graphics2D g) {
+        System.out.println(res + "**********");
+        System.out.println("/************" + res.board);
+        System.out.println("***" + res.board.getFriendlyUser() + " ****");
         String down = res.board.getFriendlyUser();
         String up = res.board.getEnemyUser();
         g.drawString(down, 30, 920);
@@ -212,14 +217,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         int up = res.board.getUpPowerUsage();
         if (down > 0) {
             String name = res.board.getFriendlyHero();
-            BufferedImage temp = Constants.cardPics.get(name);
+            BufferedImage temp = Constants.cardPics.get(name.toLowerCase());
             String mana = res.board.getDownPowerMana() + "";
             g.drawImage(temp, config.getPlayerHeroPowerX(), config.getPlayerHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
             g.drawString(mana, config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, config.getPlayerHeroPowerY() + 25);
         }
         if (up > 0) {
             String name = res.board.getEnemyHero();
-            BufferedImage temp = Constants.cardPics.get(name);
+            BufferedImage temp = Constants.cardPics.get(name.toLowerCase());
             String mana = res.board.getUpPowerMana() + "";
             g.drawImage(temp, config.getPlayerHeroPowerX(), config.getOpponentHeroPowerY(), config.getHeroPoerWidth(), config.getHeroPowerHeight(), null);
             g.drawString(mana, config.getPlayerHeroPowerX() + (config.getHeroPoerWidth() / 2) - 5, (config.getOpponentHeroPowerY()) + 25);
@@ -731,7 +736,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     private void drawDeckAnimation(Graphics2D g) {
         if (config.isAnimated()) {
             BufferedImage card;
-            if (practiceMode && AiTurn) {
+            if (practiceMode && p2Turn) {
                 card = gamePics.get("enemycard");
             } else {
                 card = cardPics.get(res.board.getHandCards().get(res.board.getHandCards().size() - 1).getName().toLowerCase());
@@ -743,14 +748,14 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
                 g.setColor(color);
                 config.setMaxWidth(config.getCardWidth() + config.getBlur());
                 config.setMaxHeigth(config.getCardHeight() + config.getBlur());
-                if (practiceMode && AiTurn) {
+                if (practiceMode && p2Turn) {
                     g.drawImage(card, AiX, AiY, config.getCardWidth() + config.getBlur(), config.getCardHeight() + config.getBlur(), null);
                 } else {
                     g.drawImage(card, X, Y, config.getCardWidth() + config.getBlur(), config.getCardHeight() + config.getBlur(), null);
                 }
                 config.setBlur(config.getBlur() + 2);
             } else {
-                if (practiceMode && AiTurn) {
+                if (practiceMode && p2Turn) {
                     g.drawImage(card, AiX, AiY, config.getMaxWidth() + config.getBlur(), config.getMaxHeigth() + config.getBlur(), null);
 
                 } else {
@@ -875,13 +880,13 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : NextTurn Button"));
             clear();
             change();
-            boolean flag = res.board.getDownDeckSize() > 0;
+            boolean flag = res.board.getUpDeckSize() > 0;
             RequestHandler.getInstance().sendRequest(new EndTurnRequest());
             if (flag) {
                 config.setToMiddle(true);
                 config.setBlur(0);
                 config.setAnimated(true);
-                if (!practiceMode || !AiTurn) {
+                if (!practiceMode || !p2Turn) {
                     toMiddleTimer.start();
                 }
             }
@@ -1023,8 +1028,8 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
     }
 
     private void change() {
-        AiTurn = !AiTurn;
-        if (practiceMode && AiTurn) {
+        p2Turn = !p2Turn;
+        if (practiceMode && p2Turn) {
             toMiddleTimer.removeActionListener(middleTimerListener);
             toMiddleTimer.addActionListener(AiMiddleTimerListener);
             toHandTimer.removeActionListener(handTimerListener);
@@ -1069,7 +1074,7 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
             }
             CardModelView view;
             if (i == -2) {
-                view = new CardModelView(Constants.cardPics.get(Responses.getInstance().board.getFriendlyHero().toLowerCase()));
+                view = new CardModelView(Constants.cardPics.get(Responses.getInstance().board.getFriendlyHero().toLowerCase()), Responses.getInstance().board.getFriendlyHero().toLowerCase());
             } else {
                 view = res.board.getDownPlayedCards().get(i);
             }
@@ -1218,6 +1223,13 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     };
 
+    private ActionListener requestsListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            requests();
+        }
+    };
+
 
     class AttackListener implements ActionListener {
         JButton button;
@@ -1254,6 +1266,9 @@ public class BoardPanel extends JPanel implements MouseMotionListener, MouseList
         }
     }
 
+    public void notified(boolean flag) {
+        nextTurnButton.doClick();
+    }
 }
 
 

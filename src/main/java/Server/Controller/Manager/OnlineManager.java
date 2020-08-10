@@ -1,85 +1,96 @@
 package Server.Controller.Manager;
 
-import Server.Controller.MainLogic.Admin;
+import Server.Controller.Actions.SPVisitor.SpecialPowerVisitor;
 import Server.Controller.MainLogic.ClientHandler;
-import Server.Model.CardModelView;
 import Server.Model.Cards.Card;
+import Server.Model.Heros.Hero;
 import Server.Model.InfoPassive;
-import Server.Model.State;
+import Server.Model.Player;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class OnlineManager extends Managers {
 
+    public OnlineManager(Player player1, Player player2, ClientHandler cl1,
+                         ClientHandler cl2, InfoPassive ip1, InfoPassive ip2,
+                         ArrayList<Card> list1, ArrayList<Card> list2,
+                         ArrayList<String> cards1, ArrayList<String> cards2) {
 
-    @Override
-    void player1InfoInitilize(InfoPassive infoPassive) {
+        try {
+            this.player1 = player1;
+            this.player2 = player2;
+            this.player1InfoPassive = ip1;
+            this.player2InfoPassive = ip2;
+            this.cl1 = cl1;
+            this.cl2 = cl2;
+            this.player1CardsOfPlayer = list1;
+            this.player2CardsOfPlayer = list2;
+            this.player1Hero = (Hero) player1.getSelectedDeck().getHero().clone();
+            this.player2Hero = (Hero) player2.getSelectedDeck().getHero().clone();
+            this.currentHero = player1Hero;
+            player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards,
+                    player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
 
-    }
+            player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards,
+                    player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
 
-    @Override
-    void player2InfoInitilize(InfoPassive infoPassive) {
-
-    }
-
-    @Override
-    void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value) {
-
-    }
-
-    @Override
-    void refillMana(boolean p1Turn, ClientHandler cl) {
-
-    }
-
-    @Override
-    void endTurn(ClientHandler cl) {
-
-    }
-
-    @Override
-    boolean drawCard(int j, String mode, ArrayList<Card> deck, ArrayList<Card> hand, ClientHandler cl) {
-        return false;
-    }
-
-
-    public State getState(ClientHandler cl) {
-        if (cl.equals(cl1)) {
-            ArrayList<CardModelView> hand = Admin.getInstance().modelList(player1HandCards);
-            ArrayList<CardModelView> p1Played = Admin.getInstance().modelList(player1PlayedCards);
-            ArrayList<CardModelView> p2Played = Admin.getInstance().modelList(player2PlayedCards);
-            CardModelView p1w = Admin.getInstance().getWeaponViewModel(player1Weapon);
-            CardModelView p2w = Admin.getInstance().getWeaponViewModel(player2Weapon);
-            int dpm = player1Hero.getHeroPower().getManaCost() - player1PowerManaDecrease;
-            int upm = player2Hero.getHeroPower().getManaCost() - player2PowerManaDecrease;
-            return new State(player1.getUsername(), player2.getUsername(), player1Hero.getName(),
-                    player2Hero.getName(), time, player1HeroPowerUsageTime, player2HeroPowerUsageTime,
-                    dpm, upm, player1NotUsedMana, player1TotalMana, player1Hero.getHealth(),
-                    player2Hero.getHealth(), player1Hero.getDefence(), player2Hero.getDefence(),
-                    player1HandCards.size(), player2HandCards.size(), player1PlayedCards.size(),
-                    player2PlayedCards.size(), player1DeckCards.size(), player2DeckCards.size(),
-                    player1Weapon != null, player2Weapon != null, player1Hero.getCanAttack(),
-                    p1w, p2w, null, null, hand, p1Played, p2Played, gameLog);
-        } else {
-            ArrayList<CardModelView> hand = Admin.getInstance().modelList(player2HandCards);
-            ArrayList<CardModelView> p1Played = Admin.getInstance().modelList(player2PlayedCards);
-            ArrayList<CardModelView> p2Played = Admin.getInstance().modelList(player1PlayedCards);
-            CardModelView p1w = Admin.getInstance().getWeaponViewModel(player2Weapon);
-            CardModelView p2w = Admin.getInstance().getWeaponViewModel(player1Weapon);
-            int upm = player1Hero.getHeroPower().getManaCost() - player1PowerManaDecrease;
-            int dpm = player2Hero.getHeroPower().getManaCost() - player2PowerManaDecrease;
-            return new State(player2.getUsername(), player1.getUsername(), player2Hero.getName(),
-                    player1Hero.getName(), time, player2HeroPowerUsageTime, player1HeroPowerUsageTime,
-                    dpm, upm, player2NotUsedMana, player2TotalMana, player2Hero.getHealth(),
-                    player1Hero.getHealth(), player2Hero.getDefence(), player1Hero.getDefence(),
-                    player2HandCards.size(), player1HandCards.size(), player2PlayedCards.size(),
-                    player1PlayedCards.size(), player2DeckCards.size(), player1DeckCards.size(),
-                    player2Weapon != null, player1Weapon != null, player2Hero.getCanAttack(),
-                    p1w, p2w, null, null, hand, p1Played, p2Played, gameLog);
+            player1InfoInitilize(ip1);
+            player2InfoInitilize(ip2);
+            initLists(list1, cards1, 1);
+            initLists(list2, cards2, 2);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
         }
     }
+
+
+    private void initLists(ArrayList<Card> list, ArrayList<String> cards,
+                           int i) {
+        ArrayList<Card> ar = new ArrayList<>();
+        for (Card card : list) {
+            if (card.getName().equalsIgnoreCase(cards.get(0))) {
+                ar.add(card);
+                list.remove(card);
+                break;
+            }
+        }
+        for (Card card : list) {
+            if (card.getName().equalsIgnoreCase(cards.get(1))) {
+                ar.add(card);
+                list.remove(card);
+                break;
+            }
+        }
+        for (Card card : list) {
+            if (card.getName().equalsIgnoreCase(cards.get(2))) {
+                ar.add(card);
+                list.remove(card);
+                break;
+            }
+        }
+        if (i == 1) {
+            player1HandCards = ar;
+            player1DeckCards = list;
+        } else {
+            player2HandCards = ar;
+            player2DeckCards = list;
+        }
+
+
+    }
+
+    @Override
+    public void endTurn(ClientHandler cl) {
+        p2Turn = !p2Turn;
+        if (cl.equals(cl1)) {
+            benyaminAction(false);
+            PlayerTurn(cl2);
+        } else {
+            benyaminAction(true);
+            PlayerTurn(cl1);
+        }
+    }
+
 
 }
 

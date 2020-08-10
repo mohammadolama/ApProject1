@@ -46,12 +46,11 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = SelectedDeckRequest.class, name = "selecteddeck"),
         @JsonSubTypes.Type(value = FirstHeroRequest.class, name = "firsthero"),
         @JsonSubTypes.Type(value = CreateGameModeRequest.class, name = "creategamemode"),
-        @JsonSubTypes.Type(value = VisiblePanelRequest.class, name = "visiblepanel"),
         @JsonSubTypes.Type(value = WantToPlayRequest.class, name = "wanttoplay"),
         @JsonSubTypes.Type(value = PlayerModelRequest.class, name = "playermodel"),
         @JsonSubTypes.Type(value = RemoveDeckRequest.class, name = "removedeck"),
         @JsonSubTypes.Type(value = SaveRequest.class, name = "save"),
-        @JsonSubTypes.Type(value = RenderRequest.class, name = "render"),
+        @JsonSubTypes.Type(value = EndTurnRequest.class, name = "endturn"),
         @JsonSubTypes.Type(value = WalletRequest.class, name = "wallet"),
         @JsonSubTypes.Type(value = PassiveRequest.class, name = "passive"),
         @JsonSubTypes.Type(value = CollectionRequest.class, name = "collection"),
@@ -60,6 +59,7 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = CanBePlayedRequest.class, name = "canbeplayed"),
         @JsonSubTypes.Type(value = DeckModelRequest.class, name = "deckmodel"),
         @JsonSubTypes.Type(value = PriceRequest.class, name = "price"),
+        @JsonSubTypes.Type(value = ThreeCardRequest.class, name = "threecard"),
 })
 public interface Request {
     public abstract void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers);

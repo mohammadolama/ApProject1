@@ -394,10 +394,9 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             RequestHandler.getInstance().sendRequest(new LogRequest("Navigate : Main Menu"));
             RequestHandler.getInstance().sendRequest(new SaveRequest());
             RequestHandler.getInstance().sendRequest(new VisiblePanelRequest("menu"));
-
         } else if (src == exit) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : DeleteAccount Button"));
-            RequestHandler.getInstance().sendRequest(new DeleteAccountRequest());
+            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
+            RequestHandler.getInstance().sendRequest(new ExitRequest());
         } else if (src == buyActivatedButton) {
             buyActivatedButton.setBackground(Color.yellow);
             sellActivatedButton.setBackground(Color.WHITE);

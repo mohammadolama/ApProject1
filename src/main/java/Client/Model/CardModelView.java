@@ -43,8 +43,9 @@ public class CardModelView {
         this.needEnemyTarget = needEnemyTarget;
     }
 
-    public CardModelView(BufferedImage image) {
+    public CardModelView(BufferedImage image, String name) {
         this.image = image;
+        this.name = name;
     }
 
     public BufferedImage getImage() {

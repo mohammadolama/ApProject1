@@ -2,6 +2,7 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.WalletResponse;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -28,7 +29,7 @@ public class WalletRequest implements Request {
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         try {
-            outputStream.println(objectMapper.writeValueAsString(clientHandler.getPlayer().getMoney()));
+            outputStream.println(objectMapper.writeValueAsString(new WalletResponse(clientHandler.getPlayer().getMoney())));
         } catch (IOException e) {
             e.printStackTrace();
         }

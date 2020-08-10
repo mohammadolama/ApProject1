@@ -3,7 +3,6 @@ package Client.Controller.Requests;
 import Client.Model.DeckModel;
 import Client.View.View.Panels.Col_Change;
 import Client.View.View.Panels.CollectionPanel;
-import Client.View.View.Panels.MyFrame;
 import Client.View.View.Update.Update;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -33,7 +32,7 @@ public class RemoveDeckRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
             String res = inputStream.nextLine();

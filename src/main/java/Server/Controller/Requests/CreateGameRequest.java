@@ -1,8 +1,11 @@
 package Server.Controller.Requests;
 
-import Client.Model.InfoPassive;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.MainLogic.DeckLogic;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Manager.NormalModeManager;
+import Server.Model.InfoPassive;
+import Server.Model.Player;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -61,6 +64,9 @@ public class CreateGameRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        Player player = clientHandler.getPlayer();
+        Managers gameManager = new NormalModeManager(player, infoPassive, DeckLogic.UpdateDeck(player.getSelectedDeck().getDeck()), card1, card2, card3, clientHandler);
+        clientHandler.setGameManager(gameManager);
+        outputStream.println("ok");
     }
 }

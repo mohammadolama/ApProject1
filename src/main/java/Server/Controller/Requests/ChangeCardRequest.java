@@ -1,11 +1,13 @@
 package Server.Controller.Requests;
 
-import Client.View.View.Panels.AlternativePanel;
+import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Model.CardModelView;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -13,12 +15,9 @@ import java.util.Scanner;
 public class ChangeCardRequest implements Request {
 
     private int i;
-    private AlternativePanel alternativePanel;
+    private CardModelView view;
+    private String card1, card2, card3;
 
-    public ChangeCardRequest(int i, AlternativePanel alternativePanel) {
-        this.i = i;
-        this.alternativePanel = alternativePanel;
-    }
 
     public ChangeCardRequest() {
     }
@@ -31,16 +30,45 @@ public class ChangeCardRequest implements Request {
         this.i = i;
     }
 
-    public AlternativePanel getAlternativePanel() {
-        return alternativePanel;
+    public CardModelView getView() {
+        return view;
     }
 
-    public void setAlternativePanel(AlternativePanel alternativePanel) {
-        this.alternativePanel = alternativePanel;
+    public void setView(CardModelView view) {
+        this.view = view;
+    }
+
+    public String getCard1() {
+        return card1;
+    }
+
+    public void setCard1(String card1) {
+        this.card1 = card1;
+    }
+
+    public String getCard2() {
+        return card2;
+    }
+
+    public void setCard2(String card2) {
+        this.card2 = card2;
+    }
+
+    public String getCard3() {
+        return card3;
+    }
+
+    public void setCard3(String card3) {
+        this.card3 = card3;
     }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        view = Admin.getInstance().changeCard(card1, card2, card3, clientHandler.getPlayer());
+        try {
+            outputStream.println(objectMapper.writeValueAsString(view));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

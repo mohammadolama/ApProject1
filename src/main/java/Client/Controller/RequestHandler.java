@@ -18,6 +18,8 @@ public class RequestHandler {
     private Scanner scanner;
     private PrintWriter printWriter;
     private ObjectMapper objectMapper;
+    private ResponseHandler responseHandler;
+    private Object object = new Object();
 
     private RequestHandler(Socket socket) {
         try {
@@ -25,6 +27,8 @@ public class RequestHandler {
             this.scanner = new Scanner(socket.getInputStream());
             this.printWriter = new PrintWriter(socket.getOutputStream(), true);
             objectMapper = new ObjectMapper();
+            responseHandler = new ResponseHandler(scanner, printWriter, objectMapper, object);
+            responseHandler.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -295,7 +299,7 @@ public class RequestHandler {
             String st = objectMapper.writeValueAsString(request);
             System.out.println(request);
 //            printWriter.println(st);
-            request.excute(scanner, printWriter, objectMapper);
+            request.excute(scanner, printWriter, objectMapper, object);
         } catch (IOException e) {
             e.printStackTrace();
         }

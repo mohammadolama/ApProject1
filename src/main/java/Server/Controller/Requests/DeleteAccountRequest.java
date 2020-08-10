@@ -17,6 +17,5 @@ public class DeleteAccountRequest implements Request {
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         Admin.getInstance().deleteAccount(clientHandler.getPlayer());
-        outputStream.println("ok");
     }
 }

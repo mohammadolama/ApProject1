@@ -1,8 +1,6 @@
 package Client.Controller.Requests;
 
-import Client.Controller.Responses;
 import Client.Model.CardModelView;
-import Client.View.View.Panels.Constants;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -41,14 +39,17 @@ public class PureModelViewRequest implements Request {
 
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             String s = objectMapper.writeValueAsString(this);
             outputStream.println(s);
-            String res = inputStream.nextLine();
-            CardModelView pr = objectMapper.readValue(res, CardModelView.class);
-            pr.setImage(Constants.cardPics.get(pr.getName().toLowerCase()));
-            Responses.getInstance().setCardModelView(pr);
+            synchronized (object) {
+                try {
+                    object.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

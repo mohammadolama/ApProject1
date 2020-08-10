@@ -17,12 +17,11 @@ public class DeleteAccountRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
 
         try {
             if (JOptionPane.showConfirmDialog(MyFrame.getInstance(), "Are you sure", "Delete Account", JOptionPane.YES_NO_OPTION) == 0) {
                 outputStream.println(objectMapper.writeValueAsString(this));
-                String res = inputStream.nextLine();
                 SoundAdmin.play1("resources/Sounds/login.wav");
                 MyFrame.getInstance().changePanel("login");
             }

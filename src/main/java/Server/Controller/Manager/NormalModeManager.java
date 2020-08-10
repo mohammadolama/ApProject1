@@ -15,7 +15,7 @@ import java.util.Collections;
 public class NormalModeManager extends NormalManagers {
 
     public NormalModeManager(Player player, InfoPassive infoPassive, ArrayList<Card> arrayList,
-                             String card1, String card2, String card3) {
+                             String card1, String card2, String card3, ClientHandler cl) {
         try {
             player1CardsOfPlayer = arrayList;
             ThreeCard(player1CardsOfPlayer, card1, card2, card3);
@@ -25,8 +25,11 @@ public class NormalModeManager extends NormalManagers {
             this.player1InfoPassive = infoPassive;
             player1InfoInitilize(infoPassive);
             enemyInit();
-            player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
-            player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, );
+            player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
+            player2Hero.accept(new SpecialPowerVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, this);
+            cl1 = cl;
+            MyTimer myTimer = new MyTimer();
+            myTimer.start();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -77,6 +80,7 @@ public class NormalModeManager extends NormalManagers {
         benyaminAction(false);
         reversePlayers();
         PlayerTurn(cl);
+        flag1 = false;
     }
 
 

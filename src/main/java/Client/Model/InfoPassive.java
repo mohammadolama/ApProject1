@@ -14,6 +14,7 @@ public class InfoPassive {
         this.description = description;
     }
 
+
     public InfoPassive() {
     }
 

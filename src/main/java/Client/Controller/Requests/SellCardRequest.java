@@ -31,15 +31,9 @@ public class SellCardRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            if (res.equalsIgnoreCase("ok")) {
-                RequestHandler.getInstance().sendRequest(new PlayMusic("sell"));
-            } else {
-                JOptionPane.showMessageDialog(MyFrame.getInstance(), "Can't be sold,It's in one of your decks.");
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }

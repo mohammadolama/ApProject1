@@ -14,6 +14,6 @@ public class EndTurnRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        clientHandler.getGameManager().endTurn(clientHandler);
     }
 }

@@ -30,7 +30,6 @@ public class StatusPanel extends JPanel implements ActionListener {
 
     private DeckModel selectedDeck;
     private StatusConfig config;
-    private String mostUsedCad;
     private PlayerModel player;
 
     private JButton back;
@@ -77,6 +76,8 @@ public class StatusPanel extends JPanel implements ActionListener {
         setFocusable(false);
         showDecks();
 
+        requests();
+
     }
 
     public static StatusPanel getInstance() {
@@ -85,8 +86,6 @@ public class StatusPanel extends JPanel implements ActionListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        requests();
-
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.YELLOW);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -121,8 +120,6 @@ public class StatusPanel extends JPanel implements ActionListener {
 
     private void requests() {
         RequestHandler.getInstance().sendRequest(new PlayerModelRequest());
-//        RequestHandler.getInstance().sendRequest(new SelectedDeckRequest());
-//        selectedDeck = Responses.getInstance().getSelectedDeck();
         player = Responses.getInstance().getPlayer();
     }
 
@@ -220,7 +217,6 @@ public class StatusPanel extends JPanel implements ActionListener {
         if (src == back) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
             RequestHandler.getInstance().sendRequest(new LogRequest("Navigate : Main Menu"));
-            RequestHandler.getInstance().sendRequest(new SaveRequest());
             RequestHandler.getInstance().sendRequest(new VisiblePanelRequest("menu"));
             ar1 = null;
             selectedDeck = null;
@@ -240,5 +236,4 @@ public class StatusPanel extends JPanel implements ActionListener {
         }
         RequestHandler.getInstance().sendRequest(new RenderRequest());
     }
-
 }

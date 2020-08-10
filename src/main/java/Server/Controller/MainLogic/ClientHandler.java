@@ -3,6 +3,7 @@ package Server.Controller.MainLogic;
 import Server.Controller.Manager.Managers;
 import Server.Controller.Requests.Request;
 import Server.Model.Player;
+import Server.Model.GameState;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -59,5 +60,17 @@ public class ClientHandler extends Thread {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public Managers getGameManager() {
+        return gameManager;
+    }
+
+    public void setGameManager(Managers gameManager) {
+        this.gameManager = gameManager;
+    }
+
+    public GameState gameState() {
+        return gameManager.getState(this);
     }
 }

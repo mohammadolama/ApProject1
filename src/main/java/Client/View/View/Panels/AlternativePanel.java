@@ -126,11 +126,11 @@ public class AlternativePanel extends JPanel implements ActionListener {
                 g.setColor(new Color(122, 122, 122, 180));
                 g.fillRect(0, 0, 1600, 1000);
                 g.drawRect(200, 150, 300, 400);
-                g.drawImage(model1.getImage(), 200, 150, 300, 400, null);
+                g.drawImage(cardPics.get(model1.getName().toLowerCase()), 200, 150, 300, 400, null);
                 g.drawRect(650, 150, 300, 400);
-                g.drawImage(model2.getImage(), 650, 150, 300, 400, null);
+                g.drawImage(cardPics.get(model2.getName().toLowerCase()), 650, 150, 300, 400, null);
                 g.drawRect(1100, 150, 300, 400);
-                g.drawImage(model3.getImage(), 1100, 150, 300, 400, null);
+                g.drawImage(cardPics.get(model3.getName().toLowerCase()), 1100, 150, 300, 400, null);
             }
         } else {
             g.setColor(new Color(53, 53, 53, 229));
@@ -212,7 +212,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
 
     private void button1Action() {
         if (!discoverMode) {
-            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(1, this));
+            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(1, this, model1.getName(), model2.getName(), model3.getName()));
             revalidate();
             repaint();
             card1.setEnabled(false);
@@ -223,7 +223,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
 
     private void button2Action() {
         if (!discoverMode) {
-            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(2, this));
+            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(2, this, model1.getName(), model2.getName(), model3.getName()));
             revalidate();
             repaint();
             card2.setEnabled(false);
@@ -234,7 +234,7 @@ public class AlternativePanel extends JPanel implements ActionListener {
 
     private void button3Action() {
         if (!discoverMode) {
-            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(3, this));
+            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(3, this, model1.getName(), model2.getName(), model3.getName()));
             revalidate();
             repaint();
             card3.setEnabled(false);

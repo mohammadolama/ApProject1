@@ -1,7 +1,5 @@
 package Client.Controller.Requests;
 
-import Client.View.View.Panels.MyFrame;
-import Client.View.View.Sounds.SoundAdmin;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -16,11 +14,9 @@ public class ExitRequest implements Request {
     }
 
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            System.exit(0);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -11,27 +11,17 @@ import java.util.Scanner;
 @JsonTypeName("wallet")
 public class WalletRequest implements Request {
 
-    private long wallet;
-
     public WalletRequest() {
     }
 
-    public long getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(long wallet) {
-        this.wallet = wallet;
-    }
-
     @Override
-    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper) {
+    public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            wallet = objectMapper.readValue(res, long.class);
-            Responses.getInstance().setWallet(wallet);
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
