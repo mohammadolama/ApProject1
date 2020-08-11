@@ -1,0 +1,13 @@
+{
+  "model": "rogue",
+  "name": "Rogue",
+  "health": 30,
+  "maxHealth": 30,
+  "canAttack": false,
+  "heroPowerManaCost": 3,
+  "powerNeedFriendlyTarget": false,
+  "powerNeedEnemyTarget": false,
+  "defence": 0,
+  "life": 30,
+  "attack": 0
+}

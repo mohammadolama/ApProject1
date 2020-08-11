@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.ChangeCardResponse;
 import Server.Model.CardModelView;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -17,7 +18,6 @@ public class ChangeCardRequest implements Request {
     private int i;
     private CardModelView view;
     private String card1, card2, card3;
-
 
     public ChangeCardRequest() {
     }
@@ -66,7 +66,7 @@ public class ChangeCardRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         view = Admin.getInstance().changeCard(card1, card2, card3, clientHandler.getPlayer());
         try {
-            outputStream.println(objectMapper.writeValueAsString(view));
+            outputStream.println(objectMapper.writeValueAsString(new ChangeCardResponse(i, view)));
         } catch (IOException e) {
             e.printStackTrace();
         }

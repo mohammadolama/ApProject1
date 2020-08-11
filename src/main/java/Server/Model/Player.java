@@ -188,8 +188,5 @@ public class Player implements Serializable {
     void postLoad() {
         this.allDecks = new HashMap<>(this.allDecks);
 
-        for (Map.Entry<String, Deck> entry : allDecks.entrySet()) {
-            System.out.println(entry.getKey() + "  :  " + entry.getValue());
-        }
     }
 }

@@ -1,0 +1,13 @@
+{
+  "model": "warlock",
+  "name": "Warlock",
+  "health": 35,
+  "maxHealth": 35,
+  "canAttack": false,
+  "heroPowerManaCost": 3,
+  "powerNeedFriendlyTarget": false,
+  "powerNeedEnemyTarget": false,
+  "defence": 0,
+  "life": 35,
+  "attack": 0
+}

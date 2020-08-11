@@ -13,6 +13,8 @@ public class MyFrame extends JFrame {
     private static final MyFrame frame = new MyFrame();
     private static JPanel panel;
     private CardLayout cardLayout;
+    private AlternativePanel alternativePanel;
+    private BoardPanel boardPanel;
 
     private MyFrame() {
         setSize(1600, 1000);
@@ -75,16 +77,33 @@ public class MyFrame extends JFrame {
         new Thread(() -> {
             ShopPanel shop = ShopPanel.getInstance();
             CollectionPanel collection = CollectionPanel.getInstance();
-            MyFrame.getPanel().add(collection, "collection");
-            MyFrame.getPanel().add(shop, "shop");
-        }).start();
-        new Thread(() -> {
             Col_Change col_change = Col_Change.getInstance();
             StatusPanel status = StatusPanel.getInstance();
             SettingPanel settingPanel = SettingPanel.getInstance();
+            MyFrame.getPanel().add(shop, "shop");
+            MyFrame.getPanel().add(collection, "collection");
             MyFrame.getPanel().add("setting", settingPanel);
             MyFrame.getPanel().add("status", status);
             MyFrame.getPanel().add(col_change, "col");
         }).start();
+        new Thread(() -> {
+
+        }).start();
+    }
+
+    public AlternativePanel getAlternativePanel() {
+        return alternativePanel;
+    }
+
+    public void setAlternativePanel(AlternativePanel alternativePanel) {
+        this.alternativePanel = alternativePanel;
+    }
+
+    public BoardPanel getBoardPanel() {
+        return boardPanel;
+    }
+
+    public void setBoardPanel(BoardPanel boardPanel) {
+        this.boardPanel = boardPanel;
     }
 }

@@ -6,6 +6,7 @@ import Server.Controller.Actions.CardVisitors.BattlecryVisitor;
 import Server.Controller.Actions.SPVisitor.HeroPowerVisitor;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.MainLogic.ThreadColor;
 import Server.Model.*;
 import Server.Model.Cards.*;
 import Server.Model.Enums.Attribute;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ListIterator;
 
-import static Client.View.View.Sounds.SoundAdmin.playSound;
 import static Server.Model.Cards.Card.getCardOf;
 
 public abstract class Managers {
@@ -483,8 +483,17 @@ public abstract class Managers {
     }
 
     public int heroPowerCanBePlayed(ClientHandler cl) {
-        if (!(player1Hero instanceof Hunter)) {
-            if (player1HeroPowerUsageTime > 0) {
+        Hero hero;
+        int i;
+        if (cl.equals(cl1)) {
+            hero = player1Hero;
+            i = player1HeroPowerUsageTime;
+        } else {
+            hero = player2Hero;
+            i = player2HeroPowerUsageTime;
+        }
+        if (!(hero instanceof Hunter)) {
+            if (i > 0) {
                 if (heroPowerTargetNeeded(cl) > 0) {
                     if (heroPowerTargetNeeded(cl) == 1) {
                         return 1;
@@ -580,7 +589,13 @@ public abstract class Managers {
         return 0;
     }
 
-    public boolean playHeroPower(Character target, ClientHandler cl) {
+    public boolean heroPower(int target, ClientHandler cl) {
+        Character tar = createTarget(target, cl);
+        return playHeroPower(tar, cl);
+    }
+
+
+    private boolean playHeroPower(Character target, ClientHandler cl) {
         if (cl.equals(cl1)) {
             return player1HeroPower(target);
         } else {
@@ -632,7 +647,7 @@ public abstract class Managers {
     }
 
 
-    private Character createTarget(int target, Managers gameManager, ClientHandler cl) {
+    private Character createTarget(int target, ClientHandler cl) {
         if (cl.equals(cl1)) {
             if (target >= 10 && target < 20) {
                 return player1PlayedCards.get(target - 10);
@@ -660,22 +675,31 @@ public abstract class Managers {
         }
     }
 
-    String canBePlayed(String string, ArrayList<Card> hand, ArrayList<Card> played,
-                       int notUsed, int manaDecrease) {
+    public String playCheck(String st, ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            return canBePlayed(st, player1HandCards, player1PlayedCards,
+                    player1NotUsedMana, player1ManaDecrease);
+        } else {
+            return canBePlayed(st, player2HandCards, player2PlayedCards,
+                    player2NotUsedMana, player2ManaDecrease);
+        }
+    }
+
+    public String canBePlayed(String string, ArrayList<Card> hand, ArrayList<Card> played,
+                              int notUsed, int manaDecrease) {
         for (Card cards : hand) {
             if (cards.getName().equalsIgnoreCase(string)) {
                 if (notUsed >= cards.getManaCost() - manaDecrease) {
                     if (getCardOf(string) instanceof Minion) {
                         if (played.size() < 7) {
-                            return "ok";
+                            return "okminion";
                         } else {
-                            playSound("error");
                             return "full";
                         }
                     } else if (getCardOf(string) instanceof Spell) {
-                        return "ok";
+                        return "okspell";
                     } else if (getCardOf(string) instanceof Weapon) {
-                        return "ok";
+                        return "okweapon";
                     }
                     break;
                 } else {
@@ -686,12 +710,24 @@ public abstract class Managers {
         throw new RuntimeException();
     }
 
+    public void playCard(String string, int i, int target, ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            playCard(string, i, target, this, player1DeckCards, player1HandCards, player1PlayedCards,
+                    player2DeckCards, player2HandCards, player2PlayedCards, player1Hero, player2Hero,
+                    false, cl1, cl2);
+        } else {
+            playCard(string, i, target, this, player2DeckCards, player2HandCards, player2PlayedCards,
+                    player1DeckCards, player1HandCards, player1PlayedCards, player2Hero, player1Hero,
+                    true, cl2, cl1);
+        }
+    }
 
-    public void playCard(String string, int i, int target, Managers gameManager,
-                         ArrayList<Card> p1deck, ArrayList<Card> p1hand, ArrayList<Card> p1played,
-                         ArrayList<Card> p2deck, ArrayList<Card> p2hand, ArrayList<Card> p2played,
-                         Hero p1hero, Hero p2hero, boolean p2Turn, ClientHandler cl1, ClientHandler cl2) {
-        Minion targeted = (Minion) createTarget(target, gameManager, cl1);
+
+    void playCard(String string, int i, int target, Managers gameManager,
+                  ArrayList<Card> p1deck, ArrayList<Card> p1hand, ArrayList<Card> p1played,
+                  ArrayList<Card> p2deck, ArrayList<Card> p2hand, ArrayList<Card> p2played,
+                  Hero p1hero, Hero p2hero, boolean p2Turn, ClientHandler cl1, ClientHandler cl2) {
+        Minion targeted = (Minion) createTarget(target, cl1);
         for (Card cards : p1hand) {
             if (cards.getName().equalsIgnoreCase(string)) {
                 checkContiniousAction(cards, p2Turn, gameManager);
@@ -772,7 +808,6 @@ public abstract class Managers {
     }
 
     private void playSpell(Spell spell, Character target, Managers gameManager, ClientHandler cl) {
-        playSound("spell");
         if (cl.equals(cl1)) {
             spendManaOnSpell(spell.getManaCost() - player1ManaDecrease, p2Turn);
             setPlayer1NotUsedMana(player1NotUsedMana - (spell.getManaCost() - player1ManaDecrease));
@@ -796,18 +831,17 @@ public abstract class Managers {
 
     private void playWeapon(Weapon weapon, Managers gameManager, ClientHandler cl) {
         if (cl.equals(cl1)) {
-            playSound("weapon");
             setPlayer1NotUsedMana(player1NotUsedMana - (weapon.getManaCost() - player1ManaDecrease));
             player1HandCards.remove(weapon);
-            gameManager.setPlayer1Weapon(weapon);
+//            gameManager.setPlayer1Weapon(weapon);
 //            Admin.getInstance().updateGameLog(String.format("%s Equiped %s", player1.getUsername(), weapon.getName()));
         } else {
-            playSound("weapon");
             setPlayer2NotUsedMana(player2NotUsedMana - (weapon.getManaCost() - player2ManaDecrease));
             player2HandCards.remove(weapon);
-            gameManager.setPlayer1Weapon(weapon);
+//            gameManager.setPlayer2Weapon(weapon);
 //            Admin.getInstance().updateGameLog(String.format("%s Equiped %s", player2.getUsername(), weapon.getName()));
         }
+        setPlayerWeapon(weapon, cl);
     }
 
 
@@ -1128,12 +1162,13 @@ public abstract class Managers {
         this.player1Weapon = player1Weapon;
     }
 
-    public Weapon getPlayer2Weapon() {
-        return player2Weapon;
+    public void setPlayer2Weapon(Weapon player1Weapon) {
+        this.player1Weapon = player1Weapon;
     }
 
-    public void setPlayer2Weapon(Weapon player2Weapon) {
-        this.player2Weapon = player2Weapon;
+
+    public Weapon getPlayer2Weapon() {
+        return player2Weapon;
     }
 
     public Hero getPlayer1Hero() {
@@ -1193,14 +1228,14 @@ public abstract class Managers {
             CardModelView p2w = Admin.getInstance().getWeaponViewModel(player2Weapon);
             int dpm = player1Hero.getHeroPower().getManaCost() - player1PowerManaDecrease;
             int upm = player2Hero.getHeroPower().getManaCost() - player2PowerManaDecrease;
-
+            System.out.println(ThreadColor.ANSI_GREEN + player1Hero.isCanAttack() + ThreadColor.ANSI_RESET);
             return new GameState(player1.getUsername(), player2.getUsername(), player1Hero.getName(),
                     player2Hero.getName(), time, player1HeroPowerUsageTime, player2HeroPowerUsageTime,
                     dpm, upm, player1NotUsedMana, player1TotalMana, player1Hero.getHealth(),
                     player2Hero.getHealth(), player1Hero.getDefence(), player2Hero.getDefence(),
                     player1HandCards.size(), player2HandCards.size(), player1PlayedCards.size(),
                     player2PlayedCards.size(), player1DeckCards.size(), player2DeckCards.size(),
-                    player1Weapon != null, player2Weapon != null, player1Hero.getCanAttack(),
+                    player1Weapon != null, player2Weapon != null, player1Hero.isCanAttack(),
                     p1w, p2w, null, null, hand, p1Played, p2Played, gameLog);
         } else {
             ArrayList<CardModelView> hand = Admin.getInstance().modelList(player2HandCards);
@@ -1216,9 +1251,46 @@ public abstract class Managers {
                     player1Hero.getHealth(), player2Hero.getDefence(), player1Hero.getDefence(),
                     player2HandCards.size(), player1HandCards.size(), player2PlayedCards.size(),
                     player1PlayedCards.size(), player2DeckCards.size(), player1DeckCards.size(),
-                    player2Weapon != null, player1Weapon != null, player2Hero.getCanAttack(),
+                    player2Weapon != null, player1Weapon != null, player2Hero.isCanAttack(),
                     p1w, p2w, null, null, hand, p1Played, p2Played, gameLog);
         }
+    }
+
+    public boolean getHeroCanAttack(ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            return player1Hero.isCanAttack();
+        } else {
+            return player2Hero.isCanAttack();
+        }
+    }
+
+    public ArrayList<Integer> listOfTargets(ClientHandler cl) {
+        ArrayList<Card> list;
+        if (cl.equals(cl1)) list = player2PlayedCards;
+        else list = player1PlayedCards;
+
+        ArrayList<Integer> targets = new ArrayList<>();
+        int i = 0;
+        for (Card card : list) {
+            if (card.getAttributes().contains(Attribute.Taunt)) {
+                targets.add(i);
+            }
+            i++;
+        }
+        if (targets.size() == 0) {
+            for (int j = 0; j < list.size(); j++) {
+                targets.add(j);
+            }
+            targets.add(-1);
+        }
+        return targets;
+    }
+
+    public boolean canDoAction(int i, ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            return !((Minion) player1PlayedCards.get(i)).isSleep();
+        }
+        return !((Minion) player2PlayedCards.get(i)).isSleep();
     }
 
 

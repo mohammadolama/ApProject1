@@ -78,7 +78,6 @@ public class CollectionRequest implements Request {
 
         for (Carts carts : ar2) {
             ar4.add(Admin.getInstance().getPureViewModelOf(carts.toString()));
-            System.out.println(Admin.getInstance().getPureViewModelOf(carts.toString()).toString());
         }
 
         try {

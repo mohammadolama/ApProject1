@@ -3,6 +3,7 @@ package Client.Controller;
 import Client.Controller.Requests.Request;
 import Client.View.View.Panels.ConnectionPanel;
 import Client.View.View.Panels.MyFrame;
+import Client.View.View.Sounds.SoundAdmin;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -294,14 +295,8 @@ public class RequestHandler {
 //        }
     }
 
-    public void sendRequest(Request request) {
-        try {
-            String st = objectMapper.writeValueAsString(request);
-            System.out.println(request);
-            request.excute(scanner, printWriter, objectMapper, object);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public synchronized void sendRequest(Request request) {
+        request.excute(scanner, printWriter, objectMapper, object);
     }
 
     public static void Connect(String ip, int port, ConnectionPanel panel) {
@@ -312,6 +307,10 @@ public class RequestHandler {
         } catch (IOException e) {
             panel.label.setText("Connection Error");
         }
+    }
+
+    public void playSound(String music) {
+        new Thread(() -> SoundAdmin.playSound(music)).start();
     }
 
 }

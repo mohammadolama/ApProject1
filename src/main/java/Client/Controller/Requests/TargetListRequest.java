@@ -1,17 +1,20 @@
 package Client.Controller.Requests;
 
+import Client.Controller.Responses;
 import Client.View.View.Panels.BoardPanel;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 @JsonTypeName("targetlist")
 public class TargetListRequest implements Request {
+    @JsonIgnore
     private BoardPanel boardPanel;
-    private ArrayList<Integer> list;
 
     public TargetListRequest(BoardPanel boardPanel) {
         this.boardPanel = boardPanel;
@@ -28,16 +31,17 @@ public class TargetListRequest implements Request {
         this.boardPanel = boardPanel;
     }
 
-    public ArrayList<Integer> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<Integer> list) {
-        this.list = list;
-    }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
-
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+            synchronized (object) {
+                object.wait();
+            }
+            boardPanel.drawTargetsForAttack(Responses.getInstance().getTargets());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

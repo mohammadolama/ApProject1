@@ -183,8 +183,10 @@ public class StatusPanel extends JPanel implements ActionListener {
     private void showDecks() {
         int i = 0;
         buttons = new ArrayList<>();
+
         RequestHandler.getInstance().sendRequest(new BestDecksRequest());
         deckNames = Responses.getInstance().getBestDecks();
+
         for (String string : deckNames) {
             JButton button = new JButton(string);
             button.setName(string);

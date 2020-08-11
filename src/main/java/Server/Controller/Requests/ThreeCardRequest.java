@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.ThreeCardResponse;
 import Server.Model.CardModelView;
 import Server.Model.InfoPassive;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -42,7 +43,7 @@ public class ThreeCardRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         list = Admin.getInstance().threeCardChoose(clientHandler.getPlayer());
         try {
-            outputStream.println(objectMapper.writeValueAsString(list));
+            outputStream.println(objectMapper.writeValueAsString(new ThreeCardResponse(list, infoPassive)));
         } catch (IOException e) {
             e.printStackTrace();
         }

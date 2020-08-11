@@ -50,6 +50,6 @@ public class PlayCardRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        clientHandler.getGameManager().playCard(name, deckIndex, targetIndex, clientHandler);
     }
 }

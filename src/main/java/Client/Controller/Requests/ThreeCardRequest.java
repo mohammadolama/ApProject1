@@ -16,8 +16,6 @@ import java.util.*;
 
 @JsonTypeName("threecard")
 public class ThreeCardRequest implements Request {
-    private ArrayList<CardModelView> list;
-    @JsonIgnore
     private InfoPassive infoPassive;
 
     public ThreeCardRequest(InfoPassive infoPassive) {
@@ -25,14 +23,6 @@ public class ThreeCardRequest implements Request {
     }
 
     public ThreeCardRequest() {
-    }
-
-    public ArrayList<CardModelView> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<CardModelView> list) {
-        this.list = list;
     }
 
     public InfoPassive getInfoPassive() {
@@ -47,20 +37,6 @@ public class ThreeCardRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            list = objectMapper.readValue(res, new TypeReference<ArrayList<CardModelView>>() {
-            });
-
-            AlternativePanel th = new AlternativePanel(false);
-            th.setModel1(list.get(0));
-            th.setModel2(list.get(1));
-            th.setModel3(list.get(2));
-            th.setInfoPassive(infoPassive);
-            th.setEnabled(true);
-            MyFrame.getPanel().add("three", th);
-            MyFrame.getInstance().changePanel("three");
-            Update.render();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

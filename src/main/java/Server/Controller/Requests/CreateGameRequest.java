@@ -4,11 +4,13 @@ import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.DeckLogic;
 import Server.Controller.Manager.Managers;
 import Server.Controller.Manager.NormalModeManager;
+import Server.Controller.Response.CreateNormalResponse;
 import Server.Model.InfoPassive;
 import Server.Model.Player;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -67,6 +69,10 @@ public class CreateGameRequest implements Request {
         Player player = clientHandler.getPlayer();
         Managers gameManager = new NormalModeManager(player, infoPassive, DeckLogic.UpdateDeck(player.getSelectedDeck().getDeck()), card1, card2, card3, clientHandler);
         clientHandler.setGameManager(gameManager);
-        outputStream.println("ok");
+        try {
+            outputStream.println(objectMapper.writeValueAsString(new CreateNormalResponse()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

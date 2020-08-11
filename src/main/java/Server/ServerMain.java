@@ -9,7 +9,6 @@ public class ServerMain {
         for (int i = 0; i < 55; i++) {
             String st = scanner.nextLine();
             String res = st.replace("Model", "Server.Model");
-            System.out.println(res);
         }
     }
 }

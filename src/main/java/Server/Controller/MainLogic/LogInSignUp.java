@@ -106,7 +106,6 @@ public class LogInSignUp {
         if (UserFinder(user)) {
             if (PassChecker(user, password)) {
                 Player player = DataBaseManagment.PlayerJsonReader(user);
-                System.out.println(player);
 //                Gamestate.setPlayer(player);
                 clientHandler.setPlayer(player);
 //                LOGGER.playerlog(player, "Log_in");

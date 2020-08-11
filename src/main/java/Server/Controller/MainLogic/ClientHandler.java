@@ -2,6 +2,7 @@ package Server.Controller.MainLogic;
 
 import Server.Controller.Manager.Managers;
 import Server.Controller.Requests.Request;
+import Server.Controller.Response.notifyAttack;
 import Server.Model.Player;
 import Server.Model.GameState;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -41,17 +42,24 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public void excuteReq(String string) {
+    public synchronized void excuteReq(String string) {
+        new Thread(() -> {
+            try {
+                Request request = objectMapper.readValue(string, Request.class);
+                request.excute(input, output, this, objectMapper, gameManager);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+    }
+
+    public synchronized void notifyAttack(int i, int j, int k, int l) {
         try {
-            System.out.println(ThreadColor.ANSI_CYAN + string + ThreadColor.ANSI_RESET);
-            Request request = objectMapper.readValue(string, Request.class);
-            request.excute(input, output, this, objectMapper, gameManager);
+            output.println(objectMapper.writeValueAsString(new notifyAttack(i, j, k, l)));
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void notifyAttack(int i, int j, int k, int l) {
     }
 
     public Player getPlayer() {

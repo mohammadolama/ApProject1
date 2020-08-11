@@ -1,7 +1,5 @@
 package Server.Controller.Response;
 
-import Server.Controller.MainLogic.ClientHandler;
-import Server.Controller.Manager.Managers;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 

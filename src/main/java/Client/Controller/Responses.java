@@ -22,6 +22,7 @@ public class Responses {
     private ArrayList<Heroes> heroesList;
     private ArrayList<Carts> collectionList;
     private ArrayList<String> bestDecks;
+    private ArrayList<Integer> targets;
     private boolean canBePlayed, heroCanAttack, canDoAction;
     private int heroPowerCanBePlayed;
     private PlayerModel player;
@@ -201,4 +202,11 @@ public class Responses {
         this.heroName = heroName;
     }
 
+    public ArrayList<Integer> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(ArrayList<Integer> targets) {
+        this.targets = targets;
+    }
 }

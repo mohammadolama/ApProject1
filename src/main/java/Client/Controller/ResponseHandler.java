@@ -32,7 +32,6 @@ public class ResponseHandler extends Thread {
     public void processRes(String string) {
         new Thread(() -> {
             try {
-                System.out.println(ThreadColor.ANSI_CYAN + string + ThreadColor.ANSI_RESET);
                 Response response = objectMapper.readValue(string, Response.class);
                 response.process(input, output, objectMapper, object);
             } catch (IOException e) {

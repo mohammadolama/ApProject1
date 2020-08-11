@@ -3,13 +3,13 @@ package Client.Controller.Requests;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
 @JsonTypeName("canbeplayed")
 public class CanBePlayedRequest implements Request {
 
-    private boolean flag;
     private String cardName;
 
     public CanBePlayedRequest(String cardName) {
@@ -17,14 +17,6 @@ public class CanBePlayedRequest implements Request {
     }
 
     public CanBePlayedRequest() {
-    }
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
     }
 
     public String getCardName() {
@@ -37,6 +29,13 @@ public class CanBePlayedRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
-
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -83,16 +83,6 @@ public class ChangeCardRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            view = objectMapper.readValue(res, CardModelView.class);
-            if (i == 1) {
-                alternativePanel.setModel1(view);
-            } else if (i == 2) {
-                alternativePanel.setModel2(view);
-            } else {
-                alternativePanel.setModel3(view);
-            }
-            Update.render();
         } catch (IOException e) {
             e.printStackTrace();
         }

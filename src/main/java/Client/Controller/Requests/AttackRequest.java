@@ -4,6 +4,7 @@ import Client.View.View.Panels.BoardPanel;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -11,12 +12,10 @@ import java.util.Scanner;
 public class AttackRequest implements Request {
     private int attacker;
     private int target;
-    private BoardPanel boardPanel;
 
     public AttackRequest(int attacker, int target, BoardPanel boardPanel) {
         this.attacker = attacker;
         this.target = target;
-        this.boardPanel = boardPanel;
     }
 
     public AttackRequest() {
@@ -38,16 +37,12 @@ public class AttackRequest implements Request {
         this.target = target;
     }
 
-    public BoardPanel getBoardPanel() {
-        return boardPanel;
-    }
-
-    public void setBoardPanel(BoardPanel boardPanel) {
-        this.boardPanel = boardPanel;
-    }
-
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
-
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

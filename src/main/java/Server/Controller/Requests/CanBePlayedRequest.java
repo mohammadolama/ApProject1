@@ -2,16 +2,17 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.CanBePlayedResponse;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
 @JsonTypeName("canbeplayed")
 public class CanBePlayedRequest implements Request {
 
-    private boolean flag;
     private String cardName;
 
     public CanBePlayedRequest(String cardName) {
@@ -21,13 +22,6 @@ public class CanBePlayedRequest implements Request {
     public CanBePlayedRequest() {
     }
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
 
     public String getCardName() {
         return cardName;
@@ -39,6 +33,11 @@ public class CanBePlayedRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        String res = clientHandler.getGameManager().playCheck(cardName, clientHandler);
+        try {
+            outputStream.println(objectMapper.writeValueAsString(new CanBePlayedResponse(res)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

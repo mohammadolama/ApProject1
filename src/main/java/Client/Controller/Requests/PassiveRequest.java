@@ -13,28 +13,19 @@ import java.util.Scanner;
 
 @JsonTypeName("passive")
 public class PassiveRequest implements Request {
-    ArrayList<InfoPassive> list;
 
     public PassiveRequest() {
     }
 
-    public ArrayList<InfoPassive> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<InfoPassive> list) {
-        this.list = list;
-    }
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            list = objectMapper.readValue(res, new TypeReference<ArrayList<InfoPassive>>() {
-            });
-            Responses.getInstance().setPassiveList(list);
-        } catch (IOException e) {
+            synchronized (object) {
+                object.wait();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

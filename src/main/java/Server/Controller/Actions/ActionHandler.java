@@ -135,30 +135,34 @@ public class ActionHandler {
             actionHandler.Attack(attacker1, target1, list2);
             setSleep(attacker, list1);
             cl1.notifyAttack(attacker, target, attacker1.getAttack(), target1.getAttack());
-            cl2.notifyAttack(target, attacker, target1.getAttack(), attacker1.getAttack());
+            if (cl2 != null)
+                cl2.notifyAttack(target, attacker, target1.getAttack(), attacker1.getAttack());
             managers.updateGameLog(String.format("%s Attacked %s", attacker1.getName(), target1.getName()));
         } else if (attacker >= 0) {
             Minion attacker1 = (Minion) list1.get(attacker);
             actionHandler.Attack(attacker1, hero2, list2);
             setSleep(attacker, list1);
             cl1.notifyAttack(attacker, target, attacker1.getAttack(), hero2.getAttack());
-            cl2.notifyAttack(target, attacker, hero2.getAttack(), attacker1.getAttack());
+            if (cl2 != null)
+                cl2.notifyAttack(target, attacker, hero2.getAttack(), attacker1.getAttack());
             managers.updateGameLog(String.format("%s Attacked %s", attacker1.getName(), hero2.getName()));
         } else if (target >= 0) {
             Minion target1 = (Minion) list2.get(target);
             cl1.notifyAttack(attacker, target, hero1.getAttack(), target1.getAttack());
-            cl2.notifyAttack(target, attacker, target1.getAttack(), hero1.getAttack());
+            if (cl2 != null)
+                cl2.notifyAttack(target, attacker, target1.getAttack(), hero1.getAttack());
             if (actionHandler.Attack(hero1, target1, list2)) {
                 managers.updateGameLog(String.format("%s Attacked %s", hero1.getName(), target1.getName()));
                 managers.updateWeapon(cl1);
             }
         } else {
-            cl1.notifyAttack(attacker, target, hero1.getAttack(), hero2.getAttack());
-            cl2.notifyAttack(target, attacker, hero2.getAttack(), hero1.getAttack());
             if (actionHandler.Attack(hero1, hero2, list2)) {
                 managers.updateGameLog(String.format("%s Attacked %s", hero1.getName(), hero2.getName()));
                 managers.updateWeapon(cl1);
             }
+            cl1.notifyAttack(attacker, target, hero1.getAttack(), hero2.getAttack());
+            if (cl2 != null)
+                cl2.notifyAttack(target, attacker, hero2.getAttack(), hero1.getAttack());
         }
     }
 

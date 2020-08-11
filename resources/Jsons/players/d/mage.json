@@ -1,0 +1,13 @@
+{
+  "model": "mage",
+  "name": "Mage",
+  "health": 30,
+  "maxHealth": 30,
+  "canAttack": false,
+  "heroPowerManaCost": 2,
+  "powerNeedFriendlyTarget": false,
+  "powerNeedEnemyTarget": true,
+  "defence": 0,
+  "attack": 0,
+  "life": 30
+}

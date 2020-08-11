@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 @JsonTypeName("endturn")
 public class EndTurnRequest implements Request {
-    private boolean friendlyDeck;
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {

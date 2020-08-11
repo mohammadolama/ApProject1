@@ -1,0 +1,347 @@
+Created in : Sun Jul 12 00:25:11 IRDT 2020
+Password : a
+User : a
+**********************
+12/07/2020 00:25:12  Sign_in
+12/07/2020 00:25:16  Select : ROGUE as first selected hero
+12/07/2020 00:25:17  Click_Button : Play Button
+12/07/2020 00:25:18  Click_Button : Start Button
+12/07/2020 00:25:18  Start the Battle
+12/07/2020 00:25:22  Click_Button : NextTurn Button
+12/07/2020 00:25:22  a  EndTurn .
+12/07/2020 00:25:24  Click_Button : NextTurn Button
+12/07/2020 00:25:24  enemy  EndTurn .
+12/07/2020 00:25:26  Click_Button : NextTurn Button
+12/07/2020 00:25:26  a  EndTurn .
+12/07/2020 00:25:49  Sign_in
+12/07/2020 00:25:50  Click_Button : Play Button
+12/07/2020 00:25:51  Click_Button : Start Button
+12/07/2020 00:25:51  Start the Battle
+12/07/2020 00:26:54  Click_Button : NextTurn Button
+12/07/2020 00:26:54  a  EndTurn .
+12/07/2020 22:57:43  Sign_in
+12/07/2020 22:57:45  Click_Button : Play Button
+12/07/2020 22:57:47  Click_Button : Start Button
+12/07/2020 22:57:47  Start the Battle
+12/07/2020 22:57:54  a Played Khashayar
+12/07/2020 22:57:54  a Played Khashayar
+12/07/2020 22:58:01  a Played Hossein
+12/07/2020 22:58:01  a Played Hossein
+12/07/2020 22:58:01  Click_Button : NextTurn Button
+12/07/2020 22:59:50  Sign_in
+12/07/2020 22:59:51  Click_Button : Play Button
+12/07/2020 22:59:53  Click_Button : Start Button
+12/07/2020 22:59:53  Start the Battle
+12/07/2020 22:59:57  a Played Hossein
+12/07/2020 22:59:57  a Played Hossein
+12/07/2020 22:59:58  Click_Button : NextTurn Button
+12/07/2020 23:00:02  Click_Button : NextTurn Button
+12/07/2020 23:00:09  Hossein Attacked Warlock
+12/07/2020 23:00:10  Click_Button : NextTurn Button
+12/07/2020 23:00:14  enemy Equiped FieryWarAxe
+12/07/2020 23:00:14  enemy Equiped FieryWarAxe
+12/07/2020 23:00:18  Warlock Attacked Rogue
+12/07/2020 23:00:18  enemy use Weapon.
+12/07/2020 23:00:26  Click_Button : NextTurn Button
+12/07/2020 23:00:36  a Cast Cookie
+12/07/2020 23:00:36  a Cast Cookie
+12/07/2020 23:00:41  Click_Button : NextTurn Button
+12/07/2020 23:00:51  Warlock Attacked Hossein
+12/07/2020 23:00:51  enemy use Weapon.
+12/07/2020 23:00:59  Click_Button : Back Button
+12/07/2020 23:01:01  Click_Button : Play Button
+12/07/2020 23:01:09  Click_Button : NextTurn Button
+12/07/2020 23:01:18  practice  EndTurn .
+12/07/2020 23:01:24  a Played Hossein
+12/07/2020 23:01:24  a Played Hossein
+12/07/2020 23:01:26  Click_Button : NextTurn Button
+12/07/2020 23:01:29  practice Played hossein
+12/07/2020 23:01:35  practice  EndTurn .
+12/07/2020 23:01:45  Click_Button : NextTurn Button
+12/07/2020 23:02:00  Click_Button : Back Button
+12/07/2020 23:02:03  practice Played benyamin
+12/07/2020 23:02:30  Sign_in
+12/07/2020 23:02:31  Click_Button : Play Button
+12/07/2020 23:02:36  Click_Button : NextTurn Button
+12/07/2020 23:02:40  practice Played hossein
+12/07/2020 23:02:46  practice Use HeroPower .
+12/07/2020 23:02:46  practice  EndTurn .
+12/07/2020 23:03:07  a Played Hossein
+12/07/2020 23:03:07  a Played Hossein
+12/07/2020 23:03:08  Click_Button : NextTurn Button
+12/07/2020 23:03:12  practice Played nima
+12/07/2020 23:03:18  Hossein Attacked Hossein
+12/07/2020 23:03:20  practice  EndTurn .
+12/07/2020 23:03:26  Hossein Attacked Warlock
+12/07/2020 23:03:28  Click_Button : NextTurn Button
+12/07/2020 23:04:50  Sign_in
+12/07/2020 23:04:51  Click_Button : Play Button
+12/07/2020 23:04:58  player Cast LearnJavadonic
+12/07/2020 23:04:58  player Cast LearnJavadonic
+12/07/2020 23:05:00  Click_Button : NextTurn Button
+12/07/2020 23:05:07  AI Cast StrengthInNumbersDR
+12/07/2020 23:05:07  AI Cast StrengthInNumbersDR
+12/07/2020 23:05:10  Click_Button : NextTurn Button
+12/07/2020 23:05:15  player Cast BookOfSpecters
+12/07/2020 23:05:15  player Cast BookOfSpecters
+12/07/2020 23:05:20  Click_Button : NextTurn Button
+12/07/2020 23:05:25  AI Played Benyamin
+12/07/2020 23:05:25  AI Played Benyamin
+12/07/2020 23:05:27  Click_Button : NextTurn Button
+12/07/2020 23:05:40  Click_Button : NextTurn Button
+12/07/2020 23:05:47  AI Equiped FieryWarAxe
+12/07/2020 23:05:47  AI Equiped FieryWarAxe
+12/07/2020 23:05:49  Click_Button : NextTurn Button
+12/07/2020 23:05:51  Click_Button : NextTurn Button
+12/07/2020 23:05:55  Click_Button : NextTurn Button
+12/07/2020 23:05:55  Click_Button : NextTurn Button
+12/07/2020 23:05:59  AI Played Nima
+12/07/2020 23:05:59  AI Played Nima
+12/07/2020 23:06:02  Click_Button : NextTurn Button
+12/07/2020 23:06:02  Click_Button : NextTurn Button
+12/07/2020 23:06:06  Click_Button : NextTurn Button
+12/07/2020 23:06:06  Click_Button : NextTurn Button
+12/07/2020 23:06:14  Minion Benyamin defeated .
+12/07/2020 23:06:14  Minion Nima defeated .
+12/07/2020 23:06:14  AI Played HighMasterSaman
+12/07/2020 23:06:14  AI Played HighMasterSaman
+12/07/2020 23:06:18  Click_Button : NextTurn Button
+12/07/2020 23:06:23  player Cast Sprint
+12/07/2020 23:06:23  player Cast Sprint
+12/07/2020 23:06:24  Click_Button : NextTurn Button
+12/07/2020 23:06:28  AI Played AghaHaghi
+12/07/2020 23:06:28  AI Played AghaHaghi
+12/07/2020 23:06:29  Click_Button : NextTurn Button
+12/07/2020 23:06:33  player Played Mobin
+12/07/2020 23:06:33  player Played Mobin
+12/07/2020 23:06:49  player Cast Aylar
+12/07/2020 23:06:49  player Cast Aylar
+12/07/2020 23:06:50  player Choosed SilverSword
+12/07/2020 23:06:50  player Choosed SilverSword
+12/07/2020 23:06:51  Click_Button : NextTurn Button
+12/07/2020 23:07:55  Click_Button : NextTurn Button
+12/07/2020 23:08:58  Click_Button : NextTurn Button
+12/07/2020 23:10:00  Click_Button : NextTurn Button
+12/07/2020 23:11:02  Click_Button : NextTurn Button
+12/07/2020 23:11:19  Sign_in
+12/07/2020 23:11:20  Click_Button : Play Button
+12/07/2020 23:12:00  player Cast LearnJavadonic
+12/07/2020 23:12:00  player Cast LearnJavadonic
+12/07/2020 23:12:05  Click_Button : NextTurn Button
+12/07/2020 23:12:09  AI Cast StrengthInNumbersDR
+12/07/2020 23:12:09  AI Cast StrengthInNumbersDR
+12/07/2020 23:13:11  Sign_in
+12/07/2020 23:13:19  Click_Button : Play Button
+12/07/2020 23:13:23  player Cast LearnJavadonic
+12/07/2020 23:13:23  player Cast LearnJavadonic
+12/07/2020 23:13:24  Click_Button : NextTurn Button
+12/07/2020 23:13:27  AI Cast StrengthInNumbersDR
+12/07/2020 23:13:27  AI Cast StrengthInNumbersDR
+12/07/2020 23:13:28  Click_Button : NextTurn Button
+12/07/2020 23:13:29  Click_Button : NextTurn Button
+12/07/2020 23:13:32  AI Played Benyamin
+12/07/2020 23:13:32  AI Played Benyamin
+12/07/2020 23:13:32  Click_Button : NextTurn Button
+12/07/2020 23:13:33  Click_Button : NextTurn Button
+12/07/2020 23:13:34  Click_Button : NextTurn Button
+12/07/2020 23:13:34  Click_Button : NextTurn Button
+12/07/2020 23:13:35  Click_Button : NextTurn Button
+12/07/2020 23:13:36  Click_Button : NextTurn Button
+12/07/2020 23:13:36  Click_Button : NextTurn Button
+12/07/2020 23:13:38  Click_Button : NextTurn Button
+12/07/2020 23:13:43  AI Played Nima
+12/07/2020 23:13:43  AI Played Nima
+12/07/2020 23:13:44  Click_Button : NextTurn Button
+12/07/2020 23:13:44  Click_Button : NextTurn Button
+12/07/2020 23:13:50  AI Played Faeze
+12/07/2020 23:13:50  AI Played Faeze
+12/07/2020 23:13:53  Click_Button : NextTurn Button
+12/07/2020 23:13:54  Click_Button : NextTurn Button
+12/07/2020 23:13:57  AI Played AghaHaghi
+12/07/2020 23:13:57  AI Played AghaHaghi
+12/07/2020 23:13:59  AI Use HeroPower
+12/07/2020 23:14:00  Click_Button : NextTurn Button
+12/07/2020 23:14:03  Click_Button : NextTurn Button
+12/07/2020 23:14:04  Click_Button : NextTurn Button
+12/07/2020 23:14:06  Click_Button : NextTurn Button
+12/07/2020 23:14:24  Click_Button : Back Button
+12/07/2020 23:14:25  Click_Button : Play Button
+12/07/2020 23:14:30  a Played Hossein
+12/07/2020 23:14:30  a Played Hossein
+12/07/2020 23:14:31  Click_Button : NextTurn Button
+12/07/2020 23:14:41  practice  EndTurn .
+12/07/2020 23:14:45  Click_Button : NextTurn Button
+12/07/2020 23:14:49  practice Played lightforgedblessing
+12/07/2020 23:14:55  practice  EndTurn .
+12/07/2020 23:15:00  Minion Hossein defeated .
+12/07/2020 23:15:00  a Played Khashayar
+12/07/2020 23:15:00  a Played Khashayar
+12/07/2020 23:15:03  a Use HeroPower
+12/07/2020 23:15:05  Click_Button : NextTurn Button
+12/07/2020 23:15:09  practice Played benyamin
+12/07/2020 23:15:10  Click_Button : NextTurn Button
+12/07/2020 23:15:14  practice Played cookie
+12/07/2020 23:15:15  practice  EndTurn .
+12/07/2020 23:15:20  Benyamin Attacked Khashayar
+12/07/2020 23:15:22  practice Use HeroPower .
+12/07/2020 23:15:22  practice  EndTurn .
+12/07/2020 23:15:22  Minion Benyamin defeated .
+12/07/2020 23:25:45  Sign_in
+12/07/2020 23:25:46  Click_Button : Play Button
+12/07/2020 23:25:56  a Played Khashayar
+12/07/2020 23:25:56  a Played Khashayar
+12/07/2020 23:25:56  Click_Button : NextTurn Button
+12/07/2020 23:27:53  Sign_in
+12/07/2020 23:27:54  Click_Button : Play Button
+12/07/2020 23:27:59  Click_Button : NextTurn Button
+12/07/2020 23:28:03  practice Played cookie
+12/07/2020 23:28:09  practice  EndTurn .
+12/07/2020 23:28:17  a Played Hossein
+12/07/2020 23:28:17  a Played Hossein
+12/07/2020 23:28:19  Click_Button : NextTurn Button
+12/07/2020 23:28:23  practice Played bookofspecters
+12/07/2020 23:28:29  practice Use HeroPower .
+12/07/2020 23:28:29  practice  EndTurn .
+12/07/2020 23:28:39  Click_Button : NextTurn Button
+12/07/2020 23:28:43  practice Equiped ArcaniteReaper
+12/07/2020 23:28:49  practice  EndTurn .
+12/07/2020 23:29:00  Hossein Attacked Warlock
+12/07/2020 23:29:02  Click_Button : NextTurn Button
+12/07/2020 23:29:06  practice Played darkskies
+12/07/2020 23:29:12  practice  EndTurn .
+12/07/2020 23:29:19  Hossein Attacked Warlock
+12/07/2020 23:29:31  a Cast BlessingOfTheAncients
+12/07/2020 23:29:31  a Cast BlessingOfTheAncients
+12/07/2020 23:29:31  Click_Button : NextTurn Button
+12/07/2020 23:29:35  practice Played aghahaghi
+12/07/2020 23:29:41  AghaHaghi Attacked Hossein
+12/07/2020 23:29:43  practice  EndTurn .
+12/07/2020 23:29:56  a Played Lachin
+12/07/2020 23:29:56  a Played Lachin
+12/07/2020 23:29:57  Click_Button : NextTurn Button
+12/07/2020 23:30:01  Minion AghaHaghi defeated .
+12/07/2020 23:30:01  Minion Hossein defeated .
+12/07/2020 23:30:01  Minion Lachin defeated .
+12/07/2020 23:30:01  practice Played highmastersaman
+12/07/2020 23:30:07  practice  EndTurn .
+12/07/2020 23:30:25  Click_Button : NextTurn Button
+12/07/2020 23:30:29  practice Played hosseinhima
+12/07/2020 23:30:35  HighMasterSaman Attacked Rogue
+12/07/2020 23:30:37  practice  EndTurn .
+12/07/2020 23:30:42  a Played Mobin
+12/07/2020 23:30:42  a Played Mobin
+12/07/2020 23:30:44  Click_Button : NextTurn Button
+12/07/2020 23:30:48  practice Played nima
+12/07/2020 23:30:54  HighMasterSaman Attacked Mobin
+12/07/2020 23:30:56  practice  EndTurn .
+12/07/2020 23:30:56  Minion Mobin defeated .
+12/07/2020 23:31:02  a Played AghaHaghi
+12/07/2020 23:31:02  a Played AghaHaghi
+12/07/2020 23:31:05  AghaHaghi Attacked Warlock
+12/07/2020 23:31:10  Mobin Attacked Warlock
+12/07/2020 23:31:15  Click_Button : NextTurn Button
+12/07/2020 23:31:19  practice Played lachin
+12/07/2020 23:31:25  HighMasterSaman Attacked Mobin
+12/07/2020 23:31:27  practice  EndTurn .
+12/07/2020 23:31:27  Minion Mobin defeated .
+12/07/2020 23:31:34  a Use HeroPower
+12/07/2020 23:31:42  AghaHaghi Attacked HighMasterSaman
+12/07/2020 23:31:42  Minion HighMasterSaman defeated .
+12/07/2020 23:31:42  Minion AghaHaghi defeated .
+12/07/2020 23:31:49  a Equiped FieryWarAxe
+12/07/2020 23:31:49  a Equiped FieryWarAxe
+12/07/2020 23:31:50  Click_Button : NextTurn Button
+12/07/2020 23:31:54  practice Played benyamin
+12/07/2020 23:32:00  Lachin Attacked Rogue
+12/07/2020 23:32:02  practice  EndTurn .
+12/07/2020 23:32:08  a Use HeroPower
+12/07/2020 23:32:17  Rogue Attacked Benyamin
+12/07/2020 23:32:17  a use Weapon.
+12/07/2020 23:32:17  Minion Benyamin defeated .
+12/07/2020 23:32:23  a Cast SwarmOfCats
+12/07/2020 23:32:23  a Cast SwarmOfCats
+12/07/2020 23:32:27  Cat Attacked Warlock
+12/07/2020 23:32:30  Cat Attacked Warlock
+12/07/2020 23:32:33  Cat Attacked Warlock
+12/07/2020 23:32:37  Cat Attacked Warlock
+12/07/2020 23:32:40  Cat Attacked Warlock
+12/07/2020 23:32:43  Cat Attacked Warlock
+12/07/2020 23:32:46  Cat Attacked Warlock
+12/07/2020 23:32:47  Click_Button : NextTurn Button
+12/07/2020 23:32:51  practice Played matin
+12/07/2020 23:32:57  HosseinHima Attacked Rogue
+12/07/2020 23:32:59  practice  EndTurn .
+12/07/2020 23:33:11  Cat Attacked Matin
+12/07/2020 23:33:11  Minion Cat defeated .
+12/07/2020 23:33:24  Cat Attacked Warlock
+12/07/2020 23:33:28  Cat Attacked Warlock
+12/07/2020 23:33:31  a Played HosseinHima
+12/07/2020 23:33:31  a Played HosseinHima
+12/07/2020 23:33:34  Cat Attacked Warlock
+12/07/2020 23:33:37  Cat Attacked Warlock
+12/07/2020 23:33:41  Cat Attacked Warlock
+12/07/2020 23:33:45  Cat Attacked HosseinHima
+12/07/2020 23:33:45  Minion Cat defeated .
+12/07/2020 23:33:51  Click_Button : NextTurn Button
+12/07/2020 23:33:55  practice Played hossein
+12/07/2020 23:34:01  Nima Attacked Rogue
+12/07/2020 23:34:03  practice  EndTurn .
+12/07/2020 23:34:14  a Cast Cookie
+12/07/2020 23:34:14  a Cast Cookie
+12/07/2020 23:34:18  Click_Button : NextTurn Button
+12/07/2020 23:34:22  practice Played hossein
+12/07/2020 23:34:28  Nima Attacked Rogue
+12/07/2020 23:34:30  practice  EndTurn .
+12/07/2020 23:34:40  HosseinHima Attacked Warlock
+12/07/2020 23:34:48  Cat Attacked Warlock
+12/07/2020 23:34:49  Click_Button : NextTurn Button
+12/07/2020 23:34:53  Minion HosseinHima defeated .
+12/07/2020 23:34:53  Minion Matin defeated .
+12/07/2020 23:34:53  Minion Hossein defeated .
+12/07/2020 23:34:53  Minion Hossein defeated .
+12/07/2020 23:34:53  Minion Cat defeated .
+12/07/2020 23:34:53  Minion Cat defeated .
+12/07/2020 23:34:53  Minion Cat defeated .
+12/07/2020 23:34:53  Minion Cat defeated .
+12/07/2020 23:34:53  Minion Cat defeated .
+12/07/2020 23:34:53  Minion HosseinHima defeated .
+12/07/2020 23:34:53  practice Played khashayar
+12/07/2020 23:34:59  Nima Attacked Rogue
+12/07/2020 23:35:01  practice  EndTurn .
+13/07/2020 00:31:33  Sign_in
+13/07/2020 00:31:40  Click_Button : Play Button
+13/07/2020 00:31:41  Click_Button : Start Button
+13/07/2020 00:31:41  Start the Battle
+13/07/2020 00:31:46  a Played Hossein
+13/07/2020 00:31:46  a Played Hossein
+13/07/2020 00:31:51  Click_Button : NextTurn Button
+13/07/2020 00:31:55  enemy Equiped Gearblade
+13/07/2020 00:31:55  enemy Equiped Gearblade
+13/07/2020 00:31:59  Warlock Attacked Rogue
+13/07/2020 00:31:59  enemy use Weapon.
+13/07/2020 00:32:01  Click_Button : NextTurn Button
+13/07/2020 00:54:57  Sign_in
+13/07/2020 00:54:58  Click_Button : Play Button
+13/07/2020 00:55:03  player Cast LearnJavadonic
+13/07/2020 00:55:03  player Cast LearnJavadonic
+13/07/2020 00:55:06  Click_Button : NextTurn Button
+13/07/2020 00:55:09  AI Cast StrengthInNumbersDR
+13/07/2020 00:55:09  AI Cast StrengthInNumbersDR
+13/07/2020 00:55:12  Click_Button : NextTurn Button
+13/07/2020 00:55:16  player Cast BookOfSpecters
+13/07/2020 00:55:16  player Cast BookOfSpecters
+13/07/2020 00:55:17  Click_Button : NextTurn Button
+13/07/2020 00:55:22  AI Equiped FieryWarAxe
+13/07/2020 00:55:22  AI Equiped FieryWarAxe
+13/07/2020 00:55:26  Mage Attacked Mage
+13/07/2020 00:55:26  AI use Weapon.
+13/07/2020 00:55:30  Click_Button : NextTurn Button
+13/07/2020 00:55:37  player Cast BlessingOfTheAncients
+13/07/2020 00:55:37  player Cast BlessingOfTheAncients
+13/07/2020 00:55:39  Click_Button : NextTurn Button
+13/07/2020 00:55:46  Mage Attacked Mage
+13/07/2020 00:55:46  AI use Weapon.
+13/07/2020 00:55:46  Click_Button : NextTurn Button
+13/07/2020 00:55:56  Click_Button : Back Button
+13/07/2020 00:55:57  Click_Button : Exit Button
+13/07/2020 00:55:57  Sign out 

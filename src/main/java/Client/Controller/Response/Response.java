@@ -33,6 +33,18 @@ import java.util.*;
         @JsonSubTypes.Type(value = Col_ChangeResponse.class, name = "col"),
         @JsonSubTypes.Type(value = CollectionResponse.class, name = "collection"),
         @JsonSubTypes.Type(value = RemoveDeckResponse.class, name = "remove"),
+        @JsonSubTypes.Type(value = PassiveResponse.class, name = "passive"),
+        @JsonSubTypes.Type(value = ThreeCardResponse.class, name = "three"),
+        @JsonSubTypes.Type(value = ChangeCardResponse.class, name = "changecard"),
+        @JsonSubTypes.Type(value = CreateNormalResponse.class, name = "normal"),
+        @JsonSubTypes.Type(value = BoardResponse.class, name = "board"),
+        @JsonSubTypes.Type(value = WantToPlayResponse.class, name = "wanttoplay"),
+        @JsonSubTypes.Type(value = HeroCanAttackResponse.class, name = "herocanattack"),
+        @JsonSubTypes.Type(value = TargetListResponse.class, name = "targetlist"),
+        @JsonSubTypes.Type(value = HeroPowerResponse.class, name = "heropower"),
+        @JsonSubTypes.Type(value = CanBePlayedResponse.class, name = "canbeplayed"),
+        @JsonSubTypes.Type(value = CanDoActionResponse.class, name = "candoaction"),
+        @JsonSubTypes.Type(value = notifyAttack.class, name = "notifyattack"),
 })
 public interface Response {
     public void process(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object);

@@ -1,0 +1,27 @@
+{
+  "username": "d",
+  "password": "d",
+  "playerID": "89802721757600",
+  "level": 0,
+  "exp": 0,
+  "money": 1000,
+  "selectedDeck": {
+    "deck": [
+      "fierywaraxe",
+      "gearblade",
+      "blessingoftheancients",
+      "cookie",
+      "lightforgedblessing",
+      "swarmofcats",
+      "sprint",
+      "arcanitereaper",
+      "aghahaghi",
+      "hossein",
+      "hosseinhima",
+      "khashayar",
+      "lachin",
+      "mobin"
+    ],
+    "hero": null
+  }
+}

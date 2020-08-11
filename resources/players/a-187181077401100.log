@@ -1,0 +1,106 @@
+Created in : Wed Jul 29 20:03:28 IRDT 2020
+Password : a
+User : a
+**********************
+29/07/2020 20:03:29  Sign_in
+29/07/2020 20:04:01  Select : MAGE as first selected hero
+29/07/2020 20:04:02  Click_Button : Play Button
+29/07/2020 20:04:05  Click_Button : Start Button
+29/07/2020 20:04:05  Start the Battle
+29/07/2020 20:04:11  Click_Button : NextTurn Button
+29/07/2020 20:04:13  Click_Button : NextTurn Button
+29/07/2020 20:04:20  Click_Button : NextTurn Button
+29/07/2020 20:04:26  Click_Button : NextTurn Button
+29/07/2020 20:04:33  Click_Button : NextTurn Button
+29/07/2020 20:04:33  Click_Button : NextTurn Button
+29/07/2020 20:04:33  Click_Button : NextTurn Button
+29/07/2020 20:04:34  Click_Button : NextTurn Button
+29/07/2020 20:05:37  Click_Button : NextTurn Button
+29/07/2020 20:06:05  enemy Played lachin
+29/07/2020 20:06:05  enemy Played lachin
+29/07/2020 20:06:07  Click_Button : NextTurn Button
+29/07/2020 20:06:16  a Cast swarmofcats
+29/07/2020 20:06:16  a Cast swarmofcats
+29/07/2020 20:06:21  cat Attacked Warlock
+29/07/2020 20:06:26  cat Attacked Warlock
+29/07/2020 20:06:30  cat Attacked Warlock
+29/07/2020 20:06:33  cat Attacked Warlock
+29/07/2020 20:06:37  cat Attacked Warlock
+29/07/2020 20:06:40  cat Attacked Warlock
+29/07/2020 20:06:44  cat Attacked Warlock
+29/07/2020 20:07:11  Click_Button : NextTurn Button
+29/07/2020 20:07:45  lachin Attacked mage
+29/07/2020 20:07:45  Click_Button : NextTurn Button
+29/07/2020 20:08:49  Click_Button : NextTurn Button
+29/07/2020 20:09:40  Click_Button : NextTurn Button
+29/07/2020 20:09:52  cat Attacked lachin
+29/07/2020 20:09:52  Minion cat defeated .
+29/07/2020 20:09:58  a Played aghahaghi
+29/07/2020 20:09:58  a Played aghahaghi
+29/07/2020 20:10:02  a Equiped fierywaraxe
+29/07/2020 20:10:02  a Equiped fierywaraxe
+29/07/2020 20:10:06  mage Attacked Warlock
+29/07/2020 20:10:06  a use Weapon.
+29/07/2020 20:10:11  aghahaghi Attacked Warlock
+29/07/2020 20:10:14  cat Attacked Warlock
+29/07/2020 20:10:18  cat Attacked Warlock
+29/07/2020 20:10:23  cat Attacked Warlock
+29/07/2020 20:10:27  cat Attacked Warlock
+29/07/2020 20:10:31  cat Attacked Warlock
+29/07/2020 20:10:44  Click_Button : NextTurn Button
+29/07/2020 20:11:46  Click_Button : NextTurn Button
+29/07/2020 20:12:08  aghahaghi Attacked Warlock
+29/07/2020 20:12:09  a Use HeroPower
+29/07/2020 20:12:14  mage Attacked Warlock
+29/07/2020 20:12:14  a use Weapon.
+29/07/2020 20:12:21  a Equiped arcanitereaper
+29/07/2020 20:12:21  a Equiped arcanitereaper
+29/07/2020 20:12:24  mage Attacked Warlock
+29/07/2020 20:12:24  a use Weapon.
+29/07/2020 20:12:34  Click_Button : Status Button
+29/07/2020 20:12:34  Navigate : Status
+29/07/2020 20:12:48  Click_Button : NextTurn Button
+29/07/2020 20:14:13  Click_Button : Exit Button
+29/07/2020 20:14:13  Navigate : Main Menu
+29/07/2020 20:14:14  Click_Button : Play Button
+29/07/2020 20:14:17  Click_Button : Start Button
+29/07/2020 20:14:17  Start the Battle
+29/07/2020 20:14:29  Click_Button : NextTurn Button
+29/07/2020 20:14:29  Click_Button : NextTurn Button
+29/07/2020 20:14:34  a Cast lightforgedblessing
+29/07/2020 20:14:34  a Cast lightforgedblessing
+29/07/2020 20:15:00  Click_Button : NextTurn Button
+29/07/2020 20:15:01  Click_Button : NextTurn Button
+29/07/2020 20:15:06  a Equiped fierywaraxe
+29/07/2020 20:15:06  a Equiped fierywaraxe
+29/07/2020 20:15:09  mage Attacked Warlock
+29/07/2020 20:15:09  a use Weapon.
+29/07/2020 20:15:11  Click_Button : NextTurn Button
+29/07/2020 20:15:16  enemy Played benyamin
+29/07/2020 20:15:16  enemy Played benyamin
+29/07/2020 20:15:17  Click_Button : NextTurn Button
+29/07/2020 20:15:25  a Cast blessingoftheancients
+29/07/2020 20:15:25  a Cast blessingoftheancients
+29/07/2020 20:15:29  mage Attacked Warlock
+29/07/2020 20:15:29  a use Weapon.
+29/07/2020 20:15:29  Click_Button : NextTurn Button
+29/07/2020 20:15:30  Click_Button : NextTurn Button
+29/07/2020 20:15:38  a Played aghahaghi
+29/07/2020 20:15:38  a Played aghahaghi
+29/07/2020 20:15:46  mage Attacked benyamin
+29/07/2020 20:16:23  aghahaghi Attacked Warlock
+29/07/2020 20:16:24  Click_Button : NextTurn Button
+29/07/2020 20:16:24  Click_Button : NextTurn Button
+29/07/2020 20:16:32  aghahaghi Attacked Warlock
+29/07/2020 20:16:33  Click_Button : NextTurn Button
+29/07/2020 20:16:34  Click_Button : NextTurn Button
+29/07/2020 20:16:39  aghahaghi Attacked Warlock
+29/07/2020 20:16:39  Click_Button : NextTurn Button
+29/07/2020 20:16:40  Click_Button : NextTurn Button
+29/07/2020 20:16:47  aghahaghi Attacked Warlock
+29/07/2020 20:16:47  Click_Button : NextTurn Button
+29/07/2020 20:16:48  Click_Button : NextTurn Button
+29/07/2020 20:16:53  aghahaghi Attacked Warlock
+29/07/2020 20:17:34  Click_Button : Status Button
+29/07/2020 20:17:34  Navigate : Status
+29/07/2020 20:17:52  Click_Button : NextTurn Button

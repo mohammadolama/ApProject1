@@ -1,0 +1,13 @@
+{
+  "model": "hunter",
+  "name": "Hunter",
+  "health": 30,
+  "maxHealth": 30,
+  "canAttack": false,
+  "heroPowerManaCost": 0,
+  "powerNeedFriendlyTarget": false,
+  "powerNeedEnemyTarget": false,
+  "defence": 0,
+  "life": 30,
+  "attack": 0
+}

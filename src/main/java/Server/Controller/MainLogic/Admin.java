@@ -361,28 +361,12 @@ public class Admin {
 //        MyFrame.getInstance().changePanel("three");
     }
 
-//    public void listOfTargets(BoardPanel boardPanel) {
-//        ArrayList<Integer> targets = new ArrayList<>();
-//        int i = 0;
-//        for (Card card : enemyPlayedCards()) {
-//            if (card.getAttributes().contains(Attribute.Taunt)) {
-//                targets.add(i);
-//            }
-//            i++;
-//        }
-//        if (targets.size() == 0) {
-//            for (int j = 0; j < enemyPlayedCards().size(); j++) {
-//                targets.add(j);
-//            }
-//            targets.add(-1);
-//        }
-//        boardPanel.drawTargetsForAttack(targets);
-//    }
 
-    public synchronized void summonedMinion(Card card, int mode, int damage, int hp) {
+//
+public synchronized void summonedMinion(Card card, int mode, int damage, int hp) {
 //        CardModelView view = new CardModelView(Constants.cardPics.get(card.getName().toLowerCase()));
 //        boardPanel.summonedMinion(view, mode, damage, hp);
-    }
+}
 
     public void winGame(String name) {
 //        AlternativePanel alternativePanel = new AlternativePanel(false);
@@ -426,7 +410,6 @@ public class Admin {
 
     Card getCardOf(String name) {
         Card card = Card.getCardOf(name.toLowerCase());
-        System.out.println(card);
         return card;
     }
 
@@ -440,7 +423,6 @@ public class Admin {
     }
 
     public DeckModel getDeckModel(Deck deck) {
-        System.out.println(deck);
         Carts mostused = DeckLogic.mostUsedCard(deck);
         double avg = DeckLogic.avarageMana(deck);
         double winrate = DeckLogic.winRate(deck);

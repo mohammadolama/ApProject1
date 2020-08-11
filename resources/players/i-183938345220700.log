@@ -1,0 +1,46 @@
+Created in : Wed Jul 29 19:09:25 IRDT 2020
+Password : i
+User : i
+**********************
+29/07/2020 19:09:33  Sign_in
+29/07/2020 19:09:37  Select : MAGE as first selected hero
+29/07/2020 19:09:54  Click_Button : Play Button
+29/07/2020 19:09:56  Click_Button : Back Button
+29/07/2020 19:09:56  Navigate : Main Menu
+29/07/2020 19:09:57  Click_Button : Collection Button
+29/07/2020 19:09:57  Navigate : Collection
+29/07/2020 19:10:00  Buy : holylight  is added to purchased cards .
+29/07/2020 19:10:02  Buy : yasaman  is added to purchased cards .
+29/07/2020 19:10:03  Click_Button : AllCards Button
+29/07/2020 19:10:03  Click_Button : Back Button
+29/07/2020 19:10:03  Navigate : Main Menu
+29/07/2020 19:10:06  Click_Button : Collection Button
+29/07/2020 19:10:06  Navigate : Collection
+29/07/2020 19:10:07  Click_Button : New_Deck Button
+29/07/2020 19:10:14  Add : arcanitereaper is added to deck.
+29/07/2020 19:10:15  Add : polymorph is added to deck.
+29/07/2020 19:10:17  Add : holylight is added to deck.
+29/07/2020 19:10:20  Add : hossein is added to deck.
+29/07/2020 19:10:21  Add : cookie is added to deck.
+29/07/2020 19:10:24  Add : khashayar is added to deck.
+29/07/2020 19:10:25  Add : sprint is added to deck.
+29/07/2020 19:10:27  Add : blessingoftheancients is added to deck.
+29/07/2020 19:10:29  Add : mobin is added to deck.
+29/07/2020 19:10:31  Add : gearblade is added to deck.
+29/07/2020 19:10:34  Add : hosseinhima is added to deck.
+29/07/2020 19:10:36  Add : fierywaraxe is added to deck.
+29/07/2020 19:10:41  Add : swarmofcats is added to deck.
+29/07/2020 19:10:43  Add : lightforgedblessing is added to deck.
+29/07/2020 19:10:45  Add : aghahaghi is added to deck.
+29/07/2020 19:10:46  Click_Button : Create_Deck Button
+29/07/2020 19:10:46  Create : deck mohammad is created.
+29/07/2020 19:10:46  Click_Button : back Button
+29/07/2020 19:10:46  Cancle the process of creating new/changing  deck.
+29/07/2020 19:10:50  Click_Button : Select Button
+29/07/2020 19:10:50  Deck : choose "mohammad" as selected deck.
+29/07/2020 19:10:52  Click_Button : AllCards Button
+29/07/2020 19:10:52  Click_Button : Back Button
+29/07/2020 19:10:52  Navigate : Main Menu
+29/07/2020 19:12:21  Click_Button : Play Button
+29/07/2020 19:12:24  Click_Button : Start Button
+29/07/2020 19:12:24  Start the Battle

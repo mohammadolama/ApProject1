@@ -30,6 +30,6 @@ public class PlayHeroPowerRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        clientHandler.getGameManager().heroPower(target, clientHandler);
     }
 }

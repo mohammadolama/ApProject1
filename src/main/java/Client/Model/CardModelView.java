@@ -48,9 +48,9 @@ public class CardModelView {
         this.name = name;
     }
 
-    public BufferedImage getImage() {
-        return image;
-    }
+//    public BufferedImage getImage() {
+//        return image;
+//    }
 
     public CardModelView() {
     }

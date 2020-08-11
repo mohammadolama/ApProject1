@@ -26,10 +26,8 @@ public class Shop {
 
     public static ArrayList<Card> Buyable(Player player) {
         ArrayList<Carts> ar = BuyableCards(player);
-        System.out.println(ar);
         ArrayList<Card> ar2;
         ar2 = DeckLogic.UpdateDeck(ar);
-        System.out.println(ar2);
         return ar2;
     }
 
@@ -78,7 +76,6 @@ public class Shop {
                 ar.add(Carts.valueOf(cartss.toString()));
             }
         }
-        System.out.println(ar.toString());
         return ar;
     }
 

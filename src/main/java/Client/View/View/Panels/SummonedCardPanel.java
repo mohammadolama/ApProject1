@@ -7,6 +7,7 @@ import Client.View.Configs.SummonedConfig;
 import javax.swing.*;
 import java.awt.*;
 
+import static Client.View.View.Panels.Constants.cardPics;
 import static Client.View.View.Panels.Constants.f2;
 
 public class SummonedCardPanel extends JPanel {
@@ -55,7 +56,7 @@ public class SummonedCardPanel extends JPanel {
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g.setFont(f2.deriveFont(50.0f));
         if (view != null) {
-            g.drawImage(view.getImage(), 0, 0, config.getWidth(), config.getHeight(), null);
+            g.drawImage(cardPics.get(view.getName().toLowerCase()), 0, 0, config.getWidth(), config.getHeight(), null);
             if (mode != 0) {
                 g.setColor(Color.green);
                 g.drawString(damage + "", config.getDamageX(), config.getDamageYl());

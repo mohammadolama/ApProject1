@@ -42,7 +42,7 @@ public abstract class Hero implements Character, Cloneable {
     @Column
     private int maxHealth;
     @Column
-    private Boolean canAttack;
+    private boolean canAttack;
     @Column
     private int damage;
     @Transient
@@ -98,14 +98,6 @@ public abstract class Hero implements Character, Cloneable {
 
     public int getHealth() {
         return health;
-    }
-
-    public Boolean getCanAttack() {
-        return canAttack;
-    }
-
-    public void setCanAttack(Boolean canAttack) {
-        this.canAttack = canAttack;
     }
 
     public void setHealth(int health) {
@@ -182,6 +174,14 @@ public abstract class Hero implements Character, Cloneable {
 
     public void setPowerNeedEnemyTarget(boolean powerNeedEnemyTarget) {
         this.powerNeedEnemyTarget = powerNeedEnemyTarget;
+    }
+
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
     }
 
     @Override

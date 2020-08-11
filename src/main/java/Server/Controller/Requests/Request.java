@@ -60,6 +60,12 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = DeckModelRequest.class, name = "deckmodel"),
         @JsonSubTypes.Type(value = PriceRequest.class, name = "price"),
         @JsonSubTypes.Type(value = ThreeCardRequest.class, name = "threecard"),
+        @JsonSubTypes.Type(value = HeroPowerCanBePlayedRequest.class, name = "heropowercanbeplayed"),
+        @JsonSubTypes.Type(value = HeroCanAttackRequest.class, name = "herocanattack"),
+        @JsonSubTypes.Type(value = PlayHeroPowerRequest.class, name = "heropower"),
+        @JsonSubTypes.Type(value = PlayCardRequest.class, name = "playcard"),
+        @JsonSubTypes.Type(value = CanDoActionRequest.class, name = "candoaction"),
+        @JsonSubTypes.Type(value = AttackRequest.class, name = "attack"),
 })
 public interface Request {
     public abstract void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers);

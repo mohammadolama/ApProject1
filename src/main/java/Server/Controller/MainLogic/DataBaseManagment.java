@@ -211,7 +211,6 @@ public class DataBaseManagment {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Account account = session.get(Account.class, user);
-        System.out.println(account.toString());
         session.delete(account);
         session.getTransaction().commit();
         session.close();
