@@ -18,6 +18,8 @@ import java.util.Scanner;
 public class ThreeCardResponse implements Response {
     private ArrayList<CardModelView> list;
     private InfoPassive infoPassive;
+    private int i;
+
 
     public ThreeCardResponse() {
     }
@@ -38,9 +40,17 @@ public class ThreeCardResponse implements Response {
         this.infoPassive = infoPassive;
     }
 
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
+    }
+
     @Override
     public void process(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
-        AlternativePanel th = new AlternativePanel(false);
+        AlternativePanel th = new AlternativePanel(false, i);
         th.setModel1(list.get(0));
         th.setModel2(list.get(1));
         th.setModel3(list.get(2));

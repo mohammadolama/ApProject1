@@ -1,6 +1,8 @@
 package Client.View.View.Panels;
 
 import Client.Controller.Requests.ActionChartRequest;
+import Client.Controller.Response.Response;
+import Client.Controller.Responses;
 import Client.Model.ActionModel;
 import Client.Controller.RequestHandler;
 
@@ -51,7 +53,8 @@ public class ActionChartPanel extends JPanel {
         g.setFont(f2);
 
         RequestHandler.getInstance().sendRequest(new ActionChartRequest());
-
+        friendlyModel = Responses.getInstance().getFriendlyModel();
+        enemyModel = Responses.getInstance().getEnemyModel();
 
         for (int i = 0; i < friendlyModel.size(); i++) {
             BufferedImage image = cardPics.get(friendlyModel.get(i).getName().toLowerCase());

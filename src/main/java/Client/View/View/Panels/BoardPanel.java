@@ -12,9 +12,6 @@ import Client.View.Configs.BoardConfig;
 import Client.View.View.ActionListeners.*;
 import Client.View.View.MouseListeners.BoardMouseListener;
 import Client.View.View.MouseListeners.BoardMouseMotionListener;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +35,7 @@ public class BoardPanel extends JPanel {
             mouseDesX, mouseDesY, mouseStartX = -1000, mouseStartY = -1000, index = 0,
             attacker, target, damage1, damage2;
 
-    private boolean flag, disabled, practiceMode, playedCardSelected = false,
+    private boolean flag, disabled, multiplayer, playedCardSelected = false,
             cardSelected = false, p2Turn = false;
 
     private String handCardSelectedName, playedCardSelectedName;
@@ -62,8 +59,8 @@ public class BoardPanel extends JPanel {
     private JLabel label;
     private boolean attacked;
 
-    public BoardPanel(boolean practiceMode) {
-        this.practiceMode = practiceMode;
+    public BoardPanel(boolean multiplayer) {
+        this.multiplayer = multiplayer;
         initConfig();
         setLayout(null);
         addMouseMotionListener(new BoardMouseMotionListener(this));
@@ -73,14 +70,14 @@ public class BoardPanel extends JPanel {
         enemyPlayedImages = new ArrayList<>();
         actionTargetButton = new ArrayList<>();
         attackTargetButton = new ArrayList<>();
-
-        toMiddleTimer = new Timer(1000 / 60, new MiddleTimerListener(this));
-        toHandTimer = new Timer(1000 / 60, new HandTimerListener(this));
-        requests = new Timer(300, requestsListener);
-        if (practiceMode) {
+        if (this.multiplayer) {
             toMiddleTimer = new Timer(1000 / 60, new P2MiddleTimerListener(this));
             toHandTimer = new Timer(1000 / 60, new P2HandTimerListener(this));
+        } else {
+            toMiddleTimer = new Timer(1000 / 60, new MiddleTimerListener(this));
+            toHandTimer = new Timer(1000 / 60, new HandTimerListener(this));
         }
+        requests = new Timer(300, requestsListener);
         playTimer = new Timer(1000 / 60, new PlayTimerListener(this));
         sleepTimer = new Timer(300, new SleepTimerListener(this));
         sleepTimer.start();
@@ -176,7 +173,6 @@ public class BoardPanel extends JPanel {
 
         drawHeroInfo(g);
 
-
         drawWeapon(g);
 
         drawMana(g);
@@ -201,6 +197,13 @@ public class BoardPanel extends JPanel {
     private void requests() {
         RequestHandler.getInstance().sendRequest(new BoardPanelRequest());
         label.setText(res.board.getTime() + "");
+        if (res.board.isP2Turn()) {
+            disabled = true;
+            nextTurnButton.setEnabled(false);
+        } else {
+            disabled = false;
+            nextTurnButton.setEnabled(true);
+        }
     }
 
 
@@ -618,7 +621,7 @@ public class BoardPanel extends JPanel {
     private void drawDeckAnimation(Graphics2D g) {
         if (config.isAnimated()) {
             BufferedImage card;
-            if (practiceMode && p2Turn) {
+            if (multiplayer && p2Turn) {
                 card = gamePics.get("enemycard");
             } else {
                 card = cardPics.get(res.board.getHandCards().get(res.board.getHandCards().size() - 1).getName().toLowerCase());
@@ -630,24 +633,25 @@ public class BoardPanel extends JPanel {
                 g.setColor(color);
                 config.setMaxWidth(config.getCardWidth() + config.getBlur());
                 config.setMaxHeigth(config.getCardHeight() + config.getBlur());
-                if (practiceMode && p2Turn) {
+                if (multiplayer && p2Turn) {
+                    System.out.println(P2X + " : " + P2Y);
                     g.drawImage(card, P2X, P2Y, config.getCardWidth() + config.getBlur(), config.getCardHeight() + config.getBlur(), null);
                 } else {
                     g.drawImage(card, X1, Y1, config.getCardWidth() + config.getBlur(), config.getCardHeight() + config.getBlur(), null);
                 }
                 config.setBlur(config.getBlur() + 2);
             } else {
-                if (practiceMode && p2Turn) {
+                if (multiplayer && p2Turn) {
                     g.drawImage(card, P2X, P2Y, config.getMaxWidth() + config.getBlur(), config.getMaxHeigth() + config.getBlur(), null);
 
                 } else {
                     g.drawImage(card, X1, Y1, config.getMaxWidth() + config.getBlur(), config.getMaxHeigth() + config.getBlur(), null);
-
                 }
                 config.setBlur(config.getBlur() - 5);
             }
         }
         if (!config.isPlayAnimation() && config.isDeckAnimationFinished()) {
+            System.out.println("here++++++++++");
             config.setDeckAnimationFinished(true);
             P2X = config.getAiDeckX();
             P2Y = config.getAiDeckY();
@@ -674,6 +678,8 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawDamage(Graphics2D g) {
+        g.setFont(f2.deriveFont(30.f));
+        g.setColor(Color.white);
         if (attacked) {
             int x1, y1, x2, y2;
             if (attacker >= 0 && target >= 0) {
@@ -769,18 +775,19 @@ public class BoardPanel extends JPanel {
     }
 
     public void change() {
-//        p2Turn = !p2Turn;
-//        if (practiceMode && p2Turn) {
-//            toMiddleTimer.removeActionListener(middleTimerListener);
-//            toMiddleTimer.addActionListener(AiMiddleTimerListener);
-//            toHandTimer.removeActionListener(handTimerListener);
-//            toHandTimer.addActionListener(AiHandTimerListener);
+        p2Turn = !p2Turn;
+//        System.out.println(p2Turn+"****************");
+//        if (multiplayer && p2Turn) {
+//            toMiddleTimer.removeActionListener(new MiddleTimerListener(this));
+//            toMiddleTimer.addActionListener(new P2MiddleTimerListener(this));
+//            toHandTimer.removeActionListener(new HandTimerListener(this));
+//            toHandTimer.addActionListener(new P2HandTimerListener(this));
 //        } else {
-//            if (practiceMode) {
-//                toMiddleTimer.removeActionListener(AiMiddleTimerListener);
-//                toMiddleTimer.addActionListener(middleTimerListener);
-//                toHandTimer.removeActionListener(AiHandTimerListener);
-//                toHandTimer.addActionListener(handTimerListener);
+//            if (multiplayer) {
+//                toMiddleTimer.removeActionListener(new P2MiddleTimerListener(this));
+//                toMiddleTimer.addActionListener(new MiddleTimerListener(this));
+//                toHandTimer.removeActionListener(new P2HandTimerListener(this));
+//                toHandTimer.addActionListener(new HandTimerListener(this));
 //            }
 //        }
     }
@@ -972,8 +979,8 @@ public class BoardPanel extends JPanel {
         this.disabled = disabled;
     }
 
-    public boolean isPracticeMode() {
-        return practiceMode;
+    public boolean isMultiplayer() {
+        return multiplayer;
     }
 
     public void setPlayedCardSelected(boolean playedCardSelected) {
@@ -1062,6 +1069,10 @@ public class BoardPanel extends JPanel {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public void forceEndTurn() {
+        nextTurnButton.doClick();
     }
 }
 

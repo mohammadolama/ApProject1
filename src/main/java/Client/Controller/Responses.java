@@ -13,21 +13,21 @@ public class Responses {
     private static final Responses responses = new Responses();
     private CardModelView cardModelView;
     private DeckModel deckModel, selectedDeck;
-    private ArrayList<CardModelView> modelviewList, purchasedCards, notPurchasedCards,
-            collectionModels;
+    private ArrayList<CardModelView> modelviewList = new ArrayList<>(), purchasedCards = new ArrayList<>(),
+            notPurchasedCards = new ArrayList<>(), collectionModels = new ArrayList<>();
+    private ArrayList<ActionModel> friendlyModel = new ArrayList<>();
+    private ArrayList<ActionModel> enemyModel = new ArrayList<>();
     private long price, wallet;
     private String className, heroName;
-    private ArrayList<InfoPassive> passiveList;
-    private HashMap<String, DeckModel> decks;
-    private ArrayList<Heroes> heroesList;
-    private ArrayList<Carts> collectionList;
-    private ArrayList<String> bestDecks;
-    private ArrayList<Integer> targets;
+    private ArrayList<InfoPassive> passiveList = new ArrayList<>();
+    private HashMap<String, DeckModel> decks = new HashMap<>();
+    private ArrayList<Heroes> heroesList = new ArrayList<>();
+    private ArrayList<Carts> collectionList = new ArrayList<>();
+    private ArrayList<String> bestDecks = new ArrayList<>();
+    private ArrayList<Integer> targets = new ArrayList<>();
     private boolean canBePlayed, heroCanAttack, canDoAction;
     private int heroPowerCanBePlayed;
     private PlayerModel player;
-    public GameState state;
-
     public GameState board;
 
     public static Responses getInstance() {
@@ -208,5 +208,21 @@ public class Responses {
 
     public void setTargets(ArrayList<Integer> targets) {
         this.targets = targets;
+    }
+
+    public ArrayList<ActionModel> getFriendlyModel() {
+        return friendlyModel;
+    }
+
+    public void setFriendlyModel(ArrayList<ActionModel> friendlyModel) {
+        this.friendlyModel = friendlyModel;
+    }
+
+    public ArrayList<ActionModel> getEnemyModel() {
+        return enemyModel;
+    }
+
+    public void setEnemyModel(ArrayList<ActionModel> enemyModel) {
+        this.enemyModel = enemyModel;
     }
 }

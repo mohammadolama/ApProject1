@@ -51,7 +51,7 @@ public class HeroPowerVisitor implements PowerVisitor {
                 int j = random.nextInt(myPlayed.size());
                 ((Minion) myPlayed.get(j)).setHealth(((Minion) myPlayed.get(j)).getHealth() + 1);
                 ((Minion) myPlayed.get(j)).setDamage(((Minion) myPlayed.get(j)).getDamage() + 1);
-                Admin.getInstance().summonedMinion(myPlayed.get(j), 1, myPlayed.get(j).getAttack(), myPlayed.get(j).getLife());
+                managers.summonedMinion(myPlayed.get(j), 1, myPlayed.get(j).getAttack(), myPlayed.get(j).getLife());
             } else if (rand == 1) {
                 managers.drawCard(1, null, myDeck, myHand);
             }
@@ -66,7 +66,7 @@ public class HeroPowerVisitor implements PowerVisitor {
 
     @Override
     public void visitPriest(Priest priest, Character target, ArrayList<Card> myDeck, ArrayList<Card> myHand, ArrayList<Card> myPlayed, ArrayList<Card> enemyDeck, ArrayList<Card> enemyHand, ArrayList<Card> enemyPlayed, Managers managers) {
-        ActionHandler actionHandler = new ActionHandler();
+        ActionHandler actionHandler = new ActionHandler(managers);
         actionHandler.restoreHealth(target, 4);
     }
 }

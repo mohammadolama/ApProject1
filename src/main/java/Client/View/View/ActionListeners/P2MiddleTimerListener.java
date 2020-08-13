@@ -16,11 +16,13 @@ public class P2MiddleTimerListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         b.setDisabled(true);
+        b.getConfig().setToMiddle(true);
         b.getConfig().setDeckAnimationFinished(false);
         b.getConfig().setAnimated(true);
-        Update.render();
+//        Update.render();
         b.setP2X(b.getP2X() + b.getXA());
         b.setP2Y(b.getP2Y() - b.getYA());
+        System.out.println(b.getP2X() + "  :  " + b.getP2Y() + "  :  " + b.getXA() + "  :  " + b.getYA());
         if (b.getP2X() < 700) {
             b.getConfig().setToMiddle(false);
             try {
@@ -30,7 +32,7 @@ public class P2MiddleTimerListener implements ActionListener {
             }
             b.getConfig().setBlur(0);
             b.getToHandTimer().start();
-            b.getToHandTimer().stop();
+            b.getToMiddleTimer().stop();
         }
         Update.render();
     }

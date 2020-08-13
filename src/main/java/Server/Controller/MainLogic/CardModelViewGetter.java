@@ -31,9 +31,6 @@ class CardModelViewGetter {
 
     CardModelView getPureViewModelOf(String string, Card cards, Managers managers) {
         int mana = cards.getManaCost();
-        if (managers != null) {
-//            mana -= managers.getFriendlyManaDecrease();
-        }
         if (cards instanceof Minion) {
             Minion minions = (Minion) cards;
             return new CardModelView(string, mana, minions.getDamage(), minions.getHealth(), minions.getType(), minions.getAttributes(), minions.isSleep(), minions.isCanBeAttacked(), minions.isNeedFriendlyTarget(), minions.isNeedEnemyTarget());

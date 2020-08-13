@@ -4,6 +4,7 @@ import Client.Controller.Requests.Request;
 import Client.View.View.Panels.ConnectionPanel;
 import Client.View.View.Panels.MyFrame;
 import Client.View.View.Sounds.SoundAdmin;
+import Server.Controller.MainLogic.ThreadColor;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class RequestHandler {
     private PrintWriter printWriter;
     private ObjectMapper objectMapper;
     private ResponseHandler responseHandler;
-    private Object object = new Object();
+    private final Object object = new Object();
 
     private RequestHandler(Socket socket) {
         try {
@@ -42,7 +43,6 @@ public class RequestHandler {
     public static RequestHandler getInstance() {
         return requestHandler;
     }
-
 
     public enum SendRequest {
 
@@ -296,7 +296,11 @@ public class RequestHandler {
     }
 
     public synchronized void sendRequest(Request request) {
+//        new Thread(() -> {
+        System.out.println(ThreadColor.ANSI_GREEN + request.toString() + ThreadColor.ANSI_RESET);
         request.excute(scanner, printWriter, objectMapper, object);
+//        }).start();
+
     }
 
     public static void Connect(String ip, int port, ConnectionPanel panel) {

@@ -1,8 +1,10 @@
 package Client.Controller.Requests;
 
+import Client.View.View.Panels.MyFrame;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -28,6 +30,11 @@ public class AylarActionRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
-
+        try {
+            outputStream.println(objectMapper.writeValueAsString(this));
+            MyFrame.getInstance().changePanel("play");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

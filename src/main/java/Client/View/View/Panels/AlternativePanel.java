@@ -31,8 +31,10 @@ public class AlternativePanel extends JPanel implements ActionListener {
     private boolean enabled;
     private boolean discoverMode;
     private boolean winningMode;
+    private int mode;
 
-    public AlternativePanel(boolean discoverMode) {
+    public AlternativePanel(boolean discoverMode, int mode) {
+        this.mode = mode;
         this.discoverMode = discoverMode;
         setSize(new Dimension(1600, 1000));
         setPreferredSize(new Dimension(1600, 1000));
@@ -199,7 +201,11 @@ public class AlternativePanel extends JPanel implements ActionListener {
             if (winningMode) {
                 RequestHandler.getInstance().sendRequest(new FinishGameRequest());
             } else {
-                RequestHandler.getInstance().sendRequest(new CreateGameRequest(infoPassive, model1.getName(), model2.getName(), model3.getName()));
+                if (mode == 1) {
+                    RequestHandler.getInstance().sendRequest(new CreateGameRequest(infoPassive, model1.getName(), model2.getName(), model3.getName(), 1));
+                } else if (mode == 2) {
+                    RequestHandler.getInstance().sendRequest(new CreateGameRequest(infoPassive, model1.getName(), model2.getName(), model3.getName(), 3));
+                }
             }
         } else if (src.equals(card1)) {
             button1Action();
@@ -239,7 +245,6 @@ public class AlternativePanel extends JPanel implements ActionListener {
             repaint();
             card3.setEnabled(false);
         } else {
-
             RequestHandler.getInstance().sendRequest(new AylarActionRequest(card3.getName()));
         }
     }

@@ -17,6 +17,5 @@ public class UnlockHeroRequest implements Request {
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         Admin.getInstance().unlockHero(clientHandler.getPlayer());
-        outputStream.println("ok");
     }
 }

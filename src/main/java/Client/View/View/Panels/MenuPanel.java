@@ -4,6 +4,7 @@ import Client.Controller.RequestHandler;
 import Client.Controller.Requests.*;
 import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.MenuConfig;
+import Client.View.View.Update.Update;
 
 import javax.swing.*;
 import java.awt.*;
@@ -137,6 +138,7 @@ public class MenuPanel extends JPanel implements ActionListener, MouseListener {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Play Button"));
             RequestHandler.getInstance().sendRequest(new WantToPlayRequest());
         } else if (button == status) {
+            Update.refresh();
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Status Button"));
             RequestHandler.getInstance().sendRequest(new LogRequest("Navigate : Status"));
             RequestHandler.getInstance().sendRequest(new VisiblePanelRequest("status"));

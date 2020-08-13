@@ -10,7 +10,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Scanner;
 
 @JsonTypeName("bestdecks")
@@ -22,6 +22,7 @@ public class BestDecksRequest implements Request {
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         ArrayList<String> list = Admin.getInstance().bestDecks(clientHandler.getPlayer());
+        Collections.reverse(list);
         try {
             outputStream.println(objectMapper.writeValueAsString(new BestDecksResponse(list)));
         } catch (IOException e) {

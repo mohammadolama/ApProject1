@@ -1,9 +1,11 @@
 package Server.Controller.MainLogic;
 
 
+import Server.Controller.Manager.DeckReaderManager;
 import Server.Model.Cards.*;
 import Server.Model.Heros.*;
 import Server.Model.Player;
+import Server.Model.Requirements;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;
@@ -15,7 +17,7 @@ public class Server extends Thread {
 
     private ServerSocket serverSocket;
     private ArrayList<Player> players;
-    private ArrayList waitingPlayers;
+    private ArrayList<Player> multiplayerWaitings;
     private int port;
     private LogInSignUp logInSignUp = new LogInSignUp();
 
@@ -23,7 +25,7 @@ public class Server extends Thread {
         try {
             this.port = port;
             players = new ArrayList<>();
-            waitingPlayers = new ArrayList<>();
+            multiplayerWaitings = new ArrayList<>();
             serverSocket = new ServerSocket(port);
 
         } catch (IOException e) {
@@ -57,7 +59,7 @@ public class Server extends Thread {
 //        System.out.println(hero.toString());
 //
 //            save();
-
+//
         new Server(8000).start();
     }
 

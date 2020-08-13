@@ -63,7 +63,6 @@ public class Player implements Serializable {
     @JoinTable
     private Map<String, Deck> allDecks;
 
-
     public Player() {
     }
 

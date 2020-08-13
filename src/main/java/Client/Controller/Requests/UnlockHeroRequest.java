@@ -19,9 +19,8 @@ public class UnlockHeroRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
-            String res = inputStream.nextLine();
-            Update.refresh();
             JOptionPane.showMessageDialog(MyFrame.getInstance(), "All Heros Unlocked!");
+            Update.refresh();
         } catch (IOException e) {
             e.printStackTrace();
         }

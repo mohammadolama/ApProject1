@@ -38,7 +38,7 @@ public class DeckLogic {
         for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
             ar.add(entry.getValue());
         }
-        ar.sort(Comparator.comparing(DeckLogic::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(DeckLogic::avarageMana));
+        ar.sort(Comparator.comparing(Deck::getCup).thenComparing(DeckLogic::winRate).thenComparing(Deck::getTotalWins).thenComparing(Deck::getTotalPlays).thenComparing(DeckLogic::avarageMana));
 
         ArrayList<String> arrayList = new ArrayList<>();
         if (ar.size() <= 10) {

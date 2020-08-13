@@ -17,9 +17,11 @@ import java.util.*;
 @JsonTypeName("threecard")
 public class ThreeCardRequest implements Request {
     private InfoPassive infoPassive;
+    private int i;
 
-    public ThreeCardRequest(InfoPassive infoPassive) {
+    public ThreeCardRequest(InfoPassive infoPassive, int i) {
         this.infoPassive = infoPassive;
+        this.i = i;
     }
 
     public ThreeCardRequest() {
@@ -31,6 +33,15 @@ public class ThreeCardRequest implements Request {
 
     public void setInfoPassive(InfoPassive infoPassive) {
         this.infoPassive = infoPassive;
+    }
+
+
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
     }
 
     @Override

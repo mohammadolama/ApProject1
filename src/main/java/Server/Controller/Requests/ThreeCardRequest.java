@@ -19,6 +19,7 @@ import java.util.Scanner;
 public class ThreeCardRequest implements Request {
     private ArrayList<CardModelView> list;
     private InfoPassive infoPassive;
+    private int i;
 
     public ThreeCardRequest() {
     }
@@ -39,11 +40,19 @@ public class ThreeCardRequest implements Request {
         this.infoPassive = infoPassive;
     }
 
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
+    }
+
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         list = Admin.getInstance().threeCardChoose(clientHandler.getPlayer());
         try {
-            outputStream.println(objectMapper.writeValueAsString(new ThreeCardResponse(list, infoPassive)));
+            outputStream.println(objectMapper.writeValueAsString(new ThreeCardResponse(list, infoPassive, i)));
         } catch (IOException e) {
             e.printStackTrace();
         }

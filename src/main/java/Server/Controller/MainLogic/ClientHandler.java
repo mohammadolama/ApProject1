@@ -2,7 +2,8 @@ package Server.Controller.MainLogic;
 
 import Server.Controller.Manager.Managers;
 import Server.Controller.Requests.Request;
-import Server.Controller.Response.notifyAttack;
+import Server.Controller.Response.*;
+import Server.Model.CardModelView;
 import Server.Model.Player;
 import Server.Model.GameState;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -62,6 +63,14 @@ public class ClientHandler extends Thread {
         }
     }
 
+    public void notifyEndturn() {
+        try {
+            output.println(objectMapper.writeValueAsString(new NotifyEndTurn()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -80,5 +89,37 @@ public class ClientHandler extends Thread {
 
     public GameState gameState() {
         return gameManager.getState(this);
+    }
+
+    public void notifyWinner(String name) {
+        try {
+            output.println(objectMapper.writeValueAsString(new NotifyWinner(name)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void notifySummon(CardModelView view, int mode, int damage, int hp) {
+        try {
+            output.println(objectMapper.writeValueAsString(new NotifySummon(view, mode, damage, hp)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void notifyAylar(CardModelView view1, CardModelView view2, CardModelView view3) {
+        try {
+            output.println(objectMapper.writeValueAsString(new NotifyAylar(view1, view2, view3)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void notifyStartGame() {
+        try {
+            output.println(objectMapper.writeValueAsString(new NotifyStartGame()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -8,7 +8,6 @@ import java.util.List;
 
 public class CardModelView {
 
-    private BufferedImage image;
     private int manaCost;
     private int damage;
     private int hp;
@@ -44,19 +43,6 @@ public class CardModelView {
     public CardModelView(String name, int manaCost) {
         this.manaCost = manaCost;
         this.name = name;
-    }
-
-//    public CardModelView(BufferedImage image) {
-//        this.image = image;
-//    }
-
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
     }
 
     public int getManaCost() {

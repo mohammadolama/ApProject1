@@ -14,9 +14,11 @@ public class DeckModel {
     private int totalWins;
     private double avarageMana;
     private double winRate;
+    private int cup;
 
     public DeckModel(String name, List<Carts> list, String hero, Carts mostUsedcart,
-                     int totalPlays, int totalWins, double avarageMana, double winRate) {
+                     int totalPlays, int totalWins, double avarageMana, double winRate,
+                     int cup) {
         this.name = name;
         this.list = list;
         this.hero = hero;
@@ -25,6 +27,7 @@ public class DeckModel {
         this.totalWins = totalWins;
         this.avarageMana = avarageMana;
         this.winRate = winRate;
+        this.cup = cup;
     }
 
     public DeckModel() {
@@ -92,5 +95,13 @@ public class DeckModel {
 
     public void setWinRate(double winRate) {
         this.winRate = winRate;
+    }
+
+    public int getCup() {
+        return cup;
+    }
+
+    public void setCup(int cup) {
+        this.cup = cup;
     }
 }

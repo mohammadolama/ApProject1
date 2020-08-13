@@ -3,6 +3,7 @@ package Client.Controller.Response;
 import Client.Controller.RequestHandler;
 import Client.Controller.Requests.PlayMusic;
 import Client.View.View.Panels.MyFrame;
+import Client.View.View.Panels.ShopPanel;
 import Client.View.View.Update.Update;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -44,6 +45,7 @@ public class BuySellResponse implements Response {
             } else {
                 RequestHandler.getInstance().sendRequest(new PlayMusic("gold"));
             }
+            ShopPanel.getInstance().revalidateCards(true);
         } else {
             if (res.equalsIgnoreCase("ok")) {
                 RequestHandler.getInstance().sendRequest(new PlayMusic("sell"));
@@ -53,6 +55,7 @@ public class BuySellResponse implements Response {
                 }).start();
 //                ,It's in one of your decks.
             }
+            ShopPanel.getInstance().revalidateCards(false);
         }
         synchronized (object) {
             object.notify();

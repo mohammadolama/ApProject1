@@ -27,7 +27,6 @@ public class PracticeManager extends NormalManagers {
     public PracticeManager(Player player, InfoPassive infoPassive, ArrayList<Card> list) {
         try {
             deckReaderMode = false;
-            practiceMode = true;
             this.player1 = player;
             this.player1Hero = (Hero) player.getSelectedDeck().getHero().clone();
             this.currentHero = player1Hero;
@@ -74,7 +73,7 @@ public class PracticeManager extends NormalManagers {
 //                if (!drawCard(player2DrawCardNum, null, player2DeckCards, player2HandCards, cl))
                 heroTakeDamage(player2Hero, 1);
                 Thread.sleep(2000);
-                wakeUp(true, cl);
+                wakeUp(cl);
                 refillMana(true, cl);
                 practicePlayCard(cl);
                 Thread.sleep(2000);
@@ -120,11 +119,11 @@ public class PracticeManager extends NormalManagers {
                         spendManaOnMinion(cards.getManaCost() - player2ManaDecrease, true);
                     } else if (cards instanceof Spell) {
                         practicePlaySpell((Spell) cards);
-                        spendManaOnSpell(cards.getManaCost() - player2ManaDecrease, true);
+                        spendManaOnSpell(cards.getManaCost() - player2ManaDecrease, cl);
                     } else if (cards instanceof Weapon) {
                         practicePlayWeapon((Weapon) cards);
                     }
-                    Admin.getInstance().summonedMinion(card, 0, 0, 0);
+                    this.summonedMinion(card, 0, 0, 0);
                     break;
                 } else {
 //                    Admin.getInstance().playSound("mana");
@@ -209,17 +208,17 @@ public class PracticeManager extends NormalManagers {
     }
 
     private void practiceAttack(Minion attacker, Character target, int i, int j, ClientHandler cl) {
-        ActionHandler actionHandler = new ActionHandler();
+        ActionHandler actionHandler = new ActionHandler(this);
         new Thread(() -> playSound("attack")).start();
         if (j >= 0) {
             Minion target1 = (Minion) target;
             actionHandler.Attack(attacker, target1, player1PlayedCards);
-            setSleep(attacker, cl);
+            setSleep(attacker);
 //            Admin.getInstance().drawPracticeAttack(i, j, attacker.getDamage(), target.getAttack());
         } else {
             Hero target1 = player1Hero;
             actionHandler.Attack(attacker, target1, player1PlayedCards);
-            setSleep(attacker, cl);
+            setSleep(attacker);
 //            Admin.getInstance().drawPracticeAttack(i, j, attacker.getDamage(), target.getAttack());
         }
     }

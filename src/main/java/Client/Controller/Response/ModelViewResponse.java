@@ -27,7 +27,6 @@ public class ModelViewResponse implements Response {
 
     @Override
     public void process(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
-        view.setImage(Constants.cardPics.get(view.getName().toLowerCase()));
         Responses.getInstance().setCardModelView(view);
         synchronized (object) {
             object.notify();

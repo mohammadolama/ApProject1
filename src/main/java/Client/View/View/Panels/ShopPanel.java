@@ -351,7 +351,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         repaint();
     }
 
-    private void revalidateCards(Boolean buyActivated) {
+    public void revalidateCards(Boolean buyActivated) {
         RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
         cards = Responses.getInstance().getModelviewList();
         pictures(cards);
@@ -410,11 +410,11 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         } else if (src == buyButton) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Buy Button"));
             RequestHandler.getInstance().sendRequest(new BuyCardRequest(name));
-            revalidateCards(true);
+//            revalidateCards(true);
         } else if (src == sellButton) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Sell Button"));
             RequestHandler.getInstance().sendRequest(new SellCardRequest(name));
-            revalidateCards(false);
+//            revalidateCards(false);
         } else {
             images.clear();
             RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));

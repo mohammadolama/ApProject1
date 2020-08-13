@@ -74,21 +74,21 @@ public class MyFrame extends JFrame {
     }
 
     public void addPanels() {
-        new Thread(() -> {
-            ShopPanel shop = ShopPanel.getInstance();
-            CollectionPanel collection = CollectionPanel.getInstance();
-            Col_Change col_change = Col_Change.getInstance();
-            StatusPanel status = StatusPanel.getInstance();
-            SettingPanel settingPanel = SettingPanel.getInstance();
-            MyFrame.getPanel().add(shop, "shop");
-            MyFrame.getPanel().add(collection, "collection");
-            MyFrame.getPanel().add("setting", settingPanel);
-            MyFrame.getPanel().add("status", status);
-            MyFrame.getPanel().add(col_change, "col");
-        }).start();
-        new Thread(() -> {
-
-        }).start();
+//        new Thread(() -> {
+        ShopPanel shop = ShopPanel.getInstance();
+        CollectionPanel collection = CollectionPanel.getInstance();
+        Col_Change col_change = Col_Change.getInstance();
+        StatusPanel status = StatusPanel.getInstance();
+        SettingPanel settingPanel = SettingPanel.getInstance();
+        MyFrame.getPanel().add(shop, "shop");
+        MyFrame.getPanel().add(collection, "collection");
+        MyFrame.getPanel().add("setting", settingPanel);
+        MyFrame.getPanel().add("status", status);
+        MyFrame.getPanel().add(col_change, "col");
+//        }).start();
+//        new Thread(() -> {
+//
+//        }).start();
     }
 
     public AlternativePanel getAlternativePanel() {

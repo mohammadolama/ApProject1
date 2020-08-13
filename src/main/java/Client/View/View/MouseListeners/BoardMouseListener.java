@@ -47,6 +47,9 @@ public class BoardMouseListener implements MouseListener {
                 b.setMouseDesY(y);
                 if (x >= b.getConfig().getLeftLineX() && x <= b.getConfig().getRightLineX() && y >= b.getConfig().getMiddleLineY() && y <= b.getConfig().getPlayAreaY()) {
                     cardSelectedAction(x, y);
+                } else {
+                    b.setHandCardSelectedName(null);
+                    b.setCardSelected(false);
                 }
                 b.setCardSelected(false);
             } else {

@@ -5,6 +5,7 @@ import Server.Controller.Manager.Managers;
 import Server.Model.ActionModel;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -41,6 +42,12 @@ public class ActionChartRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        friednlyModel = clientHandler.getGameManager().getPlayer1Actions(clientHandler);
+        enemyModel = clientHandler.getGameManager().getPlayer2Actions(clientHandler);
+        try {
+            outputStream.println(objectMapper.writeValueAsString(new ActionChartRequest(friednlyModel, enemyModel)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

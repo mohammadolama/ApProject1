@@ -20,15 +20,10 @@ public class PlayerModelRequest implements Request {
         try {
             outputStream.println(objectMapper.writeValueAsString(this));
             synchronized (object) {
-                try {
-                    object.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                object.wait();
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-
 }

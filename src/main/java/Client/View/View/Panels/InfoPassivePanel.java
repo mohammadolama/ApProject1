@@ -139,17 +139,18 @@ public class InfoPassivePanel extends JPanel implements ActionListener {
         JButton src = (JButton) e.getSource();
         if (src == normal) {
             if (infoPassive != null) {
-                RequestHandler.getInstance().sendRequest(new ThreeCardRequest(infoPassive));
-                RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Start Button"));
-                RequestHandler.getInstance().sendRequest(new LogRequest("Start the Battle"));
+                RequestHandler.getInstance().sendRequest(new ThreeCardRequest(infoPassive, 1));
+                RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Normal game"));
             }
         } else if (src == deckReader) {
             if (infoPassive != null) {
-                RequestHandler.getInstance().sendRequest(new CreateGameModeRequest(2, infoPassive));
+                RequestHandler.getInstance().sendRequest(new CreateGameRequest(infoPassive, null, null, null, 2));
+                RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : DeckReader Game"));
             }
-        } else if (src == practice) {
+        } else if (src == online) {
             if (infoPassive != null) {
-                RequestHandler.getInstance().sendRequest(new CreateGameModeRequest(3, infoPassive));
+                RequestHandler.getInstance().sendRequest(new ThreeCardRequest(infoPassive, 2));
+                RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : MultiPlayer game"));
             }
         }
         passive1.setBackground(Color.white);

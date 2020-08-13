@@ -1,5 +1,6 @@
 package Server.Controller.Requests;
 
+import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -30,6 +31,6 @@ public class LogRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        Admin.getInstance().Log(log, clientHandler.getPlayer());
     }
 }

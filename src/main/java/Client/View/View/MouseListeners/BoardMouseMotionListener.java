@@ -87,7 +87,7 @@ public class BoardMouseMotionListener implements MouseMotionListener {
             }
             CardModelView view;
             if (i == -2) {
-                view = new CardModelView(Constants.cardPics.get(Responses.getInstance().board.getFriendlyHero().toLowerCase()), Responses.getInstance().board.getFriendlyHero().toLowerCase());
+                view = new CardModelView(Responses.getInstance().board.getFriendlyHero().toLowerCase(), 0);
             } else {
                 view = b.getRes().board.getDownPlayedCards().get(i);
             }

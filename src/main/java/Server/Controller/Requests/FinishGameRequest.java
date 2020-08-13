@@ -16,6 +16,6 @@ public class FinishGameRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        clientHandler.getGameManager().finishGame(clientHandler);
     }
 }

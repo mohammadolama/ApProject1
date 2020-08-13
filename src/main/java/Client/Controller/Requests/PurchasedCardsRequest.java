@@ -15,10 +15,8 @@ import java.util.Scanner;
 @JsonTypeName("purchasedcard")
 public class PurchasedCardsRequest implements Request {
 
-
     public PurchasedCardsRequest() {
     }
-
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {

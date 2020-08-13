@@ -6,43 +6,38 @@ import Server.Model.Cards.Card;
 import Server.Model.Heros.Hero;
 import Server.Model.InfoPassive;
 import Server.Model.Player;
+import Server.Model.Requirements;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class OnlineManager extends Managers {
 
-    public OnlineManager(Player player1, Player player2, ClientHandler cl1,
-                         ClientHandler cl2, InfoPassive ip1, InfoPassive ip2,
-                         ArrayList<Card> list1, ArrayList<Card> list2,
-                         ArrayList<String> cards1, ArrayList<String> cards2) {
 
-        try {
-            this.player1 = player1;
-            this.player2 = player2;
-            this.player1InfoPassive = ip1;
-            this.player2InfoPassive = ip2;
-            this.cl1 = cl1;
-            this.cl2 = cl2;
-            this.player1CardsOfPlayer = list1;
-            this.player2CardsOfPlayer = list2;
-            this.player1Hero = (Hero) player1.getSelectedDeck().getHero().clone();
-            this.player2Hero = (Hero) player2.getSelectedDeck().getHero().clone();
-            this.currentHero = player1Hero;
-            player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards,
-                    player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
-
-            player2Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards,
-                    player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
-
-            player1InfoInitilize(ip1);
-            player2InfoInitilize(ip2);
-            initLists(list1, cards1, 1);
-            initLists(list2, cards2, 2);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+    public OnlineManager(Requirements rq1, Requirements rq2,
+                         ArrayList<Card> list1, ArrayList<Card> list2) {
+        multyplayer = true;
+        this.cl1 = rq1.getClientHandler();
+        this.cl2 = rq2.getClientHandler();
+        this.player1 = cl1.getPlayer();
+        this.player2 = cl2.getPlayer();
+        this.player1InfoPassive = rq1.getInfoPassive();
+        this.player2InfoPassive = rq2.getInfoPassive();
+        this.player1Hero = player1.getSelectedDeck().getHero();
+        this.player2Hero = player2.getSelectedDeck().getHero();
+        this.currentHero = player1Hero;
+        player1InfoInitilize(player1InfoPassive);
+        player2InfoInitilize(player2InfoPassive);
+        player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards,
+                player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
+        player2Hero.accept(new SpecialPowerVisitor(), null, player2DeckCards, player2HandCards,
+                player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, this);
+        player1CardsOfPlayer = list1;
+        player2CardsOfPlayer = list2;
+        initLists(player1CardsOfPlayer, new ArrayList<String>(Arrays.asList(rq1.getCard1(), rq1.getCard2(), rq1.getCard3())), 1);
+        initLists(player2CardsOfPlayer, new ArrayList<String>(Arrays.asList(rq2.getCard1(), rq2.getCard2(), rq2.getCard3())), 2);
+        timer = new MyTimer(false, this);
+        timer.start();
     }
-
 
     private void initLists(ArrayList<Card> list, ArrayList<String> cards,
                            int i) {
@@ -81,7 +76,9 @@ public class OnlineManager extends Managers {
 
     @Override
     public void endTurn(ClientHandler cl) {
+        updateGameLog(String.format("%s  EndTurn .", cl.getPlayer().getUsername()));
         p2Turn = !p2Turn;
+        timer.reset1(p2Turn);
         if (cl.equals(cl1)) {
             benyaminAction(false);
             PlayerTurn(cl2);

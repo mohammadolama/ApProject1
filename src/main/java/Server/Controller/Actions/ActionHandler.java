@@ -16,6 +16,12 @@ import static Client.View.View.Sounds.SoundAdmin.playSound;
 
 public class ActionHandler {
 
+    private Managers m;
+
+    public ActionHandler(Managers m) {
+        this.m = m;
+    }
+
     public boolean Attack(Character attacker, Character target, ArrayList<Card> enemyHand) {
         if (target instanceof Minion) {
             return attackMinion(attacker, target, enemyHand);
@@ -112,7 +118,7 @@ public class ActionHandler {
             target.setLife(target.getMaxLife());
         }
         if (target instanceof Minion) {
-            Admin.getInstance().summonedMinion((Minion) target, 1, target.getAttack(), target.getLife());
+            m.summonedMinion((Minion) target, 1, target.getAttack(), target.getLife());
         }
     }
 
@@ -128,11 +134,10 @@ public class ActionHandler {
 
     public void Attack(int attacker, int target, ArrayList<Card> list1, ArrayList<Card> list2, Hero hero1, Hero hero2,
                        Managers managers, ClientHandler cl1, ClientHandler cl2) {
-        ActionHandler actionHandler = new ActionHandler();
         if (attacker >= 0 && target >= 0) {
             Minion attacker1 = (Minion) list1.get(attacker);
             Minion target1 = (Minion) list2.get(target);
-            actionHandler.Attack(attacker1, target1, list2);
+            Attack(attacker1, target1, list2);
             setSleep(attacker, list1);
             cl1.notifyAttack(attacker, target, attacker1.getAttack(), target1.getAttack());
             if (cl2 != null)
@@ -140,7 +145,7 @@ public class ActionHandler {
             managers.updateGameLog(String.format("%s Attacked %s", attacker1.getName(), target1.getName()));
         } else if (attacker >= 0) {
             Minion attacker1 = (Minion) list1.get(attacker);
-            actionHandler.Attack(attacker1, hero2, list2);
+            Attack(attacker1, hero2, list2);
             setSleep(attacker, list1);
             cl1.notifyAttack(attacker, target, attacker1.getAttack(), hero2.getAttack());
             if (cl2 != null)
@@ -151,12 +156,12 @@ public class ActionHandler {
             cl1.notifyAttack(attacker, target, hero1.getAttack(), target1.getAttack());
             if (cl2 != null)
                 cl2.notifyAttack(target, attacker, target1.getAttack(), hero1.getAttack());
-            if (actionHandler.Attack(hero1, target1, list2)) {
+            if (Attack(hero1, target1, list2)) {
                 managers.updateGameLog(String.format("%s Attacked %s", hero1.getName(), target1.getName()));
                 managers.updateWeapon(cl1);
             }
         } else {
-            if (actionHandler.Attack(hero1, hero2, list2)) {
+            if (Attack(hero1, hero2, list2)) {
                 managers.updateGameLog(String.format("%s Attacked %s", hero1.getName(), hero2.getName()));
                 managers.updateWeapon(cl1);
             }

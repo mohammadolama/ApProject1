@@ -39,33 +39,11 @@ public class LoginRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
-//        ObjectMapper objectMapper = new ObjectMapper();
         try {
             String s = objectMapper.writeValueAsString(this);
             outputStream.println(s);
-//            String res = inputStream.nextLine();
-//            if (res.equalsIgnoreCase("new player")) {
-//                FirstHeroSelector firstHeroSelector = new FirstHeroSelector();
-//                MyFrame.getPanel().add("hero", firstHeroSelector);
-//                MyFrame.getInstance().changePanel("hero");
-//                LoginPanel.getInstance().reset();
-//            } else if (res.equalsIgnoreCase("welcome")) {
-//                MyFrame.getInstance().addPanels();
-//                SoundAdmin.clip.stop();
-//                SoundAdmin.play1("resources/Sounds/menu.wav");
-//                new Thread(() -> SoundAdmin.playSound("welcome")).start();
-//                MenuPanel menuPanel = MenuPanel.getInstance();
-//                MyFrame.getPanel().add("menu", menuPanel);
-//                MyFrame.getInstance().changePanel("menu");
-//                MenuPanel.getInstance().setFocusable(true);
-//                MenuPanel.getInstance().grabFocus();
-//            } else {
-//                LoginPanel.getInstance().getError().setText(res);
-//            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

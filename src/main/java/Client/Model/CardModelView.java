@@ -8,7 +8,6 @@ import java.util.List;
 
 public class CardModelView {
 
-    private BufferedImage image;
     private int manaCost;
     private int damage;
     private int hp;
@@ -20,8 +19,7 @@ public class CardModelView {
     private boolean needEnemyTarget;
     private List<Attribute> attributes;
 
-    public CardModelView(BufferedImage image, String name, int manaCost, int damage, int hp, Type type, List<Attribute> attributes, boolean sleep, boolean canBeAttacked, boolean needFriendlyTarget, boolean needEnemyTarget) {
-        this.image = image;
+    public CardModelView(String name, int manaCost, int damage, int hp, Type type, List<Attribute> attributes, boolean sleep, boolean canBeAttacked, boolean needFriendlyTarget, boolean needEnemyTarget) {
         this.manaCost = manaCost;
         this.damage = damage;
         this.hp = hp;
@@ -34,8 +32,7 @@ public class CardModelView {
         this.needEnemyTarget = needEnemyTarget;
     }
 
-    public CardModelView(BufferedImage image, String name, int manaCost, Type type, boolean needFriendlyTarget, boolean needEnemyTarget) {
-        this.image = image;
+    public CardModelView(String name, int manaCost, Type type, boolean needFriendlyTarget, boolean needEnemyTarget) {
         this.manaCost = manaCost;
         this.name = name;
         this.type = Type.Spell;
@@ -43,20 +40,12 @@ public class CardModelView {
         this.needEnemyTarget = needEnemyTarget;
     }
 
-    public CardModelView(BufferedImage image, String name) {
-        this.image = image;
+    public CardModelView(String name, int manaCost) {
         this.name = name;
+        this.manaCost = manaCost;
     }
-
-//    public BufferedImage getImage() {
-//        return image;
-//    }
 
     public CardModelView() {
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
     }
 
     public int getManaCost() {

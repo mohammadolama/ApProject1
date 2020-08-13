@@ -37,22 +37,16 @@ public class PureModelViewRequest implements Request {
         this.name = name;
     }
 
-
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object) {
         try {
             String s = objectMapper.writeValueAsString(this);
             outputStream.println(s);
             synchronized (object) {
-                try {
-                    object.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                object.wait();
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }

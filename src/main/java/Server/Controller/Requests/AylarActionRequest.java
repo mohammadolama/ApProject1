@@ -30,6 +30,6 @@ public class AylarActionRequest implements Request {
 
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
-
+        clientHandler.getGameManager().aylarAction(name, clientHandler);
     }
 }

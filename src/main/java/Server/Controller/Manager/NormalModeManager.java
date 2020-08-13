@@ -28,8 +28,8 @@ public class NormalModeManager extends NormalManagers {
             player1Hero.accept(new SpecialPowerVisitor(), null, player1DeckCards, player1HandCards, player1PlayedCards, player2DeckCards, player2HandCards, player2PlayedCards, this);
             player2Hero.accept(new SpecialPowerVisitor(), null, player2DeckCards, player2HandCards, player2PlayedCards, player1DeckCards, player1HandCards, player1PlayedCards, this);
             cl1 = cl;
-            MyTimer myTimer = new MyTimer();
-            myTimer.start();
+            timer = new MyTimer(false, this);
+            timer.start();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -77,10 +77,11 @@ public class NormalModeManager extends NormalManagers {
 
     @Override
     public void endTurn(ClientHandler cl) {
+        updateGameLog(String.format("%s  EndTurn .", cl.getPlayer().getUsername()));
         benyaminAction(false);
         reversePlayers();
         PlayerTurn(cl);
-        flag1 = false;
+        timer.reset1(false);
     }
 
 

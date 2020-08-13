@@ -3,6 +3,7 @@ package Server.Controller.MainLogic;
 import Server.Model.Account;
 import Server.Model.Cards.*;
 import Server.Model.Heros.Hero;
+import Server.Model.Log.Log;
 import Server.Model.Player;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
@@ -12,6 +13,7 @@ import org.hibernate.SessionFactory;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class DataBaseManagment {
 
@@ -74,15 +76,10 @@ public class DataBaseManagment {
 
     public static void PlayerJsonBuilder(String username, Player player) {
         Session session = sessionFactory.openSession();
-
         session.beginTransaction();
-
         session.saveOrUpdate(player);
-
         session.getTransaction().commit();
-
         session.close();
-
     }
 
     static void NewPlayerHeroBuilder(Player player) {
@@ -202,6 +199,14 @@ public class DataBaseManagment {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(account);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public static void saveLog(Log log) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(log);
         session.getTransaction().commit();
         session.close();
     }

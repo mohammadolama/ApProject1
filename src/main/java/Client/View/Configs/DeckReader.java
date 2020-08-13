@@ -1,13 +1,14 @@
 package Client.View.Configs;
 
-import Client.Model.Enums.Carts;
 
-import java.util.ArrayList;
+import Server.Model.Enums.Carts;
+
+import java.util.*;
 
 public class DeckReader {
 
-    private ArrayList<Carts> friend;
-    private ArrayList<Carts> enemy;
+    private List<Carts> friend;
+    private List<Carts> enemy;
 
     public DeckReader() {
         friend = new ArrayList<>();
@@ -54,20 +55,19 @@ public class DeckReader {
 //        enemy.add(Carts.lachin);
     }
 
-
-    public ArrayList<Carts> getFriend() {
+    public List<Carts> getFriend() {
         return friend;
     }
 
-    public void setFriend(ArrayList<Carts> friend) {
+    public void setFriend(List<Carts> friend) {
         this.friend = friend;
     }
 
-    public ArrayList<Carts> getEnemy() {
+    public List<Carts> getEnemy() {
         return enemy;
     }
 
-    public void setEnemy(ArrayList<Carts> enemy) {
+    public void setEnemy(List<Carts> enemy) {
         this.enemy = enemy;
     }
 }

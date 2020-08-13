@@ -8,7 +8,7 @@ public class GameState {
     private int downPowerUsage, upPowerUsage, downPowerMana, upPowerMana, notUsedMana,
             totalMana, downHP, upHP, downDefence, upDefence, downHandSize, upHandSize,
             downPalyedSize, upPlayedSize, downDeckSize, upDeckSize;
-    private boolean downHasWeapon, upHasWeapon, heroCanAttack;
+    private boolean downHasWeapon, upHasWeapon, heroCanAttack, p2Turn;
     private CardModelView downWeapon, upWeapon, downHeroPower, upHeroPower;
 
     private ArrayList<CardModelView> handCards, downPlayedCards, upPlayedCards;
@@ -23,7 +23,7 @@ public class GameState {
                      CardModelView downWeapon, CardModelView upWeapon, CardModelView downHeroPower,
                      CardModelView upHeroPower, ArrayList<CardModelView> handCards,
                      ArrayList<CardModelView> downPlayedCards, ArrayList<CardModelView> upPlayedCards,
-                     ArrayList<String> logs) {
+                     ArrayList<String> logs, boolean p2Turn) {
         this.friendlyUser = friendlyUser;
         this.enemyUser = enemyUser;
         this.friendlyHero = friendlyHero;
@@ -56,6 +56,7 @@ public class GameState {
         this.downPlayedCards = downPlayedCards;
         this.upPlayedCards = upPlayedCards;
         this.logs = logs;
+        this.p2Turn = p2Turn;
     }
 
     public GameState() {
@@ -316,5 +317,13 @@ public class GameState {
 
     public void setLogs(ArrayList<String> logs) {
         this.logs = logs;
+    }
+
+    public boolean isP2Turn() {
+        return p2Turn;
+    }
+
+    public void setP2Turn(boolean p2Turn) {
+        this.p2Turn = p2Turn;
     }
 }

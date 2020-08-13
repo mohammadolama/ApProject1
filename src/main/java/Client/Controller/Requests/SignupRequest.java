@@ -42,13 +42,6 @@ public class SignupRequest implements Request {
         try {
             String s = objectMapper.writeValueAsString(this);
             outputStream.println(s);
-//            String result = inputStream.nextLine();
-//            if (result.equalsIgnoreCase("ok")) {
-//                LoginPanel.getInstance().getError().setText("Account Created.");
-//            } else if (result.equalsIgnoreCase("user already exist")) {
-//                LoginPanel.getInstance().getError().setText("User already exists.");
-//            }
-//            Update.render();
         } catch (IOException e) {
             e.printStackTrace();
         }

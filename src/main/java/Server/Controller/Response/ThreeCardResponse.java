@@ -10,10 +10,12 @@ import java.util.ArrayList;
 public class ThreeCardResponse implements Response {
     private ArrayList<CardModelView> list;
     private InfoPassive infoPassive;
+    private int i;
 
-    public ThreeCardResponse(ArrayList<CardModelView> list, InfoPassive infoPassive) {
+    public ThreeCardResponse(ArrayList<CardModelView> list, InfoPassive infoPassive, int i) {
         this.list = list;
         this.infoPassive = infoPassive;
+        this.i = i;
     }
 
     public ThreeCardResponse() {
@@ -33,5 +35,13 @@ public class ThreeCardResponse implements Response {
 
     public void setInfoPassive(InfoPassive infoPassive) {
         this.infoPassive = infoPassive;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
     }
 }

@@ -41,6 +41,8 @@ public class Deck {
     @JoinTable
     @MapKeyColumn
     private Map<String, Integer> usedTimes = new HashMap<>();
+    @Transient
+    private int cup;
 
     public Deck() {
 
@@ -157,6 +159,10 @@ public class Deck {
 
     public void setUsedTimes(Map<String, Integer> usedTimes) {
         this.usedTimes = usedTimes;
+    }
+
+    public int getCup() {
+        return totalWins - (totalPlays - totalWins);
     }
 
     @Override

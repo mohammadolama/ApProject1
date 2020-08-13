@@ -17,12 +17,14 @@ public class CreateGameRequest implements Request {
     private String card1;
     private String card2;
     private String card3;
+    private int i;
 
-    public CreateGameRequest(InfoPassive infoPassive, String card1, String card2, String card3) {
+    public CreateGameRequest(InfoPassive infoPassive, String card1, String card2, String card3, int i) {
         this.infoPassive = infoPassive;
         this.card1 = card1;
         this.card2 = card2;
         this.card3 = card3;
+        this.i = i;
     }
 
     public CreateGameRequest() {
@@ -58,6 +60,14 @@ public class CreateGameRequest implements Request {
 
     public void setCard3(String card3) {
         this.card3 = card3;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
     }
 
     @Override

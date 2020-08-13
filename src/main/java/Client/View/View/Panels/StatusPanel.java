@@ -107,11 +107,12 @@ public class StatusPanel extends JPanel implements ActionListener {
         g2d.drawLine(300, config.getStartY() - 10, 1250, config.getStartY() - 10);
         g2d.setFont(f2.deriveFont(18.0f));
         if (selectedDeck != null) {
-            g2d.drawString("Name          : " + selectedDeck.getName(), config.getStartX() + 30, 40);
-            g2d.drawString("Total plays : " + selectedDeck.getTotalPlays(), config.getStartX() + 30, 70);
-            g2d.drawString("Total wins  : " + selectedDeck.getTotalWins(), config.getStartX() + 30, 100);
-            g2d.drawString("Win Rate    : " + selectedDeck.getWinRate(), config.getStartX() + 30, 130);
-            g2d.drawString("Average Mana    : " + selectedDeck.getAvarageMana(), config.getStartX() + 30, 160);
+            g2d.drawString("Name          : " + selectedDeck.getName(), config.getStartX() + 30, 20);
+            g2d.drawString("Total plays : " + selectedDeck.getTotalPlays(), config.getStartX() + 30, 50);
+            g2d.drawString("Total wins  : " + selectedDeck.getTotalWins(), config.getStartX() + 30, 80);
+            g2d.drawString("Win Rate    : " + selectedDeck.getWinRate(), config.getStartX() + 30, 110);
+            g2d.drawString("Average Mana    : " + selectedDeck.getAvarageMana(), config.getStartX() + 30, 140);
+            g2d.drawString("Earned Cup      : " + selectedDeck.getCup(), config.getStartX() + 30, 170);
             g2d.drawImage(heroPics.get(selectedDeck.getHero().toLowerCase()), config.getStartX() + 400, 0, 150, 200, null);
             g2d.drawImage(cardPics.get(selectedDeck.getMostUsedcart().toString().toLowerCase()), config.getStartX() + 700, 0, 130, 180, null);
         }
