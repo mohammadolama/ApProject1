@@ -1,14 +1,16 @@
 package Server;
 
+`import Server.Controller.MainLogic.HibernateCore;
+import Server.Controller.MainLogic.Server;
+import org.hibernate.SessionFactory;
+
 import java.util.Scanner;
 
 public class ServerMain {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        for (int i = 0; i < 55; i++) {
-            String st = scanner.nextLine();
-            String res = st.replace("Model", "Server.Model");
-        }
+        HibernateCore.connectToDataBase();
+        SessionFactory sessionFactory = HibernateCore.getInstance();
+        new Server(8000).start();
     }
 }
