@@ -1,6 +1,6 @@
 package Server;
 
-`import Server.Controller.MainLogic.HibernateCore;
+import Server.Controller.MainLogic.HibernateCore;
 import Server.Controller.MainLogic.Server;
 import org.hibernate.SessionFactory;
 
