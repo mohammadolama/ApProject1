@@ -35,7 +35,7 @@ public class ClientHandler extends Thread {
         try {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
-            while (socket.isConnected()) {
+            while (!isInterrupted()) {
                 excuteReq(input.nextLine());
             }
         } catch (IOException e) {
@@ -102,6 +102,14 @@ public class ClientHandler extends Thread {
         }
     }
 
+    public void notifyDatabseError() {
+        try {
+            output.println(objectMapper.writeValueAsString(new DatabaseError()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -121,6 +129,5 @@ public class ClientHandler extends Thread {
     public GameState gameState() {
         return gameManager.getState(this);
     }
-
 
 }

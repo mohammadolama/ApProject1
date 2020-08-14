@@ -6,7 +6,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Scanner;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -52,6 +52,7 @@ import java.util.*;
         @JsonSubTypes.Type(value = NotifyAylar.class, name = "aylar"),
         @JsonSubTypes.Type(value = NotifySummon.class, name = "notifysummon"),
         @JsonSubTypes.Type(value = NotifyStartGame.class, name = "notifygame"),
+        @JsonSubTypes.Type(value = DatabaseError.class, name = "databaseerror"),
 })
 public interface Response {
     public void process(Scanner inputStream, PrintWriter outputStream, ObjectMapper objectMapper, Object object);

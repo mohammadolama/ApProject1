@@ -17,7 +17,7 @@ public class DataBaseManagment {
 
     static ObjectMapper objectMapper = new ObjectMapper();
     static HashMap<String, Class> classes;
-    private static SessionFactory sessionFactory = HibernateCore.getInstance();
+    public static SessionFactory sessionFactory = HibernateCore.getInstance();
 
 
     static {

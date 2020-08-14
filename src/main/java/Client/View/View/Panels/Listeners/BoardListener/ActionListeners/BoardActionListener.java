@@ -4,6 +4,7 @@ import Client.Controller.RequestHandler;
 import Client.Controller.Requests.*;
 import Client.View.View.Panels.BoardPanel;
 import Client.View.View.Panels.MyFrame;
+import Client.View.View.Update.Update;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ public class BoardActionListener implements ActionListener {
         JButton src = (JButton) e.getSource();
         if (src == b.getExit()) {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
+            RequestHandler.getInstance().sendRequest(new CancleGameRequest());
             RequestHandler.getInstance().sendRequest(new ExitRequest());
         } else if (src == b.getBack()) {
             if (JOptionPane.showConfirmDialog(MyFrame.getInstance(), "Are you sure", "Delete Account", JOptionPane.YES_NO_OPTION) == 0) {
@@ -45,17 +47,14 @@ public class BoardActionListener implements ActionListener {
                 b.getConfig().setToMiddle(true);
                 b.getConfig().setBlur(0);
                 b.getConfig().setAnimated(true);
-//                if (!b.isMultiplayer() || !b.isP2Turn()) {
                 b.getToMiddleTimer().start();
-//                }
             }
-//            myTimer.flag1 = false;
             b.setPlayedCardSelected(false);
             b.setPlayedCardSelectedName(null);
             b.setHandCardSelectedName(null);
             b.setCardSelected(false);
             b.removeButton();
-//            Update.render();
+            Update.render();
         }
 
     }
