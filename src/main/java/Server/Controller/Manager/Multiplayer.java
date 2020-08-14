@@ -1,20 +1,17 @@
 package Server.Controller.Manager;
 
 import Server.Controller.Actions.SPVisitor.SpecialPowerVisitor;
-import Server.Controller.MainLogic.ClientHandler;
 import Server.Model.Cards.Card;
-import Server.Model.Heros.Hero;
-import Server.Model.InfoPassive;
-import Server.Model.Player;
 import Server.Model.Requirements;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class OnlineManager extends Managers {
+public class Multiplayer extends OnlineManagers {
 
 
-    public OnlineManager(Requirements rq1, Requirements rq2,
-                         ArrayList<Card> list1, ArrayList<Card> list2) {
+    public Multiplayer(Requirements rq1, Requirements rq2,
+                       ArrayList<Card> list1, ArrayList<Card> list2) {
         multyplayer = true;
         this.cl1 = rq1.getClientHandler();
         this.cl2 = rq2.getClientHandler();
@@ -70,24 +67,7 @@ public class OnlineManager extends Managers {
             player2HandCards = ar;
             player2DeckCards = list;
         }
-
-
     }
-
-    @Override
-    public void endTurn(ClientHandler cl) {
-        updateGameLog(String.format("%s  EndTurn .", cl.getPlayer().getUsername()));
-        p2Turn = !p2Turn;
-        timer.reset1(p2Turn);
-        if (cl.equals(cl1)) {
-            benyaminAction(false);
-            PlayerTurn(cl2);
-        } else {
-            benyaminAction(true);
-            PlayerTurn(cl1);
-        }
-    }
-
 
 }
 

@@ -1,16 +1,15 @@
 package Server.Controller.MainLogic;
 
 import Server.Model.Cards.Card;
-import Server.Model.Enums.*;
+import Server.Model.Enums.Carts;
+import Server.Model.Enums.NeutralCarts;
+import Server.Model.Enums.SpecialCarts;
 import Server.Model.Player;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Shop {
-
 
     public static boolean Buy(String st, Player player) {
         if (player.getMoney() < Price(st)) {
@@ -20,7 +19,7 @@ public class Shop {
         List<Carts> ar = player.getPlayerCarts();
         ar.add(Carts.valueOf(st));
         player.setPlayerCarts(ar);
-        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+        DataBaseManagment.savePlayer(player);
         return true;
     }
 
@@ -49,7 +48,7 @@ public class Shop {
         player.setMoney(player.getMoney() + (Price(st) / 2));
         List<Carts> ar2 = player.getPlayerCarts();
         ar2.remove(Carts.valueOf(st));
-        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+        DataBaseManagment.savePlayer(player);
     }
 
     private static ArrayList<Carts> BuyableCards(Player player) {
@@ -80,17 +79,7 @@ public class Shop {
     }
 
     public static long Price(String name) {
-        long n = 0;
-        try {
-            JSONParser jsonParser = new JSONParser();
-            FileReader fileReader = new FileReader(String.format("resources/Jsons/Cards/%s.json", name));
-            Object object = jsonParser.parse(fileReader);
-            JSONObject jsonObject = (JSONObject) object;
-            n = (Long) jsonObject.get("price");
-
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
-        return n;
+        Card card = DeckLogic.getCardOf(name);
+        return (long) card.getPrice();
     }
 }

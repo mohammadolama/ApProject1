@@ -1,9 +1,9 @@
 package Client;
 
+import Client.Controller.Fundamentals;
 import Client.View.View.Panels.Constants;
 import Client.View.View.Panels.MyFrame;
 import Client.View.View.Sounds.SoundAdmin;
-import Server.Controller.MainLogic.Fundamentals;
 
 public class ClientMain {
     public static void main(String[] args) {

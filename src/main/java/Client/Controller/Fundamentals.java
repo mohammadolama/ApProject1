@@ -1,4 +1,4 @@
-package Server.Controller.MainLogic;
+package Client.Controller;
 
 import java.io.File;
 import java.io.FileWriter;

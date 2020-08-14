@@ -1,18 +1,14 @@
 package Server.Controller.Actions;
 
-import Server.Model.Heros.*;
-import Server.Controller.Actions.CardVisitors.ActionVisitor;
-import Server.Controller.Actions.CardVisitors.BattlecryVisitor;
-import Server.Controller.Manager.*;
-import Server.Controller.MainLogic.*;
-import Server.Model.Cards.*;
-import Server.Model.Enums.*;
+import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.Manager.Managers;
+import Server.Model.Cards.Card;
+import Server.Model.Cards.Minion;
+import Server.Model.Enums.Attribute;
+import Server.Model.Heros.Hero;
 import Server.Model.Interface.Character;
 
-
 import java.util.ArrayList;
-
-import static Client.View.View.Sounds.SoundAdmin.playSound;
 
 public class ActionHandler {
 
@@ -119,16 +115,6 @@ public class ActionHandler {
         }
         if (target instanceof Minion) {
             m.summonedMinion((Minion) target, 1, target.getAttack(), target.getLife());
-        }
-    }
-
-
-    private void checkContiniousAction(Card cards, boolean p2Turn, Managers gameManager) {
-        for (ContiniousActionCarts value : ContiniousActionCarts.values()) {
-            if (cards.getName().equalsIgnoreCase(value.toString())) {
-                gameManager.addContiniousActionCard(cards, p2Turn);
-                break;
-            }
         }
     }
 

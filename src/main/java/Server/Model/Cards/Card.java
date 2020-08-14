@@ -1,19 +1,17 @@
 package Server.Model.Cards;
 
 import Server.Controller.Actions.CardVisitors.Visitor;
-import Server.Controller.MainLogic.DataBaseManagment;
-import Server.Controller.MainLogic.DeckLogic;
 import Server.Controller.Manager.Managers;
-import Server.Model.Enums.*;
+import Server.Model.Enums.Attribute;
+import Server.Model.Enums.Rarity;
+import Server.Model.Enums.Type;
 import Server.Model.Heros.Hero;
 import Server.Model.Interface.Character;
-import Server.Model.Player;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -168,101 +166,14 @@ public abstract class Card implements Character {
         return getType().getI();
     }
 
-    public static ArrayList<Card> allCards() {
-        ArrayList<Carts> ar = new ArrayList<>();
-        Collections.addAll(ar, Carts.values());
-        return DeckLogic.UpdateDeck(ar);
-    }
+    public abstract int getAttack();
 
-    public static ArrayList<Card> purchasedCards(Player player) {
-        ArrayList<Carts> ar = new ArrayList<>(player.getPlayerCarts());
-        return DeckLogic.UpdateDeck(ar);
-    }
+    public abstract void setAttack(int i);
 
-    public static ArrayList<Card> lockedCards(Player player) {
-        ArrayList<Carts> ar = new ArrayList<>();
-        outer:
-        for (Carts carts : Carts.values()) {
-            for (Carts playerCart : player.getPlayerCarts()) {
-                if (carts.toString().equalsIgnoreCase(playerCart.toString())) {
-                    continue outer;
-                }
-            }
-            ar.add(carts);
-        }
-        return DeckLogic.UpdateDeck(ar);
-    }
+    public abstract int getLife();
 
-    public static ArrayList<Card> neutralCardsFilter() {
-        ArrayList<Carts> ar = new ArrayList<>();
-        for (NeutralCarts value : NeutralCarts.values()) {
-            ar.add(Carts.valueOf(value.toString()));
-        }
-        return DeckLogic.UpdateDeck(ar);
-    }
+    public abstract void setLife(int i);
 
-    public static ArrayList<Card> specialCardsFilter() {
-        ArrayList<Carts> ar = new ArrayList<>();
-        for (SpecialCarts value : SpecialCarts.values()) {
-            ar.add(Carts.valueOf(value.toString()));
-        }
-        return DeckLogic.UpdateDeck(ar);
-    }
+    public abstract int getMaxLife();
 
-    public static Card getCardOf(String name) {
-        for (int i = 0; i < 1; i++) {
-            for (MinionCarts value : MinionCarts.values()) {
-                if (value.toString().equalsIgnoreCase(name)) {
-                    return DataBaseManagment.MinionsReader(name.toLowerCase());
-                }
-            }
-            for (SpellCarts value : SpellCarts.values()) {
-                if (value.toString().equalsIgnoreCase(name)) {
-                    return DataBaseManagment.SpellReader(name.toLowerCase());
-                }
-            }
-            for (WeaponCarts value : WeaponCarts.values()) {
-                if (value.toString().equalsIgnoreCase(name)) {
-                    return DataBaseManagment.WeaponReader(name.toLowerCase());
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public int getAttack() {
-        return 0;
-    }
-
-    @Override
-    public void setAttack(int i) {
-
-    }
-
-    @Override
-    public int getLife() {
-        return 0;
-    }
-
-    @Override
-    public void setLife(int i) {
-    }
-
-    @Override
-    public int getMaxLife() {
-        return 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                "name='" + name + '\'' +
-                ", manaCost=" + manaCost +
-                ", type=" + type +
-                ", heroClass='" + heroClass + '\'' +
-                ", rarity=" + rarity +
-                ", price=" + price +
-                '}';
-    }
 }

@@ -1,42 +1,16 @@
 package Server.Controller.Manager;
 
-import Server.Controller.Actions.SPVisitor.HeroPowerVisitor;
-
-import Server.Controller.MainLogic.Admin;
-import Server.Controller.MainLogic.ClientHandler;
-import Server.Model.Cards.*;
+import Server.Model.Cards.Card;
+import Server.Model.Cards.Weapon;
 import Server.Model.Enums.ContiniousActionCarts;
-import Server.Model.Heros.*;
-import Server.Model.*;
+import Server.Model.Heros.Hero;
+import Server.Model.InfoPassive;
+import Server.Model.Player;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 public abstract class NormalManagers extends Managers {
 
-
-    void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value) {
-        ListIterator<Card> iterator = arrayList.listIterator();
-        ArrayList<Card> ar = new ArrayList<>();
-        while (iterator.hasNext()) {
-            Card cards = iterator.next();
-            ar.add(cards);
-            iterator.remove();
-            if (ar.size() == 3)
-                break;
-        }
-        while (ar.size() < 3) {
-            ar.add(arrayList.get(0));
-            arrayList.remove(0);
-        }
-        if (value.equalsIgnoreCase("friendly")) {
-            player1HandCards = ar;
-            player1DeckCards = arrayList;
-        } else {
-            player2HandCards = ar;
-            player2DeckCards = arrayList;
-        }
-    }
 
     void reversePlayers() {
         Player playerTemp = this.player1;

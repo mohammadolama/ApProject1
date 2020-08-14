@@ -6,7 +6,7 @@ import Server.Model.Interface.Character;
 
 public class TargetCraetor {
 
-    private Managers m;
+    private final Managers m;
 
     public TargetCraetor(Managers m) {
         this.m = m;

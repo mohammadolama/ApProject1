@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class HandleCards {
 
-    private Managers m;
+    private final Managers m;
 
     public HandleCards(Managers m) {
         this.m = m;

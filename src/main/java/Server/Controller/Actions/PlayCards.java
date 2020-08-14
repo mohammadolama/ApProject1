@@ -10,16 +10,17 @@ import Server.Model.Cards.Minion;
 import Server.Model.Cards.Spell;
 import Server.Model.Cards.Weapon;
 import Server.Model.Enums.Attribute;
+import Server.Model.Enums.ContiniousActionCarts;
 import Server.Model.Heros.Hero;
 import Server.Model.Interface.Character;
 
 import java.util.ArrayList;
 
-import static Server.Model.Cards.Card.getCardOf;
+import static Server.Controller.MainLogic.DeckLogic.getCardOf;
 
 public class PlayCards {
 
-    private Managers m;
+    private final Managers m;
 
     public PlayCards(Managers m) {
         this.m = m;
@@ -47,7 +48,7 @@ public class PlayCards {
 
         for (Card cards : p1hand) {
             if (cards.getName().equalsIgnoreCase(string)) {
-                m.checkContiniousAction(cards, p2Turn, gameManager);
+                checkContiniousAction(cards, p2Turn, m);
                 cards.accept(new BattlecryVisitor(), targeted, p1deck, p1hand,
                         p1played, p2deck, p2hand,
                         p2played, p1hero, p2hero, gameManager);
@@ -179,5 +180,16 @@ public class PlayCards {
         }
         throw new RuntimeException();
     }
+
+
+    public void checkContiniousAction(Card cards, boolean p2Turn, Managers managers) {
+        for (ContiniousActionCarts value : ContiniousActionCarts.values()) {
+            if (cards.getName().equalsIgnoreCase(value.toString())) {
+                managers.addContiniousActionCard(cards, p2Turn);
+                break;
+            }
+        }
+    }
+
 
 }

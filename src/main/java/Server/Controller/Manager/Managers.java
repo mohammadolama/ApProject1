@@ -4,11 +4,15 @@ import Server.Controller.Actions.*;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Model.*;
-import Server.Model.Cards.*;
+import Server.Model.Cards.Card;
+import Server.Model.Cards.Minion;
+import Server.Model.Cards.Spell;
+import Server.Model.Cards.Weapon;
 import Server.Model.Enums.Attribute;
-import Server.Model.Enums.ContiniousActionCarts;
 import Server.Model.Heros.Hero;
+
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public abstract class Managers {
 
@@ -202,7 +206,6 @@ public abstract class Managers {
                 ActionModel model = new ActionModel(card.getName().toLowerCase(), ((Spell) card).getManaSpendOnSth(), 10);
                 models.add(model);
             }
-
         }
         return models;
     }
@@ -350,18 +353,134 @@ public abstract class Managers {
     }
 
 
-    public void checkContiniousAction(Card cards, boolean p2Turn, Managers gameManager) {
-        for (ContiniousActionCarts value : ContiniousActionCarts.values()) {
-            if (cards.getName().equalsIgnoreCase(value.toString())) {
-                gameManager.addContiniousActionCard(cards, p2Turn);
-                break;
-            }
+    public void heroTakeDamage(Hero hero, int i) {
+        hero.setHealth(hero.getHealth() - i);
+    }
+
+    public GameState getState(ClientHandler cl) {
+        HandleGameState hgs = new HandleGameState(this);
+        return hgs.getState(cl);
+    }
+
+    public boolean getHeroCanAttack(ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            return player1Hero.isCanAttack();
+        } else {
+            return player2Hero.isCanAttack();
         }
     }
 
+    public ArrayList<Integer> listOfTargets(ClientHandler cl) {
+        ArrayList<Card> list;
+        if (cl.equals(cl1)) list = player2PlayedCards;
+        else list = player1PlayedCards;
 
-    public void heroTakeDamage(Hero hero, int i) {
-        hero.setHealth(hero.getHealth() - i);
+        ArrayList<Integer> targets = new ArrayList<>();
+        int i = 0;
+        for (Card card : list) {
+            if (card.getAttributes().contains(Attribute.Taunt)) {
+                targets.add(i);
+            }
+            i++;
+        }
+        if (targets.size() == 0) {
+            for (int j = 0; j < list.size(); j++) {
+                targets.add(j);
+            }
+            targets.add(-1);
+        }
+        return targets;
+    }
+
+    public boolean canDoAction(int i, ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            return !((Minion) player1PlayedCards.get(i)).isSleep();
+        }
+        return !((Minion) player2PlayedCards.get(i)).isSleep();
+    }
+
+
+    public ArrayList<ActionModel> getPlayer1Actions(ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            return friendlyContiniousModel();
+        } else {
+            return enemyContiniousModel();
+        }
+    }
+
+    public ArrayList<ActionModel> getPlayer2Actions(ClientHandler cl) {
+        if (cl.equals(cl1)) {
+            return enemyContiniousModel();
+        } else {
+            return friendlyContiniousModel();
+        }
+    }
+
+    public void discoverMode(String card1, String card2, String card3, Hero hero) {
+        CardModelView view1 = Admin.getInstance().getPureViewModelOf(card1.toLowerCase());
+        CardModelView view2 = Admin.getInstance().getPureViewModelOf(card2.toLowerCase());
+        CardModelView view3 = Admin.getInstance().getPureViewModelOf(card3.toLowerCase());
+        if (hero.equals(player1Hero)) {
+            cl1.notifyAylar(view1, view2, view3);
+        } else if (hero.equals(player2Hero)) {
+            cl2.notifyAylar(view1, view2, view3);
+        }
+    }
+
+    public void aylarAction(String weapon, ClientHandler cl) {
+        Weapon weapon1 = (Weapon) Admin.getInstance().getCardOf(weapon);
+        weapon1.setDurability(weapon1.getDurability() + 2);
+        weapon1.setDamage(weapon1.getDamage() + 2);
+        if (cl.equals(cl1)) {
+            player1DeckCards.add(weapon1);
+            updateGameLog(String.format("%s Choosed %s", player1.getUsername(), weapon1.getName()));
+        } else {
+            player2DeckCards.add(weapon1);
+            updateGameLog(String.format("%s Choosed %s", player2.getUsername(), weapon1.getName()));
+        }
+    }
+
+    public void cancleGame(ClientHandler cl) {
+        timer.stopTimer();
+        if (cl.equals(cl1)) {
+            player1Hero.setHealth(0);
+        } else {
+            player2Hero.setHealth(0);
+        }
+        checkForWinner();
+    }
+
+    public void finishGame(ClientHandler cl) {
+        if (!timer.isStopped()) {
+            timer.stopTimer();
+        }
+    }
+
+    void ThreePrimitiveRandom(ArrayList<Card> arrayList, String value) {
+        ListIterator<Card> iterator = arrayList.listIterator();
+        ArrayList<Card> ar = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Card cards = iterator.next();
+            ar.add(cards);
+            iterator.remove();
+            if (ar.size() == 3)
+                break;
+        }
+        while (ar.size() < 3) {
+            ar.add(arrayList.get(0));
+            arrayList.remove(0);
+        }
+        if (value.equalsIgnoreCase("friendly")) {
+            player1HandCards = ar;
+            player1DeckCards = arrayList;
+        } else {
+            player2HandCards = ar;
+            player2DeckCards = arrayList;
+        }
+    }
+
+    public boolean isP2Turn() {
+        return p2Turn;
     }
 
     public Player getPlayer1() {
@@ -560,48 +679,6 @@ public abstract class Managers {
         return deckReaderMode;
     }
 
-    public GameState getState(ClientHandler cl) {
-        HandleGameState hgs = new HandleGameState(this);
-        return hgs.getState(cl);
-    }
-
-    public boolean getHeroCanAttack(ClientHandler cl) {
-        if (cl.equals(cl1)) {
-            return player1Hero.isCanAttack();
-        } else {
-            return player2Hero.isCanAttack();
-        }
-    }
-
-    public ArrayList<Integer> listOfTargets(ClientHandler cl) {
-        ArrayList<Card> list;
-        if (cl.equals(cl1)) list = player2PlayedCards;
-        else list = player1PlayedCards;
-
-        ArrayList<Integer> targets = new ArrayList<>();
-        int i = 0;
-        for (Card card : list) {
-            if (card.getAttributes().contains(Attribute.Taunt)) {
-                targets.add(i);
-            }
-            i++;
-        }
-        if (targets.size() == 0) {
-            for (int j = 0; j < list.size(); j++) {
-                targets.add(j);
-            }
-            targets.add(-1);
-        }
-        return targets;
-    }
-
-    public boolean canDoAction(int i, ClientHandler cl) {
-        if (cl.equals(cl1)) {
-            return !((Minion) player1PlayedCards.get(i)).isSleep();
-        }
-        return !((Minion) player2PlayedCards.get(i)).isSleep();
-    }
-
     public void setTime(String time) {
         this.time = time;
     }
@@ -610,67 +687,5 @@ public abstract class Managers {
         return time;
     }
 
-    public ArrayList<ActionModel> getPlayer1Actions(ClientHandler cl) {
-        if (cl.equals(cl1)) {
-            return friendlyContiniousModel();
-        } else {
-            return enemyContiniousModel();
-        }
-    }
 
-    public ArrayList<ActionModel> getPlayer2Actions(ClientHandler cl) {
-        if (cl.equals(cl1)) {
-            return enemyContiniousModel();
-        } else {
-            return friendlyContiniousModel();
-        }
-    }
-
-    public void discoverMode(String card1, String card2, String card3, Hero hero) {
-        CardModelView view1 = Admin.getInstance().getPureViewModelOf(card1.toLowerCase());
-        CardModelView view2 = Admin.getInstance().getPureViewModelOf(card2.toLowerCase());
-        CardModelView view3 = Admin.getInstance().getPureViewModelOf(card3.toLowerCase());
-        if (hero.equals(player1Hero)) {
-            cl1.notifyAylar(view1, view2, view3);
-        } else if (hero.equals(player2Hero)) {
-            cl2.notifyAylar(view1, view2, view3);
-        }
-    }
-
-    public void aylarAction(String weapon, ClientHandler cl) {
-        Weapon weapon1 = (Weapon) Admin.getInstance().getCardOf(weapon);
-        weapon1.setDurability(weapon1.getDurability() + 2);
-        weapon1.setDamage(weapon1.getDamage() + 2);
-        if (cl.equals(cl1)) {
-            player1DeckCards.add(weapon1);
-            updateGameLog(String.format("%s Choosed %s", player1.getUsername(), weapon1.getName()));
-        } else {
-            player2DeckCards.add(weapon1);
-            updateGameLog(String.format("%s Choosed %s", player2.getUsername(), weapon1.getName()));
-        }
-    }
-
-    public void cancleGame(ClientHandler cl) {
-        timer.stopTimer();
-        if (cl.equals(cl1)) {
-            player1Hero.setHealth(0);
-        } else {
-            player2Hero.setHealth(0);
-        }
-        checkForWinner();
-    }
-
-    public void finishGame(ClientHandler cl) {
-        if (!timer.isStopped()) {
-            timer.stopTimer();
-        }
-    }
-
-    public boolean isP2Turn() {
-        return p2Turn;
-    }
-
-    public void setP2Turn(boolean p2Turn) {
-        this.p2Turn = p2Turn;
-    }
 }

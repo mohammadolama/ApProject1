@@ -4,12 +4,7 @@ package Server.Controller.MainLogic;
 import Server.Model.Account;
 import Server.Model.Player;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 public class LogInSignUp {
-    private static File file = new File("resources/Model.Player.txt");
 
     public void DeleteAccount(Player player) {
         LOGGER.playerlog(player, "Account Deleted");
@@ -20,7 +15,7 @@ public class LogInSignUp {
         if (DuplicateUserChecker(user)) {
             DataBaseManagment.saveAccount(new Account(user, pass));
             Player player = new Player(user, pass);
-            DataBaseManagment.PlayerJsonBuilder(user, player);
+            DataBaseManagment.savePlayer(player);
             LOGGER.playerlog(player, "Account created");
             return "ok";
         }

@@ -3,14 +3,14 @@ package Server.Controller.MainLogic;
 
 import Server.Model.Cards.Card;
 import Server.Model.Deck;
+import Server.Model.DeckModel;
 import Server.Model.Enums.*;
+import Server.Model.Heros.Hero;
 import Server.Model.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.Comparator;
-import java.util.Map;
 
 public class DeckLogic {
 
@@ -134,4 +134,112 @@ public class DeckLogic {
     }
 
 
+    public static ArrayList<Card> allCards() {
+        ArrayList<Carts> ar = new ArrayList<>();
+        Collections.addAll(ar, Carts.values());
+        return UpdateDeck(ar);
+    }
+
+    public static ArrayList<Card> purchasedCards(Player player) {
+        ArrayList<Carts> ar = new ArrayList<>(player.getPlayerCarts());
+        return UpdateDeck(ar);
+    }
+
+    public static ArrayList<Card> lockedCards(Player player) {
+        ArrayList<Carts> ar = new ArrayList<>();
+        outer:
+        for (Carts carts : Carts.values()) {
+            for (Carts playerCart : player.getPlayerCarts()) {
+                if (carts.toString().equalsIgnoreCase(playerCart.toString())) {
+                    continue outer;
+                }
+            }
+            ar.add(carts);
+        }
+        return UpdateDeck(ar);
+    }
+
+    public static ArrayList<Card> neutralCardsFilter() {
+        ArrayList<Carts> ar = new ArrayList<>();
+        for (NeutralCarts value : NeutralCarts.values()) {
+            ar.add(Carts.valueOf(value.toString()));
+        }
+        return UpdateDeck(ar);
+    }
+
+    public static ArrayList<Card> specialCardsFilter() {
+        ArrayList<Carts> ar = new ArrayList<>();
+        for (SpecialCarts value : SpecialCarts.values()) {
+            ar.add(Carts.valueOf(value.toString()));
+        }
+        return UpdateDeck(ar);
+    }
+
+    public static Card getCardOf(String name) {
+        for (int i = 0; i < 1; i++) {
+            for (MinionCarts value : MinionCarts.values()) {
+                if (value.toString().equalsIgnoreCase(name)) {
+                    return DataBaseManagment.MinionsReader(name.toLowerCase());
+                }
+            }
+            for (SpellCarts value : SpellCarts.values()) {
+                if (value.toString().equalsIgnoreCase(name)) {
+                    return DataBaseManagment.SpellReader(name.toLowerCase());
+                }
+            }
+            for (WeaponCarts value : WeaponCarts.values()) {
+                if (value.toString().equalsIgnoreCase(name)) {
+                    return DataBaseManagment.WeaponReader(name.toLowerCase());
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public synchronized String createDeck(String name, ArrayList<Carts> selectedCards, String heroName, Player player) {
+        for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
+            String st = entry.getKey();
+            if (name.equalsIgnoreCase(st)) {
+                return "Name had been taken before !";
+            }
+        }
+        if (selectedCards.size() > 30 || selectedCards.size() < 15) {
+            return "Number of cards in your deck must be in range [15,30].";
+        }
+        Deck deck = new Deck(0, 0, name);
+        deck.setDeck(selectedCards);
+        deck.setHero(DataBaseManagment.HeroJsonReader(player, heroName.toLowerCase()));
+        deck.setUsedTimes(Deck.resetUsedTimes(selectedCards, deck));
+        player.getAllDecks().put(deck.getName(), deck);
+        Admin.getInstance().Log(String.format("Create : deck %s is created.", deck.getName()), player);
+        DataBaseManagment.savePlayer(player);
+        return "ok";
+    }
+
+    public synchronized String changeDeck(DeckModel deck, ArrayList<Carts> selectedCards, String heroName, String previous, String current, Player player) {
+        if (!current.equals(previous)) {
+            for (Map.Entry<String, Deck> entry : player.getAllDecks().entrySet()) {
+                String st = entry.getKey();
+                if (current.equalsIgnoreCase(st)) {
+                    return "Name had been taken before !";
+                }
+            }
+        }
+        if (selectedCards.size() > 30 || selectedCards.size() < 15) {
+            return "Number of cards in your deck must be in range [15,30].";
+        }
+        Deck selectedDeck = player.getAllDecks().get(previous);
+        selectedDeck.setDeck(selectedCards);
+        selectedDeck.setName(current);
+        Hero hero = DataBaseManagment.HeroJsonReader(player, heroName.toLowerCase());
+        selectedDeck.setHero(hero);
+        selectedDeck.setUsedTimes(Deck.resetUsedTimes(selectedCards, selectedDeck));
+        player.getAllDecks().remove(previous);
+        player.getAllDecks().put(current, selectedDeck);
+        player.setSelectedDeck(null);
+        Admin.getInstance().Log(String.format("Change : deck %s has been changed.", selectedDeck.getName()), player);
+        DataBaseManagment.savePlayer(player);
+        return "ok";
+    }
 }

@@ -5,7 +5,7 @@ import Server.Model.InfoPassive;
 
 public class InfoInitilizer {
 
-    private Managers m;
+    private final Managers m;
 
     public InfoInitilizer(Managers m) {
         this.m = m;

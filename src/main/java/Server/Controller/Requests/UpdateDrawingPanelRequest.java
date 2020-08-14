@@ -44,15 +44,15 @@ public class UpdateDrawingPanelRequest implements Request {
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         ArrayList<Card> cards;
         if (value.equalsIgnoreCase("all"))
-            cards = Card.allCards();
+            cards = DeckLogic.allCards();
         else if (value.equalsIgnoreCase("locked"))
-            cards = Card.lockedCards(clientHandler.getPlayer());
+            cards = DeckLogic.lockedCards(clientHandler.getPlayer());
         else if (value.equalsIgnoreCase("unlocked"))
-            cards = Card.purchasedCards(clientHandler.getPlayer());
+            cards = DeckLogic.purchasedCards(clientHandler.getPlayer());
         else if (value.equalsIgnoreCase("neutral"))
-            cards = Card.neutralCardsFilter();
+            cards = DeckLogic.neutralCardsFilter();
         else if (value.equalsIgnoreCase("special")) {
-            cards = Card.specialCardsFilter();
+            cards = DeckLogic.specialCardsFilter();
         } else {
             Deck selectedDeck = Deck.cloneDeck(clientHandler.getPlayer().getAllDecks().get(value));
             cards = DeckLogic.UpdateDeck(selectedDeck.getDeck());

@@ -10,10 +10,7 @@ import org.codehaus.jackson.map.SerializationConfig;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 public class DataBaseManagment {
 
@@ -74,7 +71,7 @@ public class DataBaseManagment {
     }
 
 
-    public static void PlayerJsonBuilder(String username, Player player) {
+    public static void savePlayer(Player player) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.saveOrUpdate(player);
@@ -82,73 +79,36 @@ public class DataBaseManagment {
         session.close();
     }
 
-    static void NewPlayerHeroBuilder(Player player) {
-        PlayerJsonBuilder(null, player);
-    }
-
-    private static void HeroBuilder(Player player, Hero hero) {
-        String st = String.format("resources/Jsons/Players/%s/%s.json", player.getUsername(), hero.getName().toLowerCase());
-        try {
-            FileWriter fileWriter = new FileWriter(st);
-            objectMapper.writeValue(fileWriter, hero);
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void HeroBuildeeer(Hero hero) {
+    public static void HeroBuilder(Hero hero) {
         Session session = sessionFactory.openSession();
-
         session.beginTransaction();
-
         session.save(hero);
-
-
         session.getTransaction().commit();
-
         session.close();
-
     }
 
     public static void WeaponBuilder(Weapon weapon) {
         Session session = sessionFactory.openSession();
-
         session.beginTransaction();
-
         session.save(weapon);
-
-
         session.getTransaction().commit();
-
         session.close();
     }
 
     public static void SpellBuilder(Spell spell) {
         Session session = sessionFactory.openSession();
-
         session.beginTransaction();
-
         session.save(spell);
-
-
         session.getTransaction().commit();
-
         session.close();
     }
 
     public static void minionBuilder(Minion minions) {
         Session session = sessionFactory.openSession();
-
         session.beginTransaction();
-
         session.save(minions);
-
-
         session.getTransaction().commit();
-
         session.close();
-
     }
 
     static Player PlayerJsonReader(String username) {
@@ -210,7 +170,6 @@ public class DataBaseManagment {
         session.getTransaction().commit();
         session.close();
     }
-
 
     public static void deleteAccount(String user) {
         Session session = sessionFactory.openSession();

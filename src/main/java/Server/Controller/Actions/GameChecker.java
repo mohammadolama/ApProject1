@@ -117,7 +117,7 @@ public class GameChecker {
 
         } else {
             player.setExp(player.getExp() + i);
-            DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+            DataBaseManagment.savePlayer(player);
         }
     }
 

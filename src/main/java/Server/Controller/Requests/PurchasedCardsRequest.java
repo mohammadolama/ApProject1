@@ -3,6 +3,7 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
+import Server.Controller.MainLogic.DeckLogic;
 import Server.Controller.Manager.Managers;
 import Server.Controller.Response.PurchasedCardsResponse;
 import Server.Model.CardModelView;
@@ -25,7 +26,7 @@ public class PurchasedCardsRequest implements Request {
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         purchasedCard = new ArrayList<>();
-        for (Card card : Card.purchasedCards(clientHandler.getPlayer())) {
+        for (Card card : DeckLogic.purchasedCards(clientHandler.getPlayer())) {
             purchasedCard.add(Admin.getInstance().getPureViewModelOf(card.getName()));
         }
         try {

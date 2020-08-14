@@ -7,7 +7,7 @@ import Server.Model.Cards.Card;
 import Server.Model.Cards.Spell;
 
 public class SpendMana {
-    private Managers m;
+    private final Managers m;
 
     public SpendMana(Managers m) {
         this.m = m;

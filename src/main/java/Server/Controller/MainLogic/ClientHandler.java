@@ -4,8 +4,8 @@ import Server.Controller.Manager.Managers;
 import Server.Controller.Requests.Request;
 import Server.Controller.Response.*;
 import Server.Model.CardModelView;
-import Server.Model.Player;
 import Server.Model.GameState;
+import Server.Model.Player;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class ClientHandler extends Thread {
 
-    private Server server;
+    private final Server server;
     private Managers gameManager;
     private final Socket socket;
     private Player player;
@@ -70,27 +70,6 @@ public class ClientHandler extends Thread {
             e.printStackTrace();
         }
     }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Managers getGameManager() {
-        return gameManager;
-    }
-
-    public void setGameManager(Managers gameManager) {
-        this.gameManager = gameManager;
-    }
-
-    public GameState gameState() {
-        return gameManager.getState(this);
-    }
-
     public void notifyWinner(String name) {
         try {
             output.println(objectMapper.writeValueAsString(new NotifyWinner(name)));
@@ -122,4 +101,26 @@ public class ClientHandler extends Thread {
             e.printStackTrace();
         }
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Managers getGameManager() {
+        return gameManager;
+    }
+
+    public void setGameManager(Managers gameManager) {
+        this.gameManager = gameManager;
+    }
+
+    public GameState gameState() {
+        return gameManager.getState(this);
+    }
+
+
 }

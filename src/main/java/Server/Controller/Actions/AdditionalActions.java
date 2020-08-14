@@ -2,7 +2,6 @@ package Server.Controller.Actions;
 
 import Server.Controller.Actions.CardVisitors.ActionVisitor;
 import Server.Controller.Actions.SPVisitor.HeroPowerVisitor;
-import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
 import Server.Model.Cards.Benyamin;
@@ -11,7 +10,7 @@ import Server.Model.Cards.Minion;
 import Server.Model.Heros.Hunter;
 
 public class AdditionalActions {
-    private Managers m;
+    private final Managers m;
 
     public AdditionalActions(Managers m) {
         this.m = m;

@@ -19,11 +19,11 @@ public class ServerMain {
 
     public static void save() {
 
-        DataBaseManagment.HeroBuildeeer(new Rogue());
-        DataBaseManagment.HeroBuildeeer(new Warlock());
-        DataBaseManagment.HeroBuildeeer(new Mage());
-        DataBaseManagment.HeroBuildeeer(new Priest());
-        DataBaseManagment.HeroBuildeeer(new Hunter());
+        DataBaseManagment.HeroBuilder(new Rogue());
+        DataBaseManagment.HeroBuilder(new Warlock());
+        DataBaseManagment.HeroBuilder(new Mage());
+        DataBaseManagment.HeroBuilder(new Priest());
+        DataBaseManagment.HeroBuilder(new Hunter());
 //
 //
         DataBaseManagment.minionBuilder(new AghaHaghi());

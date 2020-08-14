@@ -2,7 +2,6 @@ package Server.Controller.Actions;
 
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
-import Server.Controller.MainLogic.ThreadColor;
 import Server.Controller.Manager.Managers;
 import Server.Model.CardModelView;
 import Server.Model.GameState;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 
 public class HandleGameState {
 
-    private Managers m;
+    private final Managers m;
 
     public HandleGameState(Managers m) {
         this.m = m;
@@ -26,7 +25,6 @@ public class HandleGameState {
             CardModelView p2w = Admin.getInstance().getWeaponViewModel(m.getPlayer2Weapon());
             int dpm = m.getPlayer1Hero().getHeroPower().getManaCost() - m.getPlayer1PowerManaDecrease();
             int upm = m.getPlayer2Hero().getHeroPower().getManaCost() - m.getPlayer2PowerManaDecrease();
-            System.out.println(ThreadColor.ANSI_GREEN + m.getPlayer1Hero().isCanAttack() + ThreadColor.ANSI_RESET);
             return new GameState(m.getPlayer1().getUsername(), m.getPlayer2().getUsername(), m.getPlayer1Hero().getName(),
                     m.getPlayer2Hero().getName(), m.getTime(), m.getPlayer1HeroPowerUsageTime(), m.getPlayer2HeroPowerUsageTime(),
                     dpm, upm, m.getPlayer1NotUsedMana(), m.getPlayer1TotalMana(), m.getPlayer1Hero().getHealth(),

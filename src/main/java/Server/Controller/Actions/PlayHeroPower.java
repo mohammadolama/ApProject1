@@ -9,7 +9,7 @@ import Server.Model.Heros.Warlock;
 import Server.Model.Interface.Character;
 
 public class PlayHeroPower {
-    private Managers m;
+    private final Managers m;
 
     public PlayHeroPower(Managers m) {
         this.m = m;

@@ -2,17 +2,14 @@ package Server.Controller.Manager;
 
 import Client.View.Configs.DeckReader;
 import Server.Controller.Actions.SPVisitor.SpecialPowerVisitor;
-import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.DeckLogic;
 import Server.Controller.MainLogic.JsonReaders;
 import Server.Model.Cards.Card;
-import Server.Model.InfoPassive;
-import Server.Model.Player;
 import Server.Model.Requirements;
 
 import java.util.ArrayList;
 
-public class DeckReaderManager extends NormalManagers {
+public class DeckReaderManager extends OnlineManagers {
 
 
     public DeckReaderManager(Requirements rq1, Requirements rq2) {
@@ -41,17 +38,4 @@ public class DeckReaderManager extends NormalManagers {
         timer.start();
     }
 
-    @Override
-    public void endTurn(ClientHandler cl) {
-        updateGameLog(String.format("%s  EndTurn .", cl.getPlayer().getUsername()));
-        p2Turn = !p2Turn;
-        timer.reset1(p2Turn);
-        if (cl.equals(cl1)) {
-            benyaminAction(false);
-            PlayerTurn(cl2);
-        } else {
-            benyaminAction(true);
-            PlayerTurn(cl1);
-        }
-    }
 }
