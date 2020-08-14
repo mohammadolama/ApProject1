@@ -18,12 +18,6 @@ public class SelectedDeckCardsRequest implements Request {
     private ArrayList<Card> cardList;
     private String name;
 
-    public SelectedDeckCardsRequest(ArrayList<Carts> cartList, ArrayList<Card> cardList, String name) {
-        this.cartList = cartList;
-        this.cardList = cardList;
-        this.name = name;
-    }
-
     public SelectedDeckCardsRequest() {
     }
 

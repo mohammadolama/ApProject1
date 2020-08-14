@@ -1,9 +1,5 @@
 package Client.Controller.Requests;
 
-import Client.Controller.RequestHandler;
-import Client.View.View.Panels.MenuPanel;
-import Client.View.View.Panels.MyFrame;
-import Client.View.View.Sounds.SoundAdmin;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 

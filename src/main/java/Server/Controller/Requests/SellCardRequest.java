@@ -16,10 +16,6 @@ public class SellCardRequest implements Request {
 
     private String name;
 
-    public SellCardRequest(String name) {
-        this.name = name;
-    }
-
     public SellCardRequest() {
     }
 

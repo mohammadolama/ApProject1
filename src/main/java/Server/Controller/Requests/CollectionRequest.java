@@ -5,24 +5,22 @@ import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
 import Server.Controller.Response.CollectionResponse;
 import Server.Model.CardModelView;
-import Server.Model.Enums.*;
+import Server.Model.Enums.Carts;
+import Server.Model.Enums.NeutralCarts;
 import Server.Model.Heros.*;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @JsonTypeName("collection")
 public class CollectionRequest implements Request {
 
     private String name;
-    public CollectionRequest(String name) {
-        this.name = name;
-    }
-
     public CollectionRequest() {
     }
 

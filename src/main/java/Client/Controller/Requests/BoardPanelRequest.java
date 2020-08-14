@@ -1,14 +1,10 @@
 package Client.Controller.Requests;
 
-import Client.Controller.Responses;
-import Client.Model.CardModelView;
-import Client.Model.GameState;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 @JsonTypeName("boardpanel")

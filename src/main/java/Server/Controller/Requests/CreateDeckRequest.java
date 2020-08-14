@@ -20,12 +20,6 @@ public class CreateDeckRequest implements Request {
     private ArrayList<Carts> list;
     private String heroName;
 
-    public CreateDeckRequest(String name, ArrayList<Carts> list, String heroName) {
-        this.name = name;
-        this.list = list;
-        this.heroName = heroName;
-    }
-
     public CreateDeckRequest() {
     }
 

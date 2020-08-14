@@ -35,6 +35,5 @@ public class AttackRequest implements Request {
     @Override
     public void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers) {
         clientHandler.getGameManager().Attack(attacker, target, clientHandler);
-
     }
 }

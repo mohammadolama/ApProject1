@@ -13,10 +13,6 @@ public class PlayHeroPowerRequest implements Request {
 
     private int target;
 
-    public PlayHeroPowerRequest(int target) {
-        this.target = target;
-    }
-
     public PlayHeroPowerRequest() {
     }
 

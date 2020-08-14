@@ -18,10 +18,6 @@ public class PriceRequest implements Request {
     public PriceRequest() {
     }
 
-    public PriceRequest(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }

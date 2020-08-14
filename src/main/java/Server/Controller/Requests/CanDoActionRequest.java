@@ -15,10 +15,6 @@ public class CanDoActionRequest implements Request {
 
     private int index;
 
-    public CanDoActionRequest(int index) {
-        this.index = index;
-    }
-
     public CanDoActionRequest() {
     }
 

@@ -2,7 +2,6 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
-import Server.Controller.MainLogic.ThreadColor;
 import Server.Controller.Manager.Managers;
 import Server.Controller.Response.Col_ChangeResponse;
 import Server.Model.DeckModel;
@@ -23,14 +22,6 @@ public class ChangeDeckRequest implements Request {
     private String previousName;
     private String curruntName;
     private ArrayList<Carts> list;
-
-    public ChangeDeckRequest(DeckModel deck, String heroName, String previousName, String curruntName, ArrayList<Carts> list) {
-        this.deck = deck;
-        this.heroName = heroName;
-        this.previousName = previousName;
-        this.curruntName = curruntName;
-        this.list = list;
-    }
 
     public ChangeDeckRequest() {
     }

@@ -3,7 +3,6 @@ package Server.Controller.Requests;
 import Server.Controller.MainLogic.Admin;
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.MainLogic.DeckLogic;
-import Server.Controller.MainLogic.Server;
 import Server.Controller.Manager.Managers;
 import Server.Controller.Manager.NormalModeManager;
 import Server.Controller.Response.CreateNormalResponse;

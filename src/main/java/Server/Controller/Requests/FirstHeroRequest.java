@@ -16,9 +16,6 @@ public class FirstHeroRequest implements Request {
 
     private String hero;
 
-    public FirstHeroRequest(String hero) {
-        this.hero = hero;
-    }
 
     public FirstHeroRequest() {
     }

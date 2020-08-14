@@ -15,10 +15,6 @@ public class CanBePlayedRequest implements Request {
 
     private String cardName;
 
-    public CanBePlayedRequest(String cardName) {
-        this.cardName = cardName;
-    }
-
     public CanBePlayedRequest() {
     }
 

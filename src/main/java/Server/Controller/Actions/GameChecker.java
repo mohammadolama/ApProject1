@@ -113,8 +113,12 @@ public class GameChecker {
     }
 
     public void expManager(Player player, int i) {
-        player.setExp(player.getExp() + i);
-        DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+        if (player.getExp() == 0 && i < 0) {
+
+        } else {
+            player.setExp(player.getExp() + i);
+            DataBaseManagment.PlayerJsonBuilder(player.getUsername(), player);
+        }
     }
 
     public void winGame(String name) {

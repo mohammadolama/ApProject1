@@ -18,10 +18,6 @@ public class ProperCardsRequest implements Request {
     private int i;
     private ArrayList<CardModelView> list;
 
-    public ProperCardsRequest(int i) {
-        this.i = i;
-    }
-
     public ProperCardsRequest() {
     }
 

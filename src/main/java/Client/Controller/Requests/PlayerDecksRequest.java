@@ -1,14 +1,10 @@
 package Client.Controller.Requests;
 
-import Client.Controller.Responses;
-import Client.Model.DeckModel;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Scanner;
 
 @JsonTypeName("playerdecks")

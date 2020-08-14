@@ -15,10 +15,6 @@ import java.util.Scanner;
 public class BuyCardRequest implements Request {
     private String name;
 
-    public BuyCardRequest(String name) {
-        this.name = name;
-    }
-
     public BuyCardRequest() {
     }
 

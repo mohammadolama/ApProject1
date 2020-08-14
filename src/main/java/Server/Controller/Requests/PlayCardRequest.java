@@ -15,11 +15,6 @@ public class PlayCardRequest implements Request {
     private int deckIndex;
     private int targetIndex;
 
-    public PlayCardRequest(String name, int deckIndex, int targetIndex) {
-        this.name = name;
-        this.deckIndex = deckIndex;
-        this.targetIndex = targetIndex;
-    }
 
     public PlayCardRequest() {
     }

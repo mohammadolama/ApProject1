@@ -13,10 +13,6 @@ public class AylarActionRequest implements Request {
 
     private String name;
 
-    public AylarActionRequest(String name) {
-        this.name = name;
-    }
-
     public AylarActionRequest() {
     }
 

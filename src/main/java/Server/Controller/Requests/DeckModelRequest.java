@@ -17,10 +17,6 @@ import java.util.Scanner;
 public class DeckModelRequest implements Request {
     private String name;
 
-    public DeckModelRequest(String name) {
-        this.name = name;
-    }
-
     public DeckModelRequest() {
     }
 

@@ -14,10 +14,6 @@ public class LogRequest implements Request {
 
     private String log;
 
-    public LogRequest(String log) {
-        this.log = log;
-    }
-
     public LogRequest() {
     }
 

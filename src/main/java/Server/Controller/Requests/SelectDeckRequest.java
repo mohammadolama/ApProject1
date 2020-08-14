@@ -15,10 +15,6 @@ public class SelectDeckRequest implements Request {
 
     private DeckModel deck;
 
-    public SelectDeckRequest(DeckModel deck) {
-        this.deck = deck;
-    }
-
     public SelectDeckRequest() {
     }
 

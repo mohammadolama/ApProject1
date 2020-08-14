@@ -27,18 +27,10 @@ public class MyFrame extends JFrame {
         Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
         setCursor(customCursor);
 
-
         cardLayout = new CardLayout();
         panel = new JPanel();
 
-
         panel.setLayout(cardLayout);
-
-//        LoginPanel loginPanel = LoginPanel.getInstance();
-//        MenuPanel menuPanel = MenuPanel.getInstance();
-//
-//        panel.add(loginPanel, "login");
-//        panel.add(menuPanel, "menu");
 
         ConnectionPanel connectionPanel = new ConnectionPanel();
         panel.add("connection", connectionPanel);

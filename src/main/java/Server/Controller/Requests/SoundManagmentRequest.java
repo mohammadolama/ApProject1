@@ -11,10 +11,6 @@ public class SoundManagmentRequest implements Request {
 
     private int value;
 
-    public SoundManagmentRequest(int value) {
-        this.value = value;
-    }
-
     public SoundManagmentRequest() {
     }
 

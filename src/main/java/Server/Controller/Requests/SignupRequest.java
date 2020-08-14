@@ -19,11 +19,6 @@ public class SignupRequest implements Request {
     public SignupRequest() {
     }
 
-    public SignupRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public String getUsername() {
         return username;
     }

@@ -2,6 +2,7 @@ package Server.Controller.Requests;
 
 import Server.Controller.MainLogic.ClientHandler;
 import Server.Controller.Manager.Managers;
+import Server.Controller.Response.ActionChartResponse;
 import Server.Model.ActionModel;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -14,11 +15,6 @@ public class ActionChartRequest implements Request {
 
     private ArrayList<ActionModel> friednlyModel;
     private ArrayList<ActionModel> enemyModel;
-
-    public ActionChartRequest(ArrayList<ActionModel> friednlyModel, ArrayList<ActionModel> enemyModel) {
-        this.friednlyModel = friednlyModel;
-        this.enemyModel = enemyModel;
-    }
 
     public ActionChartRequest() {
     }
@@ -45,7 +41,7 @@ public class ActionChartRequest implements Request {
         friednlyModel = clientHandler.getGameManager().getPlayer1Actions(clientHandler);
         enemyModel = clientHandler.getGameManager().getPlayer2Actions(clientHandler);
         try {
-            outputStream.println(objectMapper.writeValueAsString(new ActionChartRequest(friednlyModel, enemyModel)));
+            outputStream.println(objectMapper.writeValueAsString(new ActionChartResponse(friednlyModel, enemyModel)));
         } catch (IOException e) {
             e.printStackTrace();
         }

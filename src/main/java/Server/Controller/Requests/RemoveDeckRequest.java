@@ -17,10 +17,6 @@ public class RemoveDeckRequest implements Request {
 
     private DeckModel deck;
 
-    public RemoveDeckRequest(DeckModel deck) {
-        this.deck = deck;
-    }
-
     public RemoveDeckRequest() {
     }
 

@@ -1,11 +1,8 @@
 package Client.Controller.Requests;
 
-import Client.View.View.Panels.Col_Change;
-import Client.View.View.Panels.MyFrame;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;

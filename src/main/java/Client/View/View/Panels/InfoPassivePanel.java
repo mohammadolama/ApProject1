@@ -20,7 +20,6 @@ public class InfoPassivePanel extends JPanel {
     private final JButton backButton;
     private final JButton normal;
     private final JButton deckReader;
-    private JButton practice;
     private final JButton online;
     private InfoPassive infoPassive;
     private final InfoAction ia = new InfoAction(this);
@@ -104,7 +103,6 @@ public class InfoPassivePanel extends JPanel {
         add(passive3);
         add(normal);
         add(deckReader);
-        add(practice);
         add(backButton);
         add(online);
     }

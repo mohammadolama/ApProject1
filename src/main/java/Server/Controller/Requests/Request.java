@@ -19,10 +19,8 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = LogoutRequest.class, name = "logout"),
         @JsonSubTypes.Type(value = DeleteAccountRequest.class, name = "deleteaccount"),
         @JsonSubTypes.Type(value = ExitRequest.class, name = "exit"),
-        @JsonSubTypes.Type(value = MostUsedCardRequest.class, name = "mostusedcard"),
         @JsonSubTypes.Type(value = UnlockHeroRequest.class, name = "unlockhero"),
         @JsonSubTypes.Type(value = BestDecksRequest.class, name = "bestdecks"),
-        @JsonSubTypes.Type(value = GetDeckRequest.class, name = "getdeck"),
         @JsonSubTypes.Type(value = LogRequest.class, name = "log"),
         @JsonSubTypes.Type(value = ChangeCardRequest.class, name = "changecard"),
         @JsonSubTypes.Type(value = AylarActionRequest.class, name = "aylaraction"),
@@ -45,7 +43,6 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = SelectDeckRequest.class, name = "selectdeck"),
         @JsonSubTypes.Type(value = SelectedDeckRequest.class, name = "selecteddeck"),
         @JsonSubTypes.Type(value = FirstHeroRequest.class, name = "firsthero"),
-        @JsonSubTypes.Type(value = CreateGameModeRequest.class, name = "creategamemode"),
         @JsonSubTypes.Type(value = WantToPlayRequest.class, name = "wanttoplay"),
         @JsonSubTypes.Type(value = PlayerModelRequest.class, name = "playermodel"),
         @JsonSubTypes.Type(value = RemoveDeckRequest.class, name = "removedeck"),
@@ -70,5 +67,5 @@ import java.util.Scanner;
         @JsonSubTypes.Type(value = CancleGameRequest.class, name = "cancle"),
 })
 public interface Request {
-    public abstract void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers);
+    void excute(Scanner inputStream, PrintWriter outputStream, ClientHandler clientHandler, ObjectMapper objectMapper, Managers managers);
 }

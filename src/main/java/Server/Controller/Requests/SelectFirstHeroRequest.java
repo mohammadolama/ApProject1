@@ -13,10 +13,6 @@ public class SelectFirstHeroRequest implements Request {
 
     private String name;
 
-    public SelectFirstHeroRequest(String name) {
-        this.name = name;
-    }
-
     public SelectFirstHeroRequest() {
     }
 

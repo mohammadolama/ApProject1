@@ -1,15 +1,10 @@
 package Client.Controller.Requests;
 
-import Client.Controller.Responses;
-import Client.Model.CardModelView;
-import Client.Model.Enums.Carts;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 @JsonTypeName("collection")

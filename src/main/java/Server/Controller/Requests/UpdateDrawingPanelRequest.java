@@ -21,10 +21,6 @@ public class UpdateDrawingPanelRequest implements Request {
     private String value;
     private ArrayList<CardModelView> list;
 
-    public UpdateDrawingPanelRequest(String value) {
-        this.value = value;
-    }
-
     public UpdateDrawingPanelRequest() {
     }
 

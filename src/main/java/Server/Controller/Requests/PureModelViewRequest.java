@@ -18,10 +18,6 @@ public class PureModelViewRequest implements Request {
     private CardModelView view;
     private String name;
 
-    public PureModelViewRequest(String name) {
-        this.name = name;
-    }
-
     public PureModelViewRequest() {
     }
 
