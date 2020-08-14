@@ -23,7 +23,7 @@ public class MenuAction implements ActionListener {
             RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Logout Button"));
             RequestHandler.getInstance().sendRequest(new LogoutRequest());
         } else if (button == m.getCheat()) {
-            String st = JOptionPane.showInputDialog(this, "Don't Cheat!!");
+            String st = JOptionPane.showInputDialog("Don't Cheat!!");
             if (st.equalsIgnoreCase("hesoyam")) {
                 RequestHandler.getInstance().sendRequest(new UnlockHeroRequest());
             }
