@@ -12,7 +12,7 @@ import static Client.View.View.Panels.Constants.f2;
 
 public class SummonedCardPanel extends JPanel {
 
-    private SummonedConfig config;
+    private final SummonedConfig config;
 
     private CardModelView view;
     private int damage;

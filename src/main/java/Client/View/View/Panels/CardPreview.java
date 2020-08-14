@@ -5,25 +5,23 @@ import Client.Model.Enums.Type;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static Client.View.View.Panels.Constants.cardPics;
 import static Client.View.View.Panels.Constants.fantasy;
 
-public class CardPreview extends JPanel implements ActionListener {
+public class CardPreview extends JPanel {
 
     private CardModelView cardModelView;
-    private int cardwidth = 250;
-    private int cardheight =350;
+    private final int cardwidth = 250;
+    private final int cardheight = 350;
 
-    private static CardPreview cardPreview=new CardPreview();
+    private static final CardPreview cardPreview = new CardPreview();
 
     private CardPreview() {
 
     }
 
-    public static CardPreview getInstance(){
+    public static CardPreview getInstance() {
         return cardPreview;
     }
 
@@ -69,8 +67,4 @@ public class CardPreview extends JPanel implements ActionListener {
         this.cardModelView = cardModelView;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        repaint();
-    }
 }

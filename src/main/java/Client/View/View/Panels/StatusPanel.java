@@ -2,7 +2,10 @@ package Client.View.View.Panels;
 
 
 import Client.Controller.RequestHandler;
-import Client.Controller.Requests.*;
+import Client.Controller.Requests.BestDecksRequest;
+import Client.Controller.Requests.DeckModelRequest;
+import Client.Controller.Requests.PlayerModelRequest;
+import Client.Controller.Requests.PureModelViewRequest;
 import Client.Controller.Responses;
 import Client.Model.CardModelView;
 import Client.Model.DeckModel;
@@ -11,33 +14,31 @@ import Client.Model.Enums.Type;
 import Client.Model.PlayerModel;
 import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.StatusConfig;
-
+import Client.View.View.Panels.Listeners.StatusListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static Client.View.View.Panels.Constants.*;
 
-public class StatusPanel extends JPanel implements ActionListener {
+public class StatusPanel extends JPanel {
 
-    private static ArrayList<BufferedImage> ar1 = new ArrayList<>();
-    private static ArrayList<JButton> buttons = new ArrayList<>();
+    private ArrayList<BufferedImage> ar1 = new ArrayList<>();
+    private ArrayList<JButton> buttons = new ArrayList<>();
 
     private DeckModel selectedDeck;
     private StatusConfig config;
     private PlayerModel player;
 
-    private JButton back;
-    private JButton exit = new JButton();
-    private JButton deleteAccount;
+    private final JButton back;
+    private final JButton exit = new JButton();
+    private final JButton deleteAccount;
     private List<Carts> card;
-    private List<String> deckNames;
-    private static StatusPanel statusPanel = new StatusPanel();
+    private static final StatusPanel statusPanel = new StatusPanel();
+    private final StatusListener sl = new StatusListener(this);
 
     private void initConfig() {
         config = ConfigsLoader.getInstance().getStatusConfig();
@@ -50,7 +51,7 @@ public class StatusPanel extends JPanel implements ActionListener {
         back = new JButton();
         back.setIcon(gameIcon.get("back"));
         back.setFocusable(false);
-        back.addActionListener(this);
+        back.addActionListener(sl);
         back.setBounds(config.getBackX(), config.getBackY(), config.getBackSize(), config.getBackSize());
         back.setContentAreaFilled(false);
         back.setRolloverEnabled(false);
@@ -62,10 +63,10 @@ public class StatusPanel extends JPanel implements ActionListener {
         deleteAccount.setIcon(gameIcon.get("delete"));
         deleteAccount.setBounds(config.getDeleteX(), config.getBackY(), config.getBackSize(), config.getBackSize());
         deleteAccount.setFocusable(false);
-        deleteAccount.addActionListener(this);
+        deleteAccount.addActionListener(sl);
         add(deleteAccount);
 
-        exit.addActionListener(this);
+        exit.addActionListener(sl);
         exit.setIcon(gameIcon.get("exit"));
         exit.setBounds(config.getExitX(), config.getBackY(), config.getBackSize(), config.getBackSize());
         exit.setFocusable(false);
@@ -186,7 +187,7 @@ public class StatusPanel extends JPanel implements ActionListener {
         buttons = new ArrayList<>();
 
         RequestHandler.getInstance().sendRequest(new BestDecksRequest());
-        deckNames = Responses.getInstance().getBestDecks();
+        List<String> deckNames = Responses.getInstance().getBestDecks();
 
         for (String string : deckNames) {
             JButton button = new JButton(string);
@@ -194,7 +195,7 @@ public class StatusPanel extends JPanel implements ActionListener {
             button.setBounds(config.getDeckX(), 65 + (i * 70), 280, 60);
             button.setFont(f2);
             button.setFocusable(false);
-            button.addActionListener(this);
+            button.addActionListener(sl);
             this.add(button);
             buttons.add(button);
             i++;
@@ -202,7 +203,7 @@ public class StatusPanel extends JPanel implements ActionListener {
 
     }
 
-    private void updateSelectedDeck(String name) {
+    public void updateSelectedDeck(String name) {
         RequestHandler.getInstance().sendRequest(new DeckModelRequest(name));
         selectedDeck = Responses.getInstance().getDeckModel();
         ar1 = new ArrayList<>();
@@ -213,30 +214,30 @@ public class StatusPanel extends JPanel implements ActionListener {
         }
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton src = (JButton) e.getSource();
-        if (src == back) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
-            RequestHandler.getInstance().sendRequest(new LogRequest("Navigate : Main Menu"));
-            RequestHandler.getInstance().sendRequest(new VisiblePanelRequest("menu"));
-            ar1 = null;
-            selectedDeck = null;
-        } else if (src == deleteAccount) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : DeleteAccount Button"));
-            RequestHandler.getInstance().sendRequest(new DeleteAccountRequest());
-        } else if (src == exit) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
-            RequestHandler.getInstance().sendRequest(new ExitRequest());
-        } else {
-            for (JButton button : buttons) {
-                if (src.getName().equalsIgnoreCase(button.getName())) {
-                    updateSelectedDeck(button.getName());
-                    break;
-                }
-            }
-        }
-        RequestHandler.getInstance().sendRequest(new RenderRequest());
+    public void setAr1(ArrayList<BufferedImage> ar1) {
+        this.ar1 = ar1;
     }
+
+    public ArrayList<JButton> getButtons() {
+        return buttons;
+    }
+
+
+    public void setSelectedDeck(DeckModel selectedDeck) {
+        this.selectedDeck = selectedDeck;
+    }
+
+    public JButton getBack() {
+        return back;
+    }
+
+
+    public JButton getExit() {
+        return exit;
+    }
+
+    public JButton getDeleteAccount() {
+        return deleteAccount;
+    }
+
 }

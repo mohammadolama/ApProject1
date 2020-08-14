@@ -1,50 +1,49 @@
 package Client.View.View.Panels;
 
 import Client.Controller.RequestHandler;
-import Client.Controller.Requests.*;
+import Client.Controller.Requests.PlayerDecksRequest;
 import Client.Controller.Responses;
 import Client.Model.CardModelView;
 import Client.Model.DeckModel;
 import Client.View.Configs.CollectionConfig;
 import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.CustomScrollBarUI;
-import Server.Model.Cards.Card;
+import Client.View.View.Panels.Listeners.CollectionListeners.CollectionAction;
+import Client.View.View.Panels.Listeners.CollectionListeners.CollectionChange;
+import Client.View.View.Panels.Listeners.CollectionListeners.CollectionDocument;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CollectionPanel extends JPanel implements ActionListener, MouseListener, ChangeListener {
+public class CollectionPanel extends JPanel {
 
     private static final CollectionPanel col = new CollectionPanel();
 
-    private JButton backButton = new JButton();
-    private JButton allCards = new JButton("All");
-    private JButton lockedCards = new JButton("Locked");
-    private JButton unlockedCards = new JButton("Unlocked");
-    private JButton neutralCards = new JButton("Neutral");
-    private JButton specialCards = new JButton("Special");
-    private JButton newDeck = new JButton("New Deck");
-    private JButton changeButton = new JButton("Change");
-    private JButton exitButton = new JButton();
-    private JButton selectButton = new JButton();
-    private JLabel errorLabel = new JLabel();
-    private JTextField searchField;
-    private JSlider manaFilter;
-    private JScrollPane scrollPane;
+    private final JButton backButton = new JButton();
+    private final JButton allCards = new JButton("All");
+    private final JButton lockedCards = new JButton("Locked");
+    private final JButton unlockedCards = new JButton("Unlocked");
+    private final JButton neutralCards = new JButton("Neutral");
+    private final JButton specialCards = new JButton("Special");
+    private final JButton newDeck = new JButton("New Deck");
+    private final JButton changeButton = new JButton("Change");
+    private final JButton exitButton = new JButton();
+    private final JButton selectButton = new JButton();
+    private final JLabel errorLabel = new JLabel();
+    private final JTextField searchField;
+    private final JSlider manaFilter;
+    private final JScrollPane scrollPane;
     private ArrayList<CardModelView> cards;
-    private CollectionDrawingPanel collectionDrawingPanel;
-
-    private static ArrayList<JButton> buttons;
-
+    private final CollectionDrawingPanel collectionDrawingPanel;
+    private final ArrayList<JButton> buttons;
     private DeckModel selectedDeck;
-
     private CollectionConfig config;
-
+    private final CollectionChange cc = new CollectionChange(this);
+    private final CollectionAction ca = new CollectionAction(this);
+    private final CollectionDocument cd = new CollectionDocument(this);
 
     private void initConfig() {
         config = ConfigsLoader.getInstance().getCollectionConfig();
@@ -60,73 +59,35 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         searchField.setFont(Constants.f2.deriveFont(25.0f));
         searchField.setBounds(config.getSearchX(), config.getSearchY(), 350, config.getSearchHeight());
         searchField.setFocusable(true);
-        searchField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                warn();
-            }
+        searchField.getDocument().addDocumentListener(cd);
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                warn();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                warn();
-            }
-
-            void warn() {
-                if (searchField.getText() == null || searchField.getText().equals("")) {
-                    return;
-                }
-                RequestHandler.getInstance().sendRequest(new ProperCardsRequest(3));
-                ArrayList<CardModelView> ar = Responses.getInstance().getModelviewList();
-                cards = new ArrayList<>();
-                for (CardModelView cards1 : ar) {
-                    if (cards1.getName().toLowerCase().contains(searchField.getText())) {
-                        cards.add(cards1);
-                    }
-                }
-                CollectionDrawingPanel.getInstance().updateContent(cards);
-                repaint();
-
-            }
-        });
-
-        allCards.addMouseListener(this);
         allCards.setFont(Constants.f2);
-        allCards.addActionListener(this);
+        allCards.addActionListener(ca);
         allCards.setBounds(config.getAllCardsX(), config.getSearchY(), config.getAllCardWidth(), config.getSearchHeight());
         allCards.setFocusable(false);
 
-        lockedCards.addMouseListener(this);
         lockedCards.setFont(Constants.f2);
-        lockedCards.addActionListener(this);
+        lockedCards.addActionListener(ca);
         lockedCards.setBounds(config.getAllCardsX() + config.getAllCardWidth() + 20, config.getSearchY(), config.getAllCardWidth(), config.getSearchHeight());
         lockedCards.setFocusable(false);
 
-        unlockedCards.addMouseListener(this);
         unlockedCards.setFont(Constants.f2);
-        unlockedCards.addActionListener(this);
+        unlockedCards.addActionListener(ca);
         unlockedCards.setBounds(config.getAllCardsX() + (2 * config.getAllCardWidth()) + 40, config.getSearchY(), config.getAllCardWidth(), config.getSearchHeight());
         unlockedCards.setFocusable(false);
 
-        neutralCards.addMouseListener(this);
         neutralCards.setFont(Constants.f2);
-        neutralCards.addActionListener(this);
+        neutralCards.addActionListener(ca);
         neutralCards.setBounds(config.getAllCardsX() + (3 * config.getAllCardWidth()) + 60, config.getSearchY(), config.getAllCardWidth(), config.getSearchHeight());
         neutralCards.setFocusable(false);
 
-        specialCards.addMouseListener(this);
         specialCards.setFont(Constants.f2);
-        specialCards.addActionListener(this);
+        specialCards.addActionListener(ca);
         specialCards.setBounds(config.getAllCardsX() + (4 * config.getAllCardWidth()) + 80, config.getSearchY(), config.getAllCardWidth(), config.getSearchHeight());
         specialCards.setFocusable(false);
 
-        newDeck.addMouseListener(this);
         newDeck.setFont(Constants.f2);
-        newDeck.addActionListener(this);
+        newDeck.addActionListener(ca);
         newDeck.setBounds(config.getDeckX(), config.getDeckY(), config.getDeckWidth(), config.getDeckHeight());
         newDeck.setBackground(Color.yellow);
         newDeck.setFocusable(false);
@@ -142,13 +103,12 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         manaFilter.setMinorTickSpacing(5);
         manaFilter.setLabelTable(Constants.getTable());
         manaFilter.setPaintLabels(true);
-        manaFilter.addChangeListener(this);
+        manaFilter.addChangeListener(cc);
         manaFilter.setFont(Constants.f2.deriveFont(30.0f));
         manaFilter.setBounds(config.getManaX(), config.getManaY(), config.getManaWidth(), config.getSearchHeight());
 
-        changeButton.addMouseListener(this);
         changeButton.setFont(Constants.f2);
-        changeButton.addActionListener(this);
+        changeButton.addActionListener(ca);
         changeButton.setBounds(config.getManaX() + config.getManaWidth() + 30, config.getManaY(), config.getDeckWidth(), config.getDeckHeight());
         changeButton.setFocusable(false);
         changeButton.setEnabled(false);
@@ -159,8 +119,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         errorLabel.setBounds(changeButton.getX() + config.getDeckWidth() + 60, config.getManaY(), 400, config.getDeckHeight());
 
 
-        backButton.addMouseListener(this);
-        backButton.addActionListener(this);
+        backButton.addActionListener(ca);
         backButton.setBounds(config.getDeckX() + 75, 880, 60, 60);
         backButton.setFocusable(false);
         backButton.setIcon(Constants.gameIcon.get("back"));
@@ -168,8 +127,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         backButton.setRolloverEnabled(false);
         backButton.setBorderPainted(false);
 
-        exitButton.addActionListener(this);
-        exitButton.addMouseListener(this);
+        exitButton.addActionListener(ca);
         exitButton.setIcon(Constants.gameIcon.get("exit"));
         exitButton.setBounds(config.getDeckX() + 150, 880, 60, 60);
         exitButton.setFocusable(false);
@@ -178,8 +136,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         exitButton.setBorderPainted(false);
 
 
-        selectButton.addActionListener(this);
-        selectButton.addMouseListener(this);
+        selectButton.addActionListener(ca);
         selectButton.setIcon(Constants.gameIcon.get("select"));
         selectButton.setBounds(config.getDeckX(), 880, 60, 60);
         selectButton.setFocusable(false);
@@ -236,7 +193,7 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
             button.setBounds(config.getDeckX(), config.getDeckY() + (i * config.getDeckSpacing()), config.getDeckWidth(), config.getDeckHeight());
             button.setFont(Constants.f2.deriveFont(16.0f));
             button.setFocusable(false);
-            button.addActionListener(this);
+            button.addActionListener(ca);
             this.add(button);
             buttons.add(button);
             i++;
@@ -282,115 +239,10 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         g2d.drawString("Search :", 75, 55);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        changeButton.setEnabled(false);
-        JButton src = (JButton) e.getSource();
-        if (src == backButton) {
-            allCards.doClick();
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
-            RequestHandler.getInstance().sendRequest(new LogRequest("Navigate : Main Menu"));
-            RequestHandler.getInstance().sendRequest(new SaveRequest());
-            RequestHandler.getInstance().sendRequest(new VisiblePanelRequest("menu"));
-        } else if (src == exitButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
-            RequestHandler.getInstance().sendRequest(new ExitRequest());
-        } else if (src == newDeck) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : New_Deck Button"));
-            RequestHandler.getInstance().sendRequest(new CreateNewDeckRequest());
-        } else if (src == allCards) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : AllCards Button"));
-            RequestHandler.getInstance().sendRequest(new UpdateDrawingPanelRequest("all"));
-        } else if (src == lockedCards) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : LockedCards Button"));
-            RequestHandler.getInstance().sendRequest(new UpdateDrawingPanelRequest("locked"));
-        } else if (src == unlockedCards) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : UnlockedCards Button"));
-            RequestHandler.getInstance().sendRequest(new UpdateDrawingPanelRequest("unlocked"));
-        } else if (src == neutralCards) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : NeutralCards Button"));
-            RequestHandler.getInstance().sendRequest(new UpdateDrawingPanelRequest("neutral"));
-        } else if (src == specialCards) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : SpecialCards Button"));
-            RequestHandler.getInstance().sendRequest(new UpdateDrawingPanelRequest("special"));
-        } else if (src == changeButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Change_Deck Button"));
-            allCards.doClick();
-            Col_Change.getInstance().setCreateMode(false);
-            Col_Change.getInstance().getDeckName().setText(selectedDeck.getName());
-            Col_Change.getInstance().setPreviousName(selectedDeck.getName());
-            Col_Change.getInstance().updateSelectedDeck(selectedDeck.getHero());
-            Col_Change.getInstance().setHeroSelected(true);
-            Col_Change.getInstance().setSelectedCards(selectedDeck.getList());
-            Col_Change.getInstance().setSelectedDeck(selectedDeck);
-            Col_Change.getInstance().setCreateMode(false);
-            MyFrame.getInstance().changePanel("col");
-        } else if (src == selectButton) {
-            if (selectedDeck != null) {
-                RequestHandler.getInstance().sendRequest(new SelectDeckRequest(selectedDeck));
-                RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Select Button"));
-                RequestHandler.getInstance().sendRequest(new LogRequest(String.format("Deck : choose \"%s\" as selected deck.", selectedDeck.getName())));
-                JOptionPane.showMessageDialog(this, String.format("%s is your selected deck now.", selectedDeck.getName()));
-            }
-        } else {
-            changeButton.setEnabled(true);
-            for (JButton button : buttons) {
-                CollectionDrawingPanel.getInstance().setSpecialSelected(false);
-                if (src.getName().equalsIgnoreCase(button.getName())) {
-                    RequestHandler.getInstance().sendRequest(new DeckModelRequest(button.getName()));
-                    selectedDeck = Responses.getInstance().getDeckModel();
-                    RequestHandler.getInstance().sendRequest(new UpdateDrawingPanelRequest(button.getName()));
-                    changeButton.setEnabled(true);
-                }
-            }
-        }
 
 
-    }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
 
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        int value = manaFilter.getValue();
-        if (value == 11) {
-            RequestHandler.getInstance().sendRequest(new ProperCardsRequest(3));
-            cards = Responses.getInstance().getModelviewList();
-        } else {
-            RequestHandler.getInstance().sendRequest(new ProperCardsRequest(3));
-            ArrayList<CardModelView> ar = Responses.getInstance().getModelviewList();
-            cards = new ArrayList<>();
-            for (CardModelView cards1 : ar) {
-                if (cards1.getManaCost() == value) {
-                    cards.add(cards1);
-                }
-            }
-        }
-        CollectionDrawingPanel.getInstance().updateContent(cards);
-    }
 
     static int calculateHeight(int rows, int cardHeight) {
         int height = rows * cardHeight;
@@ -404,6 +256,69 @@ public class CollectionPanel extends JPanel implements ActionListener, MouseList
         Dimension d = collectionDrawingPanel.getPreferredSize();
         d.height = calculateHeight(rows, cardHeight);
         collectionDrawingPanel.setPreferredSize(d);
+    }
+
+    public JButton getBackButton() {
+        return backButton;
+    }
+
+    public JButton getAllCards() {
+        return allCards;
+    }
+
+    public JButton getLockedCards() {
+        return lockedCards;
+    }
+
+    public JButton getUnlockedCards() {
+        return unlockedCards;
+    }
+
+    public JButton getNeutralCards() {
+        return neutralCards;
+    }
+
+    public JButton getSpecialCards() {
+        return specialCards;
+    }
+
+
+    public JButton getNewDeck() {
+        return newDeck;
+    }
+
+    public JButton getExitButton() {
+        return exitButton;
+    }
+
+    public JButton getSelectButton() {
+        return selectButton;
+    }
+
+    public JTextField getSearchField() {
+        return searchField;
+    }
+
+    public JSlider getManaFilter() {
+        return manaFilter;
+    }
+
+
+    public ArrayList<CardModelView> getCards() {
+        return cards;
+    }
+
+    public void setCards(ArrayList<CardModelView> cards) {
+        this.cards = cards;
+    }
+
+    public ArrayList<JButton> getButtons() {
+        return buttons;
+    }
+
+
+    public DeckModel getSelectedDeck() {
+        return selectedDeck;
     }
 
     public JButton getChangeButton() {

@@ -8,43 +8,40 @@ import Client.Model.DeckModel;
 import Client.Model.Enums.Carts;
 import Client.Model.Enums.Heroes;
 import Client.Model.Images;
-import Client.View.Configs.ConfigsLoader;
-import Client.View.View.Update.Update;
 import Client.View.Configs.Col_ChangeConfig;
-import Server.Controller.MainLogic.DeckLogic;
-import Server.Controller.MainLogic.ThreadColor;
+import Client.View.Configs.ConfigsLoader;
+import Client.View.View.Panels.Listeners.Col_ChangeListeners.Col_ChangeAction;
+import Client.View.View.Panels.Listeners.Col_ChangeListeners.Col_ChangeMouse;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
 
 import static Client.View.View.Panels.Constants.*;
 
 
-public class Col_Change extends JPanel implements ActionListener, MouseListener {
-    private static Col_Change col_change = new Col_Change();
+public class Col_Change extends JPanel {
+    private static final Col_Change col_change = new Col_Change();
 
-    private ArrayList<JButton> buttons = new ArrayList<>();
+    private final ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<Images> images;
     private ArrayList<CardModelView> cards;
     private ArrayList<BufferedImage> allBufferedImages;
     private ArrayList<BufferedImage> selectedBuferredImages;
-    private JTextField deckName;
+    private final JTextField deckName;
     private String previousName;
 
     private boolean createMode = true;
 
     private DeckModel selectedDeck;
 
-    private JButton backButton = new JButton("Back");
-    private JButton createButton = new JButton("Create");
-    private JButton changeButton = new JButton("Change");
-    private JButton removeButton = new JButton("Remove");
-    private JButton deckRemoveButton = new JButton("Remove Deck");
-    private JButton addButton = new JButton("Add");
+    private final JButton backButton = new JButton("Back");
+    private final JButton createButton = new JButton("Create");
+    private final JButton changeButton = new JButton("Change");
+    private final JButton removeButton = new JButton("Remove");
+    private final JButton deckRemoveButton = new JButton("Remove Deck");
+    private final JButton addButton = new JButton("Add");
 
     private ArrayList<Carts> selectedCards = new ArrayList<>();
 
@@ -53,9 +50,11 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
     private boolean mate;
 
 
-    private String name;
+    private String name1;
     private String heroName;
     private Col_ChangeConfig config;
+    private final Col_ChangeAction ca = new Col_ChangeAction(this);
+    private final Col_ChangeMouse cm = new Col_ChangeMouse(this);
 
     private void initConfig() {
         config = ConfigsLoader.getInstance().getCol_changeConfig();
@@ -69,41 +68,41 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         allCardPictures(cards);
         showHeroButtons();
         setLayout(null);
-        addMouseListener(this);
+        addMouseListener(cm);
 
         deckName = new JTextField();
         deckName.setFont(f2.deriveFont(25.0f));
         deckName.setBounds(config.getNameX(), config.getNameY(), 350, config.getSearchHeight());
         deckName.setFocusable(true);
 
-        backButton.addMouseListener(this);
+        backButton.addMouseListener(cm);
         backButton.setFont(f2);
-        backButton.addActionListener(this);
+        backButton.addActionListener(ca);
         backButton.setBounds(config.getDeckX(), 880, config.getDeckWidth(), config.getDeckHeight());
         backButton.setFocusable(false);
 
-        createButton.addMouseListener(this);
+        createButton.addMouseListener(cm);
         createButton.setFont(f2);
-        createButton.addActionListener(this);
+        createButton.addActionListener(ca);
         createButton.setBounds((gameWidth - config.getDeckWidth()) / 2, 885, config.getDeckWidth(), config.getDeckHeight());
         createButton.setFocusable(false);
 
-        changeButton.addMouseListener(this);
+        changeButton.addMouseListener(cm);
         changeButton.setFont(f2);
-        changeButton.addActionListener(this);
+        changeButton.addActionListener(ca);
         changeButton.setBounds((gameWidth - config.getDeckWidth()) / 2, 885, config.getDeckWidth(), config.getDeckHeight());
         changeButton.setFocusable(false);
 
-        deckRemoveButton.addMouseListener(this);
+        deckRemoveButton.addMouseListener(cm);
         deckRemoveButton.setFont(f2);
-        deckRemoveButton.addActionListener(this);
+        deckRemoveButton.addActionListener(ca);
         deckRemoveButton.setBounds(50, 885, config.getDeckWidth(), config.getDeckHeight());
         deckRemoveButton.setFocusable(false);
 
 
-        removeButton.addMouseListener(this);
+        removeButton.addMouseListener(cm);
         removeButton.setFont(f2.deriveFont(30.0f));
-        removeButton.addActionListener(this);
+        removeButton.addActionListener(ca);
         removeButton.setBounds(config.getAddButtonX() + 200, config.getAddButtonY(), config.getAddButtonWidth(), config.getAddButtonHeight());
         removeButton.setFocusable(false);
         removeButton.setBackground(Color.orange);
@@ -113,7 +112,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         addButton.setFont(f2.deriveFont(30.0f));
         addButton.setBackground(Color.orange);
         addButton.setBounds(config.getAddButtonX(), config.getAddButtonY(), config.getAddButtonWidth(), config.getAddButtonHeight());
-        addButton.addActionListener(this);
+        addButton.addActionListener(ca);
 
 
         JPanel jPanel = new JPanel();
@@ -140,7 +139,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
             button.setBounds(config.getDeckX(), config.getDeckY() + (i * config.getDeckSpacing()) + 5, config.getDeckWidth(), config.getDeckHeight());
             button.setFont(f2.deriveFont(21.0f));
             button.setFocusable(false);
-            button.addActionListener(this);
+            button.addActionListener(ca);
             this.add(button);
             buttons.add(button);
             i++;
@@ -184,7 +183,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
     }
 
 
-    private void addSelectedCard(String name) {
+    public void addSelectedCard(String name) {
         if (selectedCards == null) {
             selectedCards = new ArrayList<>();
         }
@@ -200,12 +199,12 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         }
     }
 
-    private void removeSelectedCard(String name) {
+    public void removeSelectedCard(String name) {
         selectedCards.remove(Carts.valueOf(name.toLowerCase()));
         selectedCardPictures(selectedCards);
     }
 
-    private void clear() {
+    public void clear() {
         selectedCards = new ArrayList<>();
         selectedBuferredImages = new ArrayList<>();
         deckName.setText("");
@@ -216,11 +215,11 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         showHeroButtons();
     }
 
-    private void createDeck() {
+    public void createDeck() {
         RequestHandler.getInstance().sendRequest(new CreateDeckRequest(deckName.getText(), selectedCards, heroName));
     }
 
-    private void changeDeck() {
+    public void changeDeck() {
         RequestHandler.getInstance().sendRequest(new ChangeDeckRequest(selectedDeck, heroName, previousName, deckName.getText(), selectedCards));
     }
 
@@ -237,7 +236,7 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
     }
 
 
-    void updateSelectedDeck(String name) {
+    public void updateSelectedDeck(String name) {
         RequestHandler.getInstance().sendRequest(new CollectionRequest(name));
         ArrayList<Carts> ar2 = Responses.getInstance().getCollectionList();
         heroName = Responses.getInstance().getHeroName();
@@ -249,9 +248,9 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
         }
     }
 
-    private void drawBigger(String st) {
+    public void drawBigger(String st) {
         clicked = true;
-        name = st;
+        name1 = st;
         repaint();
     }
 
@@ -346,146 +345,98 @@ public class Col_Change extends JPanel implements ActionListener, MouseListener 
                 removeButton.setEnabled(false);
                 add(addButton);
                 add(removeButton);
-                if (canBeRemoved(Carts.valueOf(name))) {
+                if (canBeRemoved(Carts.valueOf(name1))) {
                     removeButton.setEnabled(true);
                 }
-                if (canBeAddedToDeck(Carts.valueOf(name))) {
+                if (canBeAddedToDeck(Carts.valueOf(name1))) {
                     addButton.setEnabled(true);
                 }
 
             }
-            g2d.drawImage(cardPics.get(name), 300, 220, null);
+            g2d.drawImage(cardPics.get(name1), 300, 220, null);
         }
 
         deckName.requestFocus();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton src = (JButton) e.getSource();
-        if (src == backButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : back Button"));
-            RequestHandler.getInstance().sendRequest(new LogRequest("Cancle the process of creating new/changing  deck."));
-            RequestHandler.getInstance().sendRequest(new RenderRequest());
-            clear();
-            Update.refresh();
-            MyFrame.getInstance().changePanel("collection");
-        } else if (src == addButton) {
-            addSelectedCard(name.toLowerCase());
-            RequestHandler.getInstance().sendRequest(new LogRequest(String.format("Add : %s is added to deck.", name)));
-            clicked = false;
-            repaint();
-        } else if (src == removeButton) {
-            removeSelectedCard(name.toLowerCase());
-            RequestHandler.getInstance().sendRequest(new LogRequest(String.format("Remove : %s is removed from deck.", name)));
-            clicked = false;
-            repaint();
-        } else if (src == deckRemoveButton) {
-            if (selectedDeck != null) {
-                RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Deck_Remove Button"));
-                RequestHandler.getInstance().sendRequest(new RemoveDeckRequest(selectedDeck));
-                clear();
-            }
-        } else if (src == createButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Create_Deck Button"));
-            createDeck();
-            Update.refresh();
-        } else if (src == changeButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Change_Deck Button"));
-            changeDeck();
-            Update.refresh();
-        } else {
-            createButton.setEnabled(true);
-            heroSelected = true;
-            for (JButton button : buttons) {
-                if (src == button) {
-                    selectedCards = new ArrayList<>();
-                    selectedBuferredImages = new ArrayList<>();
-                    updateSelectedDeck(button.getName());
-                    repaint();
-                }
-            }
-        }
-        revalidate();
+    public static Col_Change getCol_change() {
+        return col_change;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        String st = null;
-        for (Images images : images) {
-            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                st = images.getName();
-                break;
-            }
-        }
-
-        if (st == null || st.equals("")) {
-            clicked = false;
-            repaint();
-            return;
-        }
-        drawBigger(st);
-
-        repaint();
+    public ArrayList<JButton> getButtons() {
+        return buttons;
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-
+    public ArrayList<Images> getImages() {
+        return images;
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
+    public ArrayList<CardModelView> getCards() {
+        return cards;
     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
+    public void setSelectedBuferredImages(ArrayList<BufferedImage> selectedBuferredImages) {
+        this.selectedBuferredImages = selectedBuferredImages;
     }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    JTextField getDeckName() {
-        return deckName;
-    }
-
-    private void updatePictures() {
-        selectedCardPictures(selectedCards);
-        repaint();
-    }
-
-
-    void setHeroSelected(boolean heroSelected) {
-        this.heroSelected = heroSelected;
-    }
-
-    void setSelectedCards(List<Carts> selectedCards) {
-        this.selectedCards = new ArrayList<>(selectedCards);
-    }
-
-    void setSelectedDeck(DeckModel selectedDeck) {
-        this.selectedDeck = selectedDeck;
+    public void setPreviousName(String previousName) {
+        this.previousName = previousName;
     }
 
     public void setCreateMode(boolean createMode) {
         this.createMode = createMode;
     }
 
+    public DeckModel getSelectedDeck() {
+        return selectedDeck;
+    }
+
+    public void setSelectedDeck(DeckModel selectedDeck) {
+        this.selectedDeck = selectedDeck;
+    }
+
     public JButton getBackButton() {
         return backButton;
     }
 
-    public void setBackButton(JButton backButton) {
-        this.backButton = backButton;
+    public JButton getCreateButton() {
+        return createButton;
     }
 
-    public void setPreviousName(String previousName) {
-        this.previousName = previousName;
+    public JButton getChangeButton() {
+        return changeButton;
+    }
+
+    public JButton getRemoveButton() {
+        return removeButton;
+    }
+
+    public JButton getDeckRemoveButton() {
+        return deckRemoveButton;
+    }
+
+    public JButton getAddButton() {
+        return addButton;
+    }
+
+    public void setSelectedCards(ArrayList<Carts> selectedCards) {
+        this.selectedCards = selectedCards;
+    }
+
+    public void setHeroSelected(boolean heroSelected) {
+        this.heroSelected = heroSelected;
+    }
+
+    public void setClicked(boolean clicked) {
+        this.clicked = clicked;
+    }
+
+    public String getName1() {
+        return name1;
+    }
+
+
+    public JTextField getDeckName() {
+        return deckName;
     }
 }

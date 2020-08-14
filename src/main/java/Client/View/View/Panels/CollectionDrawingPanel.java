@@ -6,20 +6,20 @@ import Client.Controller.Responses;
 import Client.Model.CardModelView;
 import Client.Model.Enums.Type;
 import Client.Model.Images;
-import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.CollectionDrawingConfig;
+import Client.View.Configs.ConfigsLoader;
+import Client.View.View.Panels.Listeners.CollectionDrawingListeners.CDAction;
+import Client.View.View.Panels.Listeners.CollectionDrawingListeners.CDMouse;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 
 import static Client.View.View.Panels.CollectionPanel.calculateHeight;
 import static Client.View.View.Panels.Constants.*;
 
-public class CollectionDrawingPanel extends JPanel implements MouseListener, ActionListener {
+public class CollectionDrawingPanel extends JPanel {
 
     private ArrayList<CardModelView> cards;
     private ArrayList<Images> images;
@@ -27,13 +27,15 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     private static ArrayList<BufferedImage> purchasedCards;
     private static ArrayList<BufferedImage> notPurchasedCards;
 
-    private JButton buyButton;
+    private final JButton buyButton;
     private CollectionDrawingConfig config;
     private int panelHeight = 1000;
-    private String name;
+    private String name1;
     private boolean clicked;
     private boolean mate;
     private boolean specialSelected;
+    private final CDMouse cm = new CDMouse(this);
+    private final CDAction ca = new CDAction(this);
 
     private void initConfig() {
         config = ConfigsLoader.getInstance().getCollectionDrawingConfig();
@@ -49,7 +51,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
         RequestHandler.getInstance().sendRequest(new ProperCardsRequest(3));
         cards = Responses.getInstance().getModelviewList();
         pictures(cards);
-        addMouseListener(this);
+        addMouseListener(cm);
 
         buyButton = new JButton("Buy");
         buyButton.setFocusable(false);
@@ -57,7 +59,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
         buyButton.setFont(f2.deriveFont(30.0f));
         buyButton.setBackground(Color.orange);
         buyButton.setBounds(720, panelHeight / 2, 200, 50);
-        buyButton.addActionListener(this);
+        buyButton.addActionListener(ca);
 
         update();
     }
@@ -66,14 +68,14 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
         return col;
     }
 
-    private void drawBigger(String st) {
+    public void drawBigger(String st) {
         clicked = true;
-        name = st;
+        name1 = st;
         repaint();
     }
 
 
-    private void pictures(ArrayList<CardModelView> ar) {
+    public void pictures(ArrayList<CardModelView> ar) {
         bufferedImages = new ArrayList<>();
         for (CardModelView cards1 : ar) {
             BufferedImage bf = cardPics.get(cards1.getName().toLowerCase());
@@ -92,7 +94,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     }
 
 
-    private void update() {
+    public void update() {
         purchasedCards = new ArrayList<>();
         notPurchasedCards = new ArrayList<>();
         RequestHandler.getInstance().sendRequest(new PurchasedCardsRequest());
@@ -192,7 +194,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     }
 
     private void drawBiggerImage(Graphics2D g2d) {
-        RequestHandler.getInstance().sendRequest(new PriceRequest(name.toLowerCase()));
+        RequestHandler.getInstance().sendRequest(new PriceRequest(name1.toLowerCase()));
         long price = Responses.getInstance().getPrice();
         String className = Responses.getInstance().getClassName();
         if (!mate) {
@@ -202,7 +204,7 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
             g2d.fillRect(0, 0, 1600, panelHeight);
             g2d.setColor(Color.white);
             mate = true;
-            if (contains(cardPics.get(name))) {
+            if (contains(cardPics.get(name1))) {
                 buyButton.setEnabled(true);
                 buyButton.setBackground(Color.ORANGE);
                 g2d.setFont(f2.deriveFont(40.0f));
@@ -217,8 +219,8 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
         g2d.drawString(className, 850, panelHeight / 2 - 50);
         g2d.setColor(Color.red);
         g2d.drawString("Class : ", 720, panelHeight / 2 - 50);
-        g2d.drawImage(cardPics.get(name), 300, panelHeight / 2 - 200, null);
-        drawCardInfo(g2d, name, 300, panelHeight / 2 - 200);
+        g2d.drawImage(cardPics.get(name1), 300, panelHeight / 2 - 200, null);
+        drawCardInfo(g2d, name1, 300, panelHeight / 2 - 200);
 
     }
 
@@ -247,63 +249,37 @@ public class CollectionDrawingPanel extends JPanel implements MouseListener, Act
     }
 
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        String st = null;
-        for (Images images : images) {
-            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                st = images.getName();
-                break;
-            }
-        }
-
-        if (st == null || st.equals("")) {
-            clicked = false;
-            repaint();
-            return;
-        }
-        drawBigger(st);
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
     public void setSpecialSelected(boolean specialSelected) {
         this.specialSelected = specialSelected;
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton src = (JButton) e.getSource();
-        if (src == buyButton) {
-            RequestHandler.getInstance().sendRequest(new BuyCardRequest(name));
-            RequestHandler.getInstance().sendRequest(new ProperCardsRequest(3));
-            cards = Responses.getInstance().getModelviewList();
-            pictures(cards);
-            images.clear();
-            update();
-            clicked = false;
-            repaint();
-        }
+    public ArrayList<CardModelView> getCards() {
+        return cards;
     }
+
+    public void setCards(ArrayList<CardModelView> cards) {
+        this.cards = cards;
+    }
+
+    public ArrayList<Images> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Images> images) {
+        this.images = images;
+    }
+
+
+    public JButton getBuyButton() {
+        return buyButton;
+    }
+
+    public String getName1() {
+        return name1;
+    }
+
+    public void setClicked(boolean clicked) {
+        this.clicked = clicked;
+    }
+
 }

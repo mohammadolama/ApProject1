@@ -1,4 +1,4 @@
-package Client.View.View.ActionListeners;
+package Client.View.View.Panels.Listeners.BoardListener.ActionListeners;
 
 import Client.View.View.Panels.BoardPanel;
 import Client.View.View.Update.Update;

@@ -1,28 +1,23 @@
 package Client.View.View.Panels;
 
-import Client.Controller.RequestHandler;
-import Client.Controller.Requests.ConnectRequest;
-import Client.Controller.Requests.LoginRequest;
-import Client.Controller.Requests.SignupRequest;
 import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.LoginConfig;
+import Client.View.View.Panels.Listeners.ConnectionAction;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class ConnectionPanel extends JPanel implements ActionListener {
+public class ConnectionPanel extends JPanel {
 
     public JLabel label;
-    private JTextField portField;
-    private JTextField ipField;
-    private JButton connect;
+    private final JTextField portField;
+    private final JTextField ipField;
+    private final JButton connect;
 
-    private JButton exit;
-    private JLabel portLabel;
-    private JLabel ipLabel;
-
+    private final JButton exit;
+    private final JLabel portLabel;
+    private final JLabel ipLabel;
+    private final ConnectionAction ca = new ConnectionAction(this);
 
     private LoginConfig config;
 
@@ -38,7 +33,7 @@ public class ConnectionPanel extends JPanel implements ActionListener {
         connect.setFont(Constants.f2.deriveFont(20.0f));
         connect.setFont(Constants.f2.deriveFont(20.f));
         connect.setFocusable(false);
-        connect.addActionListener(this);
+        connect.addActionListener(ca);
 
 
         ipLabel = new JLabel("IP : ");
@@ -62,7 +57,7 @@ public class ConnectionPanel extends JPanel implements ActionListener {
         exit.setContentAreaFilled(false);
         exit.setRolloverEnabled(false);
         exit.setBorderPainted(false);
-        exit.addActionListener(this);
+        exit.addActionListener(ca);
 
 
         ipField.setBounds(config.getUserlabelX() + 150, config.getUserLabelY(), config.getUserLabelWidth(), config.getUserLabelHeight());
@@ -88,22 +83,23 @@ public class ConnectionPanel extends JPanel implements ActionListener {
         g.drawImage(Constants.gamePics.get("login"), 0, 0, null);
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == connect) {
-            if (ipField.getText().equals("") || portField.getText().equals("")) {
-                return;
-            }
-            RequestHandler.Connect(ipField.getText(), Integer.parseInt(portField.getText()), this);
-        } else if (e.getSource(
-
-        ) == exit) {
-            System.exit(0);
-        }
+    public JTextField getPortField() {
+        return portField;
     }
 
 
-    public static void main(String[] args) {
+    public JTextField getIpField() {
+        return ipField;
     }
+
+
+    public JButton getConnect() {
+        return connect;
+    }
+
+
+    public JButton getExit() {
+        return exit;
+    }
+
 }

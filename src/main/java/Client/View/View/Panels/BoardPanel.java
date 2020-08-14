@@ -1,24 +1,24 @@
 package Client.View.View.Panels;
 
 import Client.Controller.RequestHandler;
-import Client.Controller.Requests.*;
+import Client.Controller.Requests.BoardPanelRequest;
 import Client.Controller.Responses;
 import Client.Model.CardModelView;
 import Client.Model.Enums.Attribute;
 import Client.Model.Enums.Type;
 import Client.Model.Images;
-import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.BoardConfig;
-import Client.View.View.ActionListeners.*;
-import Client.View.View.MouseListeners.BoardMouseListener;
-import Client.View.View.MouseListeners.BoardMouseMotionListener;
+import Client.View.Configs.ConfigsLoader;
+import Client.View.View.Panels.Listeners.BoardListener.ActionListeners.*;
+import Client.View.View.Panels.Listeners.BoardListener.MouseListeners.BoardMouseListener;
+import Client.View.View.Panels.Listeners.BoardListener.MouseListeners.BoardMouseMotionListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 
 import static Client.View.View.Panels.Constants.*;
 

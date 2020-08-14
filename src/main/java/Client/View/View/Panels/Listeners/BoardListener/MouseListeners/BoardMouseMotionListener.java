@@ -1,10 +1,9 @@
-package Client.View.View.MouseListeners;
+package Client.View.View.Panels.Listeners.BoardListener.MouseListeners;
 
 import Client.Controller.Responses;
 import Client.Model.CardModelView;
 import Client.Model.Images;
 import Client.View.View.Panels.BoardPanel;
-import Client.View.View.Panels.Constants;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;

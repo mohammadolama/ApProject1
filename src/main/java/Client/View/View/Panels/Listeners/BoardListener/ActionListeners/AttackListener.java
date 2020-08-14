@@ -1,4 +1,4 @@
-package Client.View.View.ActionListeners;
+package Client.View.View.Panels.Listeners.BoardListener.ActionListeners;
 
 import Client.Controller.RequestHandler;
 import Client.Controller.Requests.AttackRequest;

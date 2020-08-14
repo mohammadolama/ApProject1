@@ -1,30 +1,30 @@
 package Client.View.View.Panels;
 
-import Client.Controller.RequestHandler;
-import Client.Controller.Requests.LoginRequest;
-import Client.Controller.Requests.SignupRequest;
+
 import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.LoginConfig;
+import Client.View.View.Panels.Listeners.LoginListeners.LoginAcion;
+import Client.View.View.Panels.Listeners.LoginListeners.LoginMouse;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class LoginPanel extends JPanel implements ActionListener, MouseListener {
+public class LoginPanel extends JPanel {
     private static final LoginPanel loginpanel = new LoginPanel();
 
 
     private JButton source;
 
-    private JButton createAccount;
-    private JButton enter;
+    private final JButton createAccount;
+    private final JButton enter;
     private JButton exit;
-    private JLabel userLabel;
-    private JLabel passLabel;
-    private JLabel error;
-    private JTextField userField;
-    private JTextField passField;
-
+    private final JLabel userLabel;
+    private final JLabel passLabel;
+    private final JLabel error;
+    private final JTextField userField;
+    private final JTextField passField;
+    private final LoginAcion la = new LoginAcion(this);
+    private final LoginMouse lm = new LoginMouse(this);
     private LoginConfig config;
 
     private void initConfig() {
@@ -59,13 +59,13 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
 
         createAccount.setFont(Constants.f2.deriveFont(20.f));
         createAccount.setFocusable(false);
-        createAccount.addActionListener(this);
-        createAccount.addMouseListener(this);
+        createAccount.addActionListener(la);
+        createAccount.addMouseListener(lm);
 
         enter.setFont(Constants.f2.deriveFont(20.f));
         enter.setFocusable(false);
-        enter.addActionListener(this);
-        enter.addMouseListener(this);
+        enter.addActionListener(la);
+        enter.addMouseListener(lm);
 
         exit = new JButton();
         exit.setIcon(Constants.gameIcon.get("exit"));
@@ -73,7 +73,7 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
         exit.setContentAreaFilled(false);
         exit.setRolloverEnabled(false);
         exit.setBorderPainted(false);
-        exit.addActionListener(this);
+        exit.addActionListener(la);
 
 
         userField.setBounds(config.getUserlabelX() + 150, config.getUserLabelY(), config.getUserLabelWidth(), config.getUserLabelHeight());
@@ -107,49 +107,6 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
         g.drawImage(Constants.gamePics.get("login"), 0, 0, null);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == enter) {
-            if (userField.getText().equals("") || passField.getText().equals("")) {
-                return;
-            }
-            RequestHandler.getInstance().sendRequest(new LoginRequest(userField.getText(), passField.getText()));
-        } else if (e.getSource() == createAccount) {
-            if (userField.getText().equals("") || passField.getText().equals("")) {
-                return;
-            }
-            RequestHandler.getInstance().sendRequest(new SignupRequest(userField.getText(), passField.getText()));
-        } else if (e.getSource() == exit) {
-            System.exit(0);
-        }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        source = (JButton) e.getSource();
-        source.setBackground(new Color(240, 255, 97));
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        source.setBackground(Color.WHITE);
-    }
-
     public JLabel getError() {
         return error;
     }
@@ -168,5 +125,37 @@ public class LoginPanel extends JPanel implements ActionListener, MouseListener 
         userField.setText("");
         passField.setText("");
         error.setText("");
+    }
+
+    public JButton getSource() {
+        return source;
+    }
+
+    public void setSource(JButton source) {
+        this.source = source;
+    }
+
+    public JButton getCreateAccount() {
+        return createAccount;
+    }
+
+    public JButton getEnter() {
+        return enter;
+    }
+
+    public JButton getExit() {
+        return exit;
+    }
+
+    public void setExit(JButton exit) {
+        this.exit = exit;
+    }
+
+    public LoginConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(LoginConfig config) {
+        this.config = config;
     }
 }

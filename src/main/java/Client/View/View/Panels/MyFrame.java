@@ -5,14 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Scanner;
 
 public class MyFrame extends JFrame {
     private static final MyFrame frame = new MyFrame();
     private static JPanel panel;
-    private CardLayout cardLayout;
+    private final CardLayout cardLayout;
     private AlternativePanel alternativePanel;
     private BoardPanel boardPanel;
 

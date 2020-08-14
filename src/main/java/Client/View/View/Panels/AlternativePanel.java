@@ -1,21 +1,16 @@
 package Client.View.View.Panels;
 
-import Client.Controller.RequestHandler;
-import Client.Controller.Requests.AylarActionRequest;
-import Client.Controller.Requests.ChangeCardRequest;
-import Client.Controller.Requests.CreateGameRequest;
-import Client.Controller.Requests.FinishGameRequest;
 import Client.Model.CardModelView;
 import Client.Model.InfoPassive;
+import Client.View.View.Panels.Listeners.AlternativeListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 import static Client.View.View.Panels.Constants.*;
 
-public class AlternativePanel extends JPanel implements ActionListener {
+public class AlternativePanel extends JPanel {
 
     private static final Object object = new Object();
 
@@ -29,9 +24,10 @@ public class AlternativePanel extends JPanel implements ActionListener {
     private InfoPassive infoPassive;
     private BufferedImage winner;
     private boolean enabled;
-    private boolean discoverMode;
+    private final boolean discoverMode;
     private boolean winningMode;
-    private int mode;
+    private final int mode;
+    private final AlternativeListener al = new AlternativeListener(this);
 
     public AlternativePanel(boolean discoverMode, int mode) {
         this.mode = mode;
@@ -50,27 +46,27 @@ public class AlternativePanel extends JPanel implements ActionListener {
         card1 = new JButton("change");
         card1.setBounds(270, 650, 150, 100);
         card1.setFocusable(false);
-        card1.addActionListener(this);
+        card1.addActionListener(al);
         add(card1);
 
         card2 = new JButton("change");
         card2.setBounds(720, 650, 150, 100);
         card2.setFocusable(false);
-        card2.addActionListener(this);
+        card2.addActionListener(al);
         add(card2);
 
 
         card3 = new JButton("change");
         card3.setBounds(1170, 650, 150, 100);
         card3.setFocusable(false);
-        card3.addActionListener(this);
+        card3.addActionListener(al);
         add(card3);
 
 
         ok = new JButton("Start");
         ok.setBounds(720, 880, 150, 80);
         ok.setFocusable(false);
-        ok.addActionListener(this);
+        ok.addActionListener(al);
         add(ok);
     }
 
@@ -194,58 +190,39 @@ public class AlternativePanel extends JPanel implements ActionListener {
         ok.setText("Finish");
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton src = (JButton) e.getSource();
-        if (src.equals(ok)) {
-            if (winningMode) {
-                RequestHandler.getInstance().sendRequest(new FinishGameRequest());
-            } else {
-                if (mode == 1) {
-                    RequestHandler.getInstance().sendRequest(new CreateGameRequest(infoPassive, model1.getName(), model2.getName(), model3.getName(), 1));
-                } else if (mode == 2) {
-                    RequestHandler.getInstance().sendRequest(new CreateGameRequest(infoPassive, model1.getName(), model2.getName(), model3.getName(), 3));
-                }
-            }
-        } else if (src.equals(card1)) {
-            button1Action();
-        } else if (src.equals(card2)) {
-            button2Action();
-        } else if (src.equals(card3)) {
-            button3Action();
-        }
+    public static Object getObject() {
+        return object;
     }
 
-    private void button1Action() {
-        if (!discoverMode) {
-            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(1, this, model1.getName(), model2.getName(), model3.getName()));
-            revalidate();
-            repaint();
-            card1.setEnabled(false);
-        } else {
-            RequestHandler.getInstance().sendRequest(new AylarActionRequest(card1.getName()));
-        }
+    public JButton getCard1() {
+        return card1;
     }
 
-    private void button2Action() {
-        if (!discoverMode) {
-            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(2, this, model1.getName(), model2.getName(), model3.getName()));
-            revalidate();
-            repaint();
-            card2.setEnabled(false);
-        } else {
-            RequestHandler.getInstance().sendRequest(new AylarActionRequest(card2.getName()));
-        }
+    public JButton getCard2() {
+        return card2;
     }
 
-    private void button3Action() {
-        if (!discoverMode) {
-            RequestHandler.getInstance().sendRequest(new ChangeCardRequest(3, this, model1.getName(), model2.getName(), model3.getName()));
-            revalidate();
-            repaint();
-            card3.setEnabled(false);
-        } else {
-            RequestHandler.getInstance().sendRequest(new AylarActionRequest(card3.getName()));
-        }
+    public JButton getCard3() {
+        return card3;
+    }
+
+    public JButton getOk() {
+        return ok;
+    }
+
+    public InfoPassive getInfoPassive() {
+        return infoPassive;
+    }
+
+    public boolean isDiscoverMode() {
+        return discoverMode;
+    }
+
+    public boolean isWinningMode() {
+        return winningMode;
+    }
+
+    public int getMode() {
+        return mode;
     }
 }

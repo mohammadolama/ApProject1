@@ -1,10 +1,9 @@
-package Client.View.View.ActionListeners;
+package Client.View.View.Panels.Listeners.BoardListener.ActionListeners;
 
 import Client.Controller.RequestHandler;
 import Client.Controller.Requests.*;
 import Client.View.View.Panels.BoardPanel;
 import Client.View.View.Panels.MyFrame;
-import Client.View.View.Sounds.SoundAdmin;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

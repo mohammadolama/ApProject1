@@ -1,29 +1,27 @@
 package Client.View.View.Panels;
 
 import Client.Controller.RequestHandler;
-import Client.Controller.Requests.FirstHeroRequest;
 import Client.Controller.Requests.PureModelViewRequest;
 import Client.Controller.Responses;
 import Client.Model.CardModelView;
 import Client.Model.Enums.Type;
 import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.FirstHeroConfig;
+import Client.View.View.Panels.Listeners.FirstHeroAction;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static Client.View.View.Panels.Constants.*;
 
-public class FirstHeroSelector extends JPanel implements ActionListener {
+public class FirstHeroSelector extends JPanel {
 
-    private JButton mage;
-    private JButton rogue;
-    private JButton warlock;
-    private JButton choose;
+    private final JButton mage;
+    private final JButton rogue;
+    private final JButton warlock;
+    private final JButton choose;
     private String hero;
-
+    private final FirstHeroAction fa = new FirstHeroAction(this);
     private FirstHeroConfig config;
 
     private void initConfig() {
@@ -43,7 +41,7 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
         mage.setBounds(config.getStartX(), config.getStartY(), config.getSize(), config.getSize());
         mage.setFont(f2);
         mage.setFocusable(false);
-        mage.addActionListener(this);
+        mage.addActionListener(fa);
 
         rogue = new JButton();
         rogue.setIcon(rogueIcon);
@@ -52,7 +50,7 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
         rogue.setBounds(config.getStartX() + config.getSpacing(), config.getStartY(), config.getSize(), config.getSize());
         rogue.setFont(f2);
         rogue.setFocusable(false);
-        rogue.addActionListener(this);
+        rogue.addActionListener(fa);
 
         warlock = new JButton();
         warlock.setIcon(warlockIcon);
@@ -61,14 +59,14 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
         warlock.setBounds(config.getStartX() + 2 * config.getSpacing(), config.getStartY(), config.getSize(), config.getSize());
         warlock.setFont(f2);
         warlock.setFocusable(false);
-        warlock.addActionListener(this);
+        warlock.addActionListener(fa);
 
 
         choose = new JButton("Choose");
         choose.setFocusable(false);
         choose.setBounds(120, gameHight - 120, 120, 30);
         choose.setFont(f2);
-        choose.addActionListener(this);
+        choose.addActionListener(fa);
 
         JLabel jLabel = new JLabel();
         jLabel.setIcon(new ImageIcon());
@@ -153,24 +151,27 @@ public class FirstHeroSelector extends JPanel implements ActionListener {
         }
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton src = (JButton) e.getSource();
-        if (src == mage) {
-            JOptionPane.showMessageDialog(this, "Mage selected");
-            hero = "mage";
-        } else if (src == rogue) {
-            JOptionPane.showMessageDialog(this, "Rogue selected");
-            hero = "rogue";
-        } else if (src == warlock) {
-            JOptionPane.showMessageDialog(this, "Warlock selected");
-            hero = "warlock";
-        } else if (src == choose) {
-            if (hero == null || hero.equals(""))
-                return;
-            RequestHandler.getInstance().sendRequest(new FirstHeroRequest(hero));
-        }
+    public JButton getMage() {
+        return mage;
     }
 
+    public JButton getRogue() {
+        return rogue;
+    }
+
+    public JButton getWarlock() {
+        return warlock;
+    }
+
+    public JButton getChoose() {
+        return choose;
+    }
+
+    public String getHero() {
+        return hero;
+    }
+
+    public void setHero(String hero) {
+        this.hero = hero;
+    }
 }

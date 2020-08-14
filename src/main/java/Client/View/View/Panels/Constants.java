@@ -1,6 +1,5 @@
 package Client.View.View.Panels;
 
-//import Client.View.View.Client.View.View.GUI.DrawingPanels.TestPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

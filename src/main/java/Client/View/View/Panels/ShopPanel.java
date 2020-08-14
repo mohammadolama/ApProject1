@@ -1,25 +1,29 @@
 package Client.View.View.Panels;
 
 import Client.Controller.RequestHandler;
-import Client.Controller.Requests.*;
+import Client.Controller.Requests.PriceRequest;
+import Client.Controller.Requests.ProperCardsRequest;
+import Client.Controller.Requests.PureModelViewRequest;
+import Client.Controller.Requests.WalletRequest;
 import Client.Controller.Responses;
 import Client.Model.CardModelView;
 import Client.Model.Enums.Type;
 import Client.Model.Images;
 import Client.View.Configs.ConfigsLoader;
 import Client.View.Configs.ShopConfig;
+import Client.View.View.Panels.Listeners.ShopListeners.ShopAction;
+import Client.View.View.Panels.Listeners.ShopListeners.ShopChange;
+import Client.View.View.Panels.Listeners.ShopListeners.ShopDocument;
+import Client.View.View.Panels.Listeners.ShopListeners.ShopMouse;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-
 import static Client.View.View.Panels.Constants.*;
 
-public class ShopPanel extends JPanel implements ChangeListener, MouseListener, ActionListener {
+public class ShopPanel extends JPanel {
 
     private static final ShopPanel shoppanel = new ShopPanel();
 
@@ -27,21 +31,24 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private static ArrayList<BufferedImage> bufferedImages;
 
 
-    private JButton minionButton = new JButton("Minion");
-    private JButton spellButton = new JButton("Spell");
-    private JButton weaponButton = new JButton("Weapon");
-    private JButton allbutton = new JButton("All");
-    private JButton backButton = new JButton();
-    private JButton buyActivatedButton = new JButton("Buy");
-    private JButton sellActivatedButton = new JButton("Sell");
+    private final JButton minionButton = new JButton("Minion");
+    private final JButton spellButton = new JButton("Spell");
+    private final JButton weaponButton = new JButton("Weapon");
+    private final JButton allbutton = new JButton("All");
+    private final JButton backButton = new JButton();
+    private final JButton buyActivatedButton = new JButton("Buy");
+    private final JButton sellActivatedButton = new JButton("Sell");
     private JButton exit = new JButton();
-    private JButton buyButton;
-    private JButton sellButton;
-    private ArrayList<Images> images;
+    private final JButton buyButton;
+    private final JButton sellButton;
+    private final ArrayList<Images> images;
     private ArrayList<CardModelView> cards;
-    private JLabel walletLabel;
-    private JTextField searchField;
-    private JSlider manaFilter;
+    private final JLabel walletLabel;
+    private final JTextField searchField;
+    private final JSlider manaFilter;
+    private final ShopAction sa = new ShopAction(this);
+    private final ShopChange sc = new ShopChange(this);
+    private final ShopMouse sm = new ShopMouse(this);
 
 
     private boolean buyActivated = true;
@@ -50,7 +57,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     private long wallet;
 
 
-    private String name;
+    private String name1;
 
     private ShopConfig config;
 
@@ -67,42 +74,42 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         pictures(cards);
 
 
-        allbutton.addActionListener(this);
-        allbutton.addMouseListener(this);
+        allbutton.addActionListener(sa);
+        allbutton.addMouseListener(sm);
         allbutton.setBounds(config.getStartX1(), config.getStartY1(), config.getMinionWidth(), config.getMininHeight());
         allbutton.setFont(f2);
         allbutton.setFocusable(false);
 
-        minionButton.addActionListener(this);
-        minionButton.addMouseListener(this);
+        minionButton.addActionListener(sa);
+        minionButton.addMouseListener(sm);
         minionButton.setBounds(config.getStartX1(), config.getStartY1() + config.getSpacing1(), config.getMinionWidth(), config.getMininHeight());
         minionButton.setFont(f2);
         minionButton.setFocusable(false);
 
 
-        spellButton.addActionListener(this);
-        spellButton.addMouseListener(this);
+        spellButton.addActionListener(sa);
+        spellButton.addMouseListener(sm);
         spellButton.setBounds(config.getStartX1(), config.getStartY1() + 2 * config.getSpacing1(), config.getMinionWidth(), config.getMininHeight());
         spellButton.setFocusable(false);
         spellButton.setFont(f2);
 
 
-        weaponButton.addActionListener(this);
-        weaponButton.addMouseListener(this);
+        weaponButton.addActionListener(sa);
+        weaponButton.addMouseListener(sm);
         weaponButton.setBounds(config.getStartX1(), config.getStartY1() + 3 * config.getSpacing1(), config.getMinionWidth(), config.getMininHeight());
         weaponButton.setFocusable(false);
         weaponButton.setFont(f2);
 
 
         backButton.setIcon(gameIcon.get("back"));
-        backButton.addActionListener(this);
+        backButton.addActionListener(sa);
         backButton.setBounds(config.getStartX1() + 75, config.getStartY1() + 6 * config.getSpacing1(), config.getBacksize(), config.getBacksize());
         backButton.setFocusable(false);
         backButton.setContentAreaFilled(false);
         backButton.setRolloverEnabled(false);
         backButton.setBorderPainted(false);
 
-        exit.addActionListener(this);
+        exit.addActionListener(sa);
         exit.setIcon(gameIcon.get("exit"));
         exit.setBounds(config.getStartX1() + 150, config.getStartY1() + 6 * config.getSpacing1(), config.getBacksize(), config.getBacksize());
         exit.setFocusable(false);
@@ -111,16 +118,16 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         exit.setBorderPainted(false);
 
 
-        buyActivatedButton.addActionListener(this);
-        buyActivatedButton.addMouseListener(this);
+        buyActivatedButton.addActionListener(sa);
+        buyActivatedButton.addMouseListener(sm);
         buyActivatedButton.setBounds(700, 880, config.getMinionWidth(), config.getMininHeight());
         buyActivatedButton.setFocusable(false);
         buyActivatedButton.setBackground(Color.YELLOW);
         buyActivatedButton.setFont(f2);
 
 
-        sellActivatedButton.addActionListener(this);
-        sellActivatedButton.addMouseListener(this);
+        sellActivatedButton.addActionListener(sa);
+        sellActivatedButton.addMouseListener(sm);
         sellActivatedButton.setBounds(950, 880, config.getMinionWidth(), config.getMininHeight());
         sellActivatedButton.setFocusable(false);
         sellActivatedButton.setFont(f2);
@@ -136,7 +143,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         manaFilter.setMinorTickSpacing(5);
         manaFilter.setLabelTable(getTable());
         manaFilter.setPaintLabels(true);
-        manaFilter.addChangeListener(this);
+        manaFilter.addChangeListener(sc);
         manaFilter.setFont(f2.deriveFont(30.0f));
         manaFilter.setBounds(30, 880, 600, 50);
 
@@ -145,39 +152,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         searchField.setFont(f2.deriveFont(25.0f));
         searchField.setBounds(150, 20, 350, 50);
         searchField.setFocusable(true);
-        searchField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                warn();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                warn();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                warn();
-            }
-
-            void warn() {
-                searchField.requestFocus();
-                if (searchField.getText() == null || searchField.getText().equals("")) {
-                    return;
-                }
-                RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
-                ArrayList<CardModelView> ar = Responses.getInstance().getModelviewList();
-                cards = new ArrayList<>();
-                for (CardModelView cards1 : ar) {
-                    if (cards1.getName().toLowerCase().contains(searchField.getText())) {
-                        cards.add(cards1);
-                    }
-                }
-                pictures(cards);
-                repaint();
-            }
-        });
+        searchField.getDocument().addDocumentListener(new ShopDocument(this));
         add(searchField);
         RequestHandler.getInstance().sendRequest(new WalletRequest());
         wallet = Responses.getInstance().getWallet();
@@ -195,7 +170,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         buyButton.setFont(f2.deriveFont(30.0f));
         buyButton.setBackground(Color.orange);
         buyButton.setBounds(720, 550, 200, 50);
-        buyButton.addActionListener(this);
+        buyButton.addActionListener(sa);
 
         sellButton = new JButton("Sell");
         sellButton.setFocusable(false);
@@ -203,9 +178,9 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         sellButton.setFont(f2.deriveFont(30.0f));
         sellButton.setBackground(Color.orange);
         sellButton.setBounds(790, 550, 200, 50);
-        sellButton.addActionListener(this);
+        sellButton.addActionListener(sa);
 
-        addMouseListener(this);
+        addMouseListener(sm);
     }
 
     public static ShopPanel getInstance() {
@@ -271,7 +246,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             }
             g2d.setFont(f2.deriveFont(40.0f));
             g2d.setColor(Color.red);
-            RequestHandler.getInstance().sendRequest(new PriceRequest(name.toLowerCase()));
+            RequestHandler.getInstance().sendRequest(new PriceRequest(name1.toLowerCase()));
             long price = Responses.getInstance().getPrice();
             String className = Responses.getInstance().getClassName();
             g2d.drawString("Price : " + price, 720, config.getPriceY());
@@ -279,8 +254,8 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
             g2d.setColor(Color.BLUE);
             g2d.drawString(className, 850, config.getPriceY() - 40);
         }
-        g2d.drawImage(cardPics.get(name), 300, 220, null);
-        drawCardInfo(g2d, name, 300, 220);
+        g2d.drawImage(cardPics.get(name1), 300, 220, null);
+        drawCardInfo(g2d, name1, 300, 220);
 
     }
 
@@ -326,7 +301,7 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         mate = false;
     }
 
-    private void pictures(ArrayList<CardModelView> ar) {
+    public void pictures(ArrayList<CardModelView> ar) {
         bufferedImages = new ArrayList<>();
 
         for (CardModelView cards1 : ar) {
@@ -336,14 +311,14 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
     }
 
 
-    private void drawBigger(String st) {
+    public void drawBigger(String st) {
         clicked = true;
-        name = st;
+        name1 = st;
         repaint();
     }
 
 
-    private void BuySellChanger() {
+    public void BuySellChanger() {
         images.clear();
         RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
         cards = Responses.getInstance().getModelviewList();
@@ -363,114 +338,84 @@ public class ShopPanel extends JPanel implements ChangeListener, MouseListener, 
         repaint();
     }
 
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        int value = manaFilter.getValue();
-        if (value == 11) {
-            RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
-            cards = Responses.getInstance().getModelviewList();
-        } else {
-            images.clear();
-            RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
-            ArrayList<CardModelView> ar = Responses.getInstance().getModelviewList();
-            cards = new ArrayList<>();
-            for (CardModelView cards1 : ar) {
-                if (cards1.getManaCost() == value) {
-                    cards.add(cards1);
-                }
-            }
-        }
-        pictures(cards);
-        repaint();
+    public JButton getMinionButton() {
+        return minionButton;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-        JButton src = (JButton) e.getSource();
-        if (src == backButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
-            RequestHandler.getInstance().sendRequest(new LogRequest("Navigate : Main Menu"));
-            RequestHandler.getInstance().sendRequest(new SaveRequest());
-            RequestHandler.getInstance().sendRequest(new VisiblePanelRequest("menu"));
-        } else if (src == exit) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Exit Button"));
-            RequestHandler.getInstance().sendRequest(new ExitRequest());
-        } else if (src == buyActivatedButton) {
-            buyActivatedButton.setBackground(Color.yellow);
-            sellActivatedButton.setBackground(Color.WHITE);
-            buyActivated = true;
-            BuySellChanger();
-        } else if (src == sellActivatedButton) {
-            buyActivatedButton.setBackground(Color.white);
-            sellActivatedButton.setBackground(Color.yellow);
-            buyActivated = false;
-            BuySellChanger();
-        } else if (src == buyButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Buy Button"));
-            RequestHandler.getInstance().sendRequest(new BuyCardRequest(name));
-//            revalidateCards(true);
-        } else if (src == sellButton) {
-            RequestHandler.getInstance().sendRequest(new LogRequest("Click_Button : Sell Button"));
-            RequestHandler.getInstance().sendRequest(new SellCardRequest(name));
-//            revalidateCards(false);
-        } else {
-            images.clear();
-            RequestHandler.getInstance().sendRequest(new ProperCardsRequest(buyActivated ? 1 : 2));
-            ArrayList<CardModelView> ar = Responses.getInstance().getModelviewList();
-            cards = new ArrayList<>();
-            for (CardModelView cards1 : ar) {
-                if (src == allbutton) {
-                    cards.add(cards1);
-                } else if ((src == minionButton && cards1.getType().equals(Type.Minion)) ||
-                        (src == spellButton && cards1.getType().equals(Type.Spell)) ||
-                        (src == weaponButton && cards1.getType().equals(Type.Weapon))) {
-                    cards.add(cards1);
-                }
-            }
-            pictures(cards);
-        }
+    public JButton getSpellButton() {
+        return spellButton;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        String st = null;
-        for (Images images : images) {
-            if ((x >= images.getX() && x <= images.getX() + images.getWidth()) && (y >= images.getY() && y <= images.getY() + images.getHeigth())) {
-                st = images.getName();
-                break;
-            }
-        }
-        if (st == null || st.equals("")) {
-            clicked = false;
-            repaint();
-            return;
-        }
-        drawBigger(st);
-        revalidate();
-        repaint();
+    public JButton getWeaponButton() {
+        return weaponButton;
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-
+    public JButton getAllbutton() {
+        return allbutton;
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
+    public JButton getBackButton() {
+        return backButton;
     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
+    public JButton getBuyActivatedButton() {
+        return buyActivatedButton;
     }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
+    public JButton getSellActivatedButton() {
+        return sellActivatedButton;
+    }
 
+    public JButton getExit() {
+        return exit;
+    }
+
+    public void setExit(JButton exit) {
+        this.exit = exit;
+    }
+
+    public JButton getBuyButton() {
+        return buyButton;
+    }
+
+    public JButton getSellButton() {
+        return sellButton;
+    }
+
+
+    public ArrayList<Images> getImages() {
+        return images;
+    }
+
+    public ArrayList<CardModelView> getCards() {
+        return cards;
+    }
+
+    public void setCards(ArrayList<CardModelView> cards) {
+        this.cards = cards;
+    }
+
+    public JTextField getSearchField() {
+        return searchField;
+    }
+
+    public JSlider getManaFilter() {
+        return manaFilter;
+    }
+
+    public boolean isBuyActivated() {
+        return buyActivated;
+    }
+
+    public void setBuyActivated(boolean buyActivated) {
+        this.buyActivated = buyActivated;
+    }
+
+    public void setClicked(boolean clicked) {
+        this.clicked = clicked;
+    }
+
+    public String getName1() {
+        return name1;
     }
 }
